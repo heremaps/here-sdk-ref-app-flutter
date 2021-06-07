@@ -1,0 +1,206 @@
+/*
+ * Copyright (C) 2020-2021 HERE Europe B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+import 'dart:typed_data';
+
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:here_sdk/core.dart';
+import 'package:here_sdk/core.threading.dart';
+import 'package:here_sdk/mapview.dart';
+import 'package:here_sdk/routing.dart' as Routing;
+import 'package:here_sdk/search.dart';
+
+import '../common/ui_style.dart';
+import '../common/util.dart' as Util;
+import 'poi_svg_helper.dart';
+import 'waypoints_controller.dart';
+
+typedef GetTextForPoiMarkerCallback = String Function(Place);
+
+/// A class that searches for POI along a route, creates and keeps map markers for resulting POIs.
+class RoutePoiHandler {
+  static const int _kGeoCorridorRadius = 20;
+  static const int _kMaxSearchSuggestion = 100;
+
+  static final Map<String, PoiIconType> _categoryPoiTypes = {
+    PlaceCategory.eatAndDrink: PoiIconType.eatAndDrink,
+    PlaceCategory.businessAndServicesFuelingStation: PoiIconType.fueling,
+    PlaceCategory.businessAndServicesAtm: PoiIconType.atm,
+  };
+
+  final SearchOptions _searchOptions = new SearchOptions(LanguageCode.enUs, _kMaxSearchSuggestion);
+
+  /// [HereMapController] of the map.
+  final HereMapController hereMapController;
+  /// Way points controller.
+  final WayPointsController wayPointsController;
+  /// Called to get a localized string describing a place.
+  final GetTextForPoiMarkerCallback onGetText;
+
+  List<String> _categories = [];
+  Map<Routing.Route, List<Place>> _placesForRoutes = {};
+  Set<Place> _releasedPlaces = {};
+  Map<MapMarker, Place> _markers = {};
+  SearchEngine _searchEngine = SearchEngine();
+  TaskHandle _poiSearchTask;
+
+  /// Constructs a [RoutePoiHandler] object.
+  RoutePoiHandler({
+    @required this.hereMapController,
+    @required this.wayPointsController,
+    this.onGetText,
+  });
+
+  /// Releases resources.
+  void release() {
+    _stopCurrentSearch();
+    _searchEngine.release();
+    _clearMarkers();
+    clearPlaces();
+  }
+
+  void _stopCurrentSearch() {
+    _poiSearchTask?.cancel();
+    _poiSearchTask?.release();
+    _poiSearchTask = null;
+  }
+
+  void _clearMarkers() {
+    _markers.keys.forEach((marker) {
+      hereMapController.mapScene.removeMapMarker(marker);
+      marker.release();
+    });
+    _markers.clear();
+  }
+
+  /// Sets the desired categories of places to search.
+  set categories(List<String> categories) {
+    if (ListEquality().equals(categories, _categories)) {
+      return;
+    }
+
+    _categories = List.from(categories);
+    clearPlaces();
+  }
+
+  /// Returns true if the [mapMarker] is a POI marker.
+  bool isPoiMarker(MapMarker mapMarker) => _markers.containsKey(mapMarker);
+
+  /// Returns [Place] of the [marker].
+  Place getPlaceFromMarker(MapMarker marker) => _markers[marker];
+
+  /// Releases ownership of the [place].
+  void releasePlace(Place place) => _releasedPlaces.add(place);
+
+  /// Removes all found places.
+  void clearPlaces() {
+    _placesForRoutes.values.forEach((placesList) => placesList.forEach((place) {
+          if (!_releasedPlaces.contains(place)) {
+            place.release();
+          }
+        }));
+    _releasedPlaces.clear();
+    _placesForRoutes.clear();
+  }
+
+  /// Searches POI for the [route].
+  void updatePoiForRoute(Routing.Route route) {
+    _clearMarkers();
+    _stopCurrentSearch();
+
+    if (_placesForRoutes.containsKey(route)) {
+      _addMarkersForPlaces(_placesForRoutes[route]);
+    } else {
+      if (_categories.isEmpty) {
+        return;
+      }
+
+      GeoCorridor geoCorridor = GeoCorridor.withRadius(route.polyline, _kGeoCorridorRadius);
+
+      List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
+      CategoryQuery categoryQuery = CategoryQuery.withCorridorArea(categories, geoCorridor);
+      _poiSearchTask = _searchEngine.searchByCategory(categoryQuery, _searchOptions, (error, places) {
+        if (error != null) {
+          print('Search failed. Error: ${error.toString()}');
+          return;
+        }
+
+        _placesForRoutes[route] = places;
+        _addMarkersForPlaces(places);
+      });
+    }
+  }
+
+  List<Place> _filterPlaces(List<Place> places) {
+    final Set<String> wayPointsPlacesIds =
+        wayPointsController.value.where((wp) => wp.place != null).map((wp) => wp.place.id).toSet();
+    return places.whereNot((place) => wayPointsPlacesIds.contains(place.id)).toList();
+  }
+
+  void _addMarkersForPlaces(List<Place> places) {
+    int markerSize = (hereMapController.pixelScale * UIStyle.poiMarkerSize).round();
+
+    _filterPlaces(places).forEach((place) {
+      SvgInfo svgInfo = PoiSVGHelper.getPoiSvgForCategoryAndText(
+        type: _findPoiTypeForCategories(place.details.categories),
+        text: onGetText != null ? onGetText(place) : null,
+      );
+
+      MapImage mapImage = MapImage.withImageDataImageFormatWidthAndHeight(Uint8List.fromList(svgInfo.svg.codeUnits),
+          ImageFormat.svg, (svgInfo.width * (markerSize / svgInfo.height)).truncate(), markerSize);
+
+      MapMarker mapMarker = Util.createMarkerWithImage(
+        place.geoCoordinates,
+        mapImage,
+        drawOrder: UIStyle.searchMarkerDrawOrder,
+        anchor: Anchor2D.withHorizontalAndVertical(0.5, 1),
+      );
+      mapImage.release();
+
+      hereMapController.mapScene.addMapMarker(mapMarker);
+      _markers[mapMarker] = place;
+    });
+  }
+
+  PoiIconType _findPoiTypeForCategoryId(String categoryId) {
+    PoiIconType result = _categoryPoiTypes[categoryId];
+    if (result != null) {
+      return result;
+    }
+
+    int index = categoryId.lastIndexOf('-');
+    if (index < 0) {
+      return null;
+    }
+
+    return _findPoiTypeForCategoryId(categoryId.substring(0, index));
+  }
+
+  PoiIconType _findPoiTypeForCategories(List<PlaceCategory> categories) {
+    for (int i = 0; i < categories.length; ++i) {
+      PoiIconType result = _findPoiTypeForCategoryId(categories[i].id);
+      if (result != null) {
+        return result;
+      }
+    }
+
+    return PoiIconType.unknown;
+  }
+}

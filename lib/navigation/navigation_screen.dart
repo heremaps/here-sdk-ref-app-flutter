@@ -1,0 +1,672 @@
+/*
+ * Copyright (C) 2020-2021 HERE Europe B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:here_sdk/core.dart';
+import 'package:here_sdk/location.dart';
+import 'package:here_sdk/mapview.dart';
+import 'package:here_sdk/navigation.dart' as Navigation;
+import 'package:here_sdk/routing.dart' as Routing;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:screen/screen.dart';
+
+import '../landing_screen.dart';
+import '../route_preferences/route_preferences_model.dart';
+import '../common/marquee_widget.dart';
+import '../common/ui_style.dart';
+import '../common/util.dart' as Util;
+import '../common/local_notifications_helper.dart';
+import 'current_maneuver_widget.dart';
+import 'maneuver_action_text_helper.dart';
+import 'navigation_dialogs.dart' as Dialogs;
+import 'navigation_progress_widget.dart';
+import 'navigation_speed_widget.dart';
+import 'next_maneuver_widget.dart';
+import 'rerouting_handler.dart';
+import 'rerouting_indicator_widget.dart';
+
+/// Navigation mode screen widget.
+class NavigationScreen extends StatefulWidget {
+  static const String navRoute = "/navigation";
+
+  /// Initial route for navigation.
+  final Routing.Route route;
+  /// Waypoints lists of the route.
+  final List<Routing.Waypoint> wayPoints;
+
+  /// Constructs a widget.
+  NavigationScreen({
+    Key key,
+    @required this.route,
+    @required this.wayPoints,
+  }) : super(key: key);
+
+  @override
+  _NavigationScreenState createState() => _NavigationScreenState();
+}
+
+class _NavigationScreenState extends State<NavigationScreen> with WidgetsBindingObserver {
+  static const double _kInitDistanceToEarth = 1000; // meters
+  static const double _kSpeedFactor = 1.3;
+  static const int _kNotificationIntervalInMilliseconds = 500;
+  static const double _kDistanceToShowNextManeuver = 500;
+  static const double _kTopBarHeight = 100;
+  static const double _kBottomBarHeight = 130;
+  static const double _kHereLogoOffset = 75;
+  static const double _kPrincipalPointOffset = 160;
+
+  // This is example code and not for real use.
+  // These values are usually country specific and may vary depending on the navigation segment.
+  static const double _kDefaultSpeedLimitOffset = 1;
+  static const double _kDefaultSpeedLimitBoundary = 50;
+
+  final GlobalKey _mapKey = GlobalKey();
+
+  Routing.Route _currentRoute;
+
+  HereMapController _hereMapController;
+  MapPolyline _mapRoute;
+  MapMarker _startMarker;
+  MapMarker _finishMarker;
+
+  Navigation.LocationSimulator _locationSimulator;
+  LocationEngine _locationEngine;
+  Navigation.VisualNavigator _visualNavigator;
+  bool _navigationStarted = false;
+
+  bool _soundEnabled = true;
+  FlutterTts _flutterTts = FlutterTts();
+
+  int _remainingDistanceInMeters;
+  int _remainingDurationInSeconds;
+  int _currentManeuverIndex;
+  int _currentManeuverDistance = 0;
+  int _nextManeuverIndex;
+  int _nextManeuverDistance = 0;
+  String _currentStreetName;
+  double _currentSpeedLimit;
+  double _currentSpeed;
+  Navigation.SpeedWarningStatus _speedWarningStatus = Navigation.SpeedWarningStatus.speedLimitRestored;
+
+  ReroutingHandler _reroutingHandler;
+  bool _reroutingInProgress = false;
+
+  AppLifecycleState _appLifecycleState;
+
+  @override
+  void initState() {
+    super.initState();
+    Screen.keepOn(true);
+    _visualNavigator = Navigation.VisualNavigator.make();
+    _remainingDistanceInMeters = widget.route.lengthInMeters;
+    _remainingDurationInSeconds = widget.route.durationInSeconds;
+    _currentRoute = widget.route;
+    WidgetsBinding.instance.addObserver(this);
+
+    _reroutingHandler = ReroutingHandler(
+      visualNavigator: _visualNavigator,
+      wayPoints: widget.wayPoints,
+      preferences: context.read<RoutePreferencesModel>(),
+      onBeginRerouting: () => setState(() => _reroutingInProgress = true),
+      onNewRoute: _onNewRoute,
+    );
+  }
+
+  @override
+  void dispose() {
+    _reroutingHandler.release();
+    _visualNavigator.release();
+    _locationSimulator?.stop();
+    _locationSimulator?.release();
+    _locationEngine?.release();
+    _startMarker?.release();
+    _finishMarker?.release();
+    _releaseCurrentRoute();
+    _hereMapController?.release();
+    _flutterTts.stop();
+    WidgetsBinding.instance.removeObserver(this);
+    Screen.keepOn(false);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget nextManeuverWidget = _reroutingInProgress ? null : _buildNextManeuver(context);
+    Widget topBarWidget = _buildTopBar(context);
+    double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
+
+    return WillPopScope(
+      child: Scaffold(
+        appBar: topBarWidget,
+        body: Padding(
+          padding: EdgeInsets.only(
+            top: topBarWidget != null ? _kTopBarHeight + topOffset : 0,
+          ),
+          child: Stack(
+            children: [
+              HereMap(
+                key: _mapKey,
+                onMapCreated: _onMapCreated,
+              ),
+              if (nextManeuverWidget != null) nextManeuverWidget,
+              if (_navigationStarted) _buildNavigationControls(context),
+            ],
+          ),
+        ),
+        extendBodyBehindAppBar: true,
+        bottomNavigationBar: _navigationStarted
+            ? Container(
+                height: _kBottomBarHeight,
+                child: NavigationProgress(
+                  routeLengthInMeters: _currentRoute.lengthInMeters,
+                  remainingDistanceInMeters: _remainingDistanceInMeters,
+                  remainingDurationInSeconds: _remainingDurationInSeconds,
+                ),
+              )
+            : null,
+      ),
+      onWillPop: () async {
+        if (await Dialogs.askForExitFromNavigation(context)) {
+          await _stopNavigation();
+          return true;
+        }
+        return false;
+      },
+    );
+  }
+
+  void _onMapCreated(HereMapController hereMapController) {
+    _hereMapController?.release();
+    _hereMapController = hereMapController;
+
+    hereMapController.mapScene.loadSceneFromConfigurationFile('preview.normal.day.json', (MapError error) async {
+      if (error != null) {
+        print('Map scene not loaded. MapError: ${error.toString()}');
+        return;
+      }
+
+      hereMapController.camera.lookAtPointWithDistance(_currentRoute.polyline.first, _kInitDistanceToEarth);
+      hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
+
+      hereMapController.mapScene.setLayerState(MapSceneLayers.trafficFlow, MapSceneLayerState.visible);
+      hereMapController.mapScene.setLayerState(MapSceneLayers.trafficIncidents, MapSceneLayerState.visible);
+
+      _addRouteToMap();
+      bool result = await Dialogs.askForPositionSource(context);
+      if (result == null) {
+        // Nothing answered. Go back.
+        Navigator.of(context).pop();
+        return;
+      }
+
+      if (result) {
+        _startSimulatedLocations();
+      } else {
+        _startRealLocations();
+      }
+
+      _startNavigation();
+    });
+  }
+
+  void _createMapRoute() {
+    GeoPolyline routeGeoPolyline = GeoPolyline(_currentRoute.polyline);
+    _mapRoute = MapPolyline(routeGeoPolyline, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
+    _mapRoute.outlineColor = UIStyle.selectedRouteBorderColor;
+    _mapRoute.outlineWidth = UIStyle.routeOutLineWidth;
+    _hereMapController.mapScene.addMapPolyline(_mapRoute);
+  }
+
+  void _addRouteToMap() {
+    _createMapRoute();
+
+    int markerSize = (_hereMapController.pixelScale * UIStyle.locationMarkerSize).round();
+    _startMarker = Util.createMarkerWithImagePath(
+      _currentRoute.polyline.first,
+      "assets/position.svg",
+      markerSize,
+      markerSize,
+      drawOrder: UIStyle.waypointsMarkerDrawOrder,
+    );
+    _hereMapController.mapScene.addMapMarker(_startMarker);
+
+    markerSize = (_hereMapController.pixelScale * UIStyle.searchMarkerSize * 2).round();
+    _finishMarker = Util.createMarkerWithImagePath(
+      _currentRoute.polyline.last,
+      "assets/map_marker_big.svg",
+      markerSize,
+      markerSize,
+      drawOrder: UIStyle.waypointsMarkerDrawOrder,
+      anchor: Anchor2D.withHorizontalAndVertical(0.5, 1),
+    );
+    _hereMapController.mapScene.addMapMarker(_finishMarker);
+
+    _zoomToWholeRoute();
+  }
+
+  void _zoomToWholeRoute() {
+    final BuildContext context = _mapKey.currentContext;
+    if (context != null) {
+      _hereMapController.zoomToLogicalViewPort(geoBox: widget.route.boundingBox, context: context);
+    }
+  }
+
+  void _startSimulatedLocations() {
+    Navigation.LocationSimulatorOptions options =
+        Navigation.LocationSimulatorOptions(_kSpeedFactor, _kNotificationIntervalInMilliseconds);
+
+    _locationSimulator = Navigation.LocationSimulator.withRoute(widget.route, options);
+    _locationSimulator.listener = _visualNavigator;
+    _locationSimulator.start();
+  }
+
+  void _startRealLocations() {
+    _locationEngine = LocationEngine();
+    _locationEngine.setBackgroundLocationAllowed(true);
+    _locationEngine.setBackgroundLocationIndicatorVisible(true);
+    _locationEngine.setPauseLocationUpdatesAutomatically(true);
+    _locationEngine.addLocationListener(_visualNavigator);
+    _locationEngine.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
+  }
+
+  void _startNavigation() {
+    _hereMapController.mapScene.removeMapMarker(_startMarker);
+    _startMarker.release();
+    _startMarker = null;
+
+    _visualNavigator.startRendering(_hereMapController);
+    _visualNavigator.isRouteVisible = false;
+
+    _setupListeners();
+    _setupVoiceTextMessages();
+
+    _visualNavigator.route = _currentRoute;
+
+    setState(() {
+      _navigationStarted = true;
+    });
+  }
+
+  void _setupListeners() {
+    _visualNavigator.routeProgressListener =
+        Navigation.RouteProgressListener.fromLambdas(lambda_onRouteProgressUpdated: (routeProgress) {
+      List<Navigation.SectionProgress> sectionProgressList = routeProgress.sectionProgress;
+
+      int currentManeuverIndex;
+      int currentManeuverDistance = 0;
+      int nextManeuverIndex;
+      int nextManeuverDistance = 0;
+
+      List<Navigation.ManeuverProgress> nextManeuverList = routeProgress.maneuverProgress;
+      if (nextManeuverList != null && nextManeuverList.isNotEmpty) {
+        currentManeuverIndex = nextManeuverList.first.maneuverIndex;
+        currentManeuverDistance = nextManeuverList.first.remainingDistanceInMeters;
+
+        if (nextManeuverList.length > 1) {
+          nextManeuverIndex = nextManeuverList[1].maneuverIndex;
+          nextManeuverDistance = nextManeuverList[1].remainingDistanceInMeters;
+        }
+      }
+
+      setState(() {
+        _remainingDistanceInMeters = sectionProgressList.last.remainingDistanceInMeters;
+        _remainingDurationInSeconds = sectionProgressList.last.remainingDurationInSeconds;
+
+        _currentManeuverIndex = currentManeuverIndex;
+        _currentManeuverDistance = currentManeuverDistance;
+        _nextManeuverIndex = nextManeuverIndex;
+        _nextManeuverDistance = nextManeuverDistance;
+      });
+    });
+
+    _visualNavigator.navigableLocationListener = Navigation.NavigableLocationListener.fromLambdas(
+      lambda_onNavigableLocationUpdated: (location) {
+        if (_currentSpeed != location.originalLocation.speedInMetersPerSecond) {
+          setState(() {
+            _currentSpeed = location.originalLocation.speedInMetersPerSecond;
+          });
+        }
+      },
+    );
+
+    _visualNavigator.roadTextsListener =
+        Navigation.RoadTextsListener.fromLambdas(lambda_onRoadTextsUpdated: (roadTexts) {
+      if (_currentStreetName != roadTexts.names.getDefaultValue()) {
+        setState(() => _currentStreetName = roadTexts.names.getDefaultValue());
+      }
+    });
+
+    if (_currentRoute.transportMode != Routing.TransportMode.pedestrian) {
+      _visualNavigator.speedLimitListener =
+          Navigation.SpeedLimitListener.fromLambdas(lambda_onSpeedLimitUpdated: (speedLimit) {
+        if (_currentSpeedLimit != speedLimit.speedLimitInMetersPerSecond) {
+          setState(() => _currentSpeedLimit = speedLimit.speedLimitInMetersPerSecond);
+        }
+      });
+
+      _visualNavigator.speedWarningOptions = Navigation.SpeedWarningOptions(Navigation.SpeedLimitOffset(
+          _kDefaultSpeedLimitOffset, _kDefaultSpeedLimitOffset, _kDefaultSpeedLimitBoundary));
+      _visualNavigator.speedWarningListener =
+          Navigation.SpeedWarningListener.fromLambdas(lambda_onSpeedWarningStatusChanged: (status) {
+        if (status == Navigation.SpeedWarningStatus.speedLimitExceeded && _soundEnabled) {
+          FlutterRingtonePlayer.playNotification();
+        }
+        setState(() => _speedWarningStatus = status);
+      });
+    }
+
+    _visualNavigator.destinationReachedListener =
+        Navigation.DestinationReachedListener.fromLambdas(lambda_onDestinationReached: () async {
+      await _stopNavigation();
+      Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
+    });
+
+    _visualNavigator.routeDeviationListener = _reroutingHandler;
+    _visualNavigator.milestoneReachedListener = _reroutingHandler;
+  }
+
+  void _setupVoiceTextMessages() async {
+    await _flutterTts.setLanguage("en-US");
+
+    _visualNavigator.maneuverNotificationListener = Navigation.ManeuverNotificationListener.fromLambdas(
+      lambda_onManeuverNotification: (text) {
+        if (_soundEnabled) {
+          _flutterTts.speak(text);
+        }
+
+        if (_appLifecycleState == AppLifecycleState.paused) {
+          Routing.Maneuver maneuver = _visualNavigator.getManeuver(_currentManeuverIndex);
+
+          LocalNotificationsHelper.showManeuverNotification(
+            _getRemainingTimeString(),
+            text,
+            maneuver.action.imagePath,
+            !_soundEnabled,
+          );
+
+          maneuver.release();
+        }
+      },
+    );
+  }
+
+  String _getRemainingTimeString() {
+    String arrivalInfo = AppLocalizations.of(context).arrivalTimeTitle +
+        ": " +
+        DateFormat.Hm().format(DateTime.now().add(Duration(seconds: _remainingDurationInSeconds)));
+    return arrivalInfo;
+  }
+
+  void _stopNavigation() async {
+    _visualNavigator.route = null;
+    await _visualNavigator.stopRendering();
+    _locationSimulator?.stop();
+    _locationEngine?.setBackgroundLocationAllowed(false);
+    _locationEngine?.setBackgroundLocationIndicatorVisible(false);
+    _locationEngine?.setPauseLocationUpdatesAutomatically(false);
+  }
+
+  void _releaseCurrentRoute() {
+    _hereMapController.mapScene.removeMapPolyline(_mapRoute);
+    _mapRoute.release();
+    _mapRoute = null;
+
+    if (_currentRoute != widget.route) {
+      _currentRoute.release();
+    }
+  }
+
+  void _onNewRoute(Routing.Route newRoute) {
+    if (newRoute == null) {
+      // rerouting failed
+      setState(() => _reroutingInProgress = false);
+      return;
+    }
+
+    _visualNavigator.route = null;
+    _releaseCurrentRoute();
+
+    _currentRoute = newRoute;
+    _remainingDistanceInMeters = _currentRoute.lengthInMeters;
+    _remainingDurationInSeconds = _currentRoute.durationInSeconds;
+    _currentManeuverIndex = null;
+    _nextManeuverIndex = null;
+    _currentManeuverDistance = 0;
+    _visualNavigator.route = _currentRoute;
+    _createMapRoute();
+    _finishMarker.coordinates = newRoute.polyline.last;
+
+    setState(() => _reroutingInProgress = false);
+  }
+
+  Widget _buildTopBar(BuildContext context) {
+    if (_currentManeuverIndex == null && !_reroutingInProgress) {
+      return null;
+    }
+
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    Widget child;
+
+    if (_reroutingInProgress) {
+      child = ReroutingIndicator();
+    } else {
+      Routing.Maneuver maneuver = _visualNavigator.getManeuver(_currentManeuverIndex);
+      assert(maneuver != null);
+
+      child = CurrentManeuver(
+        action: maneuver.action,
+        distance: _currentManeuverDistance,
+        text: maneuver.getActionText(context),
+      );
+
+      maneuver.release();
+    }
+
+    return PreferredSize(
+      preferredSize: Size.fromHeight(_kTopBarHeight),
+      child: AppBar(
+        shape: UIStyle.bottomRoundedBorder(),
+        automaticallyImplyLeading: false,
+        backgroundColor: colorScheme.secondary,
+        flexibleSpace: SafeArea(
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNextManeuver(BuildContext context) {
+    if (_currentManeuverDistance > _kDistanceToShowNextManeuver || _reroutingInProgress) {
+      return null;
+    }
+
+    Routing.Maneuver maneuver = _nextManeuverIndex != null ? _visualNavigator.getManeuver(_nextManeuverIndex) : null;
+    if (maneuver == null) {
+      return null;
+    }
+
+    Routing.ManeuverAction action = maneuver.action;
+    String text = maneuver.getActionText(context);
+
+    maneuver.release();
+
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Material(
+        color: Theme.of(context).colorScheme.secondaryVariant,
+        shape: UIStyle.bottomRoundedBorder(),
+        elevation: 2,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: UIStyle.popupsBorderRadius,
+          ),
+          child: NextManeuver(
+            action: action,
+            distance: _nextManeuverDistance,
+            text: text,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtons(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          heroTag: null,
+          child: Icon(
+            _soundEnabled ? Icons.volume_up : Icons.volume_off,
+          ),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          onPressed: () async {
+            await _flutterTts.stop();
+            setState(() => _soundEnabled = !_soundEnabled);
+          },
+        ),
+        Container(
+          height: UIStyle.contentMarginLarge,
+        ),
+        FloatingActionButton(
+          heroTag: null,
+          child: Icon(
+            Icons.close,
+            color: UIStyle.stopNavigationButtonIconColor,
+          ),
+          backgroundColor: UIStyle.stopNavigationButtonColor,
+          onPressed: () async {
+            if (await Dialogs.askForExitFromNavigation(context)) {
+              await _stopNavigation();
+              Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  void _setupLogoAndPrincipalPointPosition() {
+    if (_hereMapController == null) {
+      return;
+    }
+
+    _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomCenter,
+        _currentStreetName != null ? (_kHereLogoOffset * _hereMapController.pixelScale).truncate() : 0);
+    _hereMapController.camera.principalPoint = Point2D(_hereMapController.viewportSize.width / 2,
+        _hereMapController.viewportSize.height - _kPrincipalPointOffset * _hereMapController.pixelScale);
+  }
+
+  Widget _buildNavigationControls(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    _setupLogoAndPrincipalPointPosition();
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(UIStyle.contentMarginLarge, UIStyle.contentMarginLarge, UIStyle.contentMarginLarge,
+            UIStyle.contentMarginLarge + UIStyle.popupsBorderRadius),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            if (_currentSpeed != null)
+              NavigationSpeed(
+                currentSpeed: _currentSpeed,
+                speedLimit: _currentSpeedLimit,
+                speedWarningStatus: _speedWarningStatus,
+              ),
+            if (_currentStreetName == null) Spacer(),
+            if (_currentStreetName != null)
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: UIStyle.contentMarginLarge,
+                    right: UIStyle.contentMarginLarge,
+                  ),
+                  child: Material(
+                    elevation: 2,
+                    color: colorScheme.background,
+                    borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: UIStyle.contentMarginMedium,
+                        right: UIStyle.contentMarginMedium,
+                      ),
+                      child: Container(
+                        height: UIStyle.bigButtonHeight,
+                        child: Center(
+                          child: MarqueeWidget(
+                            child: Text(
+                              _currentStreetName,
+                              style: TextStyle(
+                                fontSize: UIStyle.hugeFontSize,
+                                color: colorScheme.onSecondary,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            _buildButtons(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (!_navigationStarted) {
+      return;
+    }
+
+    if (state == AppLifecycleState.paused) {
+      final Routing.Maneuver maneuver = _visualNavigator.getManeuver(_currentManeuverIndex);
+
+      LocalNotificationsHelper.startNotifications(
+          _getRemainingTimeString(), maneuver.getActionText(context), maneuver.action.imagePath);
+      maneuver.release();
+      _visualNavigator.stopRendering();
+    }
+    if (state == AppLifecycleState.resumed) {
+      LocalNotificationsHelper.stopNotifications();
+      _visualNavigator.startRendering(_hereMapController);
+    }
+    _appLifecycleState = state;
+  }
+}
+
+extension _ManeuverImagePath on Routing.ManeuverAction {
+  String get imagePath {
+    final String subDir = SchedulerBinding.instance.window.platformBrightness == Brightness.light ? "dark" : "light";
+    return "assets/maneuvers/$subDir/png/${toString().split(".").last}.png";
+  }
+}

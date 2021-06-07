@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~ Copyright (C) 2017-2020 HERE Europe B.V.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  --><svg xmlns:android="http://schemas.android.com/apk/res/android" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+
+    <path d="M11.7323,5.97733357 C10.8923,5.84333357 10.3153,5.04533357 10.4503,4.20633357 L10.5943,3.30233357 C10.7293,2.46233357 11.5253,1.88533357 12.3653,2.01933357 L12.3893,2.02333357 C13.2293,2.15833357 13.8063,2.95533357 13.6723,3.79433357 L13.5273,4.69833357 C13.3933,5.53833357 12.5963,6.11533357 11.7563,5.98133357 L11.7323,5.97733357 Z M16.496,10.9968336 L19,10.9968336 L19,12.9968336 L16,12.9968336 C15.687,12.9968336 15.393,12.8508336 15.204,12.6018336 L13.223,10.3828336 L12.336,14.9738336 L14.836,17.4968336 C14.943,17.6598336 15,17.8498336 15,18.0448336 L15,22.9968336 L13,22.9968336 L13,18.3428336 L10.23,15.5198336 L8.787,22.9968336 L6.749,22.9968336 L9.334,9.61383357 L7,10.5588336 L7,13.9968336 L5,13.9968336 L5,9.88483357 C5,9.47683357 5.247,9.11083357 5.625,8.95783357 L10.29,7.06983357 C10.411,7.02083357 10.538,7.00483357 10.665,7.00483357 L10.665,6.99683357 L12.665,6.99683357 L12.665,7.00383357 C12.973,7.00383357 13.269,7.13983357 13.461,7.39183357 L16.496,10.9968336 Z" fill="#000000"/>
+</svg>

@@ -1,0 +1,5 @@
+excludes:
+  paths:
+    - pattern: "ios/**"
+      reason: "OTHER"
+      comment: "This directory is part of iOS Reference App."

@@ -1,0 +1,5 @@
+excludes:
+  paths:
+    - pattern: "android/**"
+      reason: "OTHER"
+      comment: "This directory is part of Android Reference App."
