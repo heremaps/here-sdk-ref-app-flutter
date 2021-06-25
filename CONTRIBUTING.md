@@ -1,9 +1,10 @@
 # Contributing to the HERE SDK Reference Application for Flutter
 
-## Where to start? ##
-- If you already used the HERE SDK Reference Application and found issues or having improvement ideas, awesome! [Please report these](https://github.com/heremaps/here-sdk-ref-app-flutter/issues/new)!
-- You can pick an [issue](https://github.com/heremaps/here-sdk-ref-app-flutter/issues) if you like, some are marked as "good first issue" and should be easy to pick up.
-- If you stumbled upon a bug or some unclear or incorrect documentation and you already have a fix, great! Open a [pull request](https://github.com/heremaps/here-sdk-ref-app-flutter/pulls)!
+Thank you for taking the time to contribute.
+
+## Where to start?
+- If you have found issues or have ideas for improvement, [please submit them](https://github.com/heremaps/here-sdk-ref-app-flutter/issues/new) or open a [pull request](https://github.com/heremaps/here-sdk-ref-app-flutter/pulls).
+- You can pick any [issue](https://github.com/heremaps/here-sdk-ref-app-flutter/issues) to work on, issues marked as "good first issue" could be good candidates. Before you start add a comment to explain your implementation idea, except for a minor fix.
 
 ## Signing each Commit
 

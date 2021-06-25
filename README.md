@@ -1,4 +1,4 @@
-# Reference Application for the HERE SDK for Flutter (_Navigate Edition_)
+# HERE SDK Reference Application for Flutter
 
 The reference application for the [HERE SDK for Flutter (_Navigate Edition_)](https://developer.here.com/documentation/flutter-sdk-navigate/) shows how a complex and release-ready project targeting iOS and Android devices may look like. You can use it as a source of inspiration for your own HERE SDK based projects - in parts or as a whole.
 
@@ -9,7 +9,7 @@ With this blueprint reference application you can see how UX flows can be built 
 - Learn how the [HERE SDK 4.x](https://developer.here.com/products/here-sdk) can be complemented with rich UI for your own application development.
 - Discover how to avoid common pitfalls, master edge cases and benefit from optimized end user flows.
 - All code using the HERE SDK is implemented in pure Dart following well-established clean code standards.
-- On top, the reference application is enriched with tailored graphical assets - adapted for various screen sizes and ready to be used in your own projects under the [License](#license) you can find below.
+- On top, the reference application is enriched with tailored graphical assets - adapted for various screen sizes and ready to be used in your own projects.
 
 If you are looking for smaller bits & pieces or just want to get started with the integration of the HERE SDK into a simpler project, you may want to start looking into our [example apps](https://github.com/heremaps/here-sdk-examples/tree/master/examples/latest/navigate/flutter) selection including a stripped down [hello_map_app](https://github.com/heremaps/here-sdk-examples/tree/master/examples/latest/navigate/flutter/hello_map_app) that accompanies the [Developer's Guide](https://developer.here.com/documentation/flutter-sdk-navigate/) for the HERE SDK.
 
@@ -27,12 +27,12 @@ The reference application hosted in this repo focuses on how specific features c
 
 The reference application for the HERE SDK for Flutter (_Navigate Edition_) requires the following prerequisites:
 
--  The [HERE SDK for Flutter (_Navigate Edition_), Version 4.7.0.0](https://developer.here.com/documentation/flutter-sdk-navigate/4.7.0.0/dev_guide/index.html) is required and needs to be downloaded from the [HERE platform](https://platform.here.com). For now, the _Navigate Edition_ is only available upon request. Please [contact us](https://developer.here.com/help#how-can-we-help-you) to receive access including a set of evaluation credentials.
-- If not already done, install the [Flutter SDK](https://flutter.dev/docs/get-started/install). We use [Version 2.0.6](https://flutter.dev/docs/development/tools/sdk/releases). Please note, due to the HERE SDK dependencies higher Flutter versions are not supported yet.
+-  The [HERE SDK for Flutter (_Navigate Edition_), version 4.7.0.0](https://developer.here.com/documentation/flutter-sdk-navigate/4.7.0.0/dev_guide/index.html) is required and needs to be downloaded from the [HERE platform](https://platform.here.com). For now, the _Navigate Edition_ is only available upon request. Please [contact us](https://developer.here.com/help#how-can-we-help-you) to receive access including a set of evaluation credentials.
+- If not already done, install the [Flutter SDK](https://flutter.dev/docs/get-started/install). We use [version 2.0.6](https://flutter.dev/docs/development/tools/sdk/releases). Please note, due to the HERE SDK dependencies higher Flutter versions are not supported yet.
 
 On top you need an IDE of your choice. This could be a text editor or IDEs such as [Visual Studio Code](https://code.visualstudio.com/) with the [Flutter extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter) or [Android Studio](https://developer.android.com/studio). We use Android Studio 4.1.3 for development.
 
-Note: If you want to compile, build & run for iOS devices, you also need to have [Xcode](https://developer.apple.com/xcode/) and [CocoaPods](https://cocoapods.org/) (Version 1.10.0 or higher) installed. We use Xcode 12.4 for development. If you only target Android devices, Xcode is _not_ required.
+Note: If you want to compile, build & run for iOS devices, you also need to have [Xcode](https://developer.apple.com/xcode/) and [CocoaPods](https://cocoapods.org/) (version 1.10.0 or higher) installed. We use Xcode 12.4 for development. If you only target Android devices, Xcode is _not_ required.
 
 ### Add the HERE SDK Plugin
 
@@ -69,26 +69,13 @@ If you are new to Flutter, here are more detailed steps for you. You may also wa
   - You can open the `/repository root/ios/Runner.xcworkspace` project in Xcode and execute and debug from there.
   - Note: You need to have valid _development certificates_ available to sign the app for device deployment.
 
-## Code Usage
+## Contributing
 
-This is an open source project and you are free to use the code and selected assets in this repository for your own applications. For more details, see the [License](#license) section below.
+You can contribute to this open source project and improve it for others. There are many ways to contribute to this project, whether you want to create an issue, submit bug reports or improve the documentation - we are happy to see your merge requests. Have a look at our [contribution guide](./CONTRIBUTING.md) and [code of conduct](./CODE_OF_CONDUCT.md). Happy coding!
 
-## Contribution
+## Questions and Support
 
-You can contribute code back to this open source project and improve this code for other people. There are many ways to contribute to this project, whether you want to create an issue, submit bug reports or improve the documentation - we are happy to see your merge requests. Have a look into our [contribution guide](./CONTRIBUTING.md) and happy coding!
-
-When you plan to contribute, please follow our [code of conduct](./CODE_OF_CONDUCT.md). ![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)
-
-## Get in Touch
-
-- If you have any questions on the reference application or the HERE SDK in general, please check the tag here-api on [stackoverflow.com](https://stackoverflow.com/questions/tagged/here-api).
-- If you have more questions or need further help, please [contact us](https://developer.here.com/help).
-
-Thank you for using the reference application for the HERE SDK for Flutter (_Navigate Edition_).
-
-## HERE Notice
-
-We provide the code 'AS IS'. Using the source code comes not with any additional grant of customer support or specific feature development. For sure, we still support you and in case you have questions please [contact us](https://developer.here.com/help#how-can-we-help-you). Please note, if you integrate parts if this application or the HERE SDK itself then please do not forget to include the respective HERE notices to your project as well. Furthermore, we ask you not to re-sell the included icons.
+We provide the code 'AS IS'. Using the source code does not come with any additional grant of customer support or promise of specific feature development on our part. If you have any questions, please [contact us](https://developer.here.com/help#how-can-we-help-you) or check the tag `here-api` on [stackoverflow.com](https://stackoverflow.com/questions/tagged/here-api).
 
 ## License
 
@@ -97,3 +84,8 @@ Copyright (C) 2020-2021 HERE Europe B.V.
 See the [LICENSE](./LICENSE) file in the root folder of this project for license details.
 
 For other use cases not listed in the license terms, please [contact us](https://developer.here.com/help).
+
+### Note
+
+This application and the HERE SDK itself include open source components which require explicit attribution. Please remember to add open source notices in your project.
+Furthermore, we ask you not to re-sell the icons included in this project.
