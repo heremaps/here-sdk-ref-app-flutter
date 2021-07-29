@@ -49,7 +49,7 @@ class LandingScreen extends StatefulWidget {
   _LandingScreenState createState() => _LandingScreenState();
 }
 
-class _LandingScreenState extends State<LandingScreen> with WidgetsBindingObserver, Positioning {
+class _LandingScreenState extends State<LandingScreen> with Positioning {
   bool _mapInitSuccess = false;
   HereMapController _hereMapController;
   GlobalKey _hereMapKey = GlobalKey();
@@ -59,17 +59,7 @@ class _LandingScreenState extends State<LandingScreen> with WidgetsBindingObserv
   Place _routeFromPlace;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    if (userConsentState == ConsentUserReply.notHandled) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => requestUserConsent());
-    }
-  }
-
-  @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _hereMapController?.release();
     _routeFromMarker?.release();
     _routeFromPlace?.release();
@@ -78,36 +68,20 @@ class _LandingScreenState extends State<LandingScreen> with WidgetsBindingObserv
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // this callback will be called after the user consent screen is closed
-      // rebuild layout with a new key for the map widget
-      setState(() {});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (userConsentState == ConsentUserReply.requesting || userConsentState == ConsentUserReply.notHandled) {
-      // don't show the map until asking the user for consent
-      return Scaffold();
-    }
-
-    return Scaffold(
-      body: Stack(
-        children: [
-          HereMap(
-            key: _hereMapKey,
-            onMapCreated: _onMapCreated,
-          ),
-          if (Platform.isAndroid) _buildMenuButton(),
-        ],
-      ),
-      floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
-      drawer: Platform.isAndroid ? _buildDrawer(context) : null,
-      extendBodyBehindAppBar: true,
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        body: Stack(
+          children: [
+            HereMap(
+              key: _hereMapKey,
+              onMapCreated: _onMapCreated,
+            ),
+            if (Platform.isAndroid) _buildMenuButton(),
+          ],
+        ),
+        floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
+        drawer: Platform.isAndroid ? _buildDrawer(context) : null,
+        extendBodyBehindAppBar: true,
+      );
 
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController?.release();
@@ -124,6 +98,7 @@ class _LandingScreenState extends State<LandingScreen> with WidgetsBindingObserv
       _addGestureListeners();
 
       initLocationEngine(
+        context: context,
         hereMapController: hereMapController,
         onLocationEngineStatus: (status) => _checkLocationStatus(status),
       );
@@ -216,10 +191,7 @@ class _LandingScreenState extends State<LandingScreen> with WidgetsBindingObserv
         ),
         onTap: () {
           Navigator.of(context).pop();
-          _mapInitSuccess = false;
-          // force-recreating the map view next time to avoid rendering issues
-          _hereMapKey = GlobalKey();
-          requestUserConsent();
+          requestUserConsent(context).then((value) => setState(() {}));
         },
       ),
     ];
@@ -310,21 +282,20 @@ class _LandingScreenState extends State<LandingScreen> with WidgetsBindingObserv
   }
 
   void _addGestureListeners() {
-    _hereMapController.gestures.panListener =
-        PanListener.fromLambdas(lambda_onPan: (state, origin, translation, velocity) {
+    _hereMapController.gestures.panListener = PanListener((state, origin, translation, velocity) {
       if (enableMapUpdate) {
         setState(() => enableMapUpdate = false);
       }
     });
 
-    _hereMapController.gestures.tapListener = TapListener.fromLambdas(lambda_onTap: (point) {
+    _hereMapController.gestures.tapListener = TapListener((point) {
       if (_hereMapController.widgetPins.isEmpty) {
         _removeRouteFromMarker();
       }
       _dismissWayPointPopup();
     });
 
-    _hereMapController.gestures.longPressListener = LongPressListener.fromLambdas(lambda_onLongPress: (state, point) {
+    _hereMapController.gestures.longPressListener = LongPressListener((state, point) {
       if (state == GestureState.begin) {
         _showWayPointPopup(point);
       }

@@ -139,14 +139,14 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       _setTapGestureHandler();
 
       initLocationEngine(
+        context: context,
         hereMapController: hereMapController,
       );
     });
   }
 
   void _addPanListener() {
-    _hereMapController.gestures.panListener =
-        PanListener.fromLambdas(lambda_onPan: (state, origin, translation, velocity) {
+    _hereMapController.gestures.panListener = PanListener((state, origin, translation, velocity) {
       if (enableMapUpdate) {
         setState(() => enableMapUpdate = false);
       }
@@ -163,9 +163,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   void _setTapGestureHandler() {
-    _hereMapController.gestures.tapListener = TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
-      _pickMapMarker(touchPoint);
-    });
+    _hereMapController.gestures.tapListener = TapListener((Point2D touchPoint) => _pickMapMarker(touchPoint));
   }
 
   void _pickMapMarker(Point2D touchPoint) {

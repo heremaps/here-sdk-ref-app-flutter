@@ -37,6 +37,7 @@ class RouteDetailsScreen extends StatefulWidget {
 
   /// The route.
   final Routing.Route route;
+
   /// [WayPointsController] that contains way points for the route.
   final WayPointsController wayPointsController;
 
@@ -143,9 +144,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   void _setTapGestureHandler() {
-    _hereMapController.gestures.tapListener = TapListener.fromLambdas(lambda_onTap: (Point2D touchPoint) {
-      _pickMapMarker(touchPoint);
-    });
+    _hereMapController.gestures.tapListener = TapListener((Point2D touchPoint) => _pickMapMarker(touchPoint));
   }
 
   _pickMapMarker(Point2D touchPoint) {
