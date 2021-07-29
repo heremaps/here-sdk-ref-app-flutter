@@ -86,6 +86,7 @@ mixin Positioning {
   /// Initializes the location engine. The [hereMapController] is used to display current position marker,
   /// [onLocationEngineStatus] and [onLocationUpdated] callbacks are required to get location updates.
   void initLocationEngine({
+    @required BuildContext context,
     @required HereMapController hereMapController,
     LocationEngineStatusCallback onLocationEngineStatus,
     LocationUpdatedCallback onLocationUpdated,
@@ -94,20 +95,22 @@ mixin Positioning {
     _onLocationEngineStatus = onLocationEngineStatus;
     _onLocationUpdatedCallback = onLocationUpdated;
 
-    await _askPermissions();
+    await _askPermissions(context);
   }
 
   /// Displays user consent form.
-  void requestUserConsent() {
-    _consentEngine?.requestUserConsent();
-  }
+  Future<ConsentUserReply> requestUserConsent(BuildContext context) => _consentEngine?.requestUserConsent(context);
 
   /// Gets user consent state.
   ConsentUserReply get userConsentState {
     return _consentEngine?.userConsentState;
   }
 
-  void _askPermissions() async {
+  void _askPermissions(BuildContext context) async {
+    if (userConsentState == ConsentUserReply.notHandled) {
+      await requestUserConsent(context);
+    }
+
     Map<Permission, PermissionStatus> statuses = await [
       Permission.location,
     ].request();
@@ -130,13 +133,8 @@ mixin Positioning {
     releaseLocationEngine();
 
     _locationEngine = LocationEngine();
-    _locationEngine.addLocationListener(LocationListener.fromLambdas(
-      lambda_onLocationUpdated: (location) => _onLocationUpdated(location),
-    ));
-    _locationEngine.addLocationStatusListener(LocationStatusListener.fromLambdas(
-      lambda_onStatusChanged: _onStatusChanged,
-      lambda_onFeaturesNotAvailable: null,
-    ));
+    _locationEngine.addLocationListener(LocationListener((location) => _onLocationUpdated(location)));
+    _locationEngine.addLocationStatusListener(LocationStatusListener(_onStatusChanged, null));
 
     LocationEngineStatus status = _locationEngine.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
     if (status != LocationEngineStatus.alreadyStarted && status != LocationEngineStatus.engineStarted) {

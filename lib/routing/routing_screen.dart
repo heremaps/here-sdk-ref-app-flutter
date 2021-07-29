@@ -200,6 +200,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
       );
 
       initLocationEngine(
+        context: context,
         hereMapController: hereMapController,
         onLocationUpdated: (location) => _wayPointsController.currentLocation =
             location?.coordinates ?? _hereMapController.camera.state.targetCoordinates,
@@ -212,28 +213,22 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   }
 
   void _addGestureListeners() {
-    _hereMapController.gestures.panListener = PanListener.fromLambdas(
-      lambda_onPan: (state, origin, translation, velocity) {
-        if (enableMapUpdate) {
-          setState(() => enableMapUpdate = false);
-        }
-      },
-    );
+    _hereMapController.gestures.panListener = PanListener((state, origin, translation, velocity) {
+      if (enableMapUpdate) {
+        setState(() => enableMapUpdate = false);
+      }
+    });
 
-    _hereMapController.gestures.tapListener = TapListener.fromLambdas(
-      lambda_onTap: (Point2D touchPoint) {
-        _dismissWayPointPopup();
-        _pickMapItem(touchPoint);
-      },
-    );
+    _hereMapController.gestures.tapListener = TapListener((Point2D touchPoint) {
+      _dismissWayPointPopup();
+      _pickMapItem(touchPoint);
+    });
 
-    _hereMapController.gestures.longPressListener = LongPressListener.fromLambdas(
-      lambda_onLongPress: (state, point) {
-        if (state == GestureState.begin) {
-          _showWayPointPopup(point);
-        }
-      },
-    );
+    _hereMapController.gestures.longPressListener = LongPressListener((state, point) {
+      if (state == GestureState.begin) {
+        _showWayPointPopup(point);
+      }
+    });
   }
 
   void _resetCurrentPosition() {

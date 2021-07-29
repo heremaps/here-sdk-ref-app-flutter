@@ -52,6 +52,7 @@ class NavigationScreen extends StatefulWidget {
 
   /// Initial route for navigation.
   final Routing.Route route;
+
   /// Waypoints lists of the route.
   final List<Routing.Waypoint> wayPoints;
 
@@ -118,7 +119,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   void initState() {
     super.initState();
     Screen.keepOn(true);
-    _visualNavigator = Navigation.VisualNavigator.make();
+    _visualNavigator = Navigation.VisualNavigator();
     _remainingDistanceInMeters = widget.route.lengthInMeters;
     _remainingDurationInSeconds = widget.route.durationInSeconds;
     _currentRoute = widget.route;
@@ -309,8 +310,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   }
 
   void _setupListeners() {
-    _visualNavigator.routeProgressListener =
-        Navigation.RouteProgressListener.fromLambdas(lambda_onRouteProgressUpdated: (routeProgress) {
+    _visualNavigator.routeProgressListener = Navigation.RouteProgressListener((routeProgress) {
       List<Navigation.SectionProgress> sectionProgressList = routeProgress.sectionProgress;
 
       int currentManeuverIndex;
@@ -340,26 +340,22 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       });
     });
 
-    _visualNavigator.navigableLocationListener = Navigation.NavigableLocationListener.fromLambdas(
-      lambda_onNavigableLocationUpdated: (location) {
-        if (_currentSpeed != location.originalLocation.speedInMetersPerSecond) {
-          setState(() {
-            _currentSpeed = location.originalLocation.speedInMetersPerSecond;
-          });
-        }
-      },
-    );
+    _visualNavigator.navigableLocationListener = Navigation.NavigableLocationListener((location) {
+      if (_currentSpeed != location.originalLocation.speedInMetersPerSecond) {
+        setState(() {
+          _currentSpeed = location.originalLocation.speedInMetersPerSecond;
+        });
+      }
+    });
 
-    _visualNavigator.roadTextsListener =
-        Navigation.RoadTextsListener.fromLambdas(lambda_onRoadTextsUpdated: (roadTexts) {
+    _visualNavigator.roadTextsListener = Navigation.RoadTextsListener((roadTexts) {
       if (_currentStreetName != roadTexts.names.getDefaultValue()) {
         setState(() => _currentStreetName = roadTexts.names.getDefaultValue());
       }
     });
 
     if (_currentRoute.transportMode != Routing.TransportMode.pedestrian) {
-      _visualNavigator.speedLimitListener =
-          Navigation.SpeedLimitListener.fromLambdas(lambda_onSpeedLimitUpdated: (speedLimit) {
+      _visualNavigator.speedLimitListener = Navigation.SpeedLimitListener((speedLimit) {
         if (_currentSpeedLimit != speedLimit.speedLimitInMetersPerSecond) {
           setState(() => _currentSpeedLimit = speedLimit.speedLimitInMetersPerSecond);
         }
@@ -367,8 +363,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
       _visualNavigator.speedWarningOptions = Navigation.SpeedWarningOptions(Navigation.SpeedLimitOffset(
           _kDefaultSpeedLimitOffset, _kDefaultSpeedLimitOffset, _kDefaultSpeedLimitBoundary));
-      _visualNavigator.speedWarningListener =
-          Navigation.SpeedWarningListener.fromLambdas(lambda_onSpeedWarningStatusChanged: (status) {
+      _visualNavigator.speedWarningListener = Navigation.SpeedWarningListener((status) {
         if (status == Navigation.SpeedWarningStatus.speedLimitExceeded && _soundEnabled) {
           FlutterRingtonePlayer.playNotification();
         }
@@ -376,8 +371,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       });
     }
 
-    _visualNavigator.destinationReachedListener =
-        Navigation.DestinationReachedListener.fromLambdas(lambda_onDestinationReached: () async {
+    _visualNavigator.destinationReachedListener = Navigation.DestinationReachedListener(() async {
       await _stopNavigation();
       Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
     });
@@ -389,26 +383,24 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   void _setupVoiceTextMessages() async {
     await _flutterTts.setLanguage("en-US");
 
-    _visualNavigator.maneuverNotificationListener = Navigation.ManeuverNotificationListener.fromLambdas(
-      lambda_onManeuverNotification: (text) {
-        if (_soundEnabled) {
-          _flutterTts.speak(text);
-        }
+    _visualNavigator.maneuverNotificationListener = Navigation.ManeuverNotificationListener((text) {
+      if (_soundEnabled) {
+        _flutterTts.speak(text);
+      }
 
-        if (_appLifecycleState == AppLifecycleState.paused) {
-          Routing.Maneuver maneuver = _visualNavigator.getManeuver(_currentManeuverIndex);
+      if (_appLifecycleState == AppLifecycleState.paused) {
+        Routing.Maneuver maneuver = _visualNavigator.getManeuver(_currentManeuverIndex);
 
-          LocalNotificationsHelper.showManeuverNotification(
-            _getRemainingTimeString(),
-            text,
-            maneuver.action.imagePath,
-            !_soundEnabled,
-          );
+        LocalNotificationsHelper.showManeuverNotification(
+          _getRemainingTimeString(),
+          text,
+          maneuver.action.imagePath,
+          !_soundEnabled,
+        );
 
-          maneuver.release();
-        }
-      },
-    );
+        maneuver.release();
+      }
+    });
   }
 
   String _getRemainingTimeString() {
@@ -658,7 +650,8 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     }
     if (state == AppLifecycleState.resumed) {
       LocalNotificationsHelper.stopNotifications();
-      _visualNavigator.startRendering(_hereMapController);
+      SchedulerBinding.instance
+          .addPostFrameCallback((timeStamp) => _visualNavigator.startRendering(_hereMapController));
     }
     _appLifecycleState = state;
   }

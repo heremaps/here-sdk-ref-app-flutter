@@ -50,6 +50,7 @@ class PedestrianOptionsScreen extends StatelessWidget {
             onChanged: (text) => context.read<RoutePreferencesModel>().pedestrianOptions = PedestrianOptions(
               pedestrianOptions.routeOptions,
               pedestrianOptions.textOptions,
+              AvoidanceOptions.withDefaults(),
               double.tryParse(text) ?? 0,
             ),
           ),
