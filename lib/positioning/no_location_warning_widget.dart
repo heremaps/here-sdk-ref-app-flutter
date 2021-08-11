@@ -33,8 +33,8 @@ class NoLocationWarning extends StatelessWidget {
 
   /// Constructs a widget.
   NoLocationWarning({
-    Key key,
-    @required this.onPressed,
+    Key? key,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -65,7 +65,7 @@ class NoLocationWarning extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      AppLocalizations.of(context).noLocationWarning,
+                      AppLocalizations.of(context)!.noLocationWarning,
                       style: TextStyle(
                         fontSize: UIStyle.bigFontSize,
                         color: UIStyle.noLocationWarningColor,
@@ -77,7 +77,7 @@ class NoLocationWarning extends StatelessWidget {
                       Icons.close,
                       color: UIStyle.noLocationWarningColor,
                     ),
-                    onPressed: () => onPressed(),
+                    onPressed: onPressed,
                   ),
                 ],
               ),

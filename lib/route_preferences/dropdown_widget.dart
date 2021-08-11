@@ -25,18 +25,20 @@ import 'package:flutter/material.dart';
 class DropdownWidget extends StatelessWidget {
   /// Creates a widget.
   DropdownWidget({
-    Key key,
-    @required this.data,
-    @required this.selectedValue,
-    @required this.onChanged,
+    Key? key,
+    required this.data,
+    this.selectedValue,
+    required this.onChanged,
   }) : super(key: key);
 
   /// Dropdown list items.
   final Map<int, String> data;
+
   /// Id of the selected value.
-  final int selectedValue;
+  final int? selectedValue;
+
   /// Called when the selected item is changed.
-  final Function onChanged;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,11 @@ class DropdownWidget extends StatelessWidget {
             ),
           )
           .toList(),
-      onChanged: onChanged,
+      onChanged: (value) {
+        if (value != null) {
+          onChanged(value as int);
+        }
+      },
     );
   }
 }

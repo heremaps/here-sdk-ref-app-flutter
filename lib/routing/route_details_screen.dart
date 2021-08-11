@@ -43,9 +43,9 @@ class RouteDetailsScreen extends StatefulWidget {
 
   /// Constructs a widget.
   RouteDetailsScreen({
-    Key key,
-    @required this.route,
-    @required this.wayPointsController,
+    Key? key,
+    required this.route,
+    required this.wayPointsController,
   }) : super(key: key);
 
   @override
@@ -68,8 +68,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   static const double _kZoomDistanceToManeuver = 500;
   static const double _kTapRadius = 5;
 
-  HereMapController _hereMapController;
-  MapPolyline _mapRoute;
+  late HereMapController _hereMapController;
+  bool _mapInitSuccess = false;
+  late MapPolyline _mapRoute;
   List<MapMarker> _maneuverMarkers = [];
   List<Routing.Maneuver> _maneuvers = [];
 
@@ -78,15 +79,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
   @override
   void initState() {
-    widget.route.sections.forEach((section) => section.maneuvers.forEach((maneuver) => _maneuvers.add(maneuver)));
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _hereMapController?.release();
-    _clearMapRoute();
-    super.dispose();
+    widget.route.sections.forEach((section) => section.maneuvers.forEach((maneuver) => _maneuvers.add(maneuver)));
   }
 
   @override
@@ -94,8 +88,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
         onWillPop: () async {
           if (_hasBeenZoomedToManeuver) {
             if (_maneuversSheetIsExpanded) {
-              DraggableScrollableActuator.reset(_bottomSheetKey.currentContext);
-              _hereMapController?.setWatermarkPosition(WatermarkPlacement.bottomCenter, 0);
+              DraggableScrollableActuator.reset(_bottomSheetKey.currentContext!);
+              _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomCenter, 0);
             }
 
             _zoomToWholeRoute();
@@ -122,15 +116,14 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           ),
           extendBodyBehindAppBar: true,
           extendBody: true,
-          bottomNavigationBar: _buildBottomSheet(context),
+          bottomNavigationBar: _mapInitSuccess ? _buildBottomSheet(context) : null,
         ),
       );
 
   void _onMapCreated(HereMapController hereMapController) {
-    _hereMapController?.release();
-    setState(() => _hereMapController = hereMapController);
+    _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError? error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
@@ -139,6 +132,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomCenter, 0);
       _addRouteToMap();
       _setTapGestureHandler();
+      setState(() => _mapInitSuccess = true);
     });
   }
 
@@ -148,8 +142,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
   _pickMapMarker(Point2D touchPoint) {
     _hereMapController.pickMapItems(touchPoint, _kTapRadius, (pickMapItemsResult) {
-      List<MapMarker> mapMarkersList = pickMapItemsResult.markers;
-      if (mapMarkersList.length == 0) {
+      List<MapMarker>? mapMarkersList = pickMapItemsResult?.markers;
+      if (mapMarkersList == null || mapMarkersList.length == 0) {
         print("No map markers found.");
         return;
       }
@@ -161,13 +155,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     });
   }
 
-  _clearMapRoute() {
-    _maneuverMarkers.clear();
-  }
-
   _addRouteToMap() {
-    _clearMapRoute();
-
     GeoPolyline routeGeoPolyline = GeoPolyline(widget.route.polyline);
     _mapRoute = MapPolyline(routeGeoPolyline, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
     _mapRoute.outlineColor = UIStyle.selectedRouteBorderColor;
@@ -204,7 +192,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   _zoomToWholeRoute() {
-    final BuildContext context = _mapKey.currentContext;
+    final BuildContext? context = _mapKey.currentContext;
     if (context != null) {
       final RenderBox box = context.findRenderObject() as RenderBox;
 
@@ -215,8 +203,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   _updateMapPrincipalPoint() {
-    final RenderBox mapBox = _mapKey.currentContext?.findRenderObject() as RenderBox;
-    final RenderBox bottomSheetBox = _bottomSheetKey.currentContext?.findRenderObject() as RenderBox;
+    final RenderBox? mapBox = _mapKey.currentContext?.findRenderObject() as RenderBox;
+    final RenderBox? bottomSheetBox = _bottomSheetKey.currentContext?.findRenderObject() as RenderBox;
 
     if (mapBox != null && bottomSheetBox != null) {
       _hereMapController.camera.principalPoint =
@@ -304,9 +292,9 @@ class _HeaderBuildDelegate extends SliverPersistentHeaderDelegate {
   final double extent;
 
   _HeaderBuildDelegate({
-    @required this.route,
-    @required this.controller,
-    @required this.extent,
+    required this.route,
+    required this.controller,
+    required this.extent,
   });
 
   @override

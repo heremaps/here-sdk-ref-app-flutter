@@ -25,17 +25,25 @@ import '../common/ui_style.dart';
 /// A widget that allows to enter numeric values.
 class NumericTextField extends StatelessWidget {
   /// Initial value.
-  final String initialValue;
+  final String? initialValue;
+
   /// Hint text.
-  final String hintText;
+  final String? hintText;
+
   /// True if the input value is to be interpreted as an integer, otherwise it is decimal.
   final bool isInteger;
+
   /// Called when the value is changed.
-  final Function onChanged;
+  final ValueChanged<String> onChanged;
 
   /// Constructs a widget.
-  NumericTextField({Key key, this.isInteger, this.initialValue, this.hintText, @required this.onChanged})
-      : super(key: key);
+  NumericTextField({
+    Key? key,
+    required this.isInteger,
+    this.initialValue,
+    this.hintText,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -27,18 +27,22 @@ class MarqueeWidget extends StatefulWidget {
 
   /// Child widget.
   final Widget child;
+
   /// Scroll direction.
   final Axis direction;
+
   /// Animation duration.
   final Duration animationDuration;
+
   /// Back animation duration.
   final Duration backDuration;
+
   /// Pause duration.
   final Duration pauseDuration;
 
   /// Constructs the widget.
   MarqueeWidget({
-    @required this.child,
+    required this.child,
     this.direction: Axis.horizontal,
     this.animationDuration: const Duration(
       milliseconds: _kDefaultAnimationDuration,
@@ -56,12 +60,12 @@ class MarqueeWidget extends StatefulWidget {
 }
 
 class _MarqueeWidgetState extends State<MarqueeWidget> {
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback(scroll);
+    WidgetsBinding.instance!.addPostFrameCallback(scroll);
     super.initState();
   }
 

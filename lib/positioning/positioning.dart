@@ -38,56 +38,50 @@ typedef LocationUpdatedCallback = void Function(Location location);
 mixin Positioning {
   static const double initDistanceToEarth = 8000; // meters
   static final GeoCoordinates initPosition = GeoCoordinates(52.530932, 13.384915);
-  static final ConsentEngine _consentEngine = Platform.isAndroid ? ConsentEngine() : null;
+  static final ConsentEngine? _consentEngine = Platform.isAndroid ? ConsentEngine() : null;
 
-  HereMapController _hereMapController;
-  LocationEngine _locationEngine;
+  late HereMapController _hereMapController;
+  LocationEngine? _locationEngine;
 
-  LocationEngineStatusCallback _onLocationEngineStatus;
-  LocationUpdatedCallback _onLocationUpdatedCallback;
+  LocationEngineStatusCallback? _onLocationEngineStatus;
+  LocationUpdatedCallback? _onLocationUpdatedCallback;
 
-  MapPolygon _locationAccuracyCircle;
-  MapMarker _locationMarker;
+  MapPolygon? _locationAccuracyCircle;
+  MapMarker? _locationMarker;
   bool _locationMarkerVisible = false;
 
   bool enableMapUpdate = true;
 
   /// Gets last known location.
-  Location get lastKnownLocation => _locationEngine?.lastKnownLocation;
+  Location? get lastKnownLocation => _locationEngine?.lastKnownLocation;
 
   /// Gets the state of the location engine.
-  bool get isLocationEngineStarted => _locationEngine != null ? _locationEngine.isStarted : false;
+  bool get isLocationEngineStarted => _locationEngine != null ? _locationEngine!.isStarted : false;
 
   /// Gets the state of the current location marker.
   bool get locationVisible => _locationMarkerVisible;
 
   /// Sets the state of the current location marker.
   set locationVisible(bool visible) {
-    if (_hereMapController != null && _locationMarker != null) {
+    if (_locationMarker != null) {
       if (visible) {
-        _hereMapController.mapScene.addMapMarker(_locationMarker);
-        _hereMapController.mapScene.addMapPolygon(_locationAccuracyCircle);
+        _hereMapController.mapScene.addMapMarker(_locationMarker!);
+        _hereMapController.mapScene.addMapPolygon(_locationAccuracyCircle!);
       } else {
-        _hereMapController.mapScene.removeMapMarker(_locationMarker);
-        _hereMapController.mapScene.removeMapPolygon(_locationAccuracyCircle);
+        _hereMapController.mapScene.removeMapMarker(_locationMarker!);
+        _hereMapController.mapScene.removeMapPolygon(_locationAccuracyCircle!);
       }
       _locationMarkerVisible = visible;
     }
   }
 
-  /// Releases resources.
-  void releaseLocationEngine() {
-    _locationEngine?.release();
-    _consentEngine?.release();
-  }
-
   /// Initializes the location engine. The [hereMapController] is used to display current position marker,
   /// [onLocationEngineStatus] and [onLocationUpdated] callbacks are required to get location updates.
   void initLocationEngine({
-    @required BuildContext context,
-    @required HereMapController hereMapController,
-    LocationEngineStatusCallback onLocationEngineStatus,
-    LocationUpdatedCallback onLocationUpdated,
+    required BuildContext context,
+    required HereMapController hereMapController,
+    LocationEngineStatusCallback? onLocationEngineStatus,
+    LocationUpdatedCallback? onLocationUpdated,
   }) async {
     _hereMapController = hereMapController;
     _onLocationEngineStatus = onLocationEngineStatus;
@@ -97,14 +91,14 @@ mixin Positioning {
   }
 
   /// Displays user consent form.
-  Future<ConsentUserReply> requestUserConsent(BuildContext context) => _consentEngine?.requestUserConsent(context);
+  Future<ConsentUserReply>? requestUserConsent(BuildContext context) => _consentEngine?.requestUserConsent(context);
 
   /// Gets user consent state.
-  ConsentUserReply get userConsentState {
+  ConsentUserReply? get userConsentState {
     return _consentEngine?.userConsentState;
   }
 
-  void _askPermissions(BuildContext context) async {
+  Future _askPermissions(BuildContext context) async {
     if (userConsentState == ConsentUserReply.notHandled) {
       await requestUserConsent(context);
     }
@@ -115,34 +109,30 @@ mixin Positioning {
 
     final bool locationEnabled = await Permission.location.serviceStatus.isEnabled;
 
-    if (statuses.containsKey(Permission.location) && statuses[Permission.location].isGranted && locationEnabled) {
+    if (statuses.containsKey(Permission.location) && statuses[Permission.location]!.isGranted && locationEnabled) {
       // The required permissions have been granted, let's start the location engine
       await _createAndInitLocationEngine();
       return;
     }
 
     _addMyLocationToMap(geoCoordinates: initPosition);
-    if (_onLocationEngineStatus != null) {
-      _onLocationEngineStatus(LocationEngineStatus.missingPermissions);
-    }
+    _onLocationEngineStatus?.call(LocationEngineStatus.missingPermissions);
   }
 
-  void _createAndInitLocationEngine() async {
-    releaseLocationEngine();
-
+  Future _createAndInitLocationEngine() async {
     _locationEngine = LocationEngine();
-    _locationEngine.addLocationListener(LocationListener((location) => _onLocationUpdated(location)));
-    _locationEngine.addLocationStatusListener(LocationStatusListener(_onStatusChanged, null));
+    _locationEngine!.addLocationListener(LocationListener((location) => _onLocationUpdated(location)));
+    _locationEngine!.addLocationStatusListener(LocationStatusListener(_onStatusChanged, (features) {}));
 
-    LocationEngineStatus status = _locationEngine.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
+    LocationEngineStatus status = _locationEngine!.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
     if (status != LocationEngineStatus.alreadyStarted && status != LocationEngineStatus.engineStarted) {
       return;
     }
 
-    final Location lastKnownLocation = _locationEngine.lastKnownLocation;
+    final Location? lastKnownLocation = _locationEngine!.lastKnownLocation;
     if (lastKnownLocation != null) {
       final double accuracy =
-          (lastKnownLocation.horizontalAccuracyInMeters != null) ? lastKnownLocation.horizontalAccuracyInMeters : 0;
+          (lastKnownLocation.horizontalAccuracyInMeters != null) ? lastKnownLocation.horizontalAccuracyInMeters! : 0;
 
       // Show the obtained last known location on a map.
       _addMyLocationToMap(geoCoordinates: lastKnownLocation.coordinates, accuracyRadiusInMeters: accuracy);
@@ -161,7 +151,7 @@ mixin Positioning {
   }
 
   void _addMyLocationToMap({
-    GeoCoordinates geoCoordinates,
+    required GeoCoordinates geoCoordinates,
     double accuracyRadiusInMeters = 0,
   }) {
     int locationMarkerSize = (UIStyle.locationMarkerSize * _hereMapController.pixelScale).truncate();
@@ -178,8 +168,8 @@ mixin Positioning {
     );
 
     // Add the circle to the map.
-    _hereMapController.mapScene.addMapPolygon(_locationAccuracyCircle);
-    _hereMapController.mapScene.addMapMarker(_locationMarker);
+    _hereMapController.mapScene.addMapPolygon(_locationAccuracyCircle!);
+    _hereMapController.mapScene.addMapMarker(_locationMarker!);
     _locationMarkerVisible = true;
   }
 
@@ -190,27 +180,19 @@ mixin Positioning {
   }
 
   void _onLocationUpdated(Location location) {
-    final double accuracy = (location.horizontalAccuracyInMeters != null) ? location.horizontalAccuracyInMeters : 0.0;
-    if (_locationAccuracyCircle != null) {
-      _locationAccuracyCircle.geometry = _createGeometry(location.coordinates, accuracy);
-    }
-    if (_locationMarker != null) {
-      _locationMarker.coordinates = location.coordinates;
-    }
+    final double accuracy = (location.horizontalAccuracyInMeters != null) ? location.horizontalAccuracyInMeters! : 0.0;
+    _locationAccuracyCircle?.geometry = _createGeometry(location.coordinates, accuracy);
+    _locationMarker?.coordinates = location.coordinates;
 
     // Update the map viewport to be centered on the location.
     if (enableMapUpdate) {
       _hereMapController.camera.lookAtPoint(location.coordinates);
     }
 
-    if (_onLocationUpdatedCallback != null) {
-      _onLocationUpdatedCallback(location);
-    }
+    _onLocationUpdatedCallback?.call(location);
   }
 
   void _onStatusChanged(LocationEngineStatus status) {
-    if (_onLocationEngineStatus != null) {
-      _onLocationEngineStatus(status);
-    }
+    _onLocationEngineStatus?.call(status);
   }
 }

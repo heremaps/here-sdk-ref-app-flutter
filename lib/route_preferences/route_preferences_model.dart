@@ -30,9 +30,9 @@ class RoutePreferencesModel extends ChangeNotifier {
   ScooterOptions _scooterOptions;
   PedestrianOptions _pedestrianOptions;
 
-  RouteOptions _sharedRouteOptions;
-  RouteTextOptions _sharedRouteTextOptions;
-  AvoidanceOptions _sharedAvoidanceOptions;
+  late RouteOptions _sharedRouteOptions;
+  late RouteTextOptions _sharedRouteTextOptions;
+  late AvoidanceOptions _sharedAvoidanceOptions;
 
   /// Sets new routing settings for car mode.
   set carOptions(CarOptions value) {

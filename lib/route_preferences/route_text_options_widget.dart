@@ -39,8 +39,8 @@ class RouteTextOptionsWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        PreferencesSectionTitle(title: AppLocalizations.of(context).routeTextOptionsTitle),
-        PreferencesRowTitle(title: AppLocalizations.of(context).textFormatTitle),
+        PreferencesSectionTitle(title: AppLocalizations.of(context)!.routeTextOptionsTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.textFormatTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: DropdownButtonHideUnderline(
@@ -55,7 +55,7 @@ class RouteTextOptionsWidget extends StatelessWidget {
             ),
           ),
         ),
-        PreferencesRowTitle(title: AppLocalizations.of(context).unitSystemTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.unitSystemTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: DropdownButtonHideUnderline(
@@ -70,7 +70,7 @@ class RouteTextOptionsWidget extends StatelessWidget {
             ),
           ),
         ),
-        PreferencesRowTitle(title: AppLocalizations.of(context).languageCodeTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.languageCodeTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: DropdownButtonHideUnderline(

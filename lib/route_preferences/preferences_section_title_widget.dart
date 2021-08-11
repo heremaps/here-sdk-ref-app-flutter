@@ -27,7 +27,9 @@ class PreferencesSectionTitle extends StatelessWidget {
   final String title;
 
   /// Constructs a widget.
-  PreferencesSectionTitle({@required this.title});
+  PreferencesSectionTitle({
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -17,20 +17,24 @@
  * License-Filename: LICENSE
  */
 
-import 'route_preferences/route_preferences_model.dart';
 import 'package:flutter/material.dart';
-import 'package:here_sdk/core.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:here_sdk/core.dart';
+import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
+import 'package:here_sdk/routing.dart' as Routing;
 
+import 'common/ui_style.dart';
 import 'landing_screen.dart';
 import 'navigation/navigation_screen.dart';
-import 'search/recent_search_data_model.dart';
+import 'route_preferences/route_preferences_model.dart';
 import 'routing/route_details_screen.dart';
 import 'routing/routing_screen.dart';
+import 'routing/waypoint_info.dart';
+import 'routing/waypoints_controller.dart';
+import 'search/recent_search_data_model.dart';
 import 'search/search_results_screen.dart';
-import 'common/ui_style.dart';
 
 /// The entry point of the application.
 void main() {
@@ -59,48 +63,47 @@ class MyApp extends StatelessWidget {
           const Locale('en', ''),
         ],
         theme: UIStyle.lightTheme,
-        onGenerateTitle: (BuildContext context) => AppLocalizations.of(context).appTitle,
+        onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
         onGenerateRoute: (RouteSettings settings) {
           Map<String, WidgetBuilder> routes = {
             LandingScreen.navRoute: (BuildContext context) => LandingScreen(),
             SearchResultsScreen.navRoute: (BuildContext context) {
-              List<Object> arguments = settings.arguments;
-              assert(arguments != null && arguments.length == 3);
+              List<dynamic> arguments = settings.arguments as List<dynamic>;
+              assert(arguments.length == 3);
               return SearchResultsScreen(
-                queryString: arguments[0],
-                places: arguments[1],
-                currentPosition: arguments[2],
+                queryString: arguments[0] as String,
+                places: arguments[1] as List<Place>,
+                currentPosition: arguments[2] as GeoCoordinates,
               );
             },
             RoutingScreen.navRoute: (BuildContext context) {
-              List<Object> arguments = settings.arguments;
-              assert(arguments != null && arguments.length == 3);
+              List<dynamic> arguments = settings.arguments as List<dynamic>;
+              assert(arguments.length == 3);
               return RoutingScreen(
-                currentPosition: arguments[0],
-                departure: arguments[1],
-                destination: arguments[2],
+                currentPosition: arguments[0] as GeoCoordinates,
+                departure: arguments[1] as WayPointInfo,
+                destination: arguments[2] as WayPointInfo,
               );
             },
             RouteDetailsScreen.navRoute: (BuildContext context) {
-              List<Object> arguments = settings.arguments;
-              assert(arguments != null && arguments.length == 2);
+              List<dynamic> arguments = settings.arguments as List<dynamic>;
+              assert(arguments.length == 2);
               return RouteDetailsScreen(
-                route: arguments[0],
-                wayPointsController: arguments[1],
+                route: arguments[0] as Routing.Route,
+                wayPointsController: arguments[1] as WayPointsController,
               );
             },
             NavigationScreen.navRoute: (BuildContext context) {
-              List<Object> arguments = settings.arguments;
-              assert(arguments != null && arguments.length == 2);
+              List<dynamic> arguments = settings.arguments as List<dynamic>;
+              assert(arguments.length == 2);
               return NavigationScreen(
-                route: arguments[0],
-                wayPoints: arguments[1],
+                route: arguments[0] as Routing.Route,
+                wayPoints: arguments[1] as List<Routing.Waypoint>,
               );
             },
           };
 
-          WidgetBuilder builder = routes[settings.name];
-          assert(builder != null);
+          WidgetBuilder builder = routes[settings.name]!;
           return MaterialPageRoute(
             builder: (ctx) => builder(ctx),
             settings: settings,

@@ -20,7 +20,6 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.threading.dart';
 import 'package:here_sdk/mapview.dart';
@@ -54,26 +53,24 @@ class RoutePoiHandler {
   final WayPointsController wayPointsController;
 
   /// Called to get a localized string describing a place.
-  final GetTextForPoiMarkerCallback onGetText;
+  final GetTextForPoiMarkerCallback? onGetText;
 
   List<String> _categories = [];
   Map<Routing.Route, List<Place>> _placesForRoutes = {};
   Map<MapMarker, Place> _markers = {};
   SearchEngine _searchEngine = SearchEngine();
-  TaskHandle _poiSearchTask;
+  TaskHandle? _poiSearchTask;
 
   /// Constructs a [RoutePoiHandler] object.
   RoutePoiHandler({
-    @required this.hereMapController,
-    @required this.wayPointsController,
+    required this.hereMapController,
+    required this.wayPointsController,
     this.onGetText,
   });
 
   /// Releases resources.
   void release() {
     _stopCurrentSearch();
-    _clearMarkers();
-    clearPlaces();
   }
 
   void _stopCurrentSearch() {
@@ -102,7 +99,7 @@ class RoutePoiHandler {
   bool isPoiMarker(MapMarker mapMarker) => _markers.containsKey(mapMarker);
 
   /// Returns [Place] of the [marker].
-  Place getPlaceFromMarker(MapMarker marker) => _markers[marker];
+  Place getPlaceFromMarker(MapMarker marker) => _markers[marker]!;
 
   /// Removes all found places.
   void clearPlaces() {
@@ -115,7 +112,7 @@ class RoutePoiHandler {
     _stopCurrentSearch();
 
     if (_placesForRoutes.containsKey(route)) {
-      _addMarkersForPlaces(_placesForRoutes[route]);
+      _addMarkersForPlaces(_placesForRoutes[route]!);
     } else {
       if (_categories.isEmpty) {
         return;
@@ -131,7 +128,7 @@ class RoutePoiHandler {
           return;
         }
 
-        _placesForRoutes[route] = places;
+        _placesForRoutes[route] = places!;
         _addMarkersForPlaces(places);
       });
     }
@@ -139,7 +136,7 @@ class RoutePoiHandler {
 
   List<Place> _filterPlaces(List<Place> places) {
     final Set<String> wayPointsPlacesIds =
-        wayPointsController.value.where((wp) => wp.place != null).map((wp) => wp.place.id).toSet();
+        wayPointsController.value.where((wp) => wp.place != null).map((wp) => wp.place!.id).toSet();
     return places.whereNot((place) => wayPointsPlacesIds.contains(place.id)).toList();
   }
 
@@ -149,14 +146,14 @@ class RoutePoiHandler {
     _filterPlaces(places).forEach((place) {
       SvgInfo svgInfo = PoiSVGHelper.getPoiSvgForCategoryAndText(
         type: _findPoiTypeForCategories(place.details.categories),
-        text: onGetText != null ? onGetText(place) : null,
+        text: onGetText?.call(place),
       );
 
       MapImage mapImage = MapImage.withImageDataImageFormatWidthAndHeight(Uint8List.fromList(svgInfo.svg.codeUnits),
           ImageFormat.svg, (svgInfo.width * (markerSize / svgInfo.height)).truncate(), markerSize);
 
       MapMarker mapMarker = Util.createMarkerWithImage(
-        place.geoCoordinates,
+        place.geoCoordinates!,
         mapImage,
         drawOrder: UIStyle.searchMarkerDrawOrder,
         anchor: Anchor2D.withHorizontalAndVertical(0.5, 1),
@@ -167,8 +164,8 @@ class RoutePoiHandler {
     });
   }
 
-  PoiIconType _findPoiTypeForCategoryId(String categoryId) {
-    PoiIconType result = _categoryPoiTypes[categoryId];
+  PoiIconType? _findPoiTypeForCategoryId(String categoryId) {
+    PoiIconType? result = _categoryPoiTypes[categoryId];
     if (result != null) {
       return result;
     }
@@ -183,7 +180,7 @@ class RoutePoiHandler {
 
   PoiIconType _findPoiTypeForCategories(List<PlaceCategory> categories) {
     for (int i = 0; i < categories.length; ++i) {
-      PoiIconType result = _findPoiTypeForCategoryId(categories[i].id);
+      PoiIconType? result = _findPoiTypeForCategoryId(categories[i].id);
       if (result != null) {
         return result;
       }

@@ -35,20 +35,23 @@ typedef QueryCurrentLocationCallback = GeoCoordinates Function();
 class RouteWayPoints extends StatefulWidget {
   /// Waypoints controller.
   final WayPointsController controller;
+
   /// Map controller.
   final HereMapController hereMapController;
+
   /// Key of the current map.
   final GlobalKey hereMapKey;
+
   /// Title of the current location.
   final String currentLocationTitle;
 
   /// Creates a widget.
   RouteWayPoints({
-    Key key,
-    @required this.controller,
-    @required this.hereMapController,
-    @required this.hereMapKey,
-    this.currentLocationTitle,
+    Key? key,
+    required this.controller,
+    required this.hereMapController,
+    required this.hereMapKey,
+    required this.currentLocationTitle,
   }) : super(key: key);
 
   @override

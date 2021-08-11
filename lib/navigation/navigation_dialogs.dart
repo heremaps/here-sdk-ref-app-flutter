@@ -25,8 +25,8 @@ import '../common/ui_style.dart';
 
 /// Creates a dialog for selecting a location source for navigation.
 /// There are two options available, simulation and device location.
-Future<bool> askForPositionSource(BuildContext context) async {
-  AppLocalizations appLocalizations = AppLocalizations.of(context);
+Future<bool?> askForPositionSource(BuildContext context) async {
+  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
   return await showDialog<bool>(
     context: context,
@@ -59,9 +59,9 @@ Future<bool> askForPositionSource(BuildContext context) async {
 
 /// Creates a confirmation dialog to stop navigation.
 Future<bool> askForExitFromNavigation(BuildContext context) async {
-  AppLocalizations appLocalizations = AppLocalizations.of(context);
+  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-  return await showDialog<bool>(
+  bool? result = await showDialog<bool>(
     context: context,
     builder: (context) => SimpleDialog(
       children: [
@@ -142,4 +142,6 @@ Future<bool> askForExitFromNavigation(BuildContext context) async {
       ],
     ),
   );
+
+  return result ?? false;
 }

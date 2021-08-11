@@ -26,13 +26,19 @@ import '../common/ui_style.dart';
 class PreferencesDisclosureRowWidget extends StatelessWidget {
   /// Title
   final String title;
+
   /// Sub-title
-  final String subTitle;
+  final String? subTitle;
+
   /// Called when the widget is tapped or otherwise activated.
-  final Function onPressed;
+  final VoidCallback onPressed;
 
   /// Constructs a widget.
-  PreferencesDisclosureRowWidget({@required this.title, @required this.onPressed, this.subTitle});
+  PreferencesDisclosureRowWidget({
+    required this.title,
+    required this.onPressed,
+    this.subTitle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,7 @@ class PreferencesDisclosureRowWidget extends StatelessWidget {
                     ),
                     if (subTitle?.isNotEmpty ?? false)
                       Text(
-                        subTitle,
+                        subTitle!,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                         textAlign: TextAlign.left,

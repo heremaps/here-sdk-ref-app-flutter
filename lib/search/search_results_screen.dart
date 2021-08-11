@@ -46,10 +46,10 @@ class SearchResultsScreen extends StatefulWidget {
 
   /// Creates a widget.
   SearchResultsScreen({
-    Key key,
-    @required this.queryString,
-    @required this.places,
-    @required this.currentPosition,
+    Key? key,
+    required this.queryString,
+    required this.places,
+    required this.currentPosition,
   }) : super(key: key);
 
   @override
@@ -64,12 +64,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   final GlobalKey _bottomBarKey = GlobalKey();
   final GlobalKey _hereMapKey = GlobalKey();
 
-  HereMapController _hereMapController;
+  late HereMapController _hereMapController;
 
-  MapImage _smallMarkerImage;
-  MapImage _bigMarkerImage;
-  List<MapMarker> _markers;
-  TabController _tabController;
+  late MapImage _smallMarkerImage;
+  late MapImage _bigMarkerImage;
+  late List<MapMarker> _markers;
+  late TabController _tabController;
   int _selectedIndex = -1;
 
   @override
@@ -84,23 +84,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   @override
-  void dispose() {
-    _hereMapController?.release();
-    releaseLocationEngine();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => DefaultTabController(
         length: widget.places.length,
         child: WillPopScope(
           onWillPop: () async {
-            if (_hereMapController != null) {
-              Navigator.of(context).pop(_hereMapController.camera.state.targetCoordinates);
-              return false;
-            }
-
-            return true;
+            Navigator.of(context).pop(_hereMapController.camera.state.targetCoordinates);
+            return false;
           },
           child: Scaffold(
             body: HereMap(
@@ -121,14 +110,14 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError? error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
       }
 
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
-      _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
+      hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
           widget.currentPosition, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
 
       _addPanListener();
@@ -151,7 +140,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   void _resetCurrentPosition() {
-    GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation.coordinates : widget.currentPosition;
+    GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation!.coordinates : widget.currentPosition;
 
     _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
         coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
@@ -165,8 +154,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
 
   void _pickMapMarker(Point2D touchPoint) {
     _hereMapController.pickMapItems(touchPoint, _kTapRadius, (pickMapItemsResult) {
-      List<MapMarker> mapMarkerList = pickMapItemsResult.markers;
-      if (mapMarkerList.length == 0) {
+      List<MapMarker>? mapMarkerList = pickMapItemsResult?.markers;
+      if (mapMarkerList == null || mapMarkerList.length == 0) {
         print("No map markers found.");
         return;
       }
@@ -194,7 +183,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   void _zoomToPlace(int index) {
-    _hereMapController.camera.lookAtPointWithDistance(widget.places[index].geoCoordinates, _kZoomDistanceToEarth);
+    _hereMapController.camera.lookAtPointWithDistance(widget.places[index].geoCoordinates!, _kZoomDistanceToEarth);
   }
 
   void _createResultsMarkers() {
@@ -208,7 +197,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
 
     for (int i = 0; i < widget.places.length; ++i) {
       MapMarker mapMarker = Util.createMarkerWithImage(
-        widget.places[i].geoCoordinates,
+        widget.places[i].geoCoordinates!,
         _smallMarkerImage,
         anchor: Anchor2D.withHorizontalAndVertical(0.5, 1),
       );
@@ -221,12 +210,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
 
     if (widget.places.length == 1) {
       _hereMapController.camera
-          .lookAtPointWithDistance(widget.places.first.geoCoordinates, Positioning.initDistanceToEarth);
+          .lookAtPointWithDistance(widget.places.first.geoCoordinates!, Positioning.initDistanceToEarth);
     } else {
-      GeoBox geoBox = GeoBox.containingGeoCoordinates(widget.places.map((e) => e.geoCoordinates).toList());
+      GeoBox? geoBox = GeoBox.containingGeoCoordinates(widget.places.map((e) => e.geoCoordinates!).toList());
 
-      if (_bottomBarKey.currentContext != null) {
-        final RenderBox bottomBarBox = _bottomBarKey.currentContext.findRenderObject() as RenderBox;
+      if (geoBox != null && _bottomBarKey.currentContext != null) {
+        final RenderBox bottomBarBox = _bottomBarKey.currentContext!.findRenderObject() as RenderBox;
         final double topOffset = MediaQuery.of(context).padding.top;
 
         _hereMapController.zoomGeoBoxToLogicalViewPort(
@@ -269,7 +258,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
         ),
         Expanded(
           child: Text(
-            widget.queryString ?? "",
+            widget.queryString,
             style: TextStyle(
               fontSize: UIStyle.hugeFontSize,
               color: colorScheme.primary,
@@ -301,7 +290,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
     );
   }
 
-  Widget _buildPlaceTile(BuildContext context, Place place, int index) {
+  Widget _buildPlaceTile(BuildContext context, Place place, int? index) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -383,7 +372,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   void _showPlaceDetailsPopup(BuildContext context, Place place) async {
-    final PlaceDetailsPopupResult result = await showPlaceDetailsPopup(
+    final PlaceDetailsPopupResult? result = await showPlaceDetailsPopup(
       context: context,
       place: place,
       routeToEnabled: true,

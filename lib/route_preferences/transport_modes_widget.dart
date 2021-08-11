@@ -39,8 +39,8 @@ class TransportModesWidget extends StatelessWidget {
 
   /// Constructs a widget.
   TransportModesWidget({
-    Key key,
-    @required this.tabController,
+    Key? key,
+    required this.tabController,
   }) : super(key: key);
 
   @override
@@ -81,6 +81,5 @@ extension _TransportModeIcon on TransportModes {
       case TransportModes.walk:
         return "assets/walk.svg";
     }
-    return "";
   }
 }

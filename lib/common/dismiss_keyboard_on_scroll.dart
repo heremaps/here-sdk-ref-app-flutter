@@ -23,13 +23,14 @@ import 'package:flutter/material.dart';
 class DismissKeyboardOnScroll extends StatelessWidget {
   /// Child widget.
   final Widget child;
+
   /// Called when the keyboard is dismissed.
-  final Function onDismiss;
+  final Function? onDismiss;
 
   /// Constructs a widget.
   const DismissKeyboardOnScroll({
-    Key key,
-    this.child,
+    Key? key,
+    required this.child,
     this.onDismiss,
   }) : super(key: key);
 
@@ -42,9 +43,7 @@ class DismissKeyboardOnScroll extends StatelessWidget {
         }
 
         FocusScope.of(context).unfocus();
-        if (onDismiss != null) {
-          onDismiss();
-        }
+        onDismiss?.call();
         return false;
       },
       child: child,

@@ -43,7 +43,7 @@ import 'common/util.dart' as Util;
 class LandingScreen extends StatefulWidget {
   static const String navRoute = "/";
 
-  LandingScreen({Key key}) : super(key: key);
+  LandingScreen({Key? key}) : super(key: key);
 
   @override
   _LandingScreenState createState() => _LandingScreenState();
@@ -51,19 +51,12 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> with Positioning {
   bool _mapInitSuccess = false;
-  HereMapController _hereMapController;
+  late HereMapController _hereMapController;
   GlobalKey _hereMapKey = GlobalKey();
-  OverlayEntry _locationWarningOverlay;
+  OverlayEntry? _locationWarningOverlay;
 
-  MapMarker _routeFromMarker;
-  Place _routeFromPlace;
-
-  @override
-  void dispose() {
-    _hereMapController?.release();
-    releaseLocationEngine();
-    super.dispose();
-  }
+  MapMarker? _routeFromMarker;
+  Place? _routeFromPlace;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -82,10 +75,9 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       );
 
   void _onMapCreated(HereMapController hereMapController) {
-    _hereMapController?.release();
     _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError? error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
@@ -140,7 +132,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
     }
 
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    AppLocalizations appLocalizations = AppLocalizations.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return [
       if (userConsentState != ConsentUserReply.granted)
@@ -189,7 +181,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
         onTap: () {
           Navigator.of(context).pop();
-          requestUserConsent(context).then((value) => setState(() {}));
+          requestUserConsent(context)?.then((value) => setState(() {}));
         },
       ),
     ];
@@ -197,7 +189,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   Widget _buildDrawer(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    AppLocalizations appLocalizations = AppLocalizations.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return Drawer(
       child: Ink(
@@ -308,7 +300,8 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   void _showWayPointPopup(Point2D point) {
     _dismissWayPointPopup();
-    GeoCoordinates coordinates = _hereMapController.viewToGeoCoordinates(point);
+    GeoCoordinates coordinates =
+        _hereMapController.viewToGeoCoordinates(point) ?? _hereMapController.camera.state.targetCoordinates;
 
     _hereMapController.pinWidget(
       PlaceActionsPopup(
@@ -358,18 +351,18 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         drawOrder: UIStyle.waypointsMarkerDrawOrder,
         anchor: Anchor2D.withHorizontalAndVertical(0.5, 1),
       );
-      _hereMapController.mapScene.addMapMarker(_routeFromMarker);
+      _hereMapController.mapScene.addMapMarker(_routeFromMarker!);
       if (!isLocationEngineStarted) {
         locationVisible = false;
       }
     } else {
-      _routeFromMarker.coordinates = coordinates;
+      _routeFromMarker!.coordinates = coordinates;
     }
   }
 
   void _removeRouteFromMarker() {
     if (_routeFromMarker != null) {
-      _hereMapController.mapScene.removeMapMarker(_routeFromMarker);
+      _hereMapController.mapScene.removeMapMarker(_routeFromMarker!);
       _routeFromMarker = null;
       _routeFromPlace = null;
       locationVisible = true;
@@ -377,7 +370,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   }
 
   void _resetCurrentPosition() {
-    GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation.coordinates : Positioning.initPosition;
+    GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation!.coordinates : Positioning.initPosition;
 
     _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
         coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
@@ -403,14 +396,14 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
       );
 
-      Overlay.of(context).insert(_locationWarningOverlay);
+      Overlay.of(context)!.insert(_locationWarningOverlay!);
     }
   }
 
   void _onSearch(BuildContext context) async {
     GeoCoordinates currentPosition = _hereMapController.camera.state.targetCoordinates;
 
-    final result = await showSearchPopup(
+    final SearchResult? result = await showSearchPopup(
       context: context,
       currentPosition: currentPosition,
       hereMapController: _hereMapController,
@@ -427,7 +420,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   void _showRoutingScreen(WayPointInfo destination) async {
     final GeoCoordinates currentPosition =
-        lastKnownLocation != null ? lastKnownLocation.coordinates : Positioning.initPosition;
+        lastKnownLocation != null ? lastKnownLocation!.coordinates : Positioning.initPosition;
 
     await Navigator.of(context).pushNamed(
       RoutingScreen.navRoute,
@@ -437,10 +430,10 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
             ? _routeFromPlace != null
                 ? WayPointInfo.withPlace(
                     place: _routeFromPlace,
-                    originalCoordinates: _routeFromMarker.coordinates,
+                    originalCoordinates: _routeFromMarker!.coordinates,
                   )
                 : WayPointInfo.withCoordinates(
-                    coordinates: _routeFromMarker.coordinates,
+                    coordinates: _routeFromMarker!.coordinates,
                   )
             : WayPointInfo(
                 coordinates: currentPosition,

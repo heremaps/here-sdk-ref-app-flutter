@@ -32,7 +32,10 @@ import '../common/ui_style.dart';
 /// Routing preferences screen widget.
 class RoutePreferencesScreen extends StatefulWidget {
   /// Constructs a widget.
-  RoutePreferencesScreen({Key key, int this.activeTransportTab}) : super(key: key);
+  RoutePreferencesScreen({
+    Key? key,
+    required this.activeTransportTab,
+  }) : super(key: key);
 
   /// Active transport mode for display.
   final int activeTransportTab;
@@ -42,7 +45,7 @@ class RoutePreferencesScreen extends StatefulWidget {
 }
 
 class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with TickerProviderStateMixin {
-  TabController _transportModesTabController;
+  late TabController _transportModesTabController;
 
   @override
   void initState() {
@@ -61,7 +64,7 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with Ti
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context).routePreferencesScreenTitle),
+          title: Text(AppLocalizations.of(context)!.routePreferencesScreenTitle),
           centerTitle: true,
           backgroundColor: UIStyle.preferencesBackgroundColor,
           textTheme: Theme.of(context).textTheme,

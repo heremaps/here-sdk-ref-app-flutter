@@ -36,7 +36,7 @@ import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
 
 class SearchResult {
-  final Place place; // if null the current location should be used
+  final Place? place; // if null the current location should be used
 
   SearchResult({this.place});
 
@@ -44,12 +44,12 @@ class SearchResult {
 }
 
 /// Displays a popup window with a text search for a place. The [currentPosition] is used as center of the search area.
-Future<SearchResult> showSearchPopup({
-  @required BuildContext context,
-  @required GeoCoordinates currentPosition,
-  @required HereMapController hereMapController,
-  @required GlobalKey hereMapKey,
-  String currentLocationTitle = null,
+Future<SearchResult?> showSearchPopup({
+  required BuildContext context,
+  required GeoCoordinates currentPosition,
+  required HereMapController hereMapController,
+  required GlobalKey hereMapKey,
+  String? currentLocationTitle,
 }) async {
   return showModalBottomSheet<SearchResult>(
     context: context,
@@ -79,12 +79,12 @@ Future<SearchResult> showSearchPopup({
 
 class _SearchPopup extends StatefulWidget {
   final GeoCoordinates currentPosition;
-  final ScrollController controller;
-  final String currentLocationTitle;
+  final ScrollController? controller;
+  final String? currentLocationTitle;
 
   _SearchPopup({
-    Key key,
-    @required this.currentPosition,
+    Key? key,
+    required this.currentPosition,
     this.controller,
     this.currentLocationTitle,
   }) : super(key: key);
@@ -102,24 +102,22 @@ class _SearchPopupState extends State<_SearchPopup> {
   final SearchOptions _searchOptions = new SearchOptions(LanguageCode.enUs, _kMaxSearchSuggestion);
   final SearchEngine _searchEngine = SearchEngine();
 
-  GeoCoordinates _lastPosition;
-  List<Suggestion> _suggestions;
-  List<Place> _suggestionsPlaces = []; // we must free all the places we get from suggestions, so we store them
+  late GeoCoordinates _lastPosition;
+  List<Suggestion>? _suggestions;
   Map<String, Place> _recentPlaces = {};
-  TaskHandle _searchTaskHandle;
+  TaskHandle? _searchTaskHandle;
   bool _searchInProgress = false;
-  SearchError _lastError;
+  SearchError? _lastError;
 
   @override
   void initState() {
-    _lastPosition = widget.currentPosition;
     super.initState();
+    _lastPosition = widget.currentPosition;
   }
 
   @override
   void dispose() {
     _dstTextEditCtrl.dispose();
-    _clearSuggestions();
     super.dispose();
   }
 
@@ -167,7 +165,7 @@ class _SearchPopupState extends State<_SearchPopup> {
                                 size: UIStyle.mediumIconSize,
                               ),
                               title: Text(
-                                widget.currentLocationTitle,
+                                widget.currentLocationTitle!,
                                 style: TextStyle(
                                   fontSize: UIStyle.bigFontSize,
                                   color: colorScheme.secondary,
@@ -229,7 +227,7 @@ class _SearchPopupState extends State<_SearchPopup> {
                       focusedBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
                       disabledBorder: InputBorder.none,
-                      hintText: AppLocalizations.of(context).searchHint,
+                      hintText: AppLocalizations.of(context)!.searchHint,
                     ),
                     controller: _dstTextEditCtrl,
                     textInputAction: TextInputAction.search,
@@ -242,8 +240,8 @@ class _SearchPopupState extends State<_SearchPopup> {
                   color: foregroundColor,
                   onPressed: () => setState(() {
                     _lastError = null;
+                    _suggestions = null;
                     _dstTextEditCtrl.clear();
-                    _clearSuggestions();
                   }),
                 ),
               ],
@@ -253,7 +251,7 @@ class _SearchPopupState extends State<_SearchPopup> {
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
-            AppLocalizations.of(context).cancelTitle,
+            AppLocalizations.of(context)!.cancelTitle,
             style: TextStyle(
               fontSize: UIStyle.bigFontSize,
               color: Theme.of(context).colorScheme.secondary,
@@ -267,8 +265,8 @@ class _SearchPopupState extends State<_SearchPopup> {
   Widget _buildResultsHeader(BuildContext context) {
     return Text(
       _suggestions != null
-          ? AppLocalizations.of(context).matchingResultsTitle
-          : AppLocalizations.of(context).recentlySearchTitle,
+          ? AppLocalizations.of(context)!.matchingResultsTitle
+          : AppLocalizations.of(context)!.recentlySearchTitle,
       style: TextStyle(
         fontSize: UIStyle.bigFontSize,
         color: Theme.of(context).colorScheme.onSecondary,
@@ -276,7 +274,7 @@ class _SearchPopupState extends State<_SearchPopup> {
     );
   }
 
-  List<TextSpan> _makeHighlightedText(String text, List<IndexRange> highlights) {
+  List<TextSpan> _makeHighlightedText(String text, List<IndexRange>? highlights) {
     List<TextSpan> result = [];
 
     if (highlights == null) {
@@ -306,7 +304,7 @@ class _SearchPopupState extends State<_SearchPopup> {
     return result;
   }
 
-  Widget _buildSearchTile(BuildContext context, String title, {Map<HighlightType, List<IndexRange>> highlights}) {
+  Widget _buildSearchTile(BuildContext context, String title, {Map<HighlightType, List<IndexRange>>? highlights}) {
     List<TextSpan> textSpans = _makeHighlightedText(title, (highlights ?? const {})[HighlightType.title]);
 
     return ListTile(
@@ -333,7 +331,7 @@ class _SearchPopupState extends State<_SearchPopup> {
     );
   }
 
-  Widget _buildPlaceTile(BuildContext context, Place place, {Map<HighlightType, List<IndexRange>> highlights}) {
+  Widget _buildPlaceTile(BuildContext context, Place place, {Map<HighlightType, List<IndexRange>>? highlights}) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     List<TextSpan> titleTextSpans = _makeHighlightedText(place.title, (highlights ?? const {})[HighlightType.title]);
     List<TextSpan> addressTextSpans =
@@ -394,14 +392,14 @@ class _SearchPopupState extends State<_SearchPopup> {
 
     for (RecentSearchItem item in items) {
       if (item.placeId == null) {
-        result.add(RecentSearchPlace(item.title, null));
+        result.add(RecentSearchPlace(item.title!, null));
       } else {
-        Place place = _recentPlaces[item.placeId];
+        Place? place = _recentPlaces[item.placeId];
 
         if (place == null) {
-          final Completer<Place> completer = Completer();
+          final Completer<Place?> completer = Completer();
           // try to find a place by id, if it is not there, then remove it from the list
-          _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(item.placeId), LanguageCode.enUs, (error, place) {
+          _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(item.placeId!), LanguageCode.enUs, (error, place) {
             if (error != null) {
               if (error == SearchError.noResultsFound) {
                 model.delete(item.id);
@@ -418,7 +416,7 @@ class _SearchPopupState extends State<_SearchPopup> {
             continue;
           }
 
-          _recentPlaces[item.placeId] = place;
+          _recentPlaces[item.placeId!] = place;
         }
 
         result.add(RecentSearchPlace(item.title, place));
@@ -442,10 +440,10 @@ class _SearchPopupState extends State<_SearchPopup> {
                     );
                   }
 
-                  final RecentSearchPlace item = snapshot.data[index ~/ 2];
+                  final RecentSearchPlace item = snapshot.data![index ~/ 2];
                   return item.place != null
-                      ? _buildPlaceTile(context, item.place)
-                      : _buildSearchTile(context, item.title);
+                      ? _buildPlaceTile(context, item.place!)
+                      : _buildSearchTile(context, item.title!);
                 },
                 semanticIndexCallback: (Widget widget, int localIndex) {
                   if (localIndex.isEven) {
@@ -453,7 +451,7 @@ class _SearchPopupState extends State<_SearchPopup> {
                   }
                   return null;
                 },
-                childCount: snapshot.data.length * 2 - 1,
+                childCount: snapshot.data!.length * 2 - 1,
               ),
             )
           : SliverFillRemaining(),
@@ -471,8 +469,8 @@ class _SearchPopupState extends State<_SearchPopup> {
           }
 
           Widget suggestionsWidget;
-          Suggestion suggestion = _suggestions[index ~/ 2];
-          Place place = suggestion.place;
+          Suggestion suggestion = _suggestions![index ~/ 2];
+          Place? place = suggestion.place;
           Map<HighlightType, List<IndexRange>> highlights = suggestion.getHighlights();
 
           if (place == null) {
@@ -482,7 +480,6 @@ class _SearchPopupState extends State<_SearchPopup> {
               highlights: highlights,
             );
           } else {
-            _suggestionsPlaces.add(place);
             suggestionsWidget = _buildPlaceTile(
               context,
               place,
@@ -498,14 +495,14 @@ class _SearchPopupState extends State<_SearchPopup> {
           }
           return null;
         },
-        childCount: _suggestions.length * 2 - 1,
+        childCount: _suggestions!.length * 2 - 1,
       ),
     );
   }
 
   Widget _buildErrorWidget(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    AppLocalizations appLocalizations = AppLocalizations.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     if (_lastError == SearchError.noResultsFound) {
       return SliverFillRemaining(
@@ -549,16 +546,9 @@ class _SearchPopupState extends State<_SearchPopup> {
     }
   }
 
-  void _clearSuggestions() {
-    _suggestions = null;
-    _suggestionsPlaces.clear();
-  }
-
   void _stopCurrentSearch() {
-    if (_searchTaskHandle != null) {
-      _searchTaskHandle.cancel();
-      _searchTaskHandle = null;
-    }
+    _searchTaskHandle?.cancel();
+    _searchTaskHandle = null;
   }
 
   void _suggestionsForText(String text) {
@@ -573,7 +563,7 @@ class _SearchPopupState extends State<_SearchPopup> {
     if (text.isEmpty) {
       // clear suggestions
       setState(() {
-        _clearSuggestions();
+        _suggestions = null;
       });
     } else {
       // start searching
@@ -584,7 +574,6 @@ class _SearchPopupState extends State<_SearchPopup> {
         }
 
         setState(() {
-          _clearSuggestions();
           _suggestions = suggestions ?? [];
         });
       });
@@ -611,7 +600,7 @@ class _SearchPopupState extends State<_SearchPopup> {
       if (error != null) {
         print('Search failed. Error: ${error.toString()}');
       } else {
-        await _showSearchResults(context, text, places);
+        await _showSearchResults(context, text, places!);
       }
       setState(() {
         _lastError = error;
@@ -620,10 +609,10 @@ class _SearchPopupState extends State<_SearchPopup> {
     });
   }
 
-  void _showSearchResults(BuildContext context, String queryString, List<Place> places) async {
+  Future _showSearchResults(BuildContext context, String? queryString, List<Place> places) async {
     final result = await Navigator.of(context).pushNamed(
       SearchResultsScreen.navRoute,
-      arguments: [queryString, places, _lastPosition],
+      arguments: [queryString ?? "", places, _lastPosition],
     );
 
     if (result != null) {

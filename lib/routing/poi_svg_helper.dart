@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import 'package:flutter/material.dart';
-
 import '../common/util.dart' as Util;
 
 const String _atmIcon = '''
@@ -72,9 +70,9 @@ class SvgInfo {
   final int height;
 
   SvgInfo({
-    @required this.svg,
-    @required this.width,
-    @required this.height,
+    required this.svg,
+    required this.width,
+    required this.height,
   });
 }
 
@@ -93,8 +91,8 @@ class PoiSVGHelper {
 
   /// returns SVG images for desired POI icon [type] and [text].
   static SvgInfo getPoiSvgForCategoryAndText({
-    @required PoiIconType type,
-    String text,
+    required PoiIconType type,
+    String? text,
   }) {
     int width = text != null ? text.length * _charAverageWidth + _minIconSize : 0;
 

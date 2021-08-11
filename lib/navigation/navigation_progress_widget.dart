@@ -28,23 +28,25 @@ import 'route_progress_widget.dart';
 class NavigationProgress extends StatelessWidget {
   /// The length of the route.
   final int routeLengthInMeters;
+
   /// Remaining distance in meters.
   final int remainingDistanceInMeters;
+
   /// Remaining time in seconds.
   final int remainingDurationInSeconds;
 
   /// Constructs a widget.
   NavigationProgress({
-    Key key,
-    @required this.routeLengthInMeters,
-    @required this.remainingDistanceInMeters,
-    @required this.remainingDurationInSeconds,
+    Key? key,
+    required this.routeLengthInMeters,
+    required this.remainingDistanceInMeters,
+    required this.remainingDurationInSeconds,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    AppLocalizations appLocalizations = AppLocalizations.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     DateTime dt = DateTime.now();
     DateTime dtArrival = dt.add(Duration(seconds: remainingDurationInSeconds));

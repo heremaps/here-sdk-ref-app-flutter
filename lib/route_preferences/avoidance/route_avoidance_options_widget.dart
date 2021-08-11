@@ -39,15 +39,15 @@ class RouteAvoidanceOptionsWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        PreferencesSectionTitle(title: AppLocalizations.of(context).avoidanceOptionsTitle),
+        PreferencesSectionTitle(title: AppLocalizations.of(context)!.avoidanceOptionsTitle),
         PreferencesDisclosureRowWidget(
-          title: AppLocalizations.of(context).avoidRoadFeaturesTitle,
+          title: AppLocalizations.of(context)!.avoidRoadFeaturesTitle,
           subTitle: EnumStringHelper.roadFeatureNamesToString(context, avoidanceOptions.roadFeatures),
           onPressed: () =>
               Navigator.push(context, MaterialPageRoute(builder: (context) => RoadFeaturesAvoidanceScreen())),
         ),
         PreferencesDisclosureRowWidget(
-          title: AppLocalizations.of(context).avoidCountriesTitle,
+          title: AppLocalizations.of(context)!.avoidCountriesTitle,
           subTitle: EnumStringHelper.countryCodeNamesToString(context, avoidanceOptions.countries),
           onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CountryAvoidanceScreen())),
         ),

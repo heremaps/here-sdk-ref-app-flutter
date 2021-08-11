@@ -33,10 +33,10 @@ class EnumStringHelper {
     for (TextFormat value in TextFormat.values) {
       switch (value) {
         case TextFormat.html:
-          result[value.index] = AppLocalizations.of(context).textFormatHtml;
+          result[value.index] = AppLocalizations.of(context)!.textFormatHtml;
           break;
         case TextFormat.plain:
-          result[value.index] = AppLocalizations.of(context).textFormatPlain;
+          result[value.index] = AppLocalizations.of(context)!.textFormatPlain;
           break;
         default:
           throw StateError("Invalid enum value $value for TextFormat enum.");
@@ -51,10 +51,10 @@ class EnumStringHelper {
     for (OptimizationMode value in OptimizationMode.values) {
       switch (value) {
         case OptimizationMode.fastest:
-          result[value.index] = AppLocalizations.of(context).fastestRouteTitle;
+          result[value.index] = AppLocalizations.of(context)!.fastestRouteTitle;
           break;
         case OptimizationMode.shortest:
-          result[value.index] = AppLocalizations.of(context).shortestRouteTitle;
+          result[value.index] = AppLocalizations.of(context)!.shortestRouteTitle;
           break;
         default:
           throw StateError("Invalid enum value $value for OptimizationMode enum.");
@@ -69,13 +69,13 @@ class EnumStringHelper {
     for (UnitSystem value in UnitSystem.values) {
       switch (value) {
         case UnitSystem.metric:
-          result[value.index] = AppLocalizations.of(context).unitSystemMetric;
+          result[value.index] = AppLocalizations.of(context)!.unitSystemMetric;
           break;
         case UnitSystem.imperialUk:
-          result[value.index] = AppLocalizations.of(context).unitSystemImperialUk;
+          result[value.index] = AppLocalizations.of(context)!.unitSystemImperialUk;
           break;
         case UnitSystem.imperialUs:
-          result[value.index] = AppLocalizations.of(context).unitSystemImperialUs;
+          result[value.index] = AppLocalizations.of(context)!.unitSystemImperialUs;
           break;
         default:
           throw StateError("Invalid enum value $value for TextFormat enum.");
@@ -92,28 +92,28 @@ class EnumStringHelper {
     for (LanguageCode value in LanguageCode.values) {
       switch (value) {
         case LanguageCode.arSa:
-          result[value.index] = AppLocalizations.of(context).languageCodeArSa;
+          result[value.index] = AppLocalizations.of(context)!.languageCodeArSa;
           break;
         case LanguageCode.enUs:
-          result[value.index] = AppLocalizations.of(context).languageCodeEnUs;
+          result[value.index] = AppLocalizations.of(context)!.languageCodeEnUs;
           break;
         case LanguageCode.frFr:
-          result[value.index] = AppLocalizations.of(context).languageCodeFrFr;
+          result[value.index] = AppLocalizations.of(context)!.languageCodeFrFr;
           break;
         case LanguageCode.deDe:
-          result[value.index] = AppLocalizations.of(context).languageCodeDeDe;
+          result[value.index] = AppLocalizations.of(context)!.languageCodeDeDe;
           break;
         case LanguageCode.esEs:
-          result[value.index] = AppLocalizations.of(context).languageCodeEsEs;
+          result[value.index] = AppLocalizations.of(context)!.languageCodeEsEs;
           break;
         case LanguageCode.ptPt:
-          result[value.index] = AppLocalizations.of(context).languageCodePtPt;
+          result[value.index] = AppLocalizations.of(context)!.languageCodePtPt;
           break;
         case LanguageCode.zhCn:
-          result[value.index] = AppLocalizations.of(context).languageCodeZhCn;
+          result[value.index] = AppLocalizations.of(context)!.languageCodeZhCn;
           break;
         case LanguageCode.hiIn:
-          result[value.index] = AppLocalizations.of(context).languageCodeHiIn;
+          result[value.index] = AppLocalizations.of(context)!.languageCodeHiIn;
           break;
 
         default:
@@ -125,21 +125,21 @@ class EnumStringHelper {
   /// Returns the mapping of [TunnelCategory] values to the corresponding strings.
   static Map<int, String> tunnelCategoryMap(BuildContext context) {
     final Map<int, String> result = Map<int, String>();
-    result[noneValueIndex] = AppLocalizations.of(context).noneTitle;
+    result[noneValueIndex] = AppLocalizations.of(context)!.noneTitle;
 
     for (TunnelCategory value in TunnelCategory.values) {
       switch (value) {
         case TunnelCategory.b:
-          result[value.index] = AppLocalizations.of(context).tunnelCategoryB;
+          result[value.index] = AppLocalizations.of(context)!.tunnelCategoryB;
           break;
         case TunnelCategory.c:
-          result[value.index] = AppLocalizations.of(context).tunnelCategoryC;
+          result[value.index] = AppLocalizations.of(context)!.tunnelCategoryC;
           break;
         case TunnelCategory.d:
-          result[value.index] = AppLocalizations.of(context).tunnelCategoryD;
+          result[value.index] = AppLocalizations.of(context)!.tunnelCategoryD;
           break;
         case TunnelCategory.e:
-          result[value.index] = AppLocalizations.of(context).tunnelCategoryE;
+          result[value.index] = AppLocalizations.of(context)!.tunnelCategoryE;
           break;
         default:
           throw StateError("Invalid enum value $value for TunnelCategory enum.");
@@ -159,7 +159,7 @@ class EnumStringHelper {
   /// Returns the mapping of [RoadFeatures] values to the corresponding strings.
   static LinkedHashMap<String, RoadFeatures> sortedRoadFeaturesMap(BuildContext context) {
     final Map<String, RoadFeatures> result = Map<String, RoadFeatures>();
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     for (RoadFeatures value in RoadFeatures.values) {
       switch (value) {
@@ -191,7 +191,7 @@ class EnumStringHelper {
           throw StateError("Invalid enum value $value for RoadFeatures enum.");
       }
     }
-    return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]);
+    return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]!);
   }
 
   /// Returns concatenated string of the all values from the [hazardousGoods] list.
@@ -206,7 +206,7 @@ class EnumStringHelper {
   /// Returns the mapping of [HazardousGood] values to the corresponding strings.
   static LinkedHashMap<String, HazardousGood> sortedHazardousGoodsMap(BuildContext context) {
     final Map<String, HazardousGood> result = Map<String, HazardousGood>();
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     for (HazardousGood value in HazardousGood.values) {
       switch (value) {
@@ -247,7 +247,7 @@ class EnumStringHelper {
           throw StateError("Invalid enum value $value for HazardousGood enum.");
       }
     }
-    return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]);
+    return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]!);
   }
 
   /// Returns concatenated string of the all values from the [countryCodes] list.
@@ -262,7 +262,7 @@ class EnumStringHelper {
   /// Returns the mapping of [CountryCode] values to the corresponding strings.
   static Map<String, CountryCode> countryCodesMap(BuildContext context) {
     final Map<String, CountryCode> result = Map<String, CountryCode>();
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     // Keep enum order(sorted) as in SDK
     for (CountryCode value in CountryCode.values) {

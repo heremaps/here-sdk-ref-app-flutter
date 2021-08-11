@@ -42,8 +42,8 @@ class PedestrianOptionsScreen extends StatelessWidget {
         children: [
           RouteOptionsWidget(),
           RouteTextOptionsWidget(),
-          PreferencesSectionTitle(title: AppLocalizations.of(context).walkSpeedTitle),
-          PreferencesRowTitle(title: AppLocalizations.of(context).walkSpeedUnitTitle),
+          PreferencesSectionTitle(title: AppLocalizations.of(context)!.walkSpeedTitle),
+          PreferencesRowTitle(title: AppLocalizations.of(context)!.walkSpeedUnitTitle),
           NumericTextField(
             initialValue: pedestrianOptions.walkSpeedInMetersPerSecond.toString(),
             isInteger: false,
