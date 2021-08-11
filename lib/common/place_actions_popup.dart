@@ -98,11 +98,7 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
   @override
   void dispose() {
     _searchTask?.cancel();
-    _searchTask?.release();
-    _searchEngine.release();
-    _place?.release();
     widget.hereMapController.mapScene.removeMapMarker(_mapMarker);
-    _mapMarker.release();
     super.dispose();
   }
 

@@ -86,9 +86,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   @override
   void dispose() {
     _hereMapController?.release();
-    _smallMarkerImage?.release();
-    _bigMarkerImage?.release();
-    _markers.forEach((element) => element.release());
     releaseLocationEngine();
     super.dispose();
   }
@@ -131,8 +128,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       }
 
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
-      _hereMapController.camera.lookAtPointWithOrientationAndDistance(
-          widget.currentPosition, MapCameraOrientationUpdate.withDefaults(), Positioning.initDistanceToEarth);
+      _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
+          widget.currentPosition, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
 
       _addPanListener();
       _createResultsMarkers();
@@ -156,8 +153,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   void _resetCurrentPosition() {
     GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation.coordinates : widget.currentPosition;
 
-    _hereMapController.camera.lookAtPointWithOrientationAndDistance(
-        coordinates, MapCameraOrientationUpdate.withDefaults(), Positioning.initDistanceToEarth);
+    _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
+        coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
 
     setState(() => enableMapUpdate = true);
   }

@@ -49,14 +49,15 @@ class RoutePoiHandler {
 
   /// [HereMapController] of the map.
   final HereMapController hereMapController;
+
   /// Way points controller.
   final WayPointsController wayPointsController;
+
   /// Called to get a localized string describing a place.
   final GetTextForPoiMarkerCallback onGetText;
 
   List<String> _categories = [];
   Map<Routing.Route, List<Place>> _placesForRoutes = {};
-  Set<Place> _releasedPlaces = {};
   Map<MapMarker, Place> _markers = {};
   SearchEngine _searchEngine = SearchEngine();
   TaskHandle _poiSearchTask;
@@ -71,21 +72,18 @@ class RoutePoiHandler {
   /// Releases resources.
   void release() {
     _stopCurrentSearch();
-    _searchEngine.release();
     _clearMarkers();
     clearPlaces();
   }
 
   void _stopCurrentSearch() {
     _poiSearchTask?.cancel();
-    _poiSearchTask?.release();
     _poiSearchTask = null;
   }
 
   void _clearMarkers() {
     _markers.keys.forEach((marker) {
       hereMapController.mapScene.removeMapMarker(marker);
-      marker.release();
     });
     _markers.clear();
   }
@@ -106,17 +104,8 @@ class RoutePoiHandler {
   /// Returns [Place] of the [marker].
   Place getPlaceFromMarker(MapMarker marker) => _markers[marker];
 
-  /// Releases ownership of the [place].
-  void releasePlace(Place place) => _releasedPlaces.add(place);
-
   /// Removes all found places.
   void clearPlaces() {
-    _placesForRoutes.values.forEach((placesList) => placesList.forEach((place) {
-          if (!_releasedPlaces.contains(place)) {
-            place.release();
-          }
-        }));
-    _releasedPlaces.clear();
     _placesForRoutes.clear();
   }
 
@@ -132,7 +121,7 @@ class RoutePoiHandler {
         return;
       }
 
-      GeoCorridor geoCorridor = GeoCorridor.withRadius(route.polyline, _kGeoCorridorRadius);
+      GeoCorridor geoCorridor = GeoCorridor.make(route.polyline, _kGeoCorridorRadius);
 
       List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
       CategoryQuery categoryQuery = CategoryQuery.withCorridorArea(categories, geoCorridor);
@@ -172,7 +161,6 @@ class RoutePoiHandler {
         drawOrder: UIStyle.searchMarkerDrawOrder,
         anchor: Anchor2D.withHorizontalAndVertical(0.5, 1),
       );
-      mapImage.release();
 
       hereMapController.mapScene.addMapMarker(mapMarker);
       _markers[mapMarker] = place;

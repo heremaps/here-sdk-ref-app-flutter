@@ -105,8 +105,6 @@ class _SearchPopupState extends State<_SearchPopup> {
   GeoCoordinates _lastPosition;
   List<Suggestion> _suggestions;
   List<Place> _suggestionsPlaces = []; // we must free all the places we get from suggestions, so we store them
-  List<Place> _searchResults;
-  Place _searchResult;
   Map<String, Place> _recentPlaces = {};
   TaskHandle _searchTaskHandle;
   bool _searchInProgress = false;
@@ -121,10 +119,7 @@ class _SearchPopupState extends State<_SearchPopup> {
   @override
   void dispose() {
     _dstTextEditCtrl.dispose();
-    _searchEngine.release();
     _clearSuggestions();
-    _clearSearchResults();
-    _clearRecentPlace();
     super.dispose();
   }
 
@@ -406,8 +401,7 @@ class _SearchPopupState extends State<_SearchPopup> {
         if (place == null) {
           final Completer<Place> completer = Completer();
           // try to find a place by id, if it is not there, then remove it from the list
-          TaskHandle taskHandle = _searchEngine
-              .searchByPlaceIdWithLanguageCode(PlaceIdQuery(item.placeId), LanguageCode.enUs, (error, place) {
+          _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(item.placeId), LanguageCode.enUs, (error, place) {
             if (error != null) {
               if (error == SearchError.noResultsFound) {
                 model.delete(item.id);
@@ -419,7 +413,6 @@ class _SearchPopupState extends State<_SearchPopup> {
           });
 
           place = await completer.future;
-          taskHandle.release();
 
           if (place == null) {
             continue;
@@ -497,8 +490,6 @@ class _SearchPopupState extends State<_SearchPopup> {
             );
           }
 
-          highlights?.forEach((key, value) => value?.forEach((element) => element.release()));
-
           return suggestionsWidget;
         },
         semanticIndexCallback: (Widget widget, int localIndex) {
@@ -559,41 +550,13 @@ class _SearchPopupState extends State<_SearchPopup> {
   }
 
   void _clearSuggestions() {
-    if (_suggestions != null) {
-      _suggestions.forEach((element) => element.release());
-      _suggestions = null;
-    }
-    _suggestionsPlaces.forEach((place) {
-      if (place != _searchResult) {
-        place.release();
-      }
-    });
+    _suggestions = null;
     _suggestionsPlaces.clear();
-  }
-
-  void _clearSearchResults() {
-    if (_searchResults != null) {
-      _searchResults.forEach((place) {
-        if (place != _searchResult) {
-          place.release();
-        }
-      });
-      _searchResults = null;
-    }
-  }
-
-  void _clearRecentPlace() {
-    _recentPlaces.values.forEach((place) {
-      if (place != _searchResult) {
-        place.release();
-      }
-    });
   }
 
   void _stopCurrentSearch() {
     if (_searchTaskHandle != null) {
       _searchTaskHandle.cancel();
-      _searchTaskHandle.release();
       _searchTaskHandle = null;
     }
   }
@@ -648,8 +611,6 @@ class _SearchPopupState extends State<_SearchPopup> {
       if (error != null) {
         print('Search failed. Error: ${error.toString()}');
       } else {
-        _clearSearchResults();
-        _searchResults = places;
         await _showSearchResults(context, text, places);
       }
       setState(() {
@@ -669,9 +630,8 @@ class _SearchPopupState extends State<_SearchPopup> {
       if (result is GeoCoordinates) {
         _lastPosition = result;
       } else if (result is Place) {
-        _searchResult = result;
         Navigator.of(context).pop(SearchResult(
-          place: _searchResult,
+          place: result,
         ));
       } else {
         assert(false);

@@ -63,17 +63,11 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
       return;
     }
 
-    super.value.forEach((wp) {
-      if (!value.contains(wp)) {
-        wp.release();
-      }
-    });
     super.value = value;
   }
 
   @override
   void dispose() {
-    super.value.forEach((wp) => wp.release());
     super.dispose();
     _clearWpMarkers();
   }
@@ -83,9 +77,6 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
 
   /// Sets a waypoint by index [i].
   operator []=(int i, WayPointInfo wp) {
-    if (super.value[i] != wp) {
-      super.value[i].release();
-    }
     super.value[i] = wp;
     notifyListeners();
   }
@@ -114,7 +105,6 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
   void _clearWpMarkers() {
     _wpMarkers.forEach((marker) {
       _hereMapController?.mapScene?.removeMapMarker(marker);
-      marker.release();
     });
     _wpMarkers.clear();
   }

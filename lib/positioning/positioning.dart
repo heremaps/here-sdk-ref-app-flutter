@@ -79,8 +79,6 @@ mixin Positioning {
   void releaseLocationEngine() {
     _locationEngine?.release();
     _consentEngine?.release();
-    _locationAccuracyCircle?.release();
-    _locationMarker?.release();
   }
 
   /// Initializes the location engine. The [hereMapController] is used to display current position marker,

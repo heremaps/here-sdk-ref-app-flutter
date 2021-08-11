@@ -71,7 +71,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   HereMapController _hereMapController;
   MapPolyline _mapRoute;
   List<MapMarker> _maneuverMarkers = [];
-  List<MapMarker> _wpMarkers;
   List<Routing.Maneuver> _maneuvers = [];
 
   bool _hasBeenZoomedToManeuver = false;
@@ -163,11 +162,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   _clearMapRoute() {
-    _mapRoute?.release();
-    _maneuverMarkers.forEach((marker) => marker.release());
     _maneuverMarkers.clear();
-    _wpMarkers?.forEach((marker) => marker.release());
-    _wpMarkers = null;
   }
 
   _addRouteToMap() {
@@ -198,9 +193,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       });
     });
 
-    mapImage.release();
-
-    _wpMarkers = widget.wayPointsController.buildMapMarkersForController(_hereMapController);
+    widget.wayPointsController.buildMapMarkersForController(_hereMapController);
 
     _zoomToWholeRoute();
   }

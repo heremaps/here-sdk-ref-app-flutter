@@ -33,17 +33,22 @@ typedef ReroutingCallback = void Function(Routing.Route newRoute);
 class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.MilestoneReachedListener {
   /// The maximum deviation distance in meters.
   static const int _kMaxRouteDeviation = 20;
+
   /// The maximum duration of deviation from the route in seconds.
   static const int _kMaxRouteDeviationTime = 5;
 
   /// [Navigation.VisualNavigator] that runs navigation.
   final Navigation.VisualNavigator visualNavigator;
+
   /// List of way points.
   List<Routing.Waypoint> _wayPoints;
+
   /// Routing preferences.
   final RoutePreferencesModel preferences;
+
   /// Called when route calculations is started.
   final VoidCallback onBeginRerouting;
+
   /// Called when route calculations is finished.
   final ReroutingCallback onNewRoute;
 
@@ -103,7 +108,6 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
   @override
   void release() {
     _reroutingTimer?.cancel();
-    _routingEngine.release();
   }
 
   void _beginRerouting(GeoCoordinates currentPosition, Routing.Route oldRoute, double heading) {
@@ -152,9 +156,6 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
     }
 
     onNewRoute(routes.first);
-    for (int i = 1; i < routes.length; ++i) {
-      routes[i].release();
-    }
 
     _wayPoints = newWayPoints;
     _passedWayPointIndex = 0;

@@ -81,7 +81,6 @@ MapMarker createMarkerWithImagePath(
 }) {
   MapImage mapImage = MapImage.withFilePathAndWidthAndHeight(imagePath, width, height);
   MapMarker mapMarker = createMarkerWithImage(coordinates, mapImage, drawOrder: drawOrder, anchor: anchor);
-  mapImage.release();
   return mapMarker;
 }
 
@@ -118,9 +117,9 @@ extension LogicalCoords on HereMapController {
     @required Rect viewPort,
     double margin = UIStyle.contentMarginExtraHuge,
   }) {
-    this.camera.lookAtAreaWithOrientationAndViewRectangle(
+    this.camera.lookAtAreaWithGeoOrientationAndViewRectangle(
         geoBox,
-        MapCameraOrientationUpdate.withDefaults(),
+        GeoOrientationUpdate(double.nan, double.nan),
         Rectangle2D(
             Point2D(viewPort.left + margin, viewPort.top + margin) * this.pixelScale,
             Size2D(

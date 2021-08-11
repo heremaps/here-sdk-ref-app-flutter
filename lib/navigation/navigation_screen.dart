@@ -137,12 +137,8 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   @override
   void dispose() {
     _reroutingHandler.release();
-    _visualNavigator.release();
     _locationSimulator?.stop();
-    _locationSimulator?.release();
     _locationEngine?.release();
-    _startMarker?.release();
-    _finishMarker?.release();
     _releaseCurrentRoute();
     _hereMapController?.release();
     _flutterTts.stop();
@@ -293,7 +289,6 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
   void _startNavigation() {
     _hereMapController.mapScene.removeMapMarker(_startMarker);
-    _startMarker.release();
     _startMarker = null;
 
     _visualNavigator.startRendering(_hereMapController);
@@ -397,8 +392,6 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
           maneuver.action.imagePath,
           !_soundEnabled,
         );
-
-        maneuver.release();
       }
     });
   }
@@ -421,12 +414,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
   void _releaseCurrentRoute() {
     _hereMapController.mapScene.removeMapPolyline(_mapRoute);
-    _mapRoute.release();
     _mapRoute = null;
-
-    if (_currentRoute != widget.route) {
-      _currentRoute.release();
-    }
   }
 
   void _onNewRoute(Routing.Route newRoute) {
@@ -471,8 +459,6 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
         distance: _currentManeuverDistance,
         text: maneuver.getActionText(context),
       );
-
-      maneuver.release();
     }
 
     return PreferredSize(
@@ -500,8 +486,6 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
     Routing.ManeuverAction action = maneuver.action;
     String text = maneuver.getActionText(context);
-
-    maneuver.release();
 
     return Align(
       alignment: Alignment.topCenter,
@@ -645,7 +629,6 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
       LocalNotificationsHelper.startNotifications(
           _getRemainingTimeString(), maneuver.getActionText(context), maneuver.action.imagePath);
-      maneuver.release();
       _visualNavigator.stopRendering();
     }
     if (state == AppLifecycleState.resumed) {

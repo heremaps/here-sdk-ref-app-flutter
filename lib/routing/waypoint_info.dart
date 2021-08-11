@@ -28,8 +28,10 @@ import '../common/util.dart' as Util;
 enum WayPointInfoSourceType {
   /// Current position.
   CurrentPosition,
+
   /// Arbitrary coordinates.
   Coordinates,
+
   /// A [Place].
   Place,
 }
@@ -38,37 +40,27 @@ enum WayPointInfoSourceType {
 class WayPointInfo extends Routing.Waypoint {
   /// Place of the waypoint.
   final Place place;
+
   /// Source type.
   final WayPointInfoSourceType sourceType;
-  /// Ownership of the provided [Place].
-  final bool releasePlace;
 
   String get title => place?.title ?? coordinates.toPrettyString();
 
   WayPointInfo({
     @required GeoCoordinates coordinates,
   })  : place = null,
-        releasePlace = false,
         sourceType = WayPointInfoSourceType.CurrentPosition,
         super.withDefaults(coordinates);
 
   WayPointInfo.withCoordinates({
     @required GeoCoordinates coordinates,
   })  : place = null,
-        releasePlace = false,
         sourceType = WayPointInfoSourceType.Coordinates,
         super.withDefaults(coordinates);
 
   WayPointInfo.withPlace({
     @required this.place,
-    this.releasePlace = true,
     GeoCoordinates originalCoordinates = null,
   })  : sourceType = WayPointInfoSourceType.Place,
         super.withDefaults(originalCoordinates ?? place.geoCoordinates);
-
-  void release() {
-    if (place != null && releasePlace) {
-      place.release();
-    }
-  }
 }

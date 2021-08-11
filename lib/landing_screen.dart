@@ -61,8 +61,6 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   @override
   void dispose() {
     _hereMapController?.release();
-    _routeFromMarker?.release();
-    _routeFromPlace?.release();
     releaseLocationEngine();
     super.dispose();
   }
@@ -372,9 +370,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   void _removeRouteFromMarker() {
     if (_routeFromMarker != null) {
       _hereMapController.mapScene.removeMapMarker(_routeFromMarker);
-      _routeFromMarker.release();
       _routeFromMarker = null;
-      _routeFromPlace?.release();
       _routeFromPlace = null;
       locationVisible = true;
     }
@@ -383,8 +379,8 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   void _resetCurrentPosition() {
     GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation.coordinates : Positioning.initPosition;
 
-    _hereMapController.camera.lookAtPointWithOrientationAndDistance(
-        coordinates, MapCameraOrientationUpdate.withDefaults(), Positioning.initDistanceToEarth);
+    _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
+        coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
 
     setState(() => enableMapUpdate = true);
   }

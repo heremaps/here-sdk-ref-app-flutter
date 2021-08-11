@@ -131,10 +131,8 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   @override
   void dispose() {
     _clearMapRoutes();
-    _clearRoutes();
     _dismissWayPointPopup();
     _wayPointsController.dispose();
-    _routingEngine.release();
     _routePoiHandler?.release();
     _hereMapController?.release();
     releaseLocationEngine();
@@ -191,8 +189,8 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
       }
 
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
-      _hereMapController.camera.lookAtPointWithOrientationAndDistance(
-          widget.currentPosition, MapCameraOrientationUpdate.withDefaults(), Positioning.initDistanceToEarth);
+      _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
+          widget.currentPosition, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
       _routePoiHandler = RoutePoiHandler(
         hereMapController: hereMapController,
         wayPointsController: _wayPointsController,
@@ -234,8 +232,8 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   void _resetCurrentPosition() {
     GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation.coordinates : widget.currentPosition;
 
-    _hereMapController.camera.lookAtPointWithOrientationAndDistance(
-        coordinates, MapCameraOrientationUpdate.withDefaults(), Positioning.initDistanceToEarth);
+    _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
+        coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
 
     setState(() => enableMapUpdate = true);
   }
@@ -257,7 +255,6 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
           return;
         }
 
-        _routePoiHandler.releasePlace(place);
         WayPointInfo wp = WayPointInfo.withPlace(
           place: place,
         );
@@ -332,20 +329,9 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     );
   }
 
-  _clearRoutes() {
-    _routes.forEach((route) {
-      route.sections.forEach((section) {
-        section.maneuvers.forEach((maneuver) => maneuver.release());
-        section.release();
-      });
-      route.release();
-    });
-  }
-
   _clearMapRoutes() {
     _mapRoutes.forEach((route) {
       _hereMapController.mapScene.removeMapPolyline(route);
-      route.release();
     });
     _mapRoutes.clear();
   }
@@ -569,7 +555,6 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
       return;
     }
 
-    _clearRoutes();
     _routePoiHandler.clearPlaces();
     _selectedRouteIndex = 0;
     _routesTabController.dispose();

@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';
-import 'package:here_sdk/core.threading.dart';
 import 'package:here_sdk/search.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -52,11 +51,6 @@ Future<PlaceDetailsPopupResult> showPlaceDetailsPopup({
     ),
   );
 
-  Place placeDetails = await placeDetailsFuture;
-  if (placeDetails != place) {
-    placeDetails.release();
-  }
-
   return result;
 }
 
@@ -64,8 +58,7 @@ Future<Place> _getPlaceDetails(Place place) async {
   final SearchEngine _searchEngine = SearchEngine();
   final Completer<Place> completer = Completer();
 
-  TaskHandle taskHandle =
-      _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(place.id), LanguageCode.enUs, (error, place) {
+  _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(place.id), LanguageCode.enUs, (error, place) {
     if (error != null) {
       print('Search failed. Error: ${error.toString()}');
       completer.complete();
@@ -75,8 +68,6 @@ Future<Place> _getPlaceDetails(Place place) async {
   });
 
   Place newPlace = await completer.future;
-  taskHandle.release();
-  _searchEngine.release();
 
   if (newPlace == null) {
     newPlace = place;
