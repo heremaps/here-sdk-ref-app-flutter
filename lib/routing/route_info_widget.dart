@@ -64,7 +64,7 @@ class RouteInfo extends StatelessWidget {
                       color: colorScheme.primary,
                     ),
                     children: [
-                      if (route.trafficDelayInSeconds > 0)
+                      if (route.trafficDelayInSeconds > Duration.secondsPerMinute)
                         TextSpan(
                           text: Util.formatString(AppLocalizations.of(context)!.trafficDelayText,
                               [_buildDurationString(context, route.trafficDelayInSeconds)]),
