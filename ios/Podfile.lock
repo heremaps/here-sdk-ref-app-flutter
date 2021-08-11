@@ -13,7 +13,7 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - "permission_handler (5.0.1+1)":
+  - "permission_handler (5.1.0+2)":
     - Flutter
   - screen (0.0.1):
     - Flutter
@@ -69,11 +69,11 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   here_sdk: a5c4d15d4502c1895cabb7db18cbce0f1b5ea309
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   screen: abd91ca7bf3426e1cc3646d27e9b2358d6bf07b0
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: f54e983d693712ab68910883c1e99cdaa763fc9f
+PODFILE CHECKSUM: df55b3ee02a183f44faf3430330ec06ef69f552d
 
 COCOAPODS: 1.10.1

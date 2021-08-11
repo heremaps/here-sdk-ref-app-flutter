@@ -31,17 +31,17 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.3
   intl: ^0.17.0
-  permission_handler: ^5.0.1+1
-  provider: ^4.3.2+3
-  flutter_svg: ^0.19.3
-  flutter_tts: ^2.1.0
-  reorderables: ^0.3.2
+  permission_handler: ^8.1.4+2
+  provider: ^5.0.0
+  flutter_svg: ^0.22.0
+  flutter_tts: ^3.2.2
+  reorderables: ^0.4.1
   flutter_ringtone_player: ^3.0.0
-  flutter_local_notifications: ^4.0.0
-  path_provider: ^1.6.17
-  url_launcher: ^6.0.2
+  flutter_local_notifications: ^7.0.0
+  path_provider: ^2.0.2
+  url_launcher: ^6.0.9
   screen: ^0.0.5
 
   # The following adds the HERE SDK for Flutter plugin folder to your application.
