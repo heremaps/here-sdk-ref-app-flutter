@@ -18,7 +18,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';
@@ -490,33 +489,32 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
               ),
             ],
           ),
-          if (_routesTabController.length > 0)
-            Container(
-              width: double.infinity,
-              height: _kRouteCardHeight,
-              child: TabBarView(
-                key: _tabBarViewKey,
-                controller: _routesTabController,
-                children: _routes
-                    .map(
-                      (route) => Card(
-                        elevation: 2,
-                        child: RouteInfo(
-                          route: route,
-                          onRouteDetails: () => Navigator.of(context).pushNamed(
-                            RouteDetailsScreen.navRoute,
-                            arguments: [_routes[_routesTabController.index], _wayPointsController],
-                          ),
-                          onNavigation: () => Navigator.of(context).pushNamed(
-                            NavigationScreen.navRoute,
-                            arguments: [route, _wayPointsController.value],
-                          ),
+          Container(
+            width: double.infinity,
+            height: _kRouteCardHeight,
+            child: TabBarView(
+              key: _tabBarViewKey,
+              controller: _routesTabController,
+              children: _routes
+                  .map(
+                    (route) => Card(
+                      elevation: 2,
+                      child: RouteInfo(
+                        route: route,
+                        onRouteDetails: () => Navigator.of(context).pushNamed(
+                          RouteDetailsScreen.navRoute,
+                          arguments: [_routes[_routesTabController.index], _wayPointsController],
+                        ),
+                        onNavigation: () => Navigator.of(context).pushNamed(
+                          NavigationScreen.navRoute,
+                          arguments: [route, _wayPointsController.value],
                         ),
                       ),
-                    )
-                    .toList(),
-              ),
+                    ),
+                  )
+                  .toList(),
             ),
+          ),
         ],
       ),
     );
@@ -570,8 +568,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     setState(() => _routingInProgress = false);
     _routePoiHandler.updatePoiForRoute(_routes[_selectedRouteIndex]);
 
-    SchedulerBinding.instance!.scheduleFrameCallback(
-        (timeStamp) => SchedulerBinding.instance!.addPostFrameCallback((timeStamp) => _zoomToRoutes()));
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) => _zoomToRoutes());
   }
 
   void _showError(Routing.RoutingError error) {
