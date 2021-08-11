@@ -85,7 +85,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
     _hereMapController?.release();
     _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneFromConfigurationFile('preview.normal.day.json', (MapError error) {
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;

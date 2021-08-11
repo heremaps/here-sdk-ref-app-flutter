@@ -130,7 +130,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     _hereMapController?.release();
     setState(() => _hereMapController = hereMapController);
 
-    hereMapController.mapScene.loadSceneFromConfigurationFile('preview.normal.day.json', (MapError error) {
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;

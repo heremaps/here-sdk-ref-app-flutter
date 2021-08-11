@@ -197,7 +197,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     _hereMapController?.release();
     _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneFromConfigurationFile('preview.normal.day.json', (MapError error) async {
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) async {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;

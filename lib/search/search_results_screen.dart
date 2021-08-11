@@ -121,7 +121,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneFromConfigurationFile('preview.normal.day.json', (MapError error) {
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
