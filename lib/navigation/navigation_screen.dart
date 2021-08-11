@@ -29,7 +29,7 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:screen/screen.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../landing_screen.dart';
 import '../route_preferences/route_preferences_model.dart';
@@ -118,7 +118,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   @override
   void initState() {
     super.initState();
-    Screen.keepOn(true);
+    Wakelock.enable();
     _visualNavigator = Navigation.VisualNavigator();
     _remainingDistanceInMeters = widget.route.lengthInMeters;
     _remainingDurationInSeconds = widget.route.durationInSeconds;
@@ -143,7 +143,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     _hereMapController?.release();
     _flutterTts.stop();
     WidgetsBinding.instance.removeObserver(this);
-    Screen.keepOn(false);
+    Wakelock.disable();
     super.dispose();
   }
 

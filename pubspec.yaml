@@ -42,7 +42,7 @@ dependencies:
   flutter_local_notifications: ^7.0.0
   path_provider: ^2.0.2
   url_launcher: ^6.0.9
-  screen: ^0.0.5
+  wakelock: ^0.5.2
 
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:
