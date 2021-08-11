@@ -452,7 +452,9 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       child = ReroutingIndicator();
     } else {
       Routing.Maneuver maneuver = _visualNavigator.getManeuver(_currentManeuverIndex);
-      assert(maneuver != null);
+      if (maneuver == null) {
+        return null;
+      }
 
       child = CurrentManeuver(
         action: maneuver.action,
