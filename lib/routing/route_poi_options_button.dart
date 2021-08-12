@@ -33,14 +33,14 @@ class _PoiSettingInfo {
   final IconData icon;
 
   _PoiSettingInfo({
-    @required this.categoryId,
-    @required this.imageEnabled,
-    @required this.imageDisabled,
-    @required this.icon,
+    required this.categoryId,
+    required this.imageEnabled,
+    required this.imageDisabled,
+    required this.icon,
   });
 
   String getTitle(BuildContext context) {
-    AppLocalizations appLocalizations = AppLocalizations.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     if (categoryId == PlaceCategory.eatAndDrink) {
       return appLocalizations.eatAndDrinkTitle;
@@ -50,7 +50,7 @@ class _PoiSettingInfo {
       return appLocalizations.atmTitle;
     }
 
-    return null;
+    return "";
   }
 }
 
@@ -79,13 +79,14 @@ final List<_PoiSettingInfo> _poiSettings = [
 class RoutePoiOptionsButton extends StatelessWidget {
   /// Set of categories currently enabled.
   final Set<String> categoryIds;
+
   /// Called when the set of categories is changed.
   final ValueChanged<Set<String>> onChanged;
 
   /// Constructs a widget.
   RoutePoiOptionsButton({
     this.categoryIds = const {},
-    @required this.onChanged,
+    required this.onChanged,
   });
 
   @override
@@ -140,7 +141,7 @@ class RoutePoiOptionsButton extends StatelessWidget {
               ),
               backgroundColor: colorScheme.background,
               title: Text(
-                AppLocalizations.of(context).poiSettingsTitle,
+                AppLocalizations.of(context)!.poiSettingsTitle,
                 style: TextStyle(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,

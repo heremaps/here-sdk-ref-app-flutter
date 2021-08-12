@@ -31,16 +31,18 @@ class NavigationSpeed extends StatelessWidget {
 
   /// Current speed.
   final double currentSpeed;
+
   /// Current speed limit.
-  final double speedLimit;
+  final double? speedLimit;
+
   /// Current speed warning status.
   final Navigation.SpeedWarningStatus speedWarningStatus;
 
   /// Constructs a widget.
   NavigationSpeed({
-    @required this.currentSpeed,
-    double speedLimit,
-    this.speedWarningStatus,
+    required this.currentSpeed,
+    double? speedLimit,
+    required this.speedWarningStatus,
   }) : speedLimit = speedLimit != null && speedLimit > 0 ? speedLimit : null;
 
   @override
@@ -81,7 +83,7 @@ class NavigationSpeed extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        AppLocalizations.of(context).kmhAbbreviationText,
+                        AppLocalizations.of(context)!.kmhAbbreviationText,
                         style: TextStyle(
                           fontSize: UIStyle.bigFontSize,
                           color: colorScheme.onSecondary,
@@ -112,7 +114,7 @@ class NavigationSpeed extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      (speedLimit * _kKMpHinMpS).truncate().toString(),
+                      (speedLimit! * _kKMpHinMpS).truncate().toString(),
                       style: TextStyle(
                         fontSize: UIStyle.extraHugeFontSize,
                         color: colorScheme.primary,

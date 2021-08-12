@@ -25,14 +25,15 @@ import '../common/ui_style.dart';
 class RouteProgress extends StatelessWidget {
   /// Length of the route.
   final int routeLengthInMeters;
+
   /// Remaining distance of the route.
   final int remainingDistanceInMeters;
 
   /// Constructs a widget.
   RouteProgress({
-    Key key,
-    @required this.routeLengthInMeters,
-    @required this.remainingDistanceInMeters,
+    Key? key,
+    required this.routeLengthInMeters,
+    required this.remainingDistanceInMeters,
   }) : super(key: key);
 
   @override
@@ -61,11 +62,11 @@ class _RoutePainter extends CustomPainter {
   final Color currentColor;
 
   _RoutePainter({
-    @required this.routeLengthInMeters,
-    @required this.remainingDistanceInMeters,
-    @required this.travelledColor,
-    @required this.remainingColor,
-    @required this.currentColor,
+    required this.routeLengthInMeters,
+    required this.remainingDistanceInMeters,
+    required this.travelledColor,
+    required this.remainingColor,
+    required this.currentColor,
   });
 
   @override

@@ -47,8 +47,8 @@ class RouteOptionsWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        PreferencesSectionTitle(title: AppLocalizations.of(context).routeOptionsTitle),
-        PreferencesRowTitle(title: AppLocalizations.of(context).routeAlternativesTitle),
+        PreferencesSectionTitle(title: AppLocalizations.of(context)!.routeOptionsTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.routeAlternativesTitle),
         NumericTextField(
           initialValue: routeOptions.alternatives.toString(),
           isInteger: true,
@@ -59,12 +59,12 @@ class RouteOptionsWidget extends StatelessWidget {
             routeOptions.departureTime,
           ),
         ),
-        PreferencesRowTitle(title: AppLocalizations.of(context).departureTimeTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.departureTimeTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: InkWell(
             onTap: () async {
-              DateTime newDate = await (Platform.isIOS ? _selectDateTimeCupertino(context) : _selectDateTime(context));
+              DateTime? newDate = await (Platform.isIOS ? _selectDateTimeCupertino(context) : _selectDateTime(context));
               if (newDate != null)
                 context.read<RoutePreferencesModel>().sharedRouteOptions =
                     RouteOptions(routeOptions.optimizationMode, routeOptions.alternatives, newDate);
@@ -96,7 +96,7 @@ class RouteOptionsWidget extends StatelessWidget {
             ),
           ),
         ),
-        PreferencesRowTitle(title: AppLocalizations.of(context).optimizationModeTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.optimizationModeTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: DropdownButtonHideUnderline(
@@ -115,17 +115,17 @@ class RouteOptionsWidget extends StatelessWidget {
     );
   }
 
-  Future<DateTime> _selectDateTime(BuildContext context) async {
-    final DateTime date = await _selectDate(context);
+  Future<DateTime?> _selectDateTime(BuildContext context) async {
+    final DateTime? date = await _selectDate(context);
     if (date == null) return null;
 
-    final TimeOfDay time = await _selectTime(context);
+    final TimeOfDay? time = await _selectTime(context);
     if (time == null) return null;
 
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
-  Future<DateTime> _selectDate(BuildContext context) async {
+  Future<DateTime?> _selectDate(BuildContext context) async {
     DateTime now = DateTime.now();
     return showDatePicker(
       context: context,
@@ -135,15 +135,15 @@ class RouteOptionsWidget extends StatelessWidget {
     );
   }
 
-  Future<TimeOfDay> _selectTime(BuildContext context) async {
+  Future<TimeOfDay?> _selectTime(BuildContext context) async {
     return showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(DateTime.now()),
     );
   }
 
-  Future<DateTime> _selectDateTimeCupertino(BuildContext context) async {
-    DateTime result = await showModalBottomSheet<DateTime>(
+  Future<DateTime?> _selectDateTimeCupertino(BuildContext context) async {
+    DateTime? result = await showModalBottomSheet<DateTime>(
       context: context,
       builder: (context) {
         DateTime selectedDateTime = DateTime.now();
@@ -156,7 +156,7 @@ class RouteOptionsWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      AppLocalizations.of(context).selectDateTimeTitle,
+                      AppLocalizations.of(context)!.selectDateTimeTitle,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: UIStyle.mediumFontSize,
@@ -177,7 +177,7 @@ class RouteOptionsWidget extends StatelessWidget {
                   children: <Widget>[
                     CupertinoButton(
                       child: Text(
-                        AppLocalizations.of(context).cancelTitle,
+                        AppLocalizations.of(context)!.cancelTitle,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
@@ -186,7 +186,7 @@ class RouteOptionsWidget extends StatelessWidget {
                     ),
                     CupertinoButton(
                       child: Text(
-                        AppLocalizations.of(context).doneTitle,
+                        AppLocalizations.of(context)!.doneTitle,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),

@@ -23,16 +23,18 @@ import 'package:flutter/material.dart';
 class RoutePoiOptionsItem extends StatefulWidget {
   /// Checkbox value.
   final bool value;
+
   /// Title of the button.
   final Widget title;
+
   /// Called when the value is changed.
   final ValueChanged<bool> onChanged;
 
   /// Constructs a widget.
   RoutePoiOptionsItem({
     this.value = false,
-    @required this.title,
-    @required this.onChanged,
+    required this.title,
+    required this.onChanged,
   });
 
   @override
@@ -40,7 +42,7 @@ class RoutePoiOptionsItem extends StatefulWidget {
 }
 
 class _RoutePoiOptionsItemState extends State<RoutePoiOptionsItem> {
-  bool _value;
+  late bool _value;
 
   @override
   void initState() {

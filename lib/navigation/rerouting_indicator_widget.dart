@@ -44,7 +44,7 @@ class ReroutingIndicator extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            AppLocalizations.of(context).reroutingInProgressText,
+            AppLocalizations.of(context)!.reroutingInProgressText,
             style: TextStyle(
               color: colorScheme.background,
               fontSize: UIStyle.extraHugeFontSize,

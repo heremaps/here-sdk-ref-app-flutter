@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/search.dart';
@@ -28,8 +27,10 @@ import '../common/util.dart' as Util;
 enum WayPointInfoSourceType {
   /// Current position.
   CurrentPosition,
+
   /// Arbitrary coordinates.
   Coordinates,
+
   /// A [Place].
   Place,
 }
@@ -37,38 +38,28 @@ enum WayPointInfoSourceType {
 /// Helper class that contains additional information about waypoint.
 class WayPointInfo extends Routing.Waypoint {
   /// Place of the waypoint.
-  final Place place;
+  final Place? place;
+
   /// Source type.
   final WayPointInfoSourceType sourceType;
-  /// Ownership of the provided [Place].
-  final bool releasePlace;
 
   String get title => place?.title ?? coordinates.toPrettyString();
 
   WayPointInfo({
-    @required GeoCoordinates coordinates,
+    required GeoCoordinates coordinates,
   })  : place = null,
-        releasePlace = false,
         sourceType = WayPointInfoSourceType.CurrentPosition,
         super.withDefaults(coordinates);
 
   WayPointInfo.withCoordinates({
-    @required GeoCoordinates coordinates,
+    required GeoCoordinates coordinates,
   })  : place = null,
-        releasePlace = false,
         sourceType = WayPointInfoSourceType.Coordinates,
         super.withDefaults(coordinates);
 
   WayPointInfo.withPlace({
-    @required this.place,
-    this.releasePlace = true,
-    GeoCoordinates originalCoordinates = null,
+    required this.place,
+    GeoCoordinates? originalCoordinates = null,
   })  : sourceType = WayPointInfoSourceType.Place,
-        super.withDefaults(originalCoordinates ?? place.geoCoordinates);
-
-  void release() {
-    if (place != null && releasePlace) {
-      place.release();
-    }
-  }
+        super.withDefaults(originalCoordinates ?? place!.geoCoordinates!);
 }

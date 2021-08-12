@@ -33,7 +33,7 @@ class TruckSpecificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TruckOptions truckOptions = context.select((RoutePreferencesModel model) => model.truckOptions);
     TruckSpecifications specs = truckOptions.specifications;
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -133,13 +133,15 @@ class TruckSpecificationsScreen extends StatelessWidget {
         truckOptions.hazardousGoods,
       );
 
-  TruckSpecifications _truckSpecificationsFrom(TruckSpecifications specs,
-          {int grossWeightInKilograms,
-          int weightPerAxleInKilograms,
-          int heightInCentimeters,
-          int widthInCentimeters,
-          int lengthInCentimeters,
-          int axleCount}) =>
+  TruckSpecifications _truckSpecificationsFrom(
+    TruckSpecifications specs, {
+    int? grossWeightInKilograms,
+    int? weightPerAxleInKilograms,
+    int? heightInCentimeters,
+    int? widthInCentimeters,
+    int? lengthInCentimeters,
+    int? axleCount,
+  }) =>
       TruckSpecifications(
         grossWeightInKilograms ?? specs.grossWeightInKilograms,
         weightPerAxleInKilograms ?? specs.weightPerAxleInKilograms,

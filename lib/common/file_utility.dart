@@ -27,7 +27,7 @@ class FileUtility {
   static const String _maneuverDarkImagesDir = "assets/maneuvers/dark/png/";
   static const String _maneuverLightImagesDir = "assets/maneuvers/light/png/";
 
-  static void _createDirsIfNotExist(String docsDirectory, String imagesDirectory) async {
+  static Future _createDirsIfNotExist(String docsDirectory, String imagesDirectory) async {
     final Directory maneuversDirectory = Directory("$docsDirectory/$imagesDirectory");
     if (!(await maneuversDirectory.exists())) {
       await maneuversDirectory.create(recursive: true);

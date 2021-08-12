@@ -26,7 +26,7 @@ import 'file_utility.dart';
 
 /// Helper class for maneuver notifications.
 class LocalNotificationsHelper {
-  static FlutterLocalNotificationsPlugin _maneuverLocalNotificationsPlugin;
+  static FlutterLocalNotificationsPlugin? _maneuverLocalNotificationsPlugin;
   static const MethodChannel _kAndroidServiceChannel =
       const MethodChannel("com.example.RefApp/foreground_service_channel");
   static const String _kTitleParam = "title";
@@ -72,7 +72,7 @@ class LocalNotificationsHelper {
     var platformChannelSpecifics = NotificationDetails(
       iOS: iOSNotificationDetails,
     );
-    await _maneuverLocalNotificationsPlugin.show(0, title, body, platformChannelSpecifics);
+    await _maneuverLocalNotificationsPlugin!.show(0, title, body, platformChannelSpecifics);
   }
 
   static Future _showManeuverNotificationAndroid(String title, String body, String imagePath, bool presentSound) async {
@@ -96,7 +96,7 @@ class LocalNotificationsHelper {
       iOS: IOSInitializationSettings(),
     );
 
-    _maneuverLocalNotificationsPlugin.initialize(initSettings);
+    _maneuverLocalNotificationsPlugin!.initialize(initSettings);
   }
 
   static Future _setupNotificationsAndroid(String title, String body, String imagePath) async {

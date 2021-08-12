@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import 'dart:collection';
-
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/routing.dart';
 
@@ -38,12 +36,12 @@ class CountryAvoidanceScreen extends StatelessWidget {
     final AvoidanceOptions avoidanceOptions =
         context.select((RoutePreferencesModel model) => model.sharedAvoidanceOptions);
 
-    LinkedHashMap<String, CountryCode> countryCodesMap = EnumStringHelper.countryCodesMap(context);
+    Map<String, CountryCode> countryCodesMap = EnumStringHelper.countryCodesMap(context);
     List<String> sortedCountryNames = countryCodesMap.keys.toList()..sort();
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context).avoidCountriesTitle),
+          title: Text(AppLocalizations.of(context)!.avoidCountriesTitle),
           centerTitle: true,
           backgroundColor: UIStyle.preferencesBackgroundColor,
           textTheme: Theme.of(context).textTheme),
@@ -52,13 +50,13 @@ class CountryAvoidanceScreen extends StatelessWidget {
         child: ListView.builder(
             itemCount: sortedCountryNames.length,
             itemBuilder: (context, index) {
-              CountryCode code = countryCodesMap[sortedCountryNames[index]];
+              CountryCode code = countryCodesMap[sortedCountryNames[index]]!;
               return CheckboxListTile(
                 title: Text(sortedCountryNames[index]),
                 value: avoidanceOptions.countries.contains(code),
-                onChanged: (bool enable) {
+                onChanged: (bool? enable) {
                   List<CountryCode> updatedCountries = List.from(avoidanceOptions.countries);
-                  enable ? updatedCountries.add(code) : updatedCountries.remove(code);
+                  enable ?? false ? updatedCountries.add(code) : updatedCountries.remove(code);
 
                   context.read<RoutePreferencesModel>().sharedAvoidanceOptions = AvoidanceOptions(
                     avoidanceOptions.roadFeatures,

@@ -39,7 +39,7 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context).avoidRoadFeaturesTitle),
+          title: Text(AppLocalizations.of(context)!.avoidRoadFeaturesTitle),
           centerTitle: true,
           backgroundColor: UIStyle.preferencesBackgroundColor,
           textTheme: Theme.of(context).textTheme),
@@ -50,10 +50,10 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
             return CheckboxListTile(
               title: Text(key),
               value: avoidanceOptions.roadFeatures.contains(roadFeaturesMap[key]),
-              onChanged: (bool enable) {
-                RoadFeatures changedFeature = roadFeaturesMap[key];
+              onChanged: (bool? enable) {
+                RoadFeatures? changedFeature = roadFeaturesMap[key];
                 List<RoadFeatures> updatedFeatures = List.from(avoidanceOptions.roadFeatures);
-                enable ? updatedFeatures.add(changedFeature) : updatedFeatures.remove(changedFeature);
+                enable ?? false ? updatedFeatures.add(changedFeature!) : updatedFeatures.remove(changedFeature);
 
                 context.read<RoutePreferencesModel>().sharedAvoidanceOptions = AvoidanceOptions(
                   updatedFeatures,

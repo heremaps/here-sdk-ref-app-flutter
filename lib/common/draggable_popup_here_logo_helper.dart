@@ -27,19 +27,22 @@ import 'package:here_sdk/mapview.dart';
 class DraggablePopupHereLogoHelper extends StatefulWidget {
   /// [HereMapController] that contains the logo.
   final HereMapController hereMapController;
+
   /// [Key] of the map widget.
   final GlobalKey hereMapKey;
+
   /// Child draggable scrollable sheet widget.
   final DraggableScrollableSheet draggableScrollableSheet;
+
   /// Should be true if the child sheet is disposable.
   final bool modal;
 
   /// Constructs a widget.
   DraggablePopupHereLogoHelper({
-    Key key,
-    @required this.hereMapController,
-    @required this.hereMapKey,
-    @required this.draggableScrollableSheet,
+    Key? key,
+    required this.hereMapController,
+    required this.hereMapKey,
+    required this.draggableScrollableSheet,
     this.modal = false,
   }) : super(key: key);
 
@@ -53,7 +56,7 @@ class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHel
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.scheduleFrameCallback((timeStamp) => SchedulerBinding.instance.addPostFrameCallback(
+    SchedulerBinding.instance!.scheduleFrameCallback((timeStamp) => SchedulerBinding.instance!.addPostFrameCallback(
         (timeStamp) => _updateHereLogoPosition(widget.draggableScrollableSheet.initialChildSize)));
   }
 
@@ -74,13 +77,13 @@ class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHel
   }
 
   void _updateHereLogoPosition(double extent) {
-    if (widget.hereMapKey.currentContext == null || widget.hereMapController == null || !_processEvents) {
+    if (widget.hereMapKey.currentContext == null || !_processEvents) {
       return;
     }
 
     final double height = MediaQuery.of(context).size.height;
     final double popupHeight = height * extent;
-    final RenderBox box = widget.hereMapKey.currentContext.findRenderObject() as RenderBox;
+    final RenderBox box = widget.hereMapKey.currentContext!.findRenderObject() as RenderBox;
     final double margin = (popupHeight - (height - box.paintBounds.bottom)) * widget.hereMapController.pixelScale;
 
     if (margin >= 0) {

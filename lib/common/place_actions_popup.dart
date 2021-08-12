@@ -26,7 +26,7 @@ import 'package:here_sdk/search.dart';
 import 'ui_style.dart';
 import 'util.dart' as Util;
 
-typedef PlaceActionCallback = void Function(Place place);
+typedef PlaceActionCallback = void Function(Place? place);
 
 /// A widget that displays a pop-up window for creating a waypoint from a point on the map.
 class PlaceActionsPopup extends StatefulWidget {
@@ -43,25 +43,24 @@ class PlaceActionsPopup extends StatefulWidget {
   final Widget rightButtonIcon;
 
   /// Called when the left button is tapped or otherwise activated.
-  final PlaceActionCallback onLeftButtonPressed;
+  final PlaceActionCallback? onLeftButtonPressed;
 
   /// Left button icon.
-  final Widget leftButtonIcon;
+  final Widget? leftButtonIcon;
 
   /// Creates a widget.
   PlaceActionsPopup({
-    Key key,
-    @required this.hereMapController,
-    @required this.coordinates,
-    @required this.onRightButtonPressed,
+    Key? key,
+    required this.hereMapController,
+    required this.coordinates,
+    required this.onRightButtonPressed,
     this.rightButtonIcon = const Icon(
       Icons.add,
       color: UIStyle.addWayPointPopupForegroundColor,
     ),
     this.onLeftButtonPressed = null,
     this.leftButtonIcon = null,
-  })  : assert(onLeftButtonPressed != null || onRightButtonPressed != null),
-        assert((onLeftButtonPressed == null) == (leftButtonIcon == null)),
+  })  : assert((onLeftButtonPressed == null) == (leftButtonIcon == null)),
         super(key: key);
 
   @override
@@ -73,10 +72,10 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
 
   final SearchOptions _searchOptions = new SearchOptions(LanguageCode.enUs, 1);
   final SearchEngine _searchEngine = SearchEngine();
-  TaskHandle _searchTask;
-  String _title;
-  Place _place;
-  MapMarker _mapMarker;
+  late TaskHandle _searchTask;
+  late String _title;
+  Place? _place;
+  late MapMarker _mapMarker;
 
   @override
   void initState() {
@@ -97,12 +96,8 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
 
   @override
   void dispose() {
-    _searchTask?.cancel();
-    _searchTask?.release();
-    _searchEngine.release();
-    _place?.release();
+    _searchTask.cancel();
     widget.hereMapController.mapScene.removeMapMarker(_mapMarker);
-    _mapMarker.release();
     super.dispose();
   }
 
@@ -120,9 +115,9 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
               children: [
                 if (widget.onLeftButtonPressed != null)
                   IconButton(
-                    icon: widget.leftButtonIcon,
+                    icon: widget.leftButtonIcon!,
                     onPressed: () {
-                      widget.onLeftButtonPressed(_place);
+                      widget.onLeftButtonPressed!(_place);
                       _place = null;
                     },
                   ),
@@ -140,14 +135,13 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
                     ),
                   ),
                 ),
-                if (widget.onRightButtonPressed != null)
-                  IconButton(
-                    icon: widget.rightButtonIcon,
-                    onPressed: () {
-                      widget.onRightButtonPressed(_place);
-                      _place = null;
-                    },
-                  ),
+                IconButton(
+                  icon: widget.rightButtonIcon,
+                  onPressed: () {
+                    widget.onRightButtonPressed(_place);
+                    _place = null;
+                  },
+                ),
               ],
             ),
           ),
@@ -157,14 +151,17 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
         ],
       );
 
-  void _onSearchEnd(SearchError error, List<Place> places) {
+  void _onSearchEnd(SearchError? error, List<Place>? places) {
     if (error != null) {
       print('Search failed. Error: ${error.toString()}');
+    }
+    if (places == null || places.isEmpty) {
+      return;
     }
 
     setState(() {
       _place = places.first;
-      _title = _place.address.addressText;
+      _title = places.first.address.addressText;
     });
   }
 }

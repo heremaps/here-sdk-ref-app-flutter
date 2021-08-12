@@ -28,20 +28,23 @@ import 'waypoint_info.dart';
 class RouteWayPointsList extends StatefulWidget {
   /// A waypoints list.
   final List<WayPointInfo> wayPoints;
+
   /// Parent scroll controller.
-  final ScrollController controller;
+  final ScrollController? controller;
+
   /// Called when the list of waypoints is changed.
   final ValueChanged<List<WayPointInfo>> onChanged;
+
   /// Title of the current location.
   final String currentLocationTitle;
 
   /// Creates a widget.
   RouteWayPointsList({
-    Key key,
-    @required this.wayPoints,
+    Key? key,
+    required this.wayPoints,
     this.controller,
-    @required this.onChanged,
-    @required this.currentLocationTitle,
+    required this.onChanged,
+    required this.currentLocationTitle,
   }) : super(key: key);
 
   @override
@@ -49,7 +52,7 @@ class RouteWayPointsList extends StatefulWidget {
 }
 
 class _RouteWayPointsListState extends State<RouteWayPointsList> {
-  List<WayPointInfo> _wayPoints;
+  late List<WayPointInfo> _wayPoints;
 
   @override
   void initState() {
@@ -107,7 +110,7 @@ class _RouteWayPointsListState extends State<RouteWayPointsList> {
           ),
           Expanded(
             child: Text(
-              AppLocalizations.of(context).wayPointsListTitle,
+              AppLocalizations.of(context)!.wayPointsListTitle,
               style: TextStyle(
                 fontSize: UIStyle.hugeFontSize,
                 color: Theme.of(context).colorScheme.primary,

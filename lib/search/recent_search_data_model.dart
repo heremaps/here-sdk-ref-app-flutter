@@ -26,10 +26,12 @@ import 'package:sqflite/sqflite.dart';
 class RecentSearchItem {
   /// Unique id.
   final int id;
+
   /// Title.
-  final String title;
+  final String? title;
+
   /// Id of the [Place].
-  final String placeId;
+  final String? placeId;
 
   RecentSearchItem(this.id, this.title, this.placeId);
 }
@@ -37,9 +39,10 @@ class RecentSearchItem {
 /// A class that represents the recently searched place.
 class RecentSearchPlace {
   /// Title.
-  final String title;
+  final String? title;
+
   /// [Place].
-  final Place place;
+  final Place? place;
 
   RecentSearchPlace(this.title, this.place);
 }
@@ -52,10 +55,11 @@ class RecentSearchDataModel extends ChangeNotifier {
   static final _kPlaceIdField = "place_id";
   static final _kTimeStampField = "timestamp";
 
-  Database _db;
+  late Database _db;
+  late Future<void> _initFuture;
 
   RecentSearchDataModel() {
-    _init();
+    _initFuture = _init();
   }
 
   Future<void> _init() async {
@@ -86,6 +90,7 @@ class RecentSearchDataModel extends ChangeNotifier {
 
   /// Adds [text] to the list of recently searched items.
   Future<void> insertText(String text) async {
+    await _initFuture;
     final queryResult = await _db.query(
       _kTableName,
       where: "$_kTitleField = ?",
@@ -93,7 +98,7 @@ class RecentSearchDataModel extends ChangeNotifier {
       limit: 1,
     );
     if (queryResult.isNotEmpty) {
-      await _updateTimeStamp(queryResult.first["id"]);
+      await _updateTimeStamp(queryResult.first["id"] as int);
     } else {
       await _db.insert(
         _kTableName,
@@ -109,6 +114,7 @@ class RecentSearchDataModel extends ChangeNotifier {
 
   /// Adds id of a place to the list of recently searched items.
   Future<void> insertPlaceId(String placeId) async {
+    await _initFuture;
     final queryResult = await _db.query(
       _kTableName,
       where: "$_kPlaceIdField = ?",
@@ -116,7 +122,7 @@ class RecentSearchDataModel extends ChangeNotifier {
       limit: 1,
     );
     if (queryResult.isNotEmpty) {
-      await _updateTimeStamp(queryResult.first["id"]);
+      await _updateTimeStamp(queryResult.first["id"] as int);
     } else {
       await _db.insert(
         _kTableName,
@@ -132,6 +138,7 @@ class RecentSearchDataModel extends ChangeNotifier {
 
   /// Removes an element from the list.
   Future<void> delete(int id) async {
+    await _initFuture;
     await _db.delete(
       _kTableName,
       where: "id = ?",
@@ -141,13 +148,10 @@ class RecentSearchDataModel extends ChangeNotifier {
 
   /// Returns recently searched items list.
   Future<List<RecentSearchItem>> getData() async {
-    if (_db == null) {
-      return [];
-    }
-
+    await _initFuture;
     List<Map<String, dynamic>> results = await _db.query(_kTableName, orderBy: "$_kTimeStampField DESC");
     return results
-        .map((e) => RecentSearchItem(e["id"] as int, e[_kTitleField] as String, e[_kPlaceIdField] as String))
+        .map((e) => RecentSearchItem(e["id"] as int, e[_kTitleField] as String?, e[_kPlaceIdField] as String?))
         .toList();
   }
 }

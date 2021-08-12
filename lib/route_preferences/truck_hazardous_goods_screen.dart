@@ -38,7 +38,7 @@ class TruckHazardousGoodsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context).hazardousGoodsTitle),
+          title: Text(AppLocalizations.of(context)!.hazardousGoodsTitle),
           centerTitle: true,
           backgroundColor: UIStyle.preferencesBackgroundColor,
           textTheme: Theme.of(context).textTheme),
@@ -49,10 +49,10 @@ class TruckHazardousGoodsScreen extends StatelessWidget {
             return CheckboxListTile(
               title: Text(key),
               value: truckOptions.hazardousGoods.contains(hazardousGoodsMap[key]),
-              onChanged: (bool enable) {
-                HazardousGood changedFeature = hazardousGoodsMap[key];
+              onChanged: (bool? enable) {
+                HazardousGood changedFeature = hazardousGoodsMap[key]!;
                 List<HazardousGood> updatedFeatures = List.from(truckOptions.hazardousGoods);
-                enable ? updatedFeatures.add(changedFeature) : updatedFeatures.remove(changedFeature);
+                enable ?? false ? updatedFeatures.add(changedFeature) : updatedFeatures.remove(changedFeature);
 
                 context.read<RoutePreferencesModel>().truckOptions = TruckOptions(
                     truckOptions.routeOptions,

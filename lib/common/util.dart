@@ -41,15 +41,15 @@ String formatString(String template, List replacements) {
 }
 
 /// Returns localized [distance] string in meters.
-String makeDistanceString(BuildContext context, int distance) {
+String makeDistanceString(BuildContext context, int? distance) {
   if (distance == null) {
     return "";
   } else if (distance < 1000) {
-    return "$distance ${AppLocalizations.of(context).meterAbbreviationText} ";
+    return "$distance ${AppLocalizations.of(context)!.meterAbbreviationText} ";
   } else if (distance < 10000) {
-    return "${(distance / 1000.0).toStringAsFixed(1)} ${AppLocalizations.of(context).kilometerAbbreviationText} ";
+    return "${(distance / 1000.0).toStringAsFixed(1)} ${AppLocalizations.of(context)!.kilometerAbbreviationText} ";
   } else {
-    return "${(distance / 1000).truncate()} ${AppLocalizations.of(context).kilometerAbbreviationText} ";
+    return "${(distance / 1000).truncate()} ${AppLocalizations.of(context)!.kilometerAbbreviationText} ";
   }
 }
 
@@ -76,12 +76,11 @@ MapMarker createMarkerWithImagePath(
   String imagePath,
   int width,
   int height, {
-  int drawOrder,
-  Anchor2D anchor,
+  int? drawOrder,
+  Anchor2D? anchor,
 }) {
   MapImage mapImage = MapImage.withFilePathAndWidthAndHeight(imagePath, width, height);
   MapMarker mapMarker = createMarkerWithImage(coordinates, mapImage, drawOrder: drawOrder, anchor: anchor);
-  mapImage.release();
   return mapMarker;
 }
 
@@ -89,8 +88,8 @@ MapMarker createMarkerWithImagePath(
 MapMarker createMarkerWithImage(
   GeoCoordinates coordinates,
   MapImage image, {
-  int drawOrder,
-  Anchor2D anchor,
+  int? drawOrder,
+  Anchor2D? anchor,
 }) {
   MapMarker mapMarker = MapMarker(coordinates, image);
   if (drawOrder != null) {
@@ -104,23 +103,23 @@ MapMarker createMarkerWithImage(
 }
 
 /// Returns the localized [dateTime] string.
-String stringFromDateTime(BuildContext context, DateTime dateTime) {
+String stringFromDateTime(BuildContext context, DateTime? dateTime) {
   if (dateTime == null) return "";
 
-  return DateFormat(AppLocalizations.of(context).dateTimeFormat).format(dateTime);
+  return DateFormat(AppLocalizations.of(context)!.dateTimeFormat).format(dateTime);
 }
 
 /// An extension for the [HereMapController].
 extension LogicalCoords on HereMapController {
   /// Zooms map area specified by [geoBox] into [viewPort] with [margin].
   void zoomGeoBoxToLogicalViewPort({
-    @required GeoBox geoBox,
-    @required Rect viewPort,
+    required GeoBox geoBox,
+    required Rect viewPort,
     double margin = UIStyle.contentMarginExtraHuge,
   }) {
-    this.camera.lookAtAreaWithOrientationAndViewRectangle(
+    this.camera.lookAtAreaWithGeoOrientationAndViewRectangle(
         geoBox,
-        MapCameraOrientationUpdate.withDefaults(),
+        GeoOrientationUpdate(double.nan, double.nan),
         Rectangle2D(
             Point2D(viewPort.left + margin, viewPort.top + margin) * this.pixelScale,
             Size2D(
@@ -130,7 +129,10 @@ extension LogicalCoords on HereMapController {
   }
 
   /// Zooms map area specified by [geoBox] into entire map area.
-  void zoomToLogicalViewPort({@required GeoBox geoBox, @required BuildContext context}) {
+  void zoomToLogicalViewPort({
+    required GeoBox geoBox,
+    required BuildContext context,
+  }) {
     final RenderBox box = context.findRenderObject() as RenderBox;
 
     zoomGeoBoxToLogicalViewPort(

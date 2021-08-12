@@ -29,14 +29,16 @@ import '../common/util.dart' as Util;
 class RouteInfo extends StatelessWidget {
   /// The route.
   final Routing.Route route;
+
   /// Called when the route details button is tapped or otherwise activated.
-  final VoidCallback onRouteDetails;
+  final VoidCallback? onRouteDetails;
+
   /// Called when the navigation button is tapped or otherwise activated.
-  final VoidCallback onNavigation;
+  final VoidCallback? onNavigation;
 
   /// Constructs a widget.
   RouteInfo({
-    @required this.route,
+    required this.route,
     this.onRouteDetails,
     this.onNavigation,
   });
@@ -62,9 +64,9 @@ class RouteInfo extends StatelessWidget {
                       color: colorScheme.primary,
                     ),
                     children: [
-                      if (route.trafficDelayInSeconds > 0)
+                      if (route.trafficDelayInSeconds > Duration.secondsPerMinute)
                         TextSpan(
-                          text: Util.formatString(AppLocalizations.of(context).trafficDelayText,
+                          text: Util.formatString(AppLocalizations.of(context)!.trafficDelayText,
                               [_buildDurationString(context, route.trafficDelayInSeconds)]),
                           style: TextStyle(
                             fontSize: UIStyle.mediumFontSize,
@@ -73,7 +75,7 @@ class RouteInfo extends StatelessWidget {
                         )
                       else
                         TextSpan(
-                          text: AppLocalizations.of(context).noTrafficDelaysText,
+                          text: AppLocalizations.of(context)!.noTrafficDelaysText,
                           style: TextStyle(
                             fontSize: UIStyle.smallFontSize,
                             color: colorScheme.onSecondary,
@@ -147,20 +149,16 @@ class RouteInfo extends StatelessWidget {
   }
 
   String _buildDurationString(BuildContext context, int durationInSeconds) {
-    if (durationInSeconds == null) {
-      return "";
-    }
-
     int minutes = (durationInSeconds / 60).truncate();
     int hours = (minutes / 60).truncate();
     minutes = minutes % 60;
 
     if (hours == 0) {
-      return "$minutes ${AppLocalizations.of(context).minuteAbbreviationText}";
+      return "$minutes ${AppLocalizations.of(context)!.minuteAbbreviationText}";
     } else {
-      String result = "$hours ${AppLocalizations.of(context).hourAbbreviationText}";
+      String result = "$hours ${AppLocalizations.of(context)!.hourAbbreviationText}";
       if (minutes != 0) {
-        result += " $minutes ${AppLocalizations.of(context).minuteAbbreviationText}";
+        result += " $minutes ${AppLocalizations.of(context)!.minuteAbbreviationText}";
       }
       return result;
     }

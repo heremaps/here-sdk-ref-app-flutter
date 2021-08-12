@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';
-import 'package:here_sdk/core.threading.dart';
 import 'package:here_sdk/search.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,37 +34,31 @@ enum PlaceDetailsPopupResult {
 }
 
 /// Displays a pop-up window with detailed info of the [place].
-Future<PlaceDetailsPopupResult> showPlaceDetailsPopup({
-  @required BuildContext context,
-  @required Place place,
+Future<PlaceDetailsPopupResult?> showPlaceDetailsPopup({
+  required BuildContext context,
+  required Place place,
   bool routeToEnabled = false,
   bool addToRouteEnabled = false,
 }) async {
   Future<Place> placeDetailsFuture = _getPlaceDetails(place);
 
-  PlaceDetailsPopupResult result = await showDialog<PlaceDetailsPopupResult>(
+  PlaceDetailsPopupResult? result = await showDialog<PlaceDetailsPopupResult>(
     context: context,
     builder: (context) => FutureBuilder<Place>(
       initialData: place,
       future: placeDetailsFuture,
-      builder: (context, snapshot) => _createPopupFromPlace(context, snapshot.data, routeToEnabled, addToRouteEnabled),
+      builder: (context, snapshot) => _createPopupFromPlace(context, snapshot.data!, routeToEnabled, addToRouteEnabled),
     ),
   );
-
-  Place placeDetails = await placeDetailsFuture;
-  if (placeDetails != place) {
-    placeDetails.release();
-  }
 
   return result;
 }
 
 Future<Place> _getPlaceDetails(Place place) async {
   final SearchEngine _searchEngine = SearchEngine();
-  final Completer<Place> completer = Completer();
+  final Completer<Place?> completer = Completer();
 
-  TaskHandle taskHandle =
-      _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(place.id), LanguageCode.enUs, (error, place) {
+  _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(place.id), LanguageCode.enUs, (error, place) {
     if (error != null) {
       print('Search failed. Error: ${error.toString()}');
       completer.complete();
@@ -74,9 +67,7 @@ Future<Place> _getPlaceDetails(Place place) async {
     completer.complete(place);
   });
 
-  Place newPlace = await completer.future;
-  taskHandle.release();
-  _searchEngine.release();
+  Place? newPlace = await completer.future;
 
   if (newPlace == null) {
     newPlace = place;
@@ -156,7 +147,7 @@ Widget _createPopupFromPlace(BuildContext context, Place place, bool routeToEnab
                     width: UIStyle.smallIconSize,
                     height: UIStyle.smallIconSize,
                   ),
-                  AppLocalizations.of(context).routeToButtonTitle,
+                  AppLocalizations.of(context)!.routeToButtonTitle,
                   () => Navigator.of(context).pop(PlaceDetailsPopupResult.routeTo),
                 ),
               ],
@@ -169,7 +160,7 @@ Widget _createPopupFromPlace(BuildContext context, Place place, bool routeToEnab
                     color: Theme.of(context).colorScheme.primary,
                     size: UIStyle.smallIconSize,
                   ),
-                  AppLocalizations.of(context).addToRouteButton,
+                  AppLocalizations.of(context)!.addToRouteButton,
                   () => Navigator.of(context).pop(PlaceDetailsPopupResult.addToRoute),
                 ),
               ],
@@ -181,7 +172,7 @@ Widget _createPopupFromPlace(BuildContext context, Place place, bool routeToEnab
   );
 }
 
-List<Widget> _buildPhonesList(BuildContext context, Place place) {
+List<Widget>? _buildPhonesList(BuildContext context, Place place) {
   if (place.details.contacts.isEmpty) {
     return null;
   }
@@ -197,7 +188,7 @@ List<Widget> _buildPhonesList(BuildContext context, Place place) {
 ListTile _buildPhoneTile(IconData icon, String phoneNumber) =>
     _buildInfoTile(icon, phoneNumber, () => launch("tel:" + phoneNumber));
 
-List<Widget> _buildOpeningHours(Place place) {
+List<Widget>? _buildOpeningHours(Place place) {
   if (place.details.openingHours.isEmpty) {
     return null;
   }
@@ -209,7 +200,7 @@ List<Widget> _buildOpeningHours(Place place) {
   return _convertToExpansionTile(openingHoursWidgets);
 }
 
-List<Widget> _buildURLsList(BuildContext context, Place place) {
+List<Widget>? _buildURLsList(BuildContext context, Place place) {
   if (place.details.contacts.isEmpty) {
     return null;
   }
@@ -221,7 +212,7 @@ List<Widget> _buildURLsList(BuildContext context, Place place) {
   return _convertToExpansionTile(urlsWidgets);
 }
 
-List<Widget> _convertToExpansionTile(List<ListTile> tiles) {
+List<Widget>? _convertToExpansionTile(List<ListTile> tiles) {
   if (tiles.isEmpty) {
     return null;
   }
@@ -249,7 +240,7 @@ List<Widget> _convertToExpansionTile(List<ListTile> tiles) {
   ];
 }
 
-ListTile _buildInfoTile(IconData icon, String text, VoidCallback onTap) => ListTile(
+ListTile _buildInfoTile(IconData icon, String text, VoidCallback? onTap) => ListTile(
       leading: Icon(icon),
       title: Text(
         text,

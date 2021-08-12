@@ -27,7 +27,9 @@ class ResetLocationButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   /// Constructs a widget.
-  ResetLocationButton({this.onPressed});
+  ResetLocationButton({
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class ResetLocationButton extends StatelessWidget {
         heroTag: null,
         backgroundColor: Theme.of(context).backgroundColor,
         child: Icon(Icons.gps_fixed),
-        onPressed: () => onPressed(),
+        onPressed: onPressed,
       ),
     );
   }

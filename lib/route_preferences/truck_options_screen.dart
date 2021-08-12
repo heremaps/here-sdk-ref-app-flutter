@@ -49,9 +49,9 @@ class TruckOptionsScreen extends StatelessWidget {
           RouteOptionsWidget(),
           RouteTextOptionsWidget(),
           RouteAvoidanceOptionsWidget(),
-          PreferencesSectionTitle(title: AppLocalizations.of(context).truckSpecificationsTitle),
+          PreferencesSectionTitle(title: AppLocalizations.of(context)!.truckSpecificationsTitle),
           PreferencesDisclosureRowWidget(
-            title: AppLocalizations.of(context).specificationsTitle,
+            title: AppLocalizations.of(context)!.specificationsTitle,
             subTitle: _truckSpecificationsToString(context, truckOptions.specifications),
             onPressed: () => Navigator.push(
               context,
@@ -59,14 +59,14 @@ class TruckOptionsScreen extends StatelessWidget {
             ),
           ),
           PreferencesDisclosureRowWidget(
-            title: AppLocalizations.of(context).hazardousGoodsTitle,
+            title: AppLocalizations.of(context)!.hazardousGoodsTitle,
             subTitle: EnumStringHelper.hazardousGoodsNamesToString(context, truckOptions.hazardousGoods),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => TruckHazardousGoodsScreen()),
             ),
           ),
-          PreferencesRowTitle(title: AppLocalizations.of(context).tunnelCategoryTitle),
+          PreferencesRowTitle(title: AppLocalizations.of(context)!.tunnelCategoryTitle),
           Container(
             decoration: UIStyle.roundedRectDecoration(),
             child: DropdownButtonHideUnderline(
@@ -90,7 +90,7 @@ class TruckOptionsScreen extends StatelessWidget {
   }
 
   String _truckSpecificationsToString(BuildContext context, TruckSpecifications specifications) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = AppLocalizations.of(context)!;
     return <String>[
       if (specifications.widthInCentimeters != null)
         localizations.truckWidthRowTitle + " = " + specifications.widthInCentimeters.toString(),

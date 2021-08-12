@@ -30,13 +30,13 @@ import '../common/util.dart' as Util;
 class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
   /// Current location.
   GeoCoordinates currentLocation;
-  HereMapController _hereMapController;
+  HereMapController? _hereMapController;
   List<MapMarker> _wpMarkers = [];
 
   /// Creates a [WayPointsController] object.
   WayPointsController({
-    @required List<WayPointInfo> wayPoints,
-    @required this.currentLocation,
+    required List<WayPointInfo> wayPoints,
+    required this.currentLocation,
   }) : super(wayPoints) {
     addListener(() {
       _clearWpMarkers();
@@ -45,7 +45,7 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
   }
 
   /// Sets current [HereMapController].
-  set mapController(HereMapController hereMapController) {
+  set mapController(HereMapController? hereMapController) {
     _clearWpMarkers();
     _hereMapController = hereMapController;
     _createWpMarkers();
@@ -58,24 +58,11 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
   /// Sets waypoints list.
   @override
   set value(List<WayPointInfo> value) {
-    assert(value != null);
     if (ListEquality().equals(super.value, value)) {
       return;
     }
 
-    super.value.forEach((wp) {
-      if (!value.contains(wp)) {
-        wp.release();
-      }
-    });
     super.value = value;
-  }
-
-  @override
-  void dispose() {
-    super.value.forEach((wp) => wp.release());
-    super.dispose();
-    _clearWpMarkers();
   }
 
   /// Gets a waypoint by index [i].
@@ -83,9 +70,6 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
 
   /// Sets a waypoint by index [i].
   operator []=(int i, WayPointInfo wp) {
-    if (super.value[i] != wp) {
-      super.value[i].release();
-    }
     super.value[i] = wp;
     notifyListeners();
   }
@@ -113,8 +97,7 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
 
   void _clearWpMarkers() {
     _wpMarkers.forEach((marker) {
-      _hereMapController?.mapScene?.removeMapMarker(marker);
-      marker.release();
+      _hereMapController?.mapScene.removeMapMarker(marker);
     });
     _wpMarkers.clear();
   }
@@ -125,8 +108,8 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
 
   /// Creates [MapMarker] for each waypoint in the list an adds it to the [controller].
   /// Returns a list of created markers.
-  List<MapMarker> buildMapMarkersForController(HereMapController controller) {
-    if (super.value == null || controller == null) {
+  List<MapMarker> buildMapMarkersForController(HereMapController? controller) {
+    if (controller == null) {
       return [];
     }
 

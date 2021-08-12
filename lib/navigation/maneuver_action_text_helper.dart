@@ -23,7 +23,7 @@ import 'package:here_sdk/routing.dart';
 
 import '../common/util.dart';
 
-String _makeActionString(String text, String template, String roadName) {
+String _makeActionString(String text, String template, String? roadName) {
   if (roadName == null || roadName.isEmpty) {
     return text;
   }
@@ -33,12 +33,11 @@ String _makeActionString(String text, String template, String roadName) {
 
 /// Helper extension class for the [Maneuver] class.
 extension ManeuverActionTextHelper on Maneuver {
-
   /// Returns the localized text for the navigation maneuver.
   String getActionText(BuildContext context) {
-    final AppLocalizations localizations = AppLocalizations.of(context);
-    final String roadName = roadTexts.names.getDefaultValue();
-    final String nextRoadName = nextRoadTexts.names.getDefaultValue();
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
+    final String? roadName = roadTexts.names.getDefaultValue();
+    final String? nextRoadName = nextRoadTexts.names.getDefaultValue();
 
     switch (action) {
       case ManeuverAction.arrive:
@@ -151,7 +150,5 @@ extension ManeuverActionTextHelper on Maneuver {
         return _makeActionString(
             localizations.slightRightTurnActionText, localizations.slightRightTurnActionNextRoadText, nextRoadName);
     }
-
-    return "";
   }
 }

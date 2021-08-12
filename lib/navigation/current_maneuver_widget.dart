@@ -34,13 +34,19 @@ extension _ManeuverImagePath on Routing.ManeuverAction {
 class CurrentManeuver extends StatelessWidget {
   /// The maneuver action.
   final Routing.ManeuverAction action;
+
   /// Distance to the maneuver.
   final int distance;
+
   /// Instruction for the maneuver.
   final String text;
 
   /// Constructs a widget.
-  CurrentManeuver({@required this.action, @required this.distance, @required this.text});
+  CurrentManeuver({
+    required this.action,
+    required this.distance,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
