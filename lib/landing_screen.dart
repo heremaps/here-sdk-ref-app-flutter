@@ -24,6 +24,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/consent.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk/mapview.dart';
@@ -189,7 +190,15 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   Widget _buildDrawer(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    String title = Util.formatString(
+      AppLocalizations.of(context)!.appTitleHeader,
+      [
+        Util.applicationVersion,
+        SDKBuildInformation.sdkVersion().versionGeneration,
+        SDKBuildInformation.sdkVersion().versionMajor,
+        SDKBuildInformation.sdkVersion().versionMinor,
+      ],
+    );
 
     return Drawer(
       child: Ink(
@@ -198,24 +207,24 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
           padding: EdgeInsets.zero,
           children: [
             Container(
-              height: UIStyle.drawerHeaderHeight,
               child: DrawerHeader(
-                padding: EdgeInsets.all(UIStyle.contentMarginHuge),
+                padding: EdgeInsets.all(UIStyle.contentMarginLarge),
                 decoration: BoxDecoration(
                   color: colorScheme.onSecondary,
                 ),
                 child: Row(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: SvgPicture.asset("assets/app_logo.svg"),
+                    SvgPicture.asset(
+                      "assets/app_logo.svg",
+                      width: UIStyle.drawerLogoSize,
+                      height: UIStyle.drawerLogoSize,
                     ),
                     SizedBox(
                       width: UIStyle.contentMarginMedium,
                     ),
                     Expanded(
                       child: Text(
-                        appLocalizations.appTitleHeader,
+                        title,
                         style: TextStyle(
                           color: colorScheme.onPrimary,
                         ),
