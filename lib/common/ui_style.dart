@@ -83,7 +83,7 @@ class UIStyle {
   static const double mediumIconSize = 20;
   static const double smallIconSize = 16;
 
-  static const double drawerHeaderHeight = 160;
+  static const double drawerLogoSize = 96;
 
   static const double optionsRectBorderRadius = 2;
   static const double optionsRectBorderWidth = 1;

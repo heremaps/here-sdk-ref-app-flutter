@@ -3,7 +3,7 @@
   "@appTitle": {
     "description": "Title of the Application"
   },
-  "appTitleHeader": "HERE SDK\nReference Application",
+  "appTitleHeader": "HERE SDK Reference Application for Flutter {{0}}\nBased on HERE SDK {{1}}.{{2}}.{{3}}",
   "@appTitleHeader": {
     "description": "Title of the Application in the drawer header"
   },
