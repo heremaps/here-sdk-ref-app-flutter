@@ -107,9 +107,7 @@ mixin Positioning {
       Permission.location,
     ].request();
 
-    final bool locationEnabled = await Permission.location.serviceStatus.isEnabled;
-
-    if (statuses.containsKey(Permission.location) && statuses[Permission.location]!.isGranted && locationEnabled) {
+    if (statuses.containsKey(Permission.location) && statuses[Permission.location]!.isGranted) {
       // The required permissions have been granted, let's start the location engine
       await _createAndInitLocationEngine();
       return;
@@ -193,6 +191,13 @@ mixin Positioning {
   }
 
   void _onStatusChanged(LocationEngineStatus status) {
-    _onLocationEngineStatus?.call(status);
+    if (status == LocationEngineStatus.engineStarted) {
+      // Check if location services are available
+      Permission.location.serviceStatus.then((value) {
+        _onLocationEngineStatus?.call(value.isEnabled ? status : LocationEngineStatus.notAllowed);
+      });
+    } else {
+      _onLocationEngineStatus?.call(status);
+    }
   }
 }
