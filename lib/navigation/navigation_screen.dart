@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:io';
+
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:intl/intl.dart';
@@ -272,14 +274,21 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     _locationSimulator = Navigation.LocationSimulator.withRoute(widget.route, options);
     _locationSimulator!.listener = _visualNavigator;
     _locationSimulator!.start();
+
+    // Start location engine to allow background mode under iOS
+    if (Platform.isIOS) {
+      _startRealLocations(addListener: false);
+    }
   }
 
-  void _startRealLocations() {
+  void _startRealLocations({bool addListener = true}) {
     _locationEngine = LocationEngine();
     _locationEngine!.setBackgroundLocationAllowed(true);
     _locationEngine!.setBackgroundLocationIndicatorVisible(true);
     _locationEngine!.setPauseLocationUpdatesAutomatically(true);
-    _locationEngine!.addLocationListener(_visualNavigator);
+    if (addListener) {
+      _locationEngine!.addLocationListener(_visualNavigator);
+    }
     _locationEngine!.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
   }
 
@@ -614,12 +623,17 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       return;
     }
 
-    if (state == AppLifecycleState.paused && _currentManeuverIndex != null) {
-      final Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
+    if (state == AppLifecycleState.paused) {
+      if (_currentManeuverIndex != null) {
+        final Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
 
-      if (maneuver != null) {
-        LocalNotificationsHelper.startNotifications(
-            _getRemainingTimeString(), maneuver.getActionText(context), maneuver.action.imagePath);
+        if (maneuver != null) {
+          LocalNotificationsHelper.startNotifications(
+            _getRemainingTimeString(),
+            maneuver.getActionText(context),
+            maneuver.action.imagePath,
+          );
+        }
       }
       _visualNavigator.stopRendering();
     }
