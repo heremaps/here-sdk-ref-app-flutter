@@ -1,4 +1,6 @@
 PODS:
+  - disk_space (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -24,6 +26,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - disk_space (from `.symlinks/plugins/disk_space/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_ringtone_player (from `.symlinks/plugins/flutter_ringtone_player/ios`)
@@ -40,6 +43,8 @@ SPEC REPOS:
     - FMDB
 
 EXTERNAL SOURCES:
+  disk_space:
+    :path: ".symlinks/plugins/disk_space/ios"
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -62,6 +67,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
+  disk_space: e94d34bbdf77954adfb39e60bde9cc5c7233eda6
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_ringtone_player: 15eba85187230b87b2512f0e1b92225618bc03e7

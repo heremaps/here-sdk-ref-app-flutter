@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +30,7 @@ import 'package:here_sdk/search.dart';
 
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
+import 'download_maps/download_maps_screen.dart';
 import 'positioning/no_location_warning_widget.dart';
 import 'positioning/positioning.dart';
 import 'routing/routing_screen.dart';
@@ -67,11 +66,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
               key: _hereMapKey,
               onMapCreated: _onMapCreated,
             ),
-            if (Platform.isAndroid) _buildMenuButton(),
+            _buildMenuButton(),
           ],
         ),
         floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
-        drawer: Platform.isAndroid ? _buildDrawer(context) : null,
+        drawer: _buildDrawer(context),
         extendBodyBehindAppBar: true,
       );
 
@@ -190,8 +189,10 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   Widget _buildDrawer(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     String title = Util.formatString(
-      AppLocalizations.of(context)!.appTitleHeader,
+      appLocalizations.appTitleHeader,
       [
         Util.applicationVersion,
         SDKBuildInformation.sdkVersion().versionGeneration,
@@ -235,6 +236,22 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
               ),
             ),
             ..._buildUserConsentItems(context),
+            ListTile(
+                leading: Icon(
+                  Icons.download_rounded,
+                  color: colorScheme.onPrimary,
+                ),
+                title: Text(
+                  appLocalizations.downloadMapsTitle,
+                  style: TextStyle(
+                    color: colorScheme.onPrimary,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context)
+                    ..pop()
+                    ..pushNamed(DownloadMapsScreen.navRoute);
+                }),
           ],
         ),
       ),

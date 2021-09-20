@@ -22,6 +22,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../common/ui_style.dart';
+import '../common/util.dart' as Util;
 
 /// Creates a dialog for selecting a location source for navigation.
 /// There are two options available, simulation and device location.
@@ -117,28 +118,7 @@ Future<bool> askForExitFromNavigation(BuildContext context) async {
           ),
           onPressed: () => Navigator.of(context).pop(true),
         ),
-        SimpleDialogOption(
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: UIStyle.contentMarginLarge,
-              right: UIStyle.contentMarginLarge,
-              top: UIStyle.contentMarginMedium,
-              bottom: UIStyle.contentMarginMedium,
-            ),
-            child: Center(
-              child: Text(
-                appLocalizations.cancelTitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: UIStyle.bigFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              ),
-            ),
-          ),
-          onPressed: () => Navigator.of(context).pop(false),
-        ),
+        Util.buildDialogCancelButton(context),
       ],
     ),
   );

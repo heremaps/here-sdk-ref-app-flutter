@@ -1714,5 +1714,77 @@
   "slightRightTurnActionNextRoadText": "Bear right onto {{0}}",
   "@slightRightTurnActionNextRoadText": {
     "description": "Text for the slightRightTurn maneuver action"
+  },
+  "downloadMapsTitle": "Download maps",
+  "@downloadMapsTitle": {
+    "description": "Text for the download maps menu"
+  },
+  "downloadMapsButtonTitle": "Download more maps",
+  "@downloadMapsButtonTitle": {
+    "description": "Text for the download maps button"
+  },
+  "byteAbbreviationText": "bytes",
+  "@byteAbbreviationText": {
+    "description": "Text for the abbreviation of the bytes"
+  },
+  "kilobyteAbbreviationText": "KB",
+  "@kilobyteAbbreviationText": {
+    "description": "Text for the abbreviation of the kilo bytes"
+  },
+  "megabyteAbbreviationText": "MB",
+  "@megabyteAbbreviationText": {
+    "description": "Text for the abbreviation of the mega bytes"
+  },
+  "gigabyteAbbreviationText": "GB",
+  "@gigabyteAbbreviationText": {
+    "description": "Text for the abbreviation of the giga bytes"
+  },
+  "internalStorageText": "Internal storage",
+  "@internalStorageText": {
+    "description": "Text for internal storage caption"
+  },
+  "availableStorageText": "Available",
+  "@availableStorageText": {
+    "description": "Text for available storage caption"
+  },
+  "downloadMapsErrorText": "Map downloading failed with error: {{error}}",
+  "@downloadMapsErrorText": {
+    "description": "Map downloading error message"
+  },
+  "mapRegionChildrenNumberText": "{{0}} items",
+  "@mapRegionChildrenNumberText": {
+    "description": "Text for children number of a map region"
+  },
+  "sizeOfWholeAreaOfRegion": "Whole area {{0}}",
+  "@sizeOfWholeAreaOfRegion": {
+    "description": "Text for size of whole area of a map region"
+  },
+  "incompleteDownloadMessage": "Download is not completed",
+  "@incompleteDownloadMessage": {
+    "description": "Text means that download is not completed"
+  },
+  "stopMapDownloadDialogTitle": "Stop downloading \"{{0}}\"?",
+  "@stopMapDownloadDialogTitle": {
+    "description": "Title text for stop map downloading confirmation dialog"
+  },
+  "stopMapDownloadButtonTitle": "Stop downloading",
+  "@stopMapDownloadButtonTitle": {
+    "description": "Title text for stop map downloading button"
+  },
+  "downloadedMapsTitle": "DOWNLOADED",
+  "@downloadedMapsTitle": {
+    "description": "Title of the list of downloaded maps"
+  },
+  "downloadedMapOptionsTitle": "Options",
+  "@downloadedMapOptionsTitle": {
+    "description": "Title of the options of downloaded map"
+  },
+  "retryDownloadMapOptionTitle": "Retry download",
+  "@retryDownloadMapOptionTitle": {
+    "description": "Title of the retry download map option"
+  },
+  "deleteMapOptionTitle": "Delete map",
+  "@deleteMapOptionTitle": {
+    "description": "Title of the delete map option"
   }
 }
