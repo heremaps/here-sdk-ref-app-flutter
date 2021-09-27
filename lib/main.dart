@@ -21,11 +21,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/maploader.dart';
 import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 
 import 'common/ui_style.dart';
+import 'download_maps/download_maps_screen.dart';
+import 'download_maps/map_loader_controller.dart';
+import 'download_maps/map_regions_list_screen.dart';
 import 'landing_screen.dart';
 import 'navigation/navigation_screen.dart';
 import 'route_preferences/route_preferences_model.dart';
@@ -51,6 +55,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => RecentSearchDataModel()),
         ChangeNotifierProvider(create: (context) => RoutePreferencesModel.withDefaults()),
+        ChangeNotifierProvider(create: (context) => MapLoaderController()),
       ],
       child: MaterialApp(
         localizationsDelegates: [
@@ -99,6 +104,16 @@ class MyApp extends StatelessWidget {
               return NavigationScreen(
                 route: arguments[0] as Routing.Route,
                 wayPoints: arguments[1] as List<Routing.Waypoint>,
+              );
+            },
+            DownloadMapsScreen.navRoute: (BuildContext context) {
+              return DownloadMapsScreen();
+            },
+            MapRegionsListScreen.navRoute: (BuildContext context) {
+              List<dynamic> arguments = settings.arguments as List<dynamic>;
+              assert(arguments.length == 1);
+              return MapRegionsListScreen(
+                regions: arguments[0] as List<Region>,
               );
             },
           };

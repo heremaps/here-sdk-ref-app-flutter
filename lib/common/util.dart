@@ -56,6 +56,19 @@ String makeDistanceString(BuildContext context, int? distance) {
   }
 }
 
+/// Returns localized storage [size] string in bytes.
+String makeStorageSizeString(BuildContext context, int size) {
+  if (size < 1024) {
+    return "$size ${AppLocalizations.of(context)!.byteAbbreviationText}";
+  } else if (size < 1048576) {
+    return "${size / 1024} ${AppLocalizations.of(context)!.kilobyteAbbreviationText}";
+  } else if (size < 1073741824) {
+    return "${(size / 1048576.0).toStringAsFixed(2)} ${AppLocalizations.of(context)!.megabyteAbbreviationText}";
+  } else {
+    return "${(size / 1073741824).toStringAsFixed(2)} ${AppLocalizations.of(context)!.gigabyteAbbreviationText}";
+  }
+}
+
 /// An extension for lists that allows swapping of two elements at indices [index1], [index2].
 extension ListSwap<T> on List<T> {
   List<T> swap(int index1, int index2) {
@@ -160,3 +173,47 @@ extension Point2DExtensions on Point2D {
   /// Returns [Point2D], each of whose fields is divided by [factor].
   Point2D operator /(double factor) => Point2D(x / factor, y / factor);
 }
+
+/// Utility function that shows [SnackBar] with [errorMessage]
+void displayErrorSnackBar(BuildContext context, String errorMessage) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: Colors.red,
+    content: Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Padding(
+          padding: EdgeInsets.all(UIStyle.contentMarginMedium),
+          child: Icon(Icons.error),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.all(UIStyle.contentMarginMedium),
+            child: Text(
+              errorMessage,
+              style: TextStyle(fontSize: UIStyle.hugeFontSize),
+            ),
+          ),
+        ),
+      ],
+    ),
+  ));
+}
+
+/// Utility function that builds cancel button for application dialogs
+Widget buildDialogCancelButton(BuildContext context) => SimpleDialogOption(
+      child: Padding(
+        padding: EdgeInsets.all(UIStyle.contentMarginLarge),
+        child: Center(
+          child: Text(
+            AppLocalizations.of(context)!.cancelTitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: UIStyle.bigFontSize,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
+          ),
+        ),
+      ),
+      onPressed: () => Navigator.of(context).pop(false),
+    );

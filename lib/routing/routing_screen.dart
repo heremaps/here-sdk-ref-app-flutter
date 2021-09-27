@@ -546,7 +546,10 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     if (routes == null || routes.isEmpty) {
       if (error != null) {
         setState(() => _routingInProgress = false);
-        _showError(error);
+        Util.displayErrorSnackBar(
+          _scaffoldKey.currentContext!,
+          Util.formatString(AppLocalizations.of(context)!.routingErrorText, [error.toString()]),
+        );
       }
       return;
     }
@@ -569,31 +572,6 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     _routePoiHandler.updatePoiForRoute(_routes[_selectedRouteIndex]);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) => _zoomToRoutes());
-  }
-
-  void _showError(Routing.RoutingError error) {
-    ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(
-      backgroundColor: Colors.red,
-      content: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(UIStyle.contentMarginMedium),
-            child: Icon(Icons.error),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(UIStyle.contentMarginMedium),
-              child: Text(
-                Util.formatString(AppLocalizations.of(context)!.routingErrorText, [error.toString()]),
-                style: TextStyle(fontSize: UIStyle.hugeFontSize),
-                maxLines: 2,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ));
   }
 
   void _awaitOptionsFromPreferenceScreen(BuildContext context) async {

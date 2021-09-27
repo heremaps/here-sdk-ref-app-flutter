@@ -99,6 +99,7 @@ class UIStyle {
   // private UI constants
   static const double _defaultFontSize = 16;
   static const double _defaultHeadingFontSize = 18;
+  static const double _dialogHeadingFontSize = 20;
 
   // HERE colors
   static const Color _lightBackground = Color.fromARGB(0xff, 0xf5, 0xf5, 0xf5);
@@ -111,10 +112,12 @@ class UIStyle {
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: _lightBackground,
     appBarTheme: const AppBarTheme(
-      color: _lightForeground,
+      backgroundColor: _lightBackground,
+      foregroundColor: _lightForeground,
       iconTheme: IconThemeData(
         color: _lightAccent,
       ),
+      textTheme: _lightTextTheme,
     ),
     colorScheme: const ColorScheme.light(
       primary: _lightForeground,
@@ -151,12 +154,14 @@ class UIStyle {
     color: _lightBackground,
   );
   static const TextStyle _lightHeading = TextStyle(
-    color: _lightBackground,
+    color: _lightForeground,
     fontWeight: FontWeight.bold,
     fontSize: _defaultHeadingFontSize,
   );
   static const TextStyle _lightHeadlinePrimary = TextStyle(
     color: _lightForeground,
+    fontWeight: FontWeight.bold,
+    fontSize: _dialogHeadingFontSize,
   );
   static const TextStyle _lightHintTextStyle = TextStyle(
     color: _lightForegroundHint,
