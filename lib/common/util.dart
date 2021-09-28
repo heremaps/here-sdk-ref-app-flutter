@@ -26,7 +26,7 @@ import 'package:intl/intl.dart';
 import 'ui_style.dart';
 
 /// Version of the Application
-const String applicationVersion = "1.1.0";
+const String applicationVersion = "1.2.0";
 
 const String _placeholderPattern = '(\{\{([a-zA-Z0-9]+)\}\})';
 
