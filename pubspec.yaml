@@ -38,12 +38,12 @@ dependencies:
   flutter_svg: ^0.22.0
   flutter_tts: ^3.2.2
   reorderables: ^0.4.1
-  flutter_ringtone_player: ^3.0.0
+  ringtone_player: ^0.1.1
   flutter_local_notifications: ^7.0.0
   path_provider: ^2.0.2
   url_launcher: ^6.0.9
   wakelock: ^0.5.2
-  disk_space: ^0.1.1
+  disk_space: ^0.2.1
 
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:

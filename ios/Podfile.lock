@@ -4,8 +4,6 @@ PODS:
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
-  - flutter_ringtone_player (0.0.1):
-    - Flutter
   - flutter_tts (0.0.1):
     - Flutter
   - FMDB (2.7.5):
@@ -16,6 +14,8 @@ PODS:
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
+    - Flutter
+  - ringtone_player (0.0.1):
     - Flutter
   - sqflite (0.0.2):
     - Flutter
@@ -29,11 +29,11 @@ DEPENDENCIES:
   - disk_space (from `.symlinks/plugins/disk_space/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
-  - flutter_ringtone_player (from `.symlinks/plugins/flutter_ringtone_player/ios`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - here_sdk (from `.symlinks/plugins/here_sdk/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - ringtone_player (from `.symlinks/plugins/ringtone_player/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
@@ -49,8 +49,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
-  flutter_ringtone_player:
-    :path: ".symlinks/plugins/flutter_ringtone_player/ios"
   flutter_tts:
     :path: ".symlinks/plugins/flutter_tts/ios"
   here_sdk:
@@ -59,6 +57,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  ringtone_player:
+    :path: ".symlinks/plugins/ringtone_player/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
@@ -68,14 +68,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   disk_space: e94d34bbdf77954adfb39e60bde9cc5c7233eda6
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
-  flutter_ringtone_player: 15eba85187230b87b2512f0e1b92225618bc03e7
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   here_sdk: a5c4d15d4502c1895cabb7db18cbce0f1b5ea309
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
+  ringtone_player: 151303fcb26e9daa11257fa6947faed36b198f13
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f

@@ -62,5 +62,6 @@
             android:value="2" />
 
         <service android:name=".FlutterForegroundService" android:foregroundServiceType="location"/>
+        <service android:name="dev.cruv.ringtone_player.PlayerService" />
     </application>
 </manifest>

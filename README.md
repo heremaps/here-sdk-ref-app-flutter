@@ -28,7 +28,7 @@ The reference application hosted in this repo focuses on how specific features c
 The reference application for the HERE SDK for Flutter (_Navigate Edition_) requires the following prerequisites:
 
 -  The [HERE SDK for Flutter (_Navigate Edition_), version 4.8.0.0](https://developer.here.com/documentation/flutter-sdk-navigate/4.8.0.0/dev_guide/index.html) is required and needs to be downloaded from the [HERE platform](https://platform.here.com). For now, the _Navigate Edition_ is only available upon request. Please [contact us](https://developer.here.com/help#how-can-we-help-you) to receive access including a set of evaluation credentials.
-- If not already done, install the [Flutter SDK](https://flutter.dev/docs/get-started/install). We use [version 2.2.3](https://flutter.dev/docs/development/tools/sdk/releases). Newer versions may also work, but are _not guaranteed_ to work.
+- If not already done, install the [Flutter SDK](https://flutter.dev/docs/get-started/install). We use [version 2.5.2](https://flutter.dev/docs/development/tools/sdk/releases). Newer versions may also work, but are _not guaranteed_ to work.
 
 On top you need an IDE of your choice. This could be a text editor or IDEs such as [Visual Studio Code](https://code.visualstudio.com/) with the [Flutter extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter) or [Android Studio](https://developer.android.com/studio). We use Android Studio 4.1.3 for development.
 
