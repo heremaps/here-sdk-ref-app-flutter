@@ -1719,7 +1719,7 @@
   "@downloadMapsTitle": {
     "description": "Text for the download maps menu"
   },
-  "downloadMapsButtonTitle": "Download more maps",
+  "downloadMapsButtonTitle": "Download Maps",
   "@downloadMapsButtonTitle": {
     "description": "Text for the download maps button"
   },
