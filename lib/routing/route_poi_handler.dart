@@ -118,7 +118,7 @@ class RoutePoiHandler {
         return;
       }
 
-      GeoCorridor geoCorridor = GeoCorridor.make(route.polyline, _kGeoCorridorRadius);
+      GeoCorridor geoCorridor = GeoCorridor(route.polyline, _kGeoCorridorRadius);
 
       List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
       CategoryQuery categoryQuery = CategoryQuery.withCorridorArea(categories, geoCorridor);
