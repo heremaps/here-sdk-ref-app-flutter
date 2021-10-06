@@ -63,6 +63,7 @@ class CountryAvoidanceScreen extends StatelessWidget {
                     updatedCountries,
                     avoidanceOptions.avoidAreas,
                     [],
+                    [],
                   );
                 },
               );

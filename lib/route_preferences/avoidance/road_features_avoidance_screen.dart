@@ -60,6 +60,7 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
                   avoidanceOptions.countries,
                   avoidanceOptions.avoidAreas,
                   [],
+                  [],
                 );
               },
             );
