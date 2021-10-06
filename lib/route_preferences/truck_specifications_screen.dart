@@ -38,9 +38,6 @@ class TruckSpecificationsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.truckSpecificationsTitle),
-        centerTitle: true,
-        backgroundColor: UIStyle.preferencesBackgroundColor,
-        textTheme: Theme.of(context).textTheme,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),

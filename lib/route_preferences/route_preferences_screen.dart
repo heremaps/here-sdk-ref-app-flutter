@@ -65,9 +65,6 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with Ti
     return Scaffold(
       appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.routePreferencesScreenTitle),
-          centerTitle: true,
-          backgroundColor: UIStyle.preferencesBackgroundColor,
-          textTheme: Theme.of(context).textTheme,
           bottom: PreferredSize(
               preferredSize: const Size.fromHeight(UIStyle.mediumButtonHeight),
               child: Container(

@@ -248,8 +248,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   Widget _buildNavigationHeader(BuildContext context, bool expanded) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-
     return Row(
       children: [
         IconButton(
@@ -261,7 +259,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
             widget.queryString,
             style: TextStyle(
               fontSize: UIStyle.hugeFontSize,
-              color: colorScheme.primary,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -298,7 +296,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
-              color: _selectedIndex == index ? Theme.of(context).accentColor : Colors.transparent,
+              color: _selectedIndex == index ? colorScheme.secondary : Colors.transparent,
               width: UIStyle.contentMarginExtraSmall),
         ),
       ),
