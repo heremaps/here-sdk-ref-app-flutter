@@ -39,10 +39,8 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.avoidRoadFeaturesTitle),
-          centerTitle: true,
-          backgroundColor: UIStyle.preferencesBackgroundColor,
-          textTheme: Theme.of(context).textTheme),
+        title: Text(AppLocalizations.of(context)!.avoidRoadFeaturesTitle),
+      ),
       body: Container(
         color: UIStyle.preferencesBackgroundColor,
         child: ListView(

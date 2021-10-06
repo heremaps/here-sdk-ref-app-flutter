@@ -117,7 +117,6 @@ class UIStyle {
       iconTheme: IconThemeData(
         color: _lightAccent,
       ),
-      textTheme: _lightTextTheme,
     ),
     colorScheme: const ColorScheme.light(
       primary: _lightForeground,
@@ -137,7 +136,6 @@ class UIStyle {
       selectionHandleColor: _lightAccent,
     ),
     inputDecorationTheme: _lightInputDecorationTheme,
-    accentColor: _lightAccent,
     backgroundColor: _lightBackground,
     hintColor: _lightForegroundHint,
     highlightColor: _lightAccentSecondary,

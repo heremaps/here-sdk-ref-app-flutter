@@ -41,10 +41,8 @@ class CountryAvoidanceScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.avoidCountriesTitle),
-          centerTitle: true,
-          backgroundColor: UIStyle.preferencesBackgroundColor,
-          textTheme: Theme.of(context).textTheme),
+        title: Text(AppLocalizations.of(context)!.avoidCountriesTitle),
+      ),
       body: Container(
         color: UIStyle.preferencesBackgroundColor,
         child: ListView.builder(

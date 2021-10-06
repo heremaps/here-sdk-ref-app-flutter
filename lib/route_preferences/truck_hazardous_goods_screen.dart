@@ -38,10 +38,8 @@ class TruckHazardousGoodsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.hazardousGoodsTitle),
-          centerTitle: true,
-          backgroundColor: UIStyle.preferencesBackgroundColor,
-          textTheme: Theme.of(context).textTheme),
+        title: Text(AppLocalizations.of(context)!.hazardousGoodsTitle),
+      ),
       body: Container(
         color: UIStyle.preferencesBackgroundColor,
         child: ListView(

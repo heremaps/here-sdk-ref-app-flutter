@@ -62,6 +62,7 @@ class MapRegionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     bool hasChildren = region.childRegions != null;
 
     late String subtitle;
@@ -116,14 +117,14 @@ class MapRegionTile extends StatelessWidget {
           Text(
             subtitle,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onSecondary,
+              color: colorScheme.onSecondary,
             ),
           ),
           if (downloadProgress == null && installedRegion?.status == InstalledRegionStatus.pending && !hasChildren)
             Text(
               appLocalizations.incompleteDownloadMessage,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: colorScheme.onSecondary,
               ),
             ),
         ],
@@ -136,7 +137,7 @@ class MapRegionTile extends StatelessWidget {
             if (downloadProgress != null)
               CircularProgressIndicator(
                 value: downloadProgress! >= 0 ? downloadProgress! / 100 : null,
-                color: Theme.of(context).accentColor,
+                color: colorScheme.secondary,
                 backgroundColor: Theme.of(context).dividerColor,
               ),
             Center(

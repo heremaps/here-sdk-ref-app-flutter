@@ -140,13 +140,7 @@ class RoutePoiOptionsButton extends StatelessWidget {
                 ),
               ),
               backgroundColor: colorScheme.background,
-              title: Text(
-                AppLocalizations.of(context)!.poiSettingsTitle,
-                style: TextStyle(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              title: Text(AppLocalizations.of(context)!.poiSettingsTitle),
               actions: [
                 IconButton(
                   icon: Icon(Icons.close),
