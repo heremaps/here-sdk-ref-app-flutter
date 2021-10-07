@@ -25,12 +25,16 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/location.dart';
+import 'package:here_sdk/maploader.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:provider/provider.dart';
 
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
 import 'download_maps/download_maps_screen.dart';
+import 'download_maps/map_loader_controller.dart';
+import 'download_maps/map_loader_dialogs.dart';
 import 'positioning/no_location_warning_widget.dart';
 import 'positioning/positioning.dart';
 import 'routing/routing_screen.dart';
@@ -96,6 +100,8 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       setState(() {
         _mapInitSuccess = true;
       });
+
+      _checkMapUpdate();
     });
   }
 
@@ -470,5 +476,15 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
     _routeFromPlace = null;
     _removeRouteFromMarker();
+  }
+
+  void _checkMapUpdate() async {
+    MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
+    MapUpdateAvailability? availability = await controller.checkMapUpdate();
+
+    if (availability == MapUpdateAvailability.available && await showMapUpdatesAvailableDialog(context)) {
+      controller.performMapUpdate();
+      Navigator.of(context).pushNamed(DownloadMapsScreen.navRoute);
+    }
   }
 }

@@ -72,3 +72,81 @@ Future<bool> _askForCancelMapLoading(BuildContext context, String regionName) as
 
   return result ?? false;
 }
+
+/// Creates a map updates unavailable dialog.
+void showMapUpdatesUnavailableDialog(BuildContext context) async {
+  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
+  showDialog(
+    context: context,
+    builder: (context) => SimpleDialog(
+      titlePadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
+      contentPadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
+      insetPadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
+      title: Text(
+        appLocalizations.mapUpdateUnavailableDialogTitle,
+        textAlign: TextAlign.center,
+      ),
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: UIStyle.contentMarginExtraLarge,
+          ),
+          child: Text(
+            appLocalizations.mapUpdateUnavailableDialogMessage,
+            style: TextStyle(
+              fontSize: UIStyle.bigFontSize,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Util.buildDialogCancelButton(context),
+      ],
+    ),
+  );
+}
+
+/// Creates a map updates available dialog.
+Future<bool> showMapUpdatesAvailableDialog(BuildContext context) async {
+  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
+  bool? result = await showDialog<bool>(
+    context: context,
+    builder: (context) => SimpleDialog(
+      titlePadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
+      contentPadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
+      insetPadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
+      title: Text(
+        appLocalizations.mapUpdateAvailableDialogTitle,
+        textAlign: TextAlign.center,
+      ),
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: UIStyle.contentMarginExtraLarge,
+          ),
+          child: Text(
+            appLocalizations.mapUpdateAvailableDialogMessage,
+            style: TextStyle(
+              fontSize: UIStyle.bigFontSize,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Spacer(),
+            GradientElevatedButton(
+              title: Text(appLocalizations.updateButtonTitle),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+            Spacer(),
+          ],
+        ),
+        Util.buildDialogCancelButton(context),
+      ],
+    ),
+  );
+
+  return result ?? false;
+}

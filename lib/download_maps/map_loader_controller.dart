@@ -96,14 +96,29 @@ class _RegionDeleteTask extends _RegionTask {
   void resume() {}
 }
 
+enum MapUpdateState {
+  none,
+  progress,
+  paused,
+  cancelled,
+}
+
 /// Data controller that manages offline maps.
 class MapLoaderController extends ChangeNotifier {
   final MapDownloader _mapDownloader;
+  final MapUpdater _mapUpdater;
 
   Map<RegionId, _RegionTask> _regionsInProgress = {};
 
+  MapUpdateTask? _mapUpdateTask;
+  MapUpdateState _mapUpdateState = MapUpdateState.none;
+  int? _mapUpdateProgress;
+  StreamController<MapLoaderError> _mapLoaderErrors = StreamController.broadcast();
+
   /// Default constructor
-  MapLoaderController() : _mapDownloader = MapDownloader.fromSdkEngine(SDKNativeEngine.sharedInstance!);
+  MapLoaderController()
+      : _mapDownloader = MapDownloader.fromSdkEngine(SDKNativeEngine.sharedInstance!),
+        _mapUpdater = MapUpdater.fromSdkEngine(SDKNativeEngine.sharedInstance!);
 
   /// Returns a list of [Region] objects that can be used to download the actual map data in a separate request.
   Future<List<Region>> getDownloadableRegions() async {
@@ -143,6 +158,10 @@ class MapLoaderController extends ChangeNotifier {
     MapDownloaderTask task = _mapDownloader.downloadRegions(
         [region],
         DownloadRegionsStatusListener((error, regions) {
+          if (error != null && error != MapLoaderError.operationCancelled) {
+            print("map download error ${error}");
+            _mapLoaderErrors.add(error);
+          }
           _regionsInProgress.remove(region);
           notifyListeners();
         }, (id, progress) {
@@ -196,5 +215,91 @@ class MapLoaderController extends ChangeNotifier {
   /// Returns progress of the currently loaded [Region].
   int? getDownloadProgress(RegionId region) {
     return _regionsInProgress[region]?.progress;
+  }
+
+  /// Checks for map updates
+  Future<MapUpdateAvailability?> checkMapUpdate() async {
+    final Completer<MapUpdateAvailability?> completer = Completer();
+
+    _mapUpdater.checkMapUpdate((error, availability) {
+      if (error != null) {
+        completer.completeError(error);
+        return;
+      }
+
+      completer.complete(availability);
+    });
+
+    return completer.future;
+  }
+
+  /// Performs map update.
+  void performMapUpdate() async {
+    if (_mapUpdateTask != null) {
+      return;
+    }
+
+    _mapUpdateState = MapUpdateState.progress;
+    _mapUpdateProgress = 0;
+    notifyListeners();
+
+    _mapUpdateTask = _mapUpdater.performMapUpdate(MapUpdateProgressListener((id, progress) {
+      if (_mapUpdateState == MapUpdateState.paused) {
+        // Progress callback can be called after a pause.
+        return;
+      }
+      _mapUpdateProgress = progress;
+      _mapUpdateState = MapUpdateState.progress;
+      notifyListeners();
+    }, (error) {
+      if (error != null) {
+        _mapLoaderErrors.add(error);
+      }
+      _mapUpdateState = MapUpdateState.paused;
+      notifyListeners();
+    }, (error) {
+      if (error != null && error != MapLoaderError.operationCancelled) {
+        print("map update error ${error}");
+        _mapLoaderErrors.add(error);
+      }
+      _mapUpdateState = MapUpdateState.none;
+      _mapUpdateTask = null;
+      _mapUpdateProgress = null;
+      notifyListeners();
+    }, () {
+      _mapUpdateState = MapUpdateState.progress;
+      notifyListeners();
+    }));
+  }
+
+  /// Gets current map updating state.
+  MapUpdateState get mapUpdateState => _mapUpdateState;
+
+  /// Gets current map updating progress.
+  int? get mapUpdateProgress => _mapUpdateProgress;
+
+  /// Gets stream with errors occurred while map update.
+  Stream<MapLoaderError> get mapLoaderErrors => _mapLoaderErrors.stream;
+
+  /// Pauses map update.
+  void pauseMapUpdate() {
+    _mapUpdateTask?.pause();
+    _mapUpdateState = MapUpdateState.paused;
+    notifyListeners();
+  }
+
+  /// Resumes map update.
+  void resumeMapUpdate() {
+    _mapUpdateState = MapUpdateState.progress;
+    _mapUpdateTask?.resume();
+    notifyListeners();
+  }
+
+  /// Cancels map update.
+  void cancelMapUpdate() {
+    _mapUpdateTask?.cancel();
+    _mapUpdateState = MapUpdateState.cancelled;
+    _mapUpdateProgress = null;
+    notifyListeners();
   }
 }

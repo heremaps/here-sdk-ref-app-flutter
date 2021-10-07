@@ -1786,5 +1786,41 @@
   "deleteMapOptionTitle": "Delete map",
   "@deleteMapOptionTitle": {
     "description": "Title of the delete map option"
+  },
+  "checkForMapUpdateTitle": "Check for updates",
+  "@checkForMapUpdateTitle": {
+    "description": "Map update check button title"
+  },
+  "checkForMapUpdateProgressTitle": "Checking for updates...",
+  "@checkForMapUpdateProgressTitle": {
+    "description": "Map update progress title"
+  },
+  "updateMapsErrorText": "Map updating failed with error: {{error}}",
+  "@updateMapsErrorText": {
+    "description": "Map updating error message"
+  },
+  "mapUpdateUnavailableDialogTitle": "Map update unavailable",
+  "@mapUpdateUnavailableDialogTitle": {
+    "description": "Title of the map update unavailable dialog"
+  },
+  "mapUpdateUnavailableDialogMessage": "Map update is not available at this time. Try again later.",
+  "@mapUpdateUnavailableDialogMessage": {
+    "description": "Message of the map update unavailable dialog"
+  },
+  "mapUpdateAvailableDialogTitle": "Map update available",
+  "@mapUpdateAvailableDialogTitle": {
+    "description": "Title of the map update available dialog"
+  },
+  "mapUpdateAvailableDialogMessage": "Would you like to update maps to the latest version?",
+  "@mapUpdateAvailableDialogMessage": {
+    "description": "Message of the map update available dialog"
+  },
+  "updateButtonTitle": "Update",
+  "@updateButtonTitle": {
+    "description": "Update button title"
+  },
+  "updatingMapTitle": "Updating map...",
+  "@updatingMapTitle": {
+    "description": "Title of the map updating progress"
   }
 }
