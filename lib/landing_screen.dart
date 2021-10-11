@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,6 +52,8 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> with Positioning {
+  static const int _kLocationWarningDismissPeriod = 5; // seconds
+
   bool _mapInitSuccess = false;
   late HereMapController _hereMapController;
   GlobalKey _hereMapKey = GlobalKey();
@@ -72,6 +76,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
         drawer: _buildDrawer(context),
         extendBodyBehindAppBar: true,
+        onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
       );
 
   void _onMapCreated(HereMapController hereMapController) {
@@ -423,6 +428,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       );
 
       Overlay.of(context)!.insert(_locationWarningOverlay!);
+      Timer(Duration(seconds: _kLocationWarningDismissPeriod), _dismissLocationWarningPopup);
     }
   }
 
