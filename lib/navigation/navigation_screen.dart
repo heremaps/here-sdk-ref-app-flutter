@@ -20,6 +20,7 @@
 import 'dart:io';
 
 import 'package:flutter/scheduler.dart';
+import 'package:here_sdk/gestures.dart';
 import 'package:ringtone_player/ringtone_player.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -222,6 +223,25 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       }
 
       _startNavigation();
+      _addGestureListeners();
+    });
+  }
+
+  void _addGestureListeners() {
+    _hereMapController.gestures.doubleTapListener = DoubleTapListener((origin) => _enableTracking(false));
+    _hereMapController.gestures.panListener =
+        PanListener((state, origin, translation, velocity) => _enableTracking(false));
+    _hereMapController.gestures.pinchRotateListener = PinchRotateListener(
+        (state, pinchOrigin, rotationOrigin, twoFingerDistance, rotation) => _enableTracking(false));
+    _hereMapController.gestures.twoFingerPanListener =
+        TwoFingerPanListener((state, origin, translation, velocity) => _enableTracking(false));
+    _hereMapController.gestures.twoFingerTapListener = TwoFingerTapListener((origin) => _enableTracking(false));
+  }
+
+  void _enableTracking(bool enable) {
+    setState(() {
+      _visualNavigator.cameraMode =
+          enable ? Navigation.CameraTrackingMode.enabled : Navigation.CameraTrackingMode.disabled;
     });
   }
 
@@ -515,6 +535,20 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        if (_visualNavigator.cameraMode == Navigation.CameraTrackingMode.disabled)
+          Padding(
+            padding: EdgeInsets.only(bottom: UIStyle.contentMarginLarge),
+            child: FloatingActionButton(
+              heroTag: null,
+              child: Icon(
+                Icons.videocam,
+              ),
+              backgroundColor: Theme.of(context).colorScheme.background,
+              onPressed: () {
+                _enableTracking(true);
+              },
+            ),
+          ),
         FloatingActionButton(
           heroTag: null,
           child: Icon(
