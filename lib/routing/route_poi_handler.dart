@@ -28,6 +28,7 @@ import 'package:here_sdk/search.dart';
 
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
+import '../search/search_engine_proxy.dart';
 import 'poi_svg_helper.dart';
 import 'waypoints_controller.dart';
 
@@ -55,10 +56,13 @@ class RoutePoiHandler {
   /// Called to get a localized string describing a place.
   final GetTextForPoiMarkerCallback? onGetText;
 
+  /// If true, offline routing engine should be used.
+  final bool offline;
+
   List<String> _categories = [];
   Map<Routing.Route, List<Place>> _placesForRoutes = {};
   Map<MapMarker, Place> _markers = {};
-  SearchEngine _searchEngine = SearchEngine();
+  late SearchEngineProxy _searchEngine;
   TaskHandle? _poiSearchTask;
 
   /// Constructs a [RoutePoiHandler] object.
@@ -66,7 +70,10 @@ class RoutePoiHandler {
     required this.hereMapController,
     required this.wayPointsController,
     this.onGetText,
-  });
+    required this.offline,
+  }) {
+    _searchEngine = SearchEngineProxy(offline: offline);
+  }
 
   /// Releases resources.
   void release() {

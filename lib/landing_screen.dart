@@ -29,7 +29,9 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:provider/provider.dart';
 
+import 'common/application_preferences.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
 import 'download_maps/download_maps_screen.dart';
@@ -63,20 +65,22 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   Place? _routeFromPlace;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Stack(
-          children: [
-            HereMap(
-              key: _hereMapKey,
-              onMapCreated: _onMapCreated,
-            ),
-            _buildMenuButton(),
-          ],
+  Widget build(BuildContext context) => Consumer<AppPreferences>(
+        builder: (context, preferences, child) => Scaffold(
+          body: Stack(
+            children: [
+              HereMap(
+                key: _hereMapKey,
+                onMapCreated: _onMapCreated,
+              ),
+              _buildMenuButton(),
+            ],
+          ),
+          floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
+          drawer: _buildDrawer(context, preferences),
+          extendBodyBehindAppBar: true,
+          onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
         ),
-        floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
-        drawer: _buildDrawer(context),
-        extendBodyBehindAppBar: true,
-        onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
       );
 
   void _onMapCreated(HereMapController hereMapController) {
@@ -192,7 +196,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
     ];
   }
 
-  Widget _buildDrawer(BuildContext context) {
+  Widget _buildDrawer(BuildContext context, AppPreferences preferences) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
@@ -257,6 +261,30 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
                     ..pop()
                     ..pushNamed(DownloadMapsScreen.navRoute);
                 }),
+            SwitchListTile(
+              title: Text(
+                appLocalizations.useMapOfflineSwitch,
+                style: TextStyle(
+                  color: colorScheme.onPrimary,
+                ),
+              ),
+              value: preferences.useAppOffline,
+              onChanged: (newValue) async {
+                if (newValue) {
+                  Navigator.of(context).pop();
+                  if (!await Util.showCommonConfirmationDialog(
+                    context: context,
+                    title: appLocalizations.offlineAppMapsDialogTitle,
+                    message: appLocalizations.offlineAppMapsDialogMessage,
+                    actionTitle: appLocalizations.downloadMapsTitle,
+                  )) {
+                    return;
+                  }
+                  Navigator.of(context).pushNamed(DownloadMapsScreen.navRoute);
+                }
+                preferences.useAppOffline = newValue;
+              },
+            ),
           ],
         ),
       ),

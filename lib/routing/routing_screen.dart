@@ -42,6 +42,7 @@ import 'route_poi_handler.dart';
 import 'route_poi_options_button.dart';
 import 'route_waypoints_widget.dart';
 import '../common/place_actions_popup.dart';
+import '../common/application_preferences.dart';
 import 'waypoint_info.dart';
 import 'waypoints_controller.dart';
 
@@ -86,7 +87,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   Set<String> _poiCategories = {};
   late RoutePoiHandler _routePoiHandler;
 
-  Routing.RoutingEngine _routingEngine = Routing.RoutingEngine();
+  late Routing.RoutingInterface _routingEngine;
 
   late TabController _routesTabController;
   GlobalKey _tabBarViewKey = GlobalKey();
@@ -101,6 +102,10 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
+
+    _routingEngine = Provider.of<AppPreferences>(context, listen: false).useAppOffline
+        ? Routing.OfflineRoutingEngine()
+        : Routing.RoutingEngine();
 
     _routesTabController = TabController(
       length: _routes.length,
@@ -183,6 +188,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
         hereMapController: hereMapController,
         wayPointsController: _wayPointsController,
         onGetText: (place) => Util.makeDistanceString(context, place.distanceInMeters),
+        offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline,
       );
 
       initLocationEngine(

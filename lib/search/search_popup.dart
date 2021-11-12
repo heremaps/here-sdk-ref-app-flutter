@@ -28,9 +28,11 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
 
+import '../common/application_preferences.dart';
 import '../common/dismiss_keyboard_on_scroll.dart';
 import '../common/draggable_popup_here_logo_helper.dart';
 import 'recent_search_data_model.dart';
+import 'search_engine_proxy.dart';
 import 'search_results_screen.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
@@ -100,11 +102,10 @@ class _SearchPopupState extends State<_SearchPopup> {
 
   final TextEditingController _dstTextEditCtrl = new TextEditingController();
   final SearchOptions _searchOptions = new SearchOptions(LanguageCode.enUs, _kMaxSearchSuggestion);
-  final SearchEngine _searchEngine = SearchEngine();
+  late SearchEngineProxy _searchEngine;
 
   late GeoCoordinates _lastPosition;
   List<Suggestion>? _suggestions;
-  Map<String, Place> _recentPlaces = {};
   TaskHandle? _searchTaskHandle;
   bool _searchInProgress = false;
   SearchError? _lastError;
@@ -112,6 +113,7 @@ class _SearchPopupState extends State<_SearchPopup> {
   @override
   void initState() {
     super.initState();
+    _searchEngine = new SearchEngineProxy(offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline);
     _lastPosition = widget.currentPosition;
   }
 
@@ -363,15 +365,7 @@ class _SearchPopupState extends State<_SearchPopup> {
               color: colorScheme.onSecondary,
               fontSize: UIStyle.bigFontSize,
             ),
-            children: [
-              TextSpan(
-                text: Util.makeDistanceString(context, place.distanceInMeters),
-                style: TextStyle(
-                  color: colorScheme.secondary,
-                ),
-              ),
-              ...addressTextSpans,
-            ],
+            children: addressTextSpans,
           ),
           maxLines: 2,
         ),
@@ -379,57 +373,17 @@ class _SearchPopupState extends State<_SearchPopup> {
       onTap: () {
         FocusScope.of(context).unfocus();
         RecentSearchDataModel model = Provider.of<RecentSearchDataModel>(context, listen: false);
-        model.insertPlaceId(place.id);
+        model.insertPlace(place);
         _showSearchResults(context, null, [place]);
       },
     );
   }
 
-  Stream<List<RecentSearchPlace>> _recentSearchItemsStream(BuildContext context) async* {
-    RecentSearchDataModel model = Provider.of<RecentSearchDataModel>(context, listen: false);
-    List<RecentSearchItem> items = await model.getData();
-    List<RecentSearchPlace> result = [];
-
-    for (RecentSearchItem item in items) {
-      if (item.placeId == null) {
-        result.add(RecentSearchPlace(item.title!, null));
-      } else {
-        Place? place = _recentPlaces[item.placeId];
-
-        if (place == null) {
-          final Completer<Place?> completer = Completer();
-          // try to find a place by id, if it is not there, then remove it from the list
-          _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(item.placeId!), LanguageCode.enUs, (error, place) {
-            if (error != null) {
-              if (error == SearchError.noResultsFound) {
-                model.delete(item.id);
-              }
-              completer.complete();
-            }
-
-            completer.complete(place);
-          });
-
-          place = await completer.future;
-
-          if (place == null) {
-            continue;
-          }
-
-          _recentPlaces[item.placeId!] = place;
-        }
-
-        result.add(RecentSearchPlace(item.title, place));
-      }
-
-      yield result;
-    }
-  }
-
   Widget _buildRecentSearchWidget(BuildContext context) {
-    return StreamBuilder<List<RecentSearchPlace>>(
-      initialData: [],
-      stream: _recentSearchItemsStream(context),
+    RecentSearchDataModel model = Provider.of<RecentSearchDataModel>(context, listen: false);
+
+    return FutureBuilder<List<RecentSearchItem>>(
+      future: model.getData(),
       builder: (context, snapshot) => snapshot.hasData
           ? SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -440,7 +394,7 @@ class _SearchPopupState extends State<_SearchPopup> {
                     );
                   }
 
-                  final RecentSearchPlace item = snapshot.data![index ~/ 2];
+                  final RecentSearchItem item = snapshot.data![index ~/ 2];
                   return item.place != null
                       ? _buildPlaceTile(context, item.place!)
                       : _buildSearchTile(context, item.title!);

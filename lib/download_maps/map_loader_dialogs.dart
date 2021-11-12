@@ -22,8 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/maploader.dart';
 
-import '../common/gradient_elevated_button.dart';
-import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
 import 'map_loader_controller.dart';
 
@@ -43,32 +41,9 @@ extension CancelDownloadExtension on MapLoaderController {
 /// Creates a confirmation dialog to cancel map loading.
 Future<bool> _askForCancelMapLoading(BuildContext context, String regionName) async {
   AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
-  bool? result = await showDialog<bool>(
+  return Util.showCommonConfirmationDialog(
     context: context,
-    builder: (context) => SimpleDialog(
-      titlePadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
-      contentPadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
-      insetPadding: const EdgeInsets.all(UIStyle.contentMarginExtraLarge),
-      title: Text(
-        Util.formatString(appLocalizations.stopMapDownloadDialogTitle, [regionName]),
-        textAlign: TextAlign.center,
-      ),
-      children: [
-        Row(
-          children: [
-            Spacer(),
-            GradientElevatedButton(
-              title: Text(appLocalizations.stopMapDownloadButtonTitle),
-              onPressed: () => Navigator.of(context).pop(true),
-            ),
-            Spacer(),
-          ],
-        ),
-        Util.buildDialogCancelButton(context),
-      ],
-    ),
+    title: Util.formatString(appLocalizations.stopMapDownloadDialogTitle, [regionName]),
+    actionTitle: appLocalizations.stopMapDownloadButtonTitle,
   );
-
-  return result ?? false;
 }

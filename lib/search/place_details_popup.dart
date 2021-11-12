@@ -24,9 +24,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/search.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../common/ui_style.dart';
+import '../common/application_preferences.dart';
+import '../search/search_engine_proxy.dart';
 
 enum PlaceDetailsPopupResult {
   routeTo,
@@ -40,7 +43,8 @@ Future<PlaceDetailsPopupResult?> showPlaceDetailsPopup({
   bool routeToEnabled = false,
   bool addToRouteEnabled = false,
 }) async {
-  Future<Place> placeDetailsFuture = _getPlaceDetails(place);
+  Future<Place> placeDetailsFuture =
+      _getPlaceDetails(place, Provider.of<AppPreferences>(context, listen: false).useAppOffline);
 
   PlaceDetailsPopupResult? result = await showDialog<PlaceDetailsPopupResult>(
     context: context,
@@ -54,8 +58,8 @@ Future<PlaceDetailsPopupResult?> showPlaceDetailsPopup({
   return result;
 }
 
-Future<Place> _getPlaceDetails(Place place) async {
-  final SearchEngine _searchEngine = SearchEngine();
+Future<Place> _getPlaceDetails(Place place, bool offline) async {
+  final SearchEngineProxy _searchEngine = SearchEngineProxy(offline: offline);
   final Completer<Place?> completer = Completer();
 
   _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(place.id), LanguageCode.enUs, (error, place) {

@@ -23,6 +23,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:intl/intl.dart';
 
+import 'gradient_elevated_button.dart';
 import 'ui_style.dart';
 
 /// Version of the Application
@@ -217,3 +218,67 @@ Widget buildDialogCancelButton(BuildContext context) => SimpleDialogOption(
       ),
       onPressed: () => Navigator.of(context).pop(false),
     );
+
+/// Creates a common confirmation dialog.
+Future<bool> showCommonConfirmationDialog({
+  required BuildContext context,
+  String? title,
+  String? message,
+  String? actionTitle,
+  Color? actionTextColor,
+  Color? actionBackgroundColor,
+}) async {
+  bool? result = await showDialog<bool>(
+    context: context,
+    builder: (context) => SimpleDialog(
+      titlePadding: const EdgeInsets.symmetric(
+        vertical: UIStyle.contentMarginLarge,
+        horizontal: UIStyle.contentMarginExtraLarge,
+      ),
+      title: title != null
+          ? Text(
+              title,
+              textAlign: TextAlign.center,
+            )
+          : null,
+      children: [
+        if (message != null)
+          Padding(
+            padding: EdgeInsets.only(
+              left: UIStyle.contentMarginExtraLarge,
+              right: UIStyle.contentMarginExtraLarge,
+              bottom: UIStyle.contentMarginExtraLarge,
+            ),
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: UIStyle.bigFontSize,
+              ),
+            ),
+          ),
+        if (actionTitle != null)
+          Row(
+            children: [
+              Spacer(),
+              GradientElevatedButton(
+                title: Text(
+                  actionTitle,
+                  style: TextStyle(
+                    color: actionTextColor,
+                  ),
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                primaryColor: actionBackgroundColor ?? UIStyle.buttonPrimaryColor,
+                secondaryColor: actionBackgroundColor ?? UIStyle.buttonSecondaryColor,
+              ),
+              Spacer(),
+            ],
+          ),
+        buildDialogCancelButton(context),
+      ],
+    ),
+  );
+
+  return result ?? false;
+}

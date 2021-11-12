@@ -1786,5 +1786,17 @@
   "deleteMapOptionTitle": "Delete map",
   "@deleteMapOptionTitle": {
     "description": "Title of the delete map option"
+  },
+  "useMapOfflineSwitch": "Use app offline",
+  "@useMapOfflineSwitch": {
+    "description": "Title of the switch app to offline"
+  },
+  "offlineAppMapsDialogTitle": "All you need is maps",
+  "@offlineAppMapsDialogTitle": {
+    "description": "Title of the dialog box requesting the download of maps."
+  },
+  "offlineAppMapsDialogMessage": "Before using the app offline, you need to download the map of your area.",
+  "@offlineAppMapsDialogMessage": {
+    "description": "Text of the dialog box requesting the download of maps."
   }
 }

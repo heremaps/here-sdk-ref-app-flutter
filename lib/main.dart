@@ -26,6 +26,7 @@ import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 
+import 'common/application_preferences.dart';
 import 'common/ui_style.dart';
 import 'download_maps/download_maps_screen.dart';
 import 'download_maps/map_loader_controller.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RecentSearchDataModel()),
         ChangeNotifierProvider(create: (context) => RoutePreferencesModel.withDefaults()),
         ChangeNotifierProvider(create: (context) => MapLoaderController()),
+        ChangeNotifierProvider(create: (context) => AppPreferences()),
       ],
       child: MaterialApp(
         localizationsDelegates: [

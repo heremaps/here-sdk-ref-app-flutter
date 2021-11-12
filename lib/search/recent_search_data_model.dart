@@ -30,21 +30,10 @@ class RecentSearchItem {
   /// Title.
   final String? title;
 
-  /// Id of the [Place].
-  final String? placeId;
-
-  RecentSearchItem(this.id, this.title, this.placeId);
-}
-
-/// A class that represents the recently searched place.
-class RecentSearchPlace {
-  /// Title.
-  final String? title;
-
   /// [Place].
   final Place? place;
 
-  RecentSearchPlace(this.title, this.place);
+  RecentSearchItem(this.id, this.title, this.place);
 }
 
 /// Class that implements a storage for the MRU list for the searching for places.
@@ -53,6 +42,7 @@ class RecentSearchDataModel extends ChangeNotifier {
   static final _kTableName = "items";
   static final _kTitleField = "title";
   static final _kPlaceIdField = "place_id";
+  static final _kPlaceField = "place";
   static final _kTimeStampField = "timestamp";
 
   late Database _db;
@@ -70,8 +60,10 @@ class RecentSearchDataModel extends ChangeNotifier {
           "id INTEGER PRIMARY KEY AUTOINCREMENT, "
           "$_kTitleField TEXT, "
           "$_kPlaceIdField TEXT, "
+          "$_kPlaceField TEXT, "
           "$_kTimeStampField DATETIME)"),
-      version: 1,
+      onUpgrade: (db, oldVersion, newVersion) => db.execute("DELETE * FROM $_kTableName"),
+      version: 2,
     );
 
     notifyListeners();
@@ -113,12 +105,12 @@ class RecentSearchDataModel extends ChangeNotifier {
   }
 
   /// Adds id of a place to the list of recently searched items.
-  Future<void> insertPlaceId(String placeId) async {
+  Future<void> insertPlace(Place place) async {
     await _initFuture;
     final queryResult = await _db.query(
       _kTableName,
       where: "$_kPlaceIdField = ?",
-      whereArgs: [placeId],
+      whereArgs: [place.id],
       limit: 1,
     );
     if (queryResult.isNotEmpty) {
@@ -127,7 +119,8 @@ class RecentSearchDataModel extends ChangeNotifier {
       await _db.insert(
         _kTableName,
         {
-          _kPlaceIdField: placeId,
+          _kPlaceIdField: place.id,
+          _kPlaceField: place.serializeCompact(),
           _kTimeStampField: DateTime.now().millisecondsSinceEpoch,
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
@@ -150,8 +143,10 @@ class RecentSearchDataModel extends ChangeNotifier {
   Future<List<RecentSearchItem>> getData() async {
     await _initFuture;
     List<Map<String, dynamic>> results = await _db.query(_kTableName, orderBy: "$_kTimeStampField DESC");
-    return results
-        .map((e) => RecentSearchItem(e["id"] as int, e[_kTitleField] as String?, e[_kPlaceIdField] as String?))
-        .toList();
+    return results.map((e) {
+      String? placeString = e[_kPlaceField] as String?;
+      Place? place = placeString != null ? Place.deserialize(placeString) : null;
+      return RecentSearchItem(e["id"] as int, e[_kTitleField] as String?, place);
+    }).toList();
   }
 }
