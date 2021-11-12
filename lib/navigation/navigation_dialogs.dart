@@ -61,67 +61,12 @@ Future<bool?> askForPositionSource(BuildContext context) async {
 /// Creates a confirmation dialog to stop navigation.
 Future<bool> askForExitFromNavigation(BuildContext context) async {
   AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
-  bool? result = await showDialog<bool>(
+  return Util.showCommonConfirmationDialog(
     context: context,
-    builder: (context) => SimpleDialog(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: UIStyle.contentMarginLarge,
-            right: UIStyle.contentMarginLarge,
-            top: UIStyle.contentMarginMedium,
-            bottom: UIStyle.contentMarginMedium,
-          ),
-          child: Text(
-            appLocalizations.stopNavigationDialogTitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: UIStyle.hugeFontSize,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: UIStyle.contentMarginLarge,
-            right: UIStyle.contentMarginLarge,
-            top: UIStyle.contentMarginMedium,
-            bottom: UIStyle.contentMarginMedium,
-          ),
-          child: Text(
-            appLocalizations.stopNavigationDialogSubtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: UIStyle.bigFontSize,
-            ),
-          ),
-        ),
-        SimpleDialogOption(
-          child: Material(
-            elevation: 2,
-            color: UIStyle.stopNavigationButtonColor,
-            borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
-            child: Container(
-              height: UIStyle.bigButtonHeight,
-              child: Center(
-                child: Text(
-                  appLocalizations.stopNavigationAcceptButtonCaption,
-                  style: TextStyle(
-                    fontSize: UIStyle.bigFontSize,
-                    fontWeight: FontWeight.bold,
-                    color: UIStyle.stopNavigationButtonIconColor,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          onPressed: () => Navigator.of(context).pop(true),
-        ),
-        Util.buildDialogCancelButton(context),
-      ],
-    ),
+    title: appLocalizations.stopNavigationDialogTitle,
+    message: appLocalizations.stopNavigationDialogSubtitle,
+    actionTitle: appLocalizations.stopNavigationAcceptButtonCaption,
+    actionTextColor: UIStyle.stopNavigationButtonIconColor,
+    actionBackgroundColor: UIStyle.stopNavigationButtonColor,
   );
-
-  return result ?? false;
 }

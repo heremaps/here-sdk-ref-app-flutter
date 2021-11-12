@@ -36,6 +36,7 @@ import 'package:wakelock/wakelock.dart';
 
 import '../landing_screen.dart';
 import '../route_preferences/route_preferences_model.dart';
+import '../common/application_preferences.dart';
 import '../common/marquee_widget.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
@@ -134,6 +135,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       preferences: context.read<RoutePreferencesModel>(),
       onBeginRerouting: () => setState(() => _reroutingInProgress = true),
       onNewRoute: _onNewRoute,
+      offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline,
     );
   }
 

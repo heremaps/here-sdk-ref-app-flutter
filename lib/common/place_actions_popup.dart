@@ -22,7 +22,10 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.threading.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:provider/provider.dart';
 
+import '../search/search_engine_proxy.dart';
+import 'application_preferences.dart';
 import 'ui_style.dart';
 import 'util.dart' as Util;
 
@@ -71,7 +74,7 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
   static const double _kMaxPopupWidth = 150;
 
   final SearchOptions _searchOptions = new SearchOptions(LanguageCode.enUs, 1);
-  final SearchEngine _searchEngine = SearchEngine();
+  late SearchEngineProxy _searchEngine;
   late TaskHandle _searchTask;
   late String _title;
   Place? _place;
@@ -80,6 +83,7 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
   @override
   void initState() {
     super.initState();
+    _searchEngine = new SearchEngineProxy(offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline);
     _searchTask = _searchEngine.searchByCoordinates(widget.coordinates, _searchOptions, _onSearchEnd);
     _title = widget.coordinates.toPrettyString();
     int markerSize = (widget.hereMapController.pixelScale * UIStyle.searchMarkerSize * 2).round();

@@ -52,19 +52,24 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
   /// Called when route calculations is finished.
   final ReroutingCallback onNewRoute;
 
-  Routing.RoutingEngine _routingEngine = Routing.RoutingEngine();
+  /// If true, offline routing engine should be used.
+  final bool offline;
+
+  final Routing.RoutingInterface _routingEngine;
   bool _reroutingInProgress = false;
   Timer? _reroutingTimer;
   int _passedWayPointIndex = 0;
 
   /// Constructs a [ReroutingHandler] object.
-  ReroutingHandler({
-    required this.visualNavigator,
-    required List<Routing.Waypoint> wayPoints,
-    required this.preferences,
-    required this.onBeginRerouting,
-    required this.onNewRoute,
-  }) : _wayPoints = wayPoints;
+  ReroutingHandler(
+      {required this.visualNavigator,
+      required List<Routing.Waypoint> wayPoints,
+      required this.preferences,
+      required this.onBeginRerouting,
+      required this.onNewRoute,
+      required this.offline})
+      : _wayPoints = wayPoints,
+        _routingEngine = offline ? Routing.OfflineRoutingEngine() : Routing.RoutingEngine();
 
   /// Called by [Navigator] whenever route deviation has been observed.
   @override
