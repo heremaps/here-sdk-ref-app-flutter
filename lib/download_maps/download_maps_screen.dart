@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/maploader.dart';
@@ -26,6 +28,7 @@ import 'map_loader_controller.dart';
 import 'map_loader_dialogs.dart';
 import 'map_region_tile_widget.dart';
 import 'map_regions_list_screen.dart';
+import 'map_update_progress_widget.dart';
 import 'storage_space_widget.dart';
 import '../common/gradient_elevated_button.dart';
 import '../common/ui_style.dart';
@@ -43,6 +46,25 @@ class DownloadMapsScreen extends StatefulWidget {
 
 class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
   static const double _kDownloadedMapMenuTitleHeight = 80;
+  late StreamSubscription<MapLoaderError> _errorStreamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
+    _errorStreamSubscription = controller.getMapUpdateErrors.listen((error) => Util.displayErrorSnackBar(
+          context,
+          Util.formatString(AppLocalizations.of(context)!.downloadMapsErrorText, [error.toString()]),
+        ));
+
+    _checkMapUpdate(controller);
+  }
+
+  @override
+  void dispose() {
+    _errorStreamSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Consumer<MapLoaderController>(
@@ -60,6 +82,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
               return ListView(
                 children: [
                   StorageSpace(),
+                  if (controller.mapUpdateState != MapUpdateState.none) MapUpdateProgress(),
                   ..._buildInstalledMapsList(context, snapshot.data as List<Region>?),
                   _buildDownloadButton(context),
                 ],
@@ -119,7 +142,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       result.add(Divider());
     });
 
-    if (result.isNotEmpty) {
+    if (result.isNotEmpty && controller.mapUpdateState == MapUpdateState.none) {
       result.insert(0, _buildDownloadedMapsHeader(context, controller));
     }
 
@@ -252,4 +275,12 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
           child: Text(AppLocalizations.of(context)!.downloadedMapsTitle),
         ),
       );
+
+  void _checkMapUpdate(MapLoaderController controller) async {
+    MapUpdateAvailability? availability = await controller.checkMapUpdate();
+
+    if (availability == MapUpdateAvailability.available && await showMapUpdatesAvailableDialog(context)) {
+      controller.performMapUpdate();
+    }
+  }
 }

@@ -47,3 +47,14 @@ Future<bool> _askForCancelMapLoading(BuildContext context, String regionName) as
     actionTitle: appLocalizations.stopMapDownloadButtonTitle,
   );
 }
+
+/// Creates a map updates available dialog.
+Future<bool> showMapUpdatesAvailableDialog(BuildContext context) async {
+  AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+  return Util.showCommonConfirmationDialog(
+    context: context,
+    title: appLocalizations.mapUpdateAvailableDialogTitle,
+    message: appLocalizations.mapUpdateAvailableDialogMessage,
+    actionTitle: appLocalizations.updateButtonTitle,
+  );
+}
