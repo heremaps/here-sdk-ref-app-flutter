@@ -37,10 +37,14 @@ class TransportModesWidget extends StatelessWidget {
   /// This widget's selection and animation state.
   final TabController tabController;
 
+  /// List of transport modes to be shown.
+  final List<TransportModes> transportModes;
+
   /// Constructs a widget.
   TransportModesWidget({
     Key? key,
     required this.tabController,
+    this.transportModes = TransportModes.values,
   }) : super(key: key);
 
   @override
@@ -49,7 +53,7 @@ class TransportModesWidget extends StatelessWidget {
 
   List<Widget> _buildTransportTabs(BuildContext context, int selectedIndex) {
     return List<Widget>.generate(
-      TransportModes.values.length,
+      transportModes.length,
       (index) => _buildTransportTab(context, index, selectedIndex == index),
     );
   }
@@ -60,7 +64,7 @@ class TransportModesWidget extends StatelessWidget {
 
     return Tab(
       icon: SvgPicture.asset(
-        TransportModes.values[index].icon,
+        transportModes[index].icon,
         color: color,
         width: UIStyle.bigIconSize,
         height: UIStyle.bigIconSize,
