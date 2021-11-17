@@ -1798,5 +1798,25 @@
   "offlineAppMapsDialogMessage": "Before using the app offline, you need to download the map of your area.",
   "@offlineAppMapsDialogMessage": {
     "description": "Text of the dialog box requesting the download of maps."
+  },
+  "updateMapsErrorText": "Map updating failed with error: {{error}}",
+  "@updateMapsErrorText": {
+    "description": "Map updating error message"
+  },
+  "mapUpdateAvailableDialogTitle": "Map update available",
+  "@mapUpdateAvailableDialogTitle": {
+    "description": "Title of the map update available dialog"
+  },
+  "mapUpdateAvailableDialogMessage": "Would you like to update maps to the latest version?",
+  "@mapUpdateAvailableDialogMessage": {
+    "description": "Message of the map update available dialog"
+  },
+  "updateButtonTitle": "Update",
+  "@updateButtonTitle": {
+    "description": "Update button title"
+  },
+  "updatingMapTitle": "Updating map...",
+  "@updatingMapTitle": {
+    "description": "Title of the map updating progress"
   }
 }
