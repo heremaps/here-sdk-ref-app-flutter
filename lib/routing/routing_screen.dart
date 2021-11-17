@@ -95,6 +95,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   bool _routingInProgress = false;
 
   late TabController _transportModesTabController;
+  late List<TransportModes> _transportModes;
   late WayPointsController _wayPointsController;
 
   bool _enableTraffic = false;
@@ -103,16 +104,17 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   void initState() {
     super.initState();
 
-    _routingEngine = Provider.of<AppPreferences>(context, listen: false).useAppOffline
-        ? Routing.OfflineRoutingEngine()
-        : Routing.RoutingEngine();
+    AppPreferences appPreferences = Provider.of<AppPreferences>(context, listen: false);
+    _routingEngine = appPreferences.useAppOffline ? Routing.OfflineRoutingEngine() : Routing.RoutingEngine();
 
     _routesTabController = TabController(
       length: _routes.length,
       vsync: this,
     );
+
+    _transportModes = appPreferences.useAppOffline ? [TransportModes.car, TransportModes.truck] : TransportModes.values;
     _transportModesTabController = TabController(
-      length: TransportModes.values.length,
+      length: _transportModes.length,
       vsync: this,
     );
     _transportModesTabController.addListener(() {
@@ -120,6 +122,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
         _beginRouting();
       }
     });
+
     enableMapUpdate = false;
 
     _wayPointsController = WayPointsController(
@@ -435,10 +438,13 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     );
   }
 
-  Widget _buildTransportTypeWidget(BuildContext context) {
-    return Container(
-        color: UIStyle.selectedListTileColor, child: TransportModesWidget(tabController: _transportModesTabController));
-  }
+  Widget _buildTransportTypeWidget(BuildContext context) => Container(
+        color: UIStyle.selectedListTileColor,
+        child: TransportModesWidget(
+          tabController: _transportModesTabController,
+          transportModes: _transportModes,
+        ),
+      );
 
   Widget _buildBottomNavigationBar(context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -531,17 +537,17 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     setState(() => _routingInProgress = true);
     RoutePreferencesModel preferences = Provider.of<RoutePreferencesModel>(context, listen: false);
 
-    switch (_transportModesTabController.index) {
-      case 0: // car
+    switch (_transportModes[_transportModesTabController.index]) {
+      case TransportModes.car:
         _routingEngine.calculateCarRoute(_wayPointsController.value, preferences.carOptions, _onRoutingEnd);
         break;
-      case 1: // truck
+      case TransportModes.truck:
         _routingEngine.calculateTruckRoute(_wayPointsController.value, preferences.truckOptions, _onRoutingEnd);
         break;
-      case 2: // scooter
+      case TransportModes.scooter:
         _routingEngine.calculateScooterRoute(_wayPointsController.value, preferences.scooterOptions, _onRoutingEnd);
         break;
-      case 3: // pedestrian
+      case TransportModes.walk:
         _routingEngine.calculatePedestrianRoute(
             _wayPointsController.value, preferences.pedestrianOptions, _onRoutingEnd);
         break;
@@ -585,11 +591,13 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
         context,
         MaterialPageRoute(
           builder: (context) => RoutePreferencesScreen(
-            activeTransportTab: _transportModesTabController.index,
+            activeTransportTab: TransportModes.values.indexOf(_transportModes[_transportModesTabController.index]),
           ),
         ));
 
-    setState(() => _transportModesTabController.index = activeTransportTab);
+    if (_transportModes.contains(TransportModes.values[activeTransportTab])) {
+      setState(() => _transportModesTabController.index = activeTransportTab);
+    }
     _beginRouting();
   }
 }
