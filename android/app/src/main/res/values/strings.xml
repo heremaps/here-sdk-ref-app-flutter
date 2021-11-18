@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="splash_app_name">HERE SDK\nReference Application\nfor Flutter</string>
-    <string name="splash_wait_text">Version 1.2.0</string>
-</resources>
