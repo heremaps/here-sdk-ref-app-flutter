@@ -21,11 +21,12 @@ package com.example.RefApp
 
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
+import androidx.core.view.WindowCompat
 import com.example.RefApp.FlutterForegroundService.Companion.START_FOREGROUND_ACTION
 import com.example.RefApp.FlutterForegroundService.Companion.STOP_FOREGROUND_ACTION
 import com.example.RefApp.FlutterForegroundService.Companion.UPDATE_FOREGROUND_ACTION
 import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -38,8 +39,14 @@ class MainActivity : FlutterActivity() {
         private const val UPDATE_SERVICE = "updateService"
     }
 
-    override fun provideSplashScreen(): SplashScreen? {
-        return SplashScreen()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener { splashScreenView -> splashScreenView.remove() }
+        }
+
+        super.onCreate(savedInstanceState)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -84,7 +91,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun launchForegroundService(intent: Intent) {
-        intent.action = START_FOREGROUND_ACTION;
+        intent.action = START_FOREGROUND_ACTION
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent)
         } else {
