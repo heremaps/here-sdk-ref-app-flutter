@@ -35,6 +35,7 @@ import 'common/application_preferences.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
 import 'download_maps/download_maps_screen.dart';
+import 'download_maps/map_loader_controller.dart';
 import 'positioning/no_location_warning_widget.dart';
 import 'positioning/positioning.dart';
 import 'routing/routing_screen.dart';
@@ -271,16 +272,19 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
               value: preferences.useAppOffline,
               onChanged: (newValue) async {
                 if (newValue) {
-                  Navigator.of(context).pop();
-                  if (!await Util.showCommonConfirmationDialog(
-                    context: context,
-                    title: appLocalizations.offlineAppMapsDialogTitle,
-                    message: appLocalizations.offlineAppMapsDialogMessage,
-                    actionTitle: appLocalizations.downloadMapsTitle,
-                  )) {
-                    return;
+                  MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
+                  if (controller.getInstalledRegions().isEmpty) {
+                    Navigator.of(context).pop();
+                    if (!await Util.showCommonConfirmationDialog(
+                      context: context,
+                      title: appLocalizations.offlineAppMapsDialogTitle,
+                      message: appLocalizations.offlineAppMapsDialogMessage,
+                      actionTitle: appLocalizations.downloadMapsTitle,
+                    )) {
+                      return;
+                    }
+                    Navigator.of(context).pushNamed(DownloadMapsScreen.navRoute);
                   }
-                  Navigator.of(context).pushNamed(DownloadMapsScreen.navRoute);
                 }
                 preferences.useAppOffline = newValue;
               },
