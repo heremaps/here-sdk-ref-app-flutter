@@ -18,17 +18,31 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// A class that implements application preferences.
 class AppPreferences extends ChangeNotifier {
-  bool _useAppOffline = false;
+  static final _kAppOfflineParam = "use_app_offline";
+
+  SharedPreferences? _sharedPreferences;
+
+  AppPreferences() {
+    _initializePreferences();
+  }
+
+  void _initializePreferences() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    notifyListeners();
+  }
 
   /// If true, app should use offline services.
-  bool get useAppOffline => _useAppOffline;
+  bool get useAppOffline {
+    return _sharedPreferences?.getBool(_kAppOfflineParam) ?? false;
+  }
 
   /// Setter for [useAppOffline] property.
   void set useAppOffline(bool value) {
-    _useAppOffline = value;
+    _sharedPreferences?.setBool(_kAppOfflineParam, value);
     notifyListeners();
   }
 }
