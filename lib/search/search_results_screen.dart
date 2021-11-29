@@ -84,6 +84,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   @override
+  void dispose() {
+    stopPositioning();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => DefaultTabController(
         length: widget.places.length,
         child: WillPopScope(
@@ -124,7 +130,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       _createResultsMarkers();
       _setTapGestureHandler();
 
-      initLocationEngine(
+      initPositioning(
         context: context,
         hereMapController: hereMapController,
       );

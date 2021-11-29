@@ -33,6 +33,7 @@ import 'download_maps/map_loader_controller.dart';
 import 'download_maps/map_regions_list_screen.dart';
 import 'landing_screen.dart';
 import 'navigation/navigation_screen.dart';
+import 'positioning/positioning_engine.dart';
 import 'route_preferences/route_preferences_model.dart';
 import 'routing/route_details_screen.dart';
 import 'routing/routing_screen.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RoutePreferencesModel.withDefaults()),
         ChangeNotifierProvider(create: (context) => MapLoaderController()),
         ChangeNotifierProvider(create: (context) => AppPreferences()),
+        Provider(create: (context) => PositioningEngine()),
       ],
       child: MaterialApp(
         localizationsDelegates: [

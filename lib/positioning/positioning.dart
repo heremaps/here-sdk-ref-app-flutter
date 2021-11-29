@@ -17,34 +17,33 @@
  * License-Filename: LICENSE
  */
 
-import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:here_sdk/consent.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk/mapview.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
+import 'positioning_engine.dart';
 
 typedef LocationEngineStatusCallback = void Function(LocationEngineStatus status);
 typedef LocationUpdatedCallback = void Function(Location location);
 
-/// Mixin that implements logic for positioning. It asks for user consent, obtains the necessary permissions,
-/// and provides current location updates to classes that use this mixin.
-/// The current implementation will only ask for user consent on Android devices.
+/// Mixin that implements logic for positioning. It manages the current location marker and provides location updates.
 mixin Positioning {
   static const double initDistanceToEarth = 8000; // meters
   static final GeoCoordinates initPosition = GeoCoordinates(52.530932, 13.384915);
-  static final ConsentEngine? _consentEngine = Platform.isAndroid ? ConsentEngine() : null;
 
   late HereMapController _hereMapController;
-  LocationEngine? _locationEngine;
+  PositioningEngine? _positioningEngine;
 
   LocationEngineStatusCallback? _onLocationEngineStatus;
   LocationUpdatedCallback? _onLocationUpdatedCallback;
+  StreamSubscription? _locationUpdatesSubscription;
+  StreamSubscription? _locationEngineStatusUpdatesSubscription;
 
   MapPolygon? _locationAccuracyCircle;
   MapMarker? _locationMarker;
@@ -53,10 +52,10 @@ mixin Positioning {
   bool enableMapUpdate = true;
 
   /// Gets last known location.
-  Location? get lastKnownLocation => _locationEngine?.lastKnownLocation;
+  Location? get lastKnownLocation => _positioningEngine?.lastKnownLocation;
 
   /// Gets the state of the location engine.
-  bool get isLocationEngineStarted => _locationEngine != null ? _locationEngine!.isStarted : false;
+  bool get isLocationEngineStarted => _positioningEngine?.isLocationEngineStarted ?? false;
 
   /// Gets the state of the current location marker.
   bool get locationVisible => _locationMarkerVisible;
@@ -75,59 +74,40 @@ mixin Positioning {
     }
   }
 
-  /// Initializes the location engine. The [hereMapController] is used to display current position marker,
+  /// Initializes positioning. The [hereMapController] is used to display current position marker,
   /// [onLocationEngineStatus] and [onLocationUpdated] callbacks are required to get location updates.
-  void initLocationEngine({
+  void initPositioning({
     required BuildContext context,
     required HereMapController hereMapController,
     LocationEngineStatusCallback? onLocationEngineStatus,
     LocationUpdatedCallback? onLocationUpdated,
-  }) async {
+  }) {
     _hereMapController = hereMapController;
     _onLocationEngineStatus = onLocationEngineStatus;
     _onLocationUpdatedCallback = onLocationUpdated;
 
-    await _askPermissions(context);
+    _positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
+    _initMapLocation();
+
+    _locationUpdatesSubscription = _positioningEngine!.getLocationUpdates.listen(_onLocationUpdated);
+    _locationEngineStatusUpdatesSubscription =
+        _positioningEngine!.getLocationEngineStatusUpdates.listen(_onStatusChanged);
   }
 
-  /// Displays user consent form.
-  Future<ConsentUserReply>? requestUserConsent(BuildContext context) => _consentEngine?.requestUserConsent(context);
-
-  /// Gets user consent state.
-  ConsentUserReply? get userConsentState {
-    return _consentEngine?.userConsentState;
+  /// Stops positioning.
+  void stopPositioning() {
+    _locationUpdatesSubscription?.cancel();
+    _locationEngineStatusUpdatesSubscription?.cancel();
+    if (_locationMarker != null) {
+      _hereMapController.mapScene.removeMapMarker(_locationMarker!);
+    }
+    if (_locationAccuracyCircle != null) {
+      _hereMapController.mapScene.removeMapPolygon(_locationAccuracyCircle!);
+    }
   }
 
-  Future _askPermissions(BuildContext context) async {
-    if (userConsentState == ConsentUserReply.notHandled) {
-      await requestUserConsent(context);
-    }
-
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.location,
-    ].request();
-
-    if (statuses.containsKey(Permission.location) && statuses[Permission.location]!.isGranted) {
-      // The required permissions have been granted, let's start the location engine
-      await _createAndInitLocationEngine();
-      return;
-    }
-
-    _addMyLocationToMap(geoCoordinates: initPosition);
-    _onLocationEngineStatus?.call(LocationEngineStatus.missingPermissions);
-  }
-
-  Future _createAndInitLocationEngine() async {
-    _locationEngine = LocationEngine();
-    _locationEngine!.addLocationListener(LocationListener((location) => _onLocationUpdated(location)));
-    _locationEngine!.addLocationStatusListener(LocationStatusListener(_onStatusChanged, (features) {}));
-
-    LocationEngineStatus status = _locationEngine!.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
-    if (status != LocationEngineStatus.alreadyStarted && status != LocationEngineStatus.engineStarted) {
-      return;
-    }
-
-    final Location? lastKnownLocation = _locationEngine!.lastKnownLocation;
+  void _initMapLocation() {
+    final Location? lastKnownLocation = _positioningEngine!.lastKnownLocation;
     if (lastKnownLocation != null) {
       final double accuracy =
           (lastKnownLocation.horizontalAccuracyInMeters != null) ? lastKnownLocation.horizontalAccuracyInMeters! : 0;
@@ -191,13 +171,6 @@ mixin Positioning {
   }
 
   void _onStatusChanged(LocationEngineStatus status) {
-    if (status == LocationEngineStatus.engineStarted) {
-      // Check if location services are available
-      Permission.location.serviceStatus.then((value) {
-        _onLocationEngineStatus?.call(value.isEnabled ? status : LocationEngineStatus.notAllowed);
-      });
-    } else {
-      _onLocationEngineStatus?.call(status);
-    }
+    _onLocationEngineStatus?.call(status);
   }
 }
