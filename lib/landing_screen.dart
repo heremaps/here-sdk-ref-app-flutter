@@ -38,6 +38,7 @@ import 'download_maps/download_maps_screen.dart';
 import 'download_maps/map_loader_controller.dart';
 import 'positioning/no_location_warning_widget.dart';
 import 'positioning/positioning.dart';
+import 'positioning/positioning_engine.dart';
 import 'routing/routing_screen.dart';
 import 'routing/waypoint_info.dart';
 import 'search/search_popup.dart';
@@ -64,6 +65,12 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   MapMarker? _routeFromMarker;
   Place? _routeFromPlace;
+
+  @override
+  void dispose() {
+    stopPositioning();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Consumer<AppPreferences>(
@@ -97,11 +104,12 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
       _addGestureListeners();
 
-      initLocationEngine(
-        context: context,
-        hereMapController: hereMapController,
-        onLocationEngineStatus: (status) => _checkLocationStatus(status),
-      );
+      PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
+      positioningEngine.initLocationEngine(context: context).then((value) => initPositioning(
+            context: context,
+            hereMapController: hereMapController,
+            onLocationEngineStatus: (status) => _checkLocationStatus(status),
+          ));
 
       setState(() {
         _mapInitSuccess = true;
@@ -137,6 +145,9 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   }
 
   List<Widget> _buildUserConsentItems(BuildContext context) {
+    PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
+    ConsentUserReply? userConsentState = positioningEngine.userConsentState;
+
     if (userConsentState == null) {
       return [];
     }
@@ -191,7 +202,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
         onTap: () {
           Navigator.of(context).pop();
-          requestUserConsent(context)?.then((value) => setState(() {}));
+          positioningEngine.requestUserConsent(context)?.then((value) => setState(() {}));
         },
       ),
     ];

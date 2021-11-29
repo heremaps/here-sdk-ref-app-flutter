@@ -140,6 +140,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     _routePoiHandler.release();
     _transportModesTabController.dispose();
     _routesTabController.dispose();
+    stopPositioning();
     super.dispose();
   }
 
@@ -194,7 +195,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
         offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline,
       );
 
-      initLocationEngine(
+      initPositioning(
         context: context,
         hereMapController: hereMapController,
         onLocationUpdated: (location) => _wayPointsController.currentLocation = location.coordinates,
