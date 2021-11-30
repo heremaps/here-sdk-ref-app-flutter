@@ -53,16 +53,19 @@ class RecentSearchDataModel extends ChangeNotifier {
   }
 
   Future<void> _init() async {
+    final String createTableSQL = "CREATE TABLE $_kTableName("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "$_kTitleField TEXT, "
+        "$_kPlaceIdField TEXT, "
+        "$_kPlaceField TEXT, "
+        "$_kTimeStampField DATETIME)";
+    final String deleteTableSQL = "DROP TABLE $_kTableName";
+
     final dbPath = await getDatabasesPath();
     _db = await openDatabase(
       join(dbPath, _kDbName),
-      onCreate: (db, version) => db.execute("CREATE TABLE $_kTableName("
-          "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-          "$_kTitleField TEXT, "
-          "$_kPlaceIdField TEXT, "
-          "$_kPlaceField TEXT, "
-          "$_kTimeStampField DATETIME)"),
-      onUpgrade: (db, oldVersion, newVersion) => db.execute("DELETE * FROM $_kTableName"),
+      onCreate: (db, version) => db.execute(createTableSQL),
+      onUpgrade: (db, oldVersion, newVersion) => db.execute(deleteTableSQL).then((value) => db.execute(createTableSQL)),
       version: 2,
     );
 
