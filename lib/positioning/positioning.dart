@@ -40,19 +40,18 @@ mixin Positioning {
   late HereMapController _hereMapController;
   PositioningEngine? _positioningEngine;
 
-  LocationEngineStatusCallback? _onLocationEngineStatus;
   LocationUpdatedCallback? _onLocationUpdatedCallback;
   StreamSubscription? _locationUpdatesSubscription;
-  StreamSubscription? _locationEngineStatusUpdatesSubscription;
 
   MapPolygon? _locationAccuracyCircle;
   MapMarker? _locationMarker;
   bool _locationMarkerVisible = false;
+  Location? _lastKnownLocation;
 
   bool enableMapUpdate = true;
 
   /// Gets last known location.
-  Location? get lastKnownLocation => _positioningEngine?.lastKnownLocation;
+  Location? get lastKnownLocation => _positioningEngine?.lastKnownLocation ?? _lastKnownLocation;
 
   /// Gets the state of the location engine.
   bool get isLocationEngineStarted => _positioningEngine?.isLocationEngineStarted ?? false;
@@ -75,29 +74,24 @@ mixin Positioning {
   }
 
   /// Initializes positioning. The [hereMapController] is used to display current position marker,
-  /// [onLocationEngineStatus] and [onLocationUpdated] callbacks are required to get location updates.
+  /// [onLocationUpdated] callbacks is required to get location updates.
   void initPositioning({
     required BuildContext context,
     required HereMapController hereMapController,
-    LocationEngineStatusCallback? onLocationEngineStatus,
     LocationUpdatedCallback? onLocationUpdated,
   }) {
     _hereMapController = hereMapController;
-    _onLocationEngineStatus = onLocationEngineStatus;
     _onLocationUpdatedCallback = onLocationUpdated;
 
     _positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
     _initMapLocation();
 
     _locationUpdatesSubscription = _positioningEngine!.getLocationUpdates.listen(_onLocationUpdated);
-    _locationEngineStatusUpdatesSubscription =
-        _positioningEngine!.getLocationEngineStatusUpdates.listen(_onStatusChanged);
   }
 
   /// Stops positioning.
   void stopPositioning() {
     _locationUpdatesSubscription?.cancel();
-    _locationEngineStatusUpdatesSubscription?.cancel();
     if (_locationMarker != null) {
       _hereMapController.mapScene.removeMapMarker(_locationMarker!);
     }
@@ -158,6 +152,7 @@ mixin Positioning {
   }
 
   void _onLocationUpdated(Location location) {
+    _lastKnownLocation = location;
     final double accuracy = (location.horizontalAccuracyInMeters != null) ? location.horizontalAccuracyInMeters! : 0.0;
     _locationAccuracyCircle?.geometry = _createGeometry(location.coordinates, accuracy);
     _locationMarker?.coordinates = location.coordinates;
@@ -168,9 +163,5 @@ mixin Positioning {
     }
 
     _onLocationUpdatedCallback?.call(location);
-  }
-
-  void _onStatusChanged(LocationEngineStatus status) {
-    _onLocationEngineStatus?.call(status);
   }
 }
