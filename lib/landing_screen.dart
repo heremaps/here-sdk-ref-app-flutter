@@ -105,10 +105,10 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       _addGestureListeners();
 
       PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
+      positioningEngine.getLocationEngineStatusUpdates.listen(_checkLocationStatus);
       positioningEngine.initLocationEngine(context: context).then((value) => initPositioning(
             context: context,
             hereMapController: hereMapController,
-            onLocationEngineStatus: (status) => _checkLocationStatus(status),
           ));
 
       setState(() {
