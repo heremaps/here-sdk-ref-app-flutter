@@ -17,24 +17,23 @@
  * License-Filename: LICENSE
  */
 
-import 'truck_hazardous_goods_screen.dart';
-import 'preferences_disclosure_row_widget.dart';
-import 'avoidance/route_avoidance_options_widget.dart';
-import 'truck_specifications_screen.dart';
-import 'route_preferences_model.dart';
-import 'package:provider/provider.dart';
-import 'preferences_row_title_widget.dart';
-import 'preferences_section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dropdown_widget.dart';
-import 'enum_string_helper.dart';
-import 'route_options_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:here_sdk/routing.dart';
-import 'route_text_options_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../common/ui_style.dart';
+import 'avoidance/route_avoidance_options_widget.dart';
+import 'dropdown_widget.dart';
+import 'enum_string_helper.dart';
+import 'preferences_disclosure_row_widget.dart';
+import 'preferences_row_title_widget.dart';
+import 'preferences_section_title_widget.dart';
+import 'route_options_widget.dart';
+import 'route_preferences_model.dart';
+import 'route_text_options_widget.dart';
+import 'truck_hazardous_goods_screen.dart';
+import 'truck_specifications_screen.dart';
 
 /// Routing settings widget for truck mode.
 class TruckOptionsScreen extends StatelessWidget {

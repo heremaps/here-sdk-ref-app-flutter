@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../common/ui_style.dart';

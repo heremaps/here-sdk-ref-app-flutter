@@ -19,18 +19,19 @@
 
 import 'dart:async';
 
-import '../route_preferences/route_preferences_model.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
+
+import '../route_preferences/route_preferences_model.dart';
 
 typedef ReroutingCallback = void Function(Routing.Route? newRoute);
 
 /// Helper class that monitors the deviation from the current route and performs route recalculation if necessary.
 /// [Routing.RoutingEngine] is used to calculate a new route. Calculation of a new route starts when the deviation from
 /// the current route exceeds [_kMaxRouteDeviation] meters for [_kMaxRouteDeviationTime] seconds.
-class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.MilestoneReachedListener {
+class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.MilestoneStatusListener {
   /// The maximum deviation distance in meters.
   static const int _kMaxRouteDeviation = 20;
 
@@ -171,7 +172,7 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
 
   /// Called by [Navigator] when a milestone has been reached.
   @override
-  onMilestoneReached(Navigation.Milestone milestone) {
+  void onMilestoneStatusUpdated(Navigation.Milestone milestone, Navigation.MilestoneStatus status) {
     if (milestone.waypointIndex != null) {
       _passedWayPointIndex = milestone.waypointIndex!;
     }

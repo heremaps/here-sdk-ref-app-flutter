@@ -207,8 +207,8 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       hereMapController.camera.lookAtPointWithDistance(_currentRoute.polyline.first, _kInitDistanceToEarth);
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
 
-      hereMapController.mapScene.setLayerState(MapSceneLayers.trafficFlow, MapSceneLayerState.visible);
-      hereMapController.mapScene.setLayerState(MapSceneLayers.trafficIncidents, MapSceneLayerState.visible);
+      hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficFlow, VisibilityState.visible);
+      hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficIncidents, VisibilityState.visible);
 
       _addRouteToMap();
       bool? result = await Dialogs.askForPositionSource(context);
@@ -398,7 +398,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     });
 
     _visualNavigator.routeDeviationListener = _reroutingHandler;
-    _visualNavigator.milestoneReachedListener = _reroutingHandler;
+    _visualNavigator.milestoneStatusListener = _reroutingHandler;
   }
 
   void _setupVoiceTextMessages() async {
