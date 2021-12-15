@@ -187,7 +187,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       ),
       onWillPop: () async {
         if (await Dialogs.askForExitFromNavigation(context)) {
-          await _stopNavigation();
+          _stopNavigation();
           return true;
         }
         return false;
@@ -392,8 +392,8 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       });
     }
 
-    _visualNavigator.destinationReachedListener = Navigation.DestinationReachedListener(() async {
-      await _stopNavigation();
+    _visualNavigator.destinationReachedListener = Navigation.DestinationReachedListener(() {
+      _stopNavigation();
       Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
     });
 
@@ -431,9 +431,9 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     return arrivalInfo;
   }
 
-  Future _stopNavigation() async {
+  void _stopNavigation() {
     _visualNavigator.route = null;
-    await _visualNavigator.stopRendering();
+    _visualNavigator.stopRendering();
     _locationSimulator?.stop();
     _locationEngine?.setBackgroundLocationAllowed(false);
     _locationEngine?.setBackgroundLocationIndicatorVisible(false);
@@ -574,7 +574,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
           backgroundColor: UIStyle.stopNavigationButtonColor,
           onPressed: () async {
             if (await Dialogs.askForExitFromNavigation(context)) {
-              await _stopNavigation();
+              _stopNavigation();
               Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
             }
           },
