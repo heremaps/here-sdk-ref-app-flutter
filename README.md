@@ -17,9 +17,10 @@ The reference application hosted in this repo focuses on how specific features c
 
 ### Supported features (so far):
 
-- [Search](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/search/search-library.html): Including suggestions, text search and search along a route corridor.
-- [Routing](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/routing/routing-library.html): As of now, the reference application supports the following transport modes: car, truck, scooter and pedestrian.
-- [Turn-By-Turn Navigation](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/navigation/navigation-library.html): Including maneuver instructions with visual feedback and voice guidance.
+- [Search](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/search.html): Including suggestions, text search and search along a route corridor using the [search library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/search/search-library.html) of the HERE SDK.
+- [Routing](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/routing.html): As of now, the reference application supports the following transport modes: car, truck, scooter and pedestrian using the [routing library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/routing/routing-library.html) of the HERE SDK.
+- [Turn-By-Turn Navigation](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/navigation.html): Including maneuver instructions with visual feedback and voice guidance using the [navigation library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/navigation/navigation-library.html) of the HERE SDK.
+- [Offline Maps](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/offline-maps.html): Including UI to download, install and update regions using the [maploader library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/maploader/maploader-library.html) of the HERE SDK. The application can be operated offline when the in-app offline switch is activated. To operate fully offline, turn also the device's connectivity off.
 
 ![screenshots](assets/screenshots.png)
 
