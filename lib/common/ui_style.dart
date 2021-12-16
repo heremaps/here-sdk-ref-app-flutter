@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 /// Helper class that contains all definitions of colors, fonts, sizes and other UI parameters that are used in

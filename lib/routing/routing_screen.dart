@@ -428,9 +428,9 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
               ),
               onTap: () => setState(() {
                 _enableTraffic = !_enableTraffic;
-                MapSceneLayerState newState = _enableTraffic ? MapSceneLayerState.visible : MapSceneLayerState.hidden;
-                _hereMapController.mapScene.setLayerState(MapSceneLayers.trafficFlow, newState);
-                _hereMapController.mapScene.setLayerState(MapSceneLayers.trafficIncidents, newState);
+                VisibilityState newState = _enableTraffic ? VisibilityState.visible : VisibilityState.hidden;
+                _hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficFlow, newState);
+                _hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficIncidents, newState);
               }),
             ),
           ),

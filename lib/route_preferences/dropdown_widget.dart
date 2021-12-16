@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-import 'enum_string_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'enum_string_helper.dart';
 
 /// Dropdown list widget.
 class DropdownWidget extends StatelessWidget {

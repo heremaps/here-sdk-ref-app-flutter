@@ -16,16 +16,16 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-import 'preferences_row_title_widget.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/routing.dart';
 import 'package:provider/provider.dart';
-import 'route_preferences_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../common/ui_style.dart';
 import 'numeric_text_field_widget.dart';
+import 'preferences_row_title_widget.dart';
+import 'route_preferences_model.dart';
 
 /// Truck specifications screen widget.
 class TruckSpecificationsScreen extends StatelessWidget {

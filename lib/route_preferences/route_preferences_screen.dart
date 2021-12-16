@@ -17,17 +17,15 @@
  * License-Filename: LICENSE
  */
 
-import 'transport_modes_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../common/ui_style.dart';
 import 'car_options_screen.dart';
 import 'pedestrian_options_screen.dart';
 import 'scooter_options_screen.dart';
+import 'transport_modes_widget.dart';
 import 'truck_options_screen.dart';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../common/ui_style.dart';
 
 /// Routing preferences screen widget.
 class RoutePreferencesScreen extends StatefulWidget {

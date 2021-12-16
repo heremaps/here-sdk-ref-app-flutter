@@ -17,18 +17,18 @@
  * License-Filename: LICENSE
  */
 
-import 'route_preferences_model.dart';
-import 'package:provider/provider.dart';
-import 'enum_string_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:provider/provider.dart';
+
 import '../common/ui_style.dart';
 import 'dropdown_widget.dart';
+import 'enum_string_helper.dart';
 import 'preferences_section_title_widget.dart';
 import 'preferences_row_title_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'route_preferences_model.dart';
 
 /// Route text options widget.
 class RouteTextOptionsWidget extends StatelessWidget {

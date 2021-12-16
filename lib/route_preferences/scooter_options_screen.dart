@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-import 'avoidance/route_avoidance_options_widget.dart';
-import 'route_preferences_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:here_sdk/routing.dart';
 import 'package:provider/provider.dart';
+
+import 'avoidance/route_avoidance_options_widget.dart';
 import 'preferences_row_title_widget.dart';
 import 'preferences_section_title_widget.dart';
-import 'package:flutter/material.dart';
 import 'route_options_widget.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:here_sdk/routing.dart';
+import 'route_preferences_model.dart';
 import 'route_text_options_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Routing settings widget for scooter mode.
 class ScooterOptionsScreen extends StatelessWidget {

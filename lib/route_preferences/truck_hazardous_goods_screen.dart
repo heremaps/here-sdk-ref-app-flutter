@@ -19,15 +19,14 @@
 
 import 'dart:collection';
 
-import 'enum_string_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/routing.dart';
 import 'package:provider/provider.dart';
-import 'route_preferences_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../common/ui_style.dart';
+import 'enum_string_helper.dart';
+import 'route_preferences_model.dart';
 
 /// Truck hazardous goods preferences screen widget.
 class TruckHazardousGoodsScreen extends StatelessWidget {
