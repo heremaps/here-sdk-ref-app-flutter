@@ -32,9 +32,11 @@ The reference application for the HERE SDK for Flutter (_Navigate Edition_) requ
 - If not already done, install the [Flutter SDK](https://flutter.dev/docs/get-started/install). You need at least [version 2.8.0](https://flutter.dev/docs/development/tools/sdk/releases). Newer versions may also work, but are _not guaranteed_ to work.
 - Make sure to specify `JAVA_HOME` in your `env` variables. The minimum supported JDK version is Java 8.
 
-On top you need an IDE of your choice. This could be a text editor or IDEs such as [Visual Studio Code](https://code.visualstudio.com/) with the [Flutter extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter) or [Android Studio](https://developer.android.com/studio). We use Android Studio 4.1.3 for development.
+On top you need an IDE of your choice. This could be a text editor or IDEs such as [Visual Studio Code](https://code.visualstudio.com/) with the [Flutter extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter) or [Android Studio](https://developer.android.com/studio).
 
-Note: If you want to compile, build & run for iOS devices, you also need to have [Xcode](https://developer.apple.com/xcode/) and [CocoaPods](https://cocoapods.org/) (version 1.10.0 or higher) installed. We use Xcode 12.4 for development. If you only target Android devices, Xcode is _not_ required.
+Note: If you want to compile, build & run for iOS devices, you also need to have [Xcode](https://developer.apple.com/xcode/) and [CocoaPods](https://cocoapods.org/) installed. If you only target Android devices, Xcode is _not_ required.
+
+Confirm that you meet the overall [minimum requirements](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/about.html#minimum-requirements) as listed in the _Developer's Guide_ for the HERE SDK for Flutter (_Navigate Edition_).
 
 ### Add the HERE SDK Plugin
 
