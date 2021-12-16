@@ -19,6 +19,7 @@
 
 package com.example.RefApp
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -79,10 +80,15 @@ class FlutterForegroundService : Service() {
         return START_NOT_STICKY
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     private fun createNotification(bundle: Bundle): Notification {
         val pm = applicationContext.packageManager
         val notificationIntent = pm.getLaunchIntentForPackage(applicationContext.packageName)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+        } else {
+            PendingIntent.getActivity(this, 0, notificationIntent, 0)
+        }
 
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_notification)
@@ -100,7 +106,7 @@ class FlutterForegroundService : Service() {
         }
 
         if (!bundle.getBoolean(SOUND_ENABLED_ARG, false)) {
-            builder.setNotificationSilent()
+            builder.setSilent(true)
         }
 
         return builder.build()
