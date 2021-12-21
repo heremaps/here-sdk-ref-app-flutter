@@ -25,12 +25,12 @@ import 'route_text_options_widget.dart';
 /// Routing settings widget for car mode.
 class CarOptionsScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [RouteOptionsWidget(), RouteTextOptionsWidget(), RouteAvoidanceOptionsWidget()],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [RouteOptionsWidget(), RouteTextOptionsWidget(), RouteAvoidanceOptionsWidget()],
+          ),
+        ),
+      );
 }

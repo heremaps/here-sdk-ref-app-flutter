@@ -41,49 +41,51 @@ class TruckOptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TruckOptions truckOptions = context.select((RoutePreferencesModel model) => model.truckOptions);
 
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RouteOptionsWidget(),
-          RouteTextOptionsWidget(),
-          RouteAvoidanceOptionsWidget(),
-          PreferencesSectionTitle(title: AppLocalizations.of(context)!.truckSpecificationsTitle),
-          PreferencesDisclosureRowWidget(
-            title: AppLocalizations.of(context)!.specificationsTitle,
-            subTitle: _truckSpecificationsToString(context, truckOptions.specifications),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TruckSpecificationsScreen()),
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RouteOptionsWidget(),
+            RouteTextOptionsWidget(),
+            RouteAvoidanceOptionsWidget(),
+            PreferencesSectionTitle(title: AppLocalizations.of(context)!.truckSpecificationsTitle),
+            PreferencesDisclosureRowWidget(
+              title: AppLocalizations.of(context)!.specificationsTitle,
+              subTitle: _truckSpecificationsToString(context, truckOptions.specifications),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TruckSpecificationsScreen()),
+              ),
             ),
-          ),
-          PreferencesDisclosureRowWidget(
-            title: AppLocalizations.of(context)!.hazardousGoodsTitle,
-            subTitle: EnumStringHelper.hazardousGoodsNamesToString(context, truckOptions.hazardousGoods),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TruckHazardousGoodsScreen()),
+            PreferencesDisclosureRowWidget(
+              title: AppLocalizations.of(context)!.hazardousGoodsTitle,
+              subTitle: EnumStringHelper.hazardousGoodsNamesToString(context, truckOptions.hazardousGoods),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TruckHazardousGoodsScreen()),
+              ),
             ),
-          ),
-          PreferencesRowTitle(title: AppLocalizations.of(context)!.tunnelCategoryTitle),
-          Container(
-            decoration: UIStyle.roundedRectDecoration(),
-            child: DropdownButtonHideUnderline(
-              child: DropdownWidget(
-                data: EnumStringHelper.tunnelCategoryMap(context),
-                selectedValue: truckOptions.tunnelCategory?.index,
-                onChanged: (category) => context.read<RoutePreferencesModel>().truckOptions = TruckOptions(
-                  truckOptions.routeOptions,
-                  truckOptions.textOptions,
-                  truckOptions.avoidanceOptions,
-                  truckOptions.specifications,
-                  category == EnumStringHelper.noneValueIndex ? null : TunnelCategory.values[category],
-                  truckOptions.hazardousGoods,
+            PreferencesRowTitle(title: AppLocalizations.of(context)!.tunnelCategoryTitle),
+            Container(
+              decoration: UIStyle.roundedRectDecoration(),
+              child: DropdownButtonHideUnderline(
+                child: DropdownWidget(
+                  data: EnumStringHelper.tunnelCategoryMap(context),
+                  selectedValue: truckOptions.tunnelCategory?.index,
+                  onChanged: (category) => context.read<RoutePreferencesModel>().truckOptions = TruckOptions(
+                    truckOptions.routeOptions,
+                    truckOptions.textOptions,
+                    truckOptions.avoidanceOptions,
+                    truckOptions.specifications,
+                    category == EnumStringHelper.noneValueIndex ? null : TunnelCategory.values[category],
+                    truckOptions.hazardousGoods,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
