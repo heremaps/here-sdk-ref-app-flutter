@@ -36,25 +36,27 @@ class PedestrianOptionsScreen extends StatelessWidget {
     final PedestrianOptions pedestrianOptions =
         context.select((RoutePreferencesModel model) => model.pedestrianOptions);
 
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RouteOptionsWidget(),
-          RouteTextOptionsWidget(),
-          PreferencesSectionTitle(title: AppLocalizations.of(context)!.walkSpeedTitle),
-          PreferencesRowTitle(title: AppLocalizations.of(context)!.walkSpeedUnitTitle),
-          NumericTextField(
-            initialValue: pedestrianOptions.walkSpeedInMetersPerSecond.toString(),
-            isInteger: false,
-            onChanged: (text) => context.read<RoutePreferencesModel>().pedestrianOptions = PedestrianOptions(
-              pedestrianOptions.routeOptions,
-              pedestrianOptions.textOptions,
-              AvoidanceOptions.withDefaults(),
-              double.tryParse(text) ?? 0,
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RouteOptionsWidget(),
+            RouteTextOptionsWidget(),
+            PreferencesSectionTitle(title: AppLocalizations.of(context)!.walkSpeedTitle),
+            PreferencesRowTitle(title: AppLocalizations.of(context)!.walkSpeedUnitTitle),
+            NumericTextField(
+              initialValue: pedestrianOptions.walkSpeedInMetersPerSecond.toString(),
+              isInteger: false,
+              onChanged: (text) => context.read<RoutePreferencesModel>().pedestrianOptions = PedestrianOptions(
+                pedestrianOptions.routeOptions,
+                pedestrianOptions.textOptions,
+                AvoidanceOptions.withDefaults(),
+                double.tryParse(text) ?? 0,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

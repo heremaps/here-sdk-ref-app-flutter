@@ -35,30 +35,32 @@ class ScooterOptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScooterOptions scooterOptions = context.select((RoutePreferencesModel model) => model.scooterOptions);
 
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RouteOptionsWidget(),
-          RouteTextOptionsWidget(),
-          RouteAvoidanceOptionsWidget(),
-          PreferencesSectionTitle(title: AppLocalizations.of(context)!.highwayTitle),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              PreferencesRowTitle(title: AppLocalizations.of(context)!.allowHighwayTitle),
-              Switch.adaptive(
-                value: scooterOptions.allowHighway,
-                onChanged: (value) => context.read<RoutePreferencesModel>().scooterOptions = ScooterOptions(
-                  scooterOptions.routeOptions,
-                  scooterOptions.textOptions,
-                  scooterOptions.avoidanceOptions,
-                  value,
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RouteOptionsWidget(),
+            RouteTextOptionsWidget(),
+            RouteAvoidanceOptionsWidget(),
+            PreferencesSectionTitle(title: AppLocalizations.of(context)!.highwayTitle),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PreferencesRowTitle(title: AppLocalizations.of(context)!.allowHighwayTitle),
+                Switch.adaptive(
+                  value: scooterOptions.allowHighway,
+                  onChanged: (value) => context.read<RoutePreferencesModel>().scooterOptions = ScooterOptions(
+                    scooterOptions.routeOptions,
+                    scooterOptions.textOptions,
+                    scooterOptions.avoidanceOptions,
+                    value,
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
