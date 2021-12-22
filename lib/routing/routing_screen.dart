@@ -450,6 +450,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   Widget _buildBottomNavigationBar(context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AppLocalizations appLocalization = AppLocalizations.of(context)!;
+    AppPreferences appPreferences = Provider.of<AppPreferences>(context, listen: false);
 
     return BottomAppBar(
       key: _bottomBarKey,
@@ -514,10 +515,12 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
                       elevation: 2,
                       child: RouteInfo(
                         route: route,
-                        onRouteDetails: () => Navigator.of(context).pushNamed(
-                          RouteDetailsScreen.navRoute,
-                          arguments: [_routes[_routesTabController.index], _wayPointsController],
-                        ),
+                        onRouteDetails: appPreferences.useAppOffline
+                            ? null
+                            : () => Navigator.of(context).pushNamed(
+                                  RouteDetailsScreen.navRoute,
+                                  arguments: [_routes[_routesTabController.index], _wayPointsController],
+                                ),
                         onNavigation: () => Navigator.of(context).pushNamed(
                           NavigationScreen.navRoute,
                           arguments: [route, _wayPointsController.value],
