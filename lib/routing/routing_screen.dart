@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -591,17 +593,15 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   }
 
   void _awaitOptionsFromPreferenceScreen(BuildContext context) async {
-    final activeTransportTab = await Navigator.push(
+    final activeTransportMode = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => RoutePreferencesScreen(
-            activeTransportTab: TransportModes.values.indexOf(_transportModes[_transportModesTabController.index]),
+            activeTransportMode: _transportModes[_transportModesTabController.index],
           ),
         ));
 
-    if (_transportModes.contains(TransportModes.values[activeTransportTab])) {
-      setState(() => _transportModesTabController.index = activeTransportTab);
-    }
+    setState(() => _transportModesTabController.index = max(_transportModes.indexOf(activeTransportMode), 0));
     _beginRouting();
   }
 }
