@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,8 +100,8 @@ class _SearchPopupState extends State<_SearchPopup> {
   static const double _kHeaderHeight = 110;
   static const double _kHeaderHeightExt = 140;
 
-  final TextEditingController _dstTextEditCtrl = new TextEditingController();
-  final SearchOptions _searchOptions = new SearchOptions(LanguageCode.enUs, _kMaxSearchSuggestion);
+  final TextEditingController _dstTextEditCtrl = TextEditingController();
+  final SearchOptions _searchOptions = SearchOptions(LanguageCode.enUs, _kMaxSearchSuggestion);
   late SearchEngineProxy _searchEngine;
 
   late GeoCoordinates _lastPosition;
@@ -113,7 +113,7 @@ class _SearchPopupState extends State<_SearchPopup> {
   @override
   void initState() {
     super.initState();
-    _searchEngine = new SearchEngineProxy(offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline);
+    _searchEngine = SearchEngineProxy(offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline);
     _lastPosition = widget.currentPosition;
   }
 

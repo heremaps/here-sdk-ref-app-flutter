@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ class PlaceActionsPopup extends StatefulWidget {
 class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
   static const double _kMaxPopupWidth = 150;
 
-  final SearchOptions _searchOptions = new SearchOptions(LanguageCode.enUs, 1);
+  final SearchOptions _searchOptions = SearchOptions(LanguageCode.enUs, 1);
   late SearchEngineProxy _searchEngine;
   late TaskHandle _searchTask;
   late String _title;
@@ -83,7 +83,7 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
   @override
   void initState() {
     super.initState();
-    _searchEngine = new SearchEngineProxy(offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline);
+    _searchEngine = SearchEngineProxy(offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline);
     _searchTask = _searchEngine.searchByCoordinates(widget.coordinates, _searchOptions, _onSearchEnd);
     _title = widget.coordinates.toPrettyString();
     int markerSize = (widget.hereMapController.pixelScale * UIStyle.searchMarkerSize * 2).round();
