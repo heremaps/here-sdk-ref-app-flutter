@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -464,14 +464,12 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   }
 
   PreferredSize? _buildTopBar(BuildContext context) {
-    if (_currentManeuverIndex == null && !_reroutingInProgress) {
+    if (!_navigationStarted) {
       return null;
     }
 
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
     Widget child;
-
-    if (_reroutingInProgress) {
+    if (_reroutingInProgress || _currentManeuverIndex == null) {
       child = ReroutingIndicator();
     } else {
       Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
@@ -491,7 +489,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       child: AppBar(
         shape: UIStyle.bottomRoundedBorder(),
         automaticallyImplyLeading: false,
-        backgroundColor: colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         flexibleSpace: SafeArea(
           child: child,
         ),
