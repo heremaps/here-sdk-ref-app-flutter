@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   static const double _kRouteCardHeight = 85;
 
   final GlobalKey _bottomBarKey = GlobalKey();
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey _hereMapKey = GlobalKey();
 
   late HereMapController _hereMapController;
