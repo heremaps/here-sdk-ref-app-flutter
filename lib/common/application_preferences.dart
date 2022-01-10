@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// A class that implements application preferences.
 class AppPreferences extends ChangeNotifier {
   static final _kAppOfflineParam = "use_app_offline";
+  static final _kShowTrafficLayersParam = "show_traffic_layers";
 
   SharedPreferences? _sharedPreferences;
 
@@ -43,6 +44,17 @@ class AppPreferences extends ChangeNotifier {
   /// Setter for [useAppOffline] property.
   void set useAppOffline(bool value) {
     _sharedPreferences?.setBool(_kAppOfflineParam, value);
+    notifyListeners();
+  }
+
+  /// If true, app should show traffic flow and traffic incidents layers.
+  bool get showTrafficLayers {
+    return _sharedPreferences?.getBool(_kShowTrafficLayersParam) ?? true;
+  }
+
+  /// Setter for [showTrafficLayers] property.
+  void set showTrafficLayers(bool value) {
+    _sharedPreferences?.setBool(_kShowTrafficLayersParam, value);
     notifyListeners();
   }
 }

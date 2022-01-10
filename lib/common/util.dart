@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
+import 'application_preferences.dart';
 import 'gradient_elevated_button.dart';
 import 'ui_style.dart';
 
@@ -281,4 +283,17 @@ Future<bool> showCommonConfirmationDialog({
   );
 
   return result ?? false;
+}
+
+/// Sets traffic layers visibility on the map according to option saved in preferences (or hides them if app is in
+/// offline mode).
+void setTrafficLayersVisibilityOnMap(BuildContext context, HereMapController hereMapController) {
+  AppPreferences appPreferences = Provider.of<AppPreferences>(context, listen: false);
+  VisibilityState trafficVisibilityState = appPreferences.useAppOffline
+      ? VisibilityState.hidden
+      : appPreferences.showTrafficLayers
+          ? VisibilityState.visible
+          : VisibilityState.hidden;
+  hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficFlow, trafficVisibilityState);
+  hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficIncidents, trafficVisibilityState);
 }
