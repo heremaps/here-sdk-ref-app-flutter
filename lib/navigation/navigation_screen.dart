@@ -207,8 +207,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       hereMapController.camera.lookAtPointWithDistance(_currentRoute.polyline.first, _kInitDistanceToEarth);
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
 
-      hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficFlow, VisibilityState.visible);
-      hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficIncidents, VisibilityState.visible);
+      Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
       _addRouteToMap();
       bool? result = await Dialogs.askForPositionSource(context);

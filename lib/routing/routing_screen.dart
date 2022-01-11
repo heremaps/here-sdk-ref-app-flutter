@@ -100,8 +100,6 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   late List<TransportModes> _transportModes;
   late WayPointsController _wayPointsController;
 
-  bool _enableTraffic = false;
-
   @override
   void initState() {
     super.initState();
@@ -157,7 +155,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
                   key: _hereMapKey,
                   onMapCreated: _onMapCreated,
                 ),
-                _buildTrafficButton(context),
+                if (!Provider.of<AppPreferences>(context, listen: false).useAppOffline) _buildTrafficButton(context),
               ],
             ),
             extendBodyBehindAppBar: true,
@@ -186,6 +184,8 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
       }
+
+      Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
       hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
       hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
@@ -408,6 +408,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
   Widget _buildTrafficButton(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+    AppPreferences appPreferences = Provider.of<AppPreferences>(context, listen: false);
 
     return Align(
       alignment: Alignment.topRight,
@@ -422,17 +423,15 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
               child: Padding(
                 padding: EdgeInsets.all(UIStyle.contentMarginMedium),
                 child: SvgPicture.asset(
-                  _enableTraffic ? "assets/traffic_off.svg" : "assets/traffic_on.svg",
+                  appPreferences.showTrafficLayers ? "assets/traffic_off.svg" : "assets/traffic_on.svg",
                   color: colorScheme.primary,
                   width: UIStyle.bigIconSize,
                   height: UIStyle.bigIconSize,
                 ),
               ),
               onTap: () => setState(() {
-                _enableTraffic = !_enableTraffic;
-                VisibilityState newState = _enableTraffic ? VisibilityState.visible : VisibilityState.hidden;
-                _hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficFlow, newState);
-                _hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficIncidents, newState);
+                appPreferences.showTrafficLayers = !appPreferences.showTrafficLayers;
+                Util.setTrafficLayersVisibilityOnMap(context, _hereMapController);
               }),
             ),
           ),
