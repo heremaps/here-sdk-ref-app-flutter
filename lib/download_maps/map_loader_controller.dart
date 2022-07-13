@@ -137,15 +137,18 @@ class MapLoaderController extends ChangeNotifier {
 
   /// Method to get a list of map regions that are currently installed on the device.
   List<InstalledRegion> getInstalledRegions() {
-    List<InstalledRegion> installedRegions = _mapDownloader.getInstalledRegions();
-
-    installedRegions.removeWhere((elementToRemove) =>
-        elementToRemove.status == InstalledRegionStatus.pending &&
-        installedRegions
-            .where((element) =>
-                element.status == InstalledRegionStatus.pending && element.regionId == elementToRemove.parentId)
-            .isNotEmpty);
-
+    List<InstalledRegion> installedRegions = [];
+    try {
+      installedRegions = _mapDownloader.getInstalledRegions();
+      installedRegions.removeWhere((elementToRemove) =>
+          elementToRemove.status == InstalledRegionStatus.pending &&
+          installedRegions
+              .where((element) =>
+                  element.status == InstalledRegionStatus.pending && element.regionId == elementToRemove.parentId)
+              .isNotEmpty);
+    } catch (error) {
+      print('Failed to get installed regions: ${error.toString()}');
+    }
     return installedRegions;
   }
 
@@ -216,7 +219,6 @@ class MapLoaderController extends ChangeNotifier {
   /// Checks for map updates
   Future<MapUpdateAvailability?> checkMapUpdate() async {
     final Completer<MapUpdateAvailability?> completer = Completer();
-
     _mapUpdater.checkMapUpdate((error, availability) {
       if (error != null) {
         completer.completeError(error);

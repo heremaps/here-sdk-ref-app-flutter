@@ -153,7 +153,7 @@ packages:
       path: "plugins/here_sdk"
       relative: true
     source: path
-    version: "4.10.0"
+    version: "4.12.0"
   intl:
     dependency: "direct main"
     description:
@@ -473,7 +473,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.17"
+    version: "6.1.3"
   url_launcher_android:
     dependency: transitive
     description:

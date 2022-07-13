@@ -45,12 +45,23 @@ import 'search/search_results_screen.dart';
 /// The entry point of the application.
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SdkContext.init(IsolateOrigin.main);
+  SdkContext.init();
   runApp(MyApp());
 }
 
 /// Application root widget.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    SdkContext.release();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
