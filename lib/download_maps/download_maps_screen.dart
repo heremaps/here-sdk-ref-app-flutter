@@ -120,16 +120,8 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     installedRegions.forEach((element) {
       Region region = _findInstalledRegionByID(regions, element.regionId)!;
       int? progress = controller.getDownloadProgress(element.regionId);
-
       MapRegionTile tile = MapRegionTile(
-        region: Region(
-          region.regionId,
-          region.internalparentId,
-          region.name,
-          region.sizeOnDiskInBytes,
-          region.sizeOnNetworkInBytes,
-          null,
-        ),
+        region: region,
         installedRegion: element,
         downloadProgress: progress,
         onTap: () => progress != null
@@ -277,10 +269,13 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       );
 
   void _checkMapUpdate(MapLoaderController controller) async {
-    MapUpdateAvailability? availability = await controller.checkMapUpdate();
-
-    if (availability == MapUpdateAvailability.available && await showMapUpdatesAvailableDialog(context)) {
-      controller.performMapUpdate();
+    try {
+      MapUpdateAvailability? availability = await controller.checkMapUpdate();
+      if (availability == MapUpdateAvailability.available && await showMapUpdatesAvailableDialog(context)) {
+        controller.performMapUpdate();
+      }
+    } catch (error) {
+      print('Error while checking map update $error');
     }
   }
 }

@@ -127,14 +127,15 @@ class _StorageSpaceState extends State<StorageSpace> {
   Future<void> _updateDiskSpace() async {
     double? freeDiskSpace = await DiskSpace.getFreeDiskSpace;
     double? totalDiskSpace = await DiskSpace.getTotalDiskSpace;
-
-    setState(() {
-      if (freeDiskSpace != null) {
-        _availableSpace = (freeDiskSpace * 1048576).toInt();
-      }
-      if (totalDiskSpace != null) {
-        _totalSpace = (totalDiskSpace * 1048576).toInt();
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (freeDiskSpace != null) {
+          _availableSpace = (freeDiskSpace * 1048576).toInt();
+        }
+        if (totalDiskSpace != null) {
+          _totalSpace = (totalDiskSpace * 1048576).toInt();
+        }
+      });
+    }
   }
 }

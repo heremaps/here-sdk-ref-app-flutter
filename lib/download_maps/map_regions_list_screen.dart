@@ -28,9 +28,11 @@ import 'map_region_tile_widget.dart';
 import 'map_loader_dialogs.dart';
 
 class _ParentRegion extends Region {
-  _ParentRegion.fromRegion(Region region)
-      : super(region.regionId, region.internalparentId, region.name, region.sizeOnDiskInBytes,
-            region.sizeOnNetworkInBytes, null);
+  _ParentRegion.fromRegion(Region region) : super.withAllDefaults(region.regionId) {
+    name = region.name;
+    sizeOnDiskInBytes = region.sizeOnDiskInBytes;
+    sizeOnNetworkInBytes = region.sizeOnNetworkInBytes;
+  }
 }
 
 /// Map regions list screen widget.
