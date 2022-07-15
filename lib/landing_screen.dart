@@ -67,13 +67,13 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   Place? _routeFromPlace;
 
   @override
-  void dispose() {
-    stopPositioning();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => Consumer<AppPreferences>(
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        stopPositioning();
+        return true;
+      },
+      child: Consumer<AppPreferences>(
         builder: (context, preferences, child) => Scaffold(
           body: Stack(
             children: [
@@ -89,7 +89,9 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
           extendBodyBehindAppBar: true,
           onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
         ),
-      );
+      ),
+    );
+  }
 
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;
