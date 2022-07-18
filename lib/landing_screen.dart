@@ -67,6 +67,12 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   Place? _routeFromPlace;
 
   @override
+  void dispose() {
+    stopPositioning();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
