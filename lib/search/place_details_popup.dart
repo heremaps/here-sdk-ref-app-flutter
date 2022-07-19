@@ -210,7 +210,7 @@ List<Widget>? _buildURLsList(BuildContext context, Place place) {
   }
 
   List<ListTile> urlsWidgets = place.details.contacts.first.websites
-      .map((site) => _buildInfoTile(Icons.language, site.address, () => launch(site.address)))
+      .map((site) => _buildInfoTile(Icons.language, site.address, () => launchUrl(Uri.parse(site.address))))
       .toList();
 
   return _convertToExpansionTile(urlsWidgets);
