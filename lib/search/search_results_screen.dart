@@ -122,10 +122,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
         return;
       }
 
-      hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
-      hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
-          widget.currentPosition, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
-
+      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+      hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
+        widget.currentPosition,
+        GeoOrientationUpdate(double.nan, double.nan),
+        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      );
       _addPanListener();
       _createResultsMarkers();
       _setTapGestureHandler();
@@ -148,9 +150,11 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   void _resetCurrentPosition() {
     GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation!.coordinates : widget.currentPosition;
 
-    _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
-        coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
-
+    _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
+      coordinates,
+      GeoOrientationUpdate(double.nan, double.nan),
+      MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+    );
     setState(() => enableMapUpdate = true);
   }
 
@@ -189,7 +193,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   void _zoomToPlace(int index) {
-    _hereMapController.camera.lookAtPointWithDistance(widget.places[index].geoCoordinates!, _kZoomDistanceToEarth);
+    _hereMapController.camera.lookAtPointWithMeasure(
+      widget.places[index].geoCoordinates!,
+      MapMeasure(MapMeasureKind.distance, _kZoomDistanceToEarth),
+    );
   }
 
   void _createResultsMarkers() {
@@ -215,8 +222,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
     _updateSelectedPlace();
 
     if (widget.places.length == 1) {
-      _hereMapController.camera
-          .lookAtPointWithDistance(widget.places.first.geoCoordinates!, Positioning.initDistanceToEarth);
+      _hereMapController.camera.lookAtPointWithMeasure(
+        widget.places.first.geoCoordinates!,
+        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      );
     } else {
       GeoBox? geoBox = GeoBox.containingGeoCoordinates(widget.places.map((e) => e.geoCoordinates!).toList());
 
@@ -437,6 +446,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       ),
     );
 
-    _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
+    _hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
   }
 }

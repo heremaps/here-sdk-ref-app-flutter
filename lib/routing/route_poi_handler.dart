@@ -45,7 +45,9 @@ class RoutePoiHandler {
     PlaceCategory.businessAndServicesAtm: PoiIconType.atm,
   };
 
-  final SearchOptions _searchOptions = SearchOptions(LanguageCode.enUs, _kMaxSearchSuggestion);
+  final SearchOptions _searchOptions = SearchOptions.withDefaults()
+    ..languageCode = LanguageCode.enUs
+    ..maxItems = _kMaxSearchSuggestion;
 
   /// [HereMapController] of the map.
   final HereMapController hereMapController;
@@ -125,10 +127,13 @@ class RoutePoiHandler {
         return;
       }
 
-      GeoCorridor geoCorridor = GeoCorridor(route.polyline, _kGeoCorridorRadius);
+      GeoCorridor geoCorridor = GeoCorridor(route.geometry.vertices, _kGeoCorridorRadius);
 
       List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
-      CategoryQuery categoryQuery = CategoryQuery.withCorridorArea(categories, geoCorridor);
+      CategoryQuery categoryQuery = CategoryQuery.withCategoriesInArea(
+        categories,
+        CategoryQueryArea.withCorridor(geoCorridor),
+      );
       _poiSearchTask = _searchEngine.searchByCategory(categoryQuery, _searchOptions, (error, places) {
         if (error != null) {
           print('Search failed. Error: ${error.toString()}');

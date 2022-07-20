@@ -108,8 +108,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         return;
       }
 
-      hereMapController.camera.lookAtPointWithDistance(Positioning.initPosition, Positioning.initDistanceToEarth);
-      hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
+      hereMapController.camera.lookAtPointWithMeasure(
+        Positioning.initPosition,
+        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      );
+      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
       _addGestureListeners();
 
       PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
@@ -453,9 +456,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   void _resetCurrentPosition() {
     GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation!.coordinates : Positioning.initPosition;
-
-    _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
-        coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
+    _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
+      coordinates,
+      GeoOrientationUpdate(double.nan, double.nan),
+      MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+    );
 
     setState(() => enableMapUpdate = true);
   }

@@ -52,15 +52,19 @@ class CountryAvoidanceScreen extends StatelessWidget {
                 value: avoidanceOptions.countries.contains(code),
                 onChanged: (bool? enable) {
                   List<CountryCode> updatedCountries = List.from(avoidanceOptions.countries);
-                  enable ?? false ? updatedCountries.add(code) : updatedCountries.remove(code);
+                  if (enable ?? false) {
+                    updatedCountries.add(code);
+                  } else {
+                    updatedCountries.remove(code);
+                  }
 
-                  context.read<RoutePreferencesModel>().sharedAvoidanceOptions = AvoidanceOptions(
-                    avoidanceOptions.roadFeatures,
-                    updatedCountries,
-                    avoidanceOptions.avoidAreas,
-                    [],
-                    [],
-                  );
+                  final AvoidanceOptions newOptions = AvoidanceOptions.withDefaults()
+                    ..roadFeatures = avoidanceOptions.roadFeatures
+                    ..countries = updatedCountries
+                    ..avoidAreas = avoidanceOptions.avoidAreas
+                    ..zoneCategories = avoidanceOptions.zoneCategories
+                    ..segments = avoidanceOptions.segments;
+                  context.read<RoutePreferencesModel>().sharedAvoidanceOptions = newOptions;
                 },
               );
             }),

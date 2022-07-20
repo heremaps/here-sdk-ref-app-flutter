@@ -57,17 +57,17 @@ class RouteInfo extends StatelessWidget {
               children: [
                 RichText(
                   text: TextSpan(
-                    text: _buildDurationString(context, route.durationInSeconds) + " ",
+                    text: _buildDurationString(context, route.duration.inSeconds) + " ",
                     style: TextStyle(
                       fontSize: UIStyle.hugeFontSize,
                       fontWeight: FontWeight.bold,
                       color: colorScheme.primary,
                     ),
                     children: [
-                      if (route.trafficDelayInSeconds > Duration.secondsPerMinute)
+                      if (route.trafficDelay.inSeconds > Duration.secondsPerMinute)
                         TextSpan(
                           text: Util.formatString(AppLocalizations.of(context)!.trafficDelayText,
-                              [_buildDurationString(context, route.trafficDelayInSeconds)]),
+                              [_buildDurationString(context, route.trafficDelay.inSeconds)]),
                           style: TextStyle(
                             fontSize: UIStyle.mediumFontSize,
                             color: UIStyle.trafficWarningColor,

@@ -20,6 +20,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:here_sdk/transport.dart' as Transport;
 import 'package:provider/provider.dart';
 
 import '../common/ui_style.dart';
@@ -32,7 +33,7 @@ class TruckSpecificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TruckOptions truckOptions = context.select((RoutePreferencesModel model) => model.truckOptions);
-    TruckSpecifications specs = truckOptions.specifications;
+    Transport.TruckSpecifications specs = truckOptions.truckSpecifications;
     AppLocalizations localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -121,30 +122,33 @@ class TruckSpecificationsScreen extends StatelessWidget {
     );
   }
 
-  TruckOptions _truckOptionsFrom(TruckOptions truckOptions, TruckSpecifications truckSpecifications) => TruckOptions(
-        truckOptions.routeOptions,
-        truckOptions.textOptions,
-        truckOptions.avoidanceOptions,
-        truckSpecifications,
-        truckOptions.tunnelCategory,
-        truckOptions.hazardousGoods,
-      );
+  TruckOptions _truckOptionsFrom(TruckOptions truckOptions, Transport.TruckSpecifications truckSpecifications) {
+    final TruckOptions options = TruckOptions.withDefaults()
+      ..routeOptions = truckOptions.routeOptions
+      ..textOptions = truckOptions.textOptions
+      ..avoidanceOptions = truckOptions.avoidanceOptions
+      ..truckSpecifications = truckSpecifications
+      ..linkTunnelCategory = truckOptions.linkTunnelCategory
+      ..hazardousMaterials = truckOptions.hazardousMaterials;
+    return options;
+  }
 
-  TruckSpecifications _truckSpecificationsFrom(
-    TruckSpecifications specs, {
+  Transport.TruckSpecifications _truckSpecificationsFrom(
+    Transport.TruckSpecifications specs, {
     int? grossWeightInKilograms,
     int? weightPerAxleInKilograms,
     int? heightInCentimeters,
     int? widthInCentimeters,
     int? lengthInCentimeters,
     int? axleCount,
-  }) =>
-      TruckSpecifications(
-        grossWeightInKilograms ?? specs.grossWeightInKilograms,
-        weightPerAxleInKilograms ?? specs.weightPerAxleInKilograms,
-        heightInCentimeters ?? specs.heightInCentimeters,
-        widthInCentimeters ?? specs.widthInCentimeters,
-        lengthInCentimeters ?? specs.lengthInCentimeters,
-        axleCount ?? specs.axleCount,
-      );
+  }) {
+    return Transport.TruckSpecifications(
+      grossWeightInKilograms ?? specs.grossWeightInKilograms,
+      weightPerAxleInKilograms ?? specs.weightPerAxleInKilograms,
+      heightInCentimeters ?? specs.heightInCentimeters,
+      widthInCentimeters ?? specs.widthInCentimeters,
+      lengthInCentimeters ?? specs.lengthInCentimeters,
+      axleCount ?? specs.axleCount,
+    );
+  }
 }

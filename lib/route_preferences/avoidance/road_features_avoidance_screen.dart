@@ -50,16 +50,22 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
               value: avoidanceOptions.roadFeatures.contains(roadFeaturesMap[key]),
               onChanged: (bool? enable) {
                 RoadFeatures? changedFeature = roadFeaturesMap[key];
+                if (changedFeature == null) {
+                  return;
+                }
                 List<RoadFeatures> updatedFeatures = List.from(avoidanceOptions.roadFeatures);
-                enable ?? false ? updatedFeatures.add(changedFeature!) : updatedFeatures.remove(changedFeature);
-
-                context.read<RoutePreferencesModel>().sharedAvoidanceOptions = AvoidanceOptions(
-                  updatedFeatures,
-                  avoidanceOptions.countries,
-                  avoidanceOptions.avoidAreas,
-                  [],
-                  [],
-                );
+                if (enable ?? false) {
+                  updatedFeatures.add(changedFeature);
+                } else {
+                  updatedFeatures.remove(changedFeature);
+                }
+                final AvoidanceOptions newOptions = AvoidanceOptions.withDefaults()
+                  ..roadFeatures = updatedFeatures
+                  ..countries = avoidanceOptions.countries
+                  ..avoidAreas = avoidanceOptions.avoidAreas
+                  ..zoneCategories = avoidanceOptions.zoneCategories
+                  ..segments = avoidanceOptions.segments;
+                context.read<RoutePreferencesModel>().sharedAvoidanceOptions = newOptions;
               },
             );
           }).toList(),

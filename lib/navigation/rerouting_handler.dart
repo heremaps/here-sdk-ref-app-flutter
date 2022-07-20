@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
+import 'package:here_sdk/transport.dart' as Transport;
 
 import '../route_preferences/route_preferences_model.dart';
 
@@ -111,7 +112,6 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
   }
 
   /// Releases resources.
-  @override
   void release() {
     _reroutingTimer?.cancel();
   }
@@ -127,23 +127,23 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
       ..._wayPoints.sublist(_passedWayPointIndex + 1)
     ];
 
-    switch (oldRoute.transportMode) {
-      case Routing.TransportMode.car:
+    switch (oldRoute.requestedTransportMode) {
+      case Transport.TransportMode.car:
         _routingEngine.calculateCarRoute(
             newWayPoints, preferences.carOptions, (error, routes) => _onReroutingEnd(error, routes, newWayPoints));
         break;
 
-      case Routing.TransportMode.truck:
+      case Transport.TransportMode.truck:
         _routingEngine.calculateTruckRoute(
             newWayPoints, preferences.truckOptions, (error, routes) => _onReroutingEnd(error, routes, newWayPoints));
         break;
 
-      case Routing.TransportMode.scooter:
+      case Transport.TransportMode.scooter:
         _routingEngine.calculateScooterRoute(
             newWayPoints, preferences.scooterOptions, (error, routes) => _onReroutingEnd(error, routes, newWayPoints));
         break;
 
-      case Routing.TransportMode.pedestrian:
+      case Transport.TransportMode.pedestrian:
         _routingEngine.calculatePedestrianRoute(newWayPoints, preferences.pedestrianOptions,
             (error, routes) => _onReroutingEnd(error, routes, newWayPoints));
         break;

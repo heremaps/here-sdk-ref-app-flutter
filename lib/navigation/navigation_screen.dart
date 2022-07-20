@@ -31,6 +31,7 @@ import 'package:here_sdk/location.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
+import 'package:here_sdk/transport.dart' as Transport;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -125,7 +126,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     Wakelock.enable();
     _visualNavigator = Navigation.VisualNavigator();
     _remainingDistanceInMeters = widget.route.lengthInMeters;
-    _remainingDurationInSeconds = widget.route.durationInSeconds;
+    _remainingDurationInSeconds = widget.route.duration.inSeconds;
     _currentRoute = widget.route;
     WidgetsBinding.instance!.addObserver(this);
 
@@ -204,8 +205,11 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
         return;
       }
 
-      hereMapController.camera.lookAtPointWithDistance(_currentRoute.polyline.first, _kInitDistanceToEarth);
-      hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
+      hereMapController.camera.lookAtPointWithMeasure(
+        _currentRoute.geometry.vertices.first,
+        MapMeasure(MapMeasureKind.distance, _kInitDistanceToEarth),
+      );
+      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
 
       Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
@@ -247,8 +251,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   }
 
   void _createMapRoute() {
-    GeoPolyline routeGeoPolyline = GeoPolyline(_currentRoute.polyline);
-    _mapRoute = MapPolyline(routeGeoPolyline, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
+    _mapRoute = MapPolyline(_currentRoute.geometry, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
     _mapRoute.outlineColor = UIStyle.selectedRouteBorderColor;
     _mapRoute.outlineWidth = UIStyle.routeOutLineWidth;
     _hereMapController.mapScene.addMapPolyline(_mapRoute);
@@ -259,7 +262,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
     int markerSize = (_hereMapController.pixelScale * UIStyle.locationMarkerSize).round();
     _startMarker = Util.createMarkerWithImagePath(
-      _currentRoute.polyline.first,
+      _currentRoute.geometry.vertices.first,
       "assets/position.svg",
       markerSize,
       markerSize,
@@ -269,7 +272,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
     markerSize = (_hereMapController.pixelScale * UIStyle.searchMarkerSize * 2).round();
     _finishMarker = Util.createMarkerWithImagePath(
-      _currentRoute.polyline.last,
+      _currentRoute.geometry.vertices.last,
       "assets/map_marker_big.svg",
       markerSize,
       markerSize,
@@ -289,8 +292,9 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   }
 
   void _startSimulatedLocations() {
-    Navigation.LocationSimulatorOptions options =
-        Navigation.LocationSimulatorOptions(_kSpeedFactor, _kNotificationIntervalInMilliseconds);
+    Navigation.LocationSimulatorOptions options = Navigation.LocationSimulatorOptions.withDefaults()
+      ..speedFactor = _kSpeedFactor
+      ..notificationInterval = Duration(milliseconds: _kNotificationIntervalInMilliseconds);
 
     _locationSimulator = Navigation.LocationSimulator.withRoute(widget.route, options);
     _locationSimulator!.listener = _visualNavigator;
@@ -351,7 +355,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
       setState(() {
         _remainingDistanceInMeters = sectionProgressList.last.remainingDistanceInMeters;
-        _remainingDurationInSeconds = sectionProgressList.last.remainingDurationInSeconds;
+        _remainingDurationInSeconds = sectionProgressList.last.remainingDuration.inSeconds;
 
         _currentManeuverIndex = currentManeuverIndex;
         _currentManeuverDistance = currentManeuverDistance;
@@ -374,15 +378,18 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       }
     });
 
-    if (_currentRoute.transportMode != Routing.TransportMode.pedestrian) {
+    if (_currentRoute.requestedTransportMode != Transport.TransportMode.pedestrian) {
       _visualNavigator.speedLimitListener = Navigation.SpeedLimitListener((speedLimit) {
         if (_currentSpeedLimit != speedLimit.speedLimitInMetersPerSecond) {
           setState(() => _currentSpeedLimit = speedLimit.speedLimitInMetersPerSecond);
         }
       });
 
-      _visualNavigator.speedWarningOptions = Navigation.SpeedWarningOptions(Navigation.SpeedLimitOffset(
-          _kDefaultSpeedLimitOffset, _kDefaultSpeedLimitOffset, _kDefaultSpeedLimitBoundary));
+      final Navigation.SpeedLimitOffset offset = Navigation.SpeedLimitOffset.withDefaults()
+        ..lowSpeedOffsetInMetersPerSecond = _kDefaultSpeedLimitOffset
+        ..highSpeedOffsetInMetersPerSecond = _kDefaultSpeedLimitOffset
+        ..highSpeedBoundaryInMetersPerSecond = _kDefaultSpeedLimitBoundary;
+      _visualNavigator.speedWarningOptions = Navigation.SpeedWarningOptions(offset);
       _visualNavigator.speedWarningListener = Navigation.SpeedWarningListener((status) {
         if (status == Navigation.SpeedWarningStatus.speedLimitExceeded && _soundEnabled) {
           RingtonePlayer.play(android: Android.notification, ios: Ios.triTone);
@@ -451,13 +458,13 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
     _currentRoute = newRoute;
     _remainingDistanceInMeters = _currentRoute.lengthInMeters;
-    _remainingDurationInSeconds = _currentRoute.durationInSeconds;
+    _remainingDurationInSeconds = _currentRoute.duration.inSeconds;
     _currentManeuverIndex = null;
     _nextManeuverIndex = null;
     _currentManeuverDistance = 0;
     _visualNavigator.route = _currentRoute;
     _createMapRoute();
-    _finishMarker.coordinates = newRoute.polyline.last;
+    _finishMarker.coordinates = newRoute.geometry.vertices.last;
 
     setState(() => _reroutingInProgress = false);
   }
@@ -512,7 +519,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     return Align(
       alignment: Alignment.topCenter,
       child: Material(
-        color: Theme.of(context).colorScheme.secondaryVariant,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         shape: UIStyle.bottomRoundedBorder(),
         elevation: 2,
         child: Padding(
@@ -581,7 +588,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   }
 
   void _setupLogoAndPrincipalPointPosition() {
-    _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomCenter,
+    _hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter,
         _currentStreetName != null ? (_kHereLogoOffset * _hereMapController.pixelScale).truncate() : 0);
     _hereMapController.camera.principalPoint = Point2D(_hereMapController.viewportSize.width / 2,
         _hereMapController.viewportSize.height - _kPrincipalPointOffset * _hereMapController.pixelScale);

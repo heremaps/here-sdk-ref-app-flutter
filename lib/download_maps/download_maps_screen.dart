@@ -221,8 +221,8 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
                   color: Colors.red,
                 ),
               ),
-              onTap: () {
-                controller.deleteRegion(region.regionId);
+              onTap: () async {
+                await controller.deleteRegion(region.regionId);
                 Navigator.of(context).pop();
               },
             ),

@@ -89,7 +89,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           if (_hasBeenZoomedToManeuver) {
             if (_maneuversSheetIsExpanded) {
               DraggableScrollableActuator.reset(_bottomSheetKey.currentContext!);
-              _hereMapController.setWatermarkPosition(WatermarkPlacement.bottomCenter, 0);
+              _hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter, 0);
             }
 
             _zoomToWholeRoute();
@@ -129,7 +129,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
         return;
       }
 
-      hereMapController.setWatermarkPosition(WatermarkPlacement.bottomCenter, 0);
+      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter, 0);
       _addRouteToMap();
       _setTapGestureHandler();
       setState(() => _mapInitSuccess = true);
@@ -156,8 +156,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   _addRouteToMap() {
-    GeoPolyline routeGeoPolyline = GeoPolyline(widget.route.polyline);
-    _mapRoute = MapPolyline(routeGeoPolyline, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
+    _mapRoute = MapPolyline(widget.route.geometry, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
     _mapRoute.outlineColor = UIStyle.selectedRouteBorderColor;
     _mapRoute.outlineWidth = UIStyle.routeOutLineWidth;
 
@@ -187,7 +186,10 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   _zoomToManeuver(int index) {
-    _hereMapController.camera.lookAtPointWithDistance(_maneuvers[index].coordinates, _kZoomDistanceToManeuver);
+    _hereMapController.camera.lookAtPointWithMeasure(
+      _maneuvers[index].coordinates,
+      MapMeasure(MapMeasureKind.distance, _kZoomDistanceToManeuver),
+    );
     _hasBeenZoomedToManeuver = true;
   }
 

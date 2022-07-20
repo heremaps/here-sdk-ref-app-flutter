@@ -74,7 +74,7 @@ Future<SearchResult?> showSearchPopup({
       ),
     ),
   ).then((value) {
-    hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
+    hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
     return value;
   });
 }
@@ -101,7 +101,9 @@ class _SearchPopupState extends State<_SearchPopup> {
   static const double _kHeaderHeightExt = 140;
 
   final TextEditingController _dstTextEditCtrl = TextEditingController();
-  final SearchOptions _searchOptions = SearchOptions(LanguageCode.enUs, _kMaxSearchSuggestion);
+  final SearchOptions _searchOptions = SearchOptions.withDefaults()
+    ..languageCode = LanguageCode.enUs
+    ..maxItems = _kMaxSearchSuggestion;
   late SearchEngineProxy _searchEngine;
 
   late GeoCoordinates _lastPosition;
@@ -521,8 +523,8 @@ class _SearchPopupState extends State<_SearchPopup> {
       });
     } else {
       // start searching
-      _searchTaskHandle =
-          _searchEngine.suggest(TextQuery.withAreaCenter(text, _lastPosition), _searchOptions, (error, suggestions) {
+      final TextQuery query = TextQuery.withArea(text, TextQueryArea.withCenter(_lastPosition));
+      _searchTaskHandle = _searchEngine.suggest(query, _searchOptions, (error, suggestions) {
         if (error != null) {
           print('Search failed. Error: ${error.toString()}');
         }
@@ -549,8 +551,8 @@ class _SearchPopupState extends State<_SearchPopup> {
     RecentSearchDataModel model = Provider.of<RecentSearchDataModel>(context, listen: false);
     model.insertText(text);
 
-    _searchTaskHandle = _searchEngine.searchByText(TextQuery.withAreaCenter(text, _lastPosition), _searchOptions,
-        (error, places) async {
+    final TextQuery query = TextQuery.withArea(text, TextQueryArea.withCenter(_lastPosition));
+    _searchTaskHandle = _searchEngine.searchByText(query, _searchOptions, (error, places) async {
       if (error != null) {
         print('Search failed. Error: ${error.toString()}');
       } else {

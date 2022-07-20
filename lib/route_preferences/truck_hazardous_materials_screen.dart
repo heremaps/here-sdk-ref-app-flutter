@@ -21,6 +21,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:here_sdk/transport.dart' as Transport;
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -29,11 +30,12 @@ import 'enum_string_helper.dart';
 import 'route_preferences_model.dart';
 
 /// Truck hazardous goods preferences screen widget.
-class TruckHazardousGoodsScreen extends StatelessWidget {
+class TruckHazardousMaterialsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TruckOptions truckOptions = context.select((RoutePreferencesModel model) => model.truckOptions);
-    LinkedHashMap<String, HazardousGood> hazardousGoodsMap = EnumStringHelper.sortedHazardousGoodsMap(context);
+    LinkedHashMap<String, Transport.HazardousMaterial> hazardousMaterialsMap =
+        EnumStringHelper.sortedHazardousMaterialsMap(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,22 +44,27 @@ class TruckHazardousGoodsScreen extends StatelessWidget {
       body: Container(
         color: UIStyle.preferencesBackgroundColor,
         child: ListView(
-          children: hazardousGoodsMap.keys.map((String key) {
+          children: hazardousMaterialsMap.keys.map((String key) {
             return CheckboxListTile(
               title: Text(key),
-              value: truckOptions.hazardousGoods.contains(hazardousGoodsMap[key]),
+              value: truckOptions.hazardousMaterials.contains(hazardousMaterialsMap[key]),
               onChanged: (bool? enable) {
-                HazardousGood changedFeature = hazardousGoodsMap[key]!;
-                List<HazardousGood> updatedFeatures = List.from(truckOptions.hazardousGoods);
-                enable ?? false ? updatedFeatures.add(changedFeature) : updatedFeatures.remove(changedFeature);
+                Transport.HazardousMaterial changedFeature = hazardousMaterialsMap[key]!;
+                List<Transport.HazardousMaterial> updatedFeatures = List.from(truckOptions.hazardousMaterials);
+                if (enable ?? false) {
+                  updatedFeatures.add(changedFeature);
+                } else {
+                  updatedFeatures.remove(changedFeature);
+                }
 
-                context.read<RoutePreferencesModel>().truckOptions = TruckOptions(
-                    truckOptions.routeOptions,
-                    truckOptions.textOptions,
-                    truckOptions.avoidanceOptions,
-                    truckOptions.specifications,
-                    truckOptions.tunnelCategory,
-                    updatedFeatures);
+                final TruckOptions newTruckOptions = TruckOptions.withDefaults()
+                  ..routeOptions = truckOptions.routeOptions
+                  ..textOptions = truckOptions.textOptions
+                  ..avoidanceOptions = truckOptions.avoidanceOptions
+                  ..truckSpecifications = truckOptions.truckSpecifications
+                  ..linkTunnelCategory = truckOptions.linkTunnelCategory
+                  ..hazardousMaterials = updatedFeatures;
+                context.read<RoutePreferencesModel>().truckOptions = newTruckOptions;
               },
             );
           }).toList(),

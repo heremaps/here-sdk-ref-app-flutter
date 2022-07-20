@@ -119,7 +119,7 @@ class UIStyle {
     colorScheme: const ColorScheme.light(
       primary: _lightForeground,
       secondary: _lightAccent,
-      secondaryVariant: _lightAccentSecondary,
+      secondaryContainer: _lightAccentSecondary,
       onPrimary: _lightBackground,
       onSecondary: _lightForegroundSecondary,
       background: _lightBackground,

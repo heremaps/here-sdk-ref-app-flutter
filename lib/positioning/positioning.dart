@@ -110,14 +110,20 @@ mixin Positioning {
       _addMyLocationToMap(geoCoordinates: lastKnownLocation.coordinates, accuracyRadiusInMeters: accuracy);
       // Update the map viewport to be centered on the location.
       if (enableMapUpdate) {
-        _hereMapController.camera.lookAtPointWithDistance(lastKnownLocation.coordinates, initDistanceToEarth);
+        _hereMapController.camera.lookAtPointWithMeasure(
+          lastKnownLocation.coordinates,
+          MapMeasure(MapMeasureKind.distance, initDistanceToEarth),
+        );
       }
     } else {
       // No last known location available, show a pre-defined location.
       _addMyLocationToMap(geoCoordinates: initPosition);
       // Update the map viewport to be centered on the location.
       if (enableMapUpdate) {
-        _hereMapController.camera.lookAtPointWithDistance(initPosition, initDistanceToEarth);
+        _hereMapController.camera.lookAtPointWithMeasure(
+          initPosition,
+          MapMeasure(MapMeasureKind.distance, initDistanceToEarth),
+        );
       }
     }
   }

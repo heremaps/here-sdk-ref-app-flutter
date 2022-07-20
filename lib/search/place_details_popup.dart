@@ -189,8 +189,9 @@ List<Widget>? _buildPhonesList(BuildContext context, Place place) {
   return _convertToExpansionTile(phoneWidgets);
 }
 
-ListTile _buildPhoneTile(IconData icon, String phoneNumber) =>
-    _buildInfoTile(icon, phoneNumber, () => launch("tel:" + phoneNumber));
+ListTile _buildPhoneTile(IconData icon, String phoneNumber) {
+  return _buildInfoTile(icon, phoneNumber, () => launchUrl(Uri.parse("tel:" + phoneNumber)));
+}
 
 List<Widget>? _buildOpeningHours(Place place) {
   if (place.details.openingHours.isEmpty) {

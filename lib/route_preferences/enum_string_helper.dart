@@ -22,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:here_sdk/transport.dart' as Transport;
 
 /// Helper class for the routing options strings.
 class EnumStringHelper {
@@ -122,23 +123,23 @@ class EnumStringHelper {
     return result;
   }
 
-  /// Returns the mapping of [TunnelCategory] values to the corresponding strings.
+  /// Returns the mapping of [Transport.TunnelCategory] values to the corresponding strings.
   static Map<int, String> tunnelCategoryMap(BuildContext context) {
     final Map<int, String> result = Map<int, String>();
     result[noneValueIndex] = AppLocalizations.of(context)!.noneTitle;
 
-    for (TunnelCategory value in TunnelCategory.values) {
+    for (Transport.TunnelCategory value in Transport.TunnelCategory.values) {
       switch (value) {
-        case TunnelCategory.b:
+        case Transport.TunnelCategory.b:
           result[value.index] = AppLocalizations.of(context)!.tunnelCategoryB;
           break;
-        case TunnelCategory.c:
+        case Transport.TunnelCategory.c:
           result[value.index] = AppLocalizations.of(context)!.tunnelCategoryC;
           break;
-        case TunnelCategory.d:
+        case Transport.TunnelCategory.d:
           result[value.index] = AppLocalizations.of(context)!.tunnelCategoryD;
           break;
-        case TunnelCategory.e:
+        case Transport.TunnelCategory.e:
           result[value.index] = AppLocalizations.of(context)!.tunnelCategoryE;
           break;
         default:
@@ -194,53 +195,56 @@ class EnumStringHelper {
     return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]!);
   }
 
-  /// Returns concatenated string of the all values from the [hazardousGoods] list.
-  static String hazardousGoodsNamesToString(BuildContext context, List<HazardousGood> hazardousGoods) {
+  /// Returns concatenated string of the all values from the [hazardousMaterials] list.
+  static String hazardousMaterialsNamesToString(
+    BuildContext context,
+    List<Transport.HazardousMaterial> hazardousMaterials,
+  ) {
     List<String> result = <String>[];
-    sortedHazardousGoodsMap(context).forEach((key, value) {
-      if (hazardousGoods.contains(value)) result.add(key);
+    sortedHazardousMaterialsMap(context).forEach((key, value) {
+      if (hazardousMaterials.contains(value)) result.add(key);
     });
     return result.join(", ");
   }
 
-  /// Returns the mapping of [HazardousGood] values to the corresponding strings.
-  static LinkedHashMap<String, HazardousGood> sortedHazardousGoodsMap(BuildContext context) {
-    final Map<String, HazardousGood> result = Map<String, HazardousGood>();
+  /// Returns the mapping of [HazardousMaterial] values to the corresponding strings.
+  static LinkedHashMap<String, Transport.HazardousMaterial> sortedHazardousMaterialsMap(BuildContext context) {
+    final Map<String, Transport.HazardousMaterial> result = Map<String, Transport.HazardousMaterial>();
     AppLocalizations localizations = AppLocalizations.of(context)!;
 
-    for (HazardousGood value in HazardousGood.values) {
+    for (Transport.HazardousMaterial value in Transport.HazardousMaterial.values) {
       switch (value) {
-        case HazardousGood.explosive:
+        case Transport.HazardousMaterial.explosive:
           result[localizations.hazardousGoodsExplosive] = value;
           break;
-        case HazardousGood.gas:
+        case Transport.HazardousMaterial.gas:
           result[localizations.hazardousGoodsGas] = value;
           break;
-        case HazardousGood.flammable:
+        case Transport.HazardousMaterial.flammable:
           result[localizations.hazardousGoodsFlammable] = value;
           break;
-        case HazardousGood.combustible:
+        case Transport.HazardousMaterial.combustible:
           result[localizations.hazardousGoodsCombustible] = value;
           break;
-        case HazardousGood.organic:
+        case Transport.HazardousMaterial.organic:
           result[localizations.hazardousGoodsOrganic] = value;
           break;
-        case HazardousGood.poison:
+        case Transport.HazardousMaterial.poison:
           result[localizations.hazardousGoodsPoison] = value;
           break;
-        case HazardousGood.radioactive:
+        case Transport.HazardousMaterial.radioactive:
           result[localizations.hazardousGoodsRadioactive] = value;
           break;
-        case HazardousGood.corrosive:
+        case Transport.HazardousMaterial.corrosive:
           result[localizations.hazardousGoodsCorrosive] = value;
           break;
-        case HazardousGood.poisonousInhalation:
+        case Transport.HazardousMaterial.poisonousInhalation:
           result[localizations.hazardousGoodsPoisonousInhalation] = value;
           break;
-        case HazardousGood.harmfulToWater:
+        case Transport.HazardousMaterial.harmfulToWater:
           result[localizations.hazardousGoodsHarmfulToWater] = value;
           break;
-        case HazardousGood.other:
+        case Transport.HazardousMaterial.other:
           result[localizations.hazardousGoodsOther] = value;
           break;
         default:
