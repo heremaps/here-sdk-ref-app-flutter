@@ -187,7 +187,7 @@ class _RouteWayPointsState extends State<RouteWayPoints> {
       ),
     );
 
-    widget.hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
+    widget.hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
     widget.controller.value = wayPoints;
   }
 }

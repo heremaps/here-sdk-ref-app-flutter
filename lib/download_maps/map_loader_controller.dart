@@ -105,8 +105,13 @@ enum MapUpdateState {
 
 /// Data controller that manages offline maps.
 class MapLoaderController extends ChangeNotifier {
-  final MapDownloader _mapDownloader;
-  final MapUpdater _mapUpdater;
+  MapUpdater? _mapUpdater;
+  final Completer<MapUpdater> _mapUpdaterCompleter = Completer();
+  Future<MapUpdater> get mapUpdater async => await _mapUpdaterCompleter.future;
+
+  MapDownloader? _mapDownloader;
+  final Completer<MapDownloader> _mapDownloaderCompleter = Completer();
+  Future<MapDownloader> get mapDownloader async => await _mapDownloaderCompleter.future;
 
   Map<RegionId, _RegionTask> _regionsInProgress = {};
 
@@ -116,14 +121,23 @@ class MapLoaderController extends ChangeNotifier {
   StreamController<MapLoaderError> _mapUpdateErrors = StreamController.broadcast();
 
   /// Default constructor
-  MapLoaderController()
-      : _mapDownloader = MapDownloader.fromSdkEngine(SDKNativeEngine.sharedInstance!),
-        _mapUpdater = MapUpdater.fromSdkEngine(SDKNativeEngine.sharedInstance!);
+  MapLoaderController() {
+    MapDownloader.fromSdkEngineAsync(SDKNativeEngine.sharedInstance!, (MapDownloader downloader) {
+      _mapDownloader = downloader;
+      _mapDownloaderCompleter.complete(_mapDownloader);
+    });
+
+    MapUpdater.fromSdkEngineAsync(SDKNativeEngine.sharedInstance!, (MapUpdater updater) {
+      _mapUpdater = updater;
+      _mapUpdaterCompleter.complete(_mapUpdater);
+    });
+  }
 
   /// Returns a list of [Region] objects that can be used to download the actual map data in a separate request.
   Future<List<Region>> getDownloadableRegions() async {
     final Completer<List<Region>> completer = Completer();
-    _mapDownloader.getDownloadableRegions((error, regions) {
+
+    (await mapDownloader).getDownloadableRegions((error, regions) {
       if (error != null) {
         completer.completeError(error);
         return;
@@ -139,13 +153,15 @@ class MapLoaderController extends ChangeNotifier {
   List<InstalledRegion> getInstalledRegions() {
     List<InstalledRegion> installedRegions = [];
     try {
-      installedRegions = _mapDownloader.getInstalledRegions();
-      installedRegions.removeWhere((elementToRemove) =>
-          elementToRemove.status == InstalledRegionStatus.pending &&
-          installedRegions
-              .where((element) =>
-                  element.status == InstalledRegionStatus.pending && element.regionId == elementToRemove.parentId)
-              .isNotEmpty);
+      if (_mapDownloader != null) {
+        installedRegions = _mapDownloader!.getInstalledRegions();
+        installedRegions.removeWhere((elementToRemove) =>
+            elementToRemove.status == InstalledRegionStatus.pending &&
+            installedRegions
+                .where((element) =>
+                    element.status == InstalledRegionStatus.pending && element.regionId == elementToRemove.parentId)
+                .isNotEmpty);
+      }
     } catch (error) {
       print('Failed to get installed regions: ${error.toString()}');
     }
@@ -153,12 +169,12 @@ class MapLoaderController extends ChangeNotifier {
   }
 
   /// Starts download a [Region].
-  void downloadRegion(RegionId region) {
+  void downloadRegion(RegionId region) async {
     if (_regionsInProgress.containsKey(region)) {
       return;
     }
 
-    MapDownloaderTask task = _mapDownloader.downloadRegions(
+    MapDownloaderTask task = (await mapDownloader).downloadRegions(
         [region],
         DownloadRegionsStatusListener((error, regions) {
           _regionsInProgress.remove(region);
@@ -198,13 +214,13 @@ class MapLoaderController extends ChangeNotifier {
   }
 
   /// Deleted downloaded [Region].
-  void deleteRegion(RegionId region) {
+  Future<void> deleteRegion(RegionId region) async {
     _regionsInProgress[region] = _RegionDeleteTask(
       regionId: region,
     );
     notifyListeners();
 
-    _mapDownloader.deleteRegions([region], (error, regions) {
+    (await mapDownloader).deleteRegions([region], (error, regions) {
       print("delete error ${error}");
       _regionsInProgress.remove(region);
       notifyListeners();
@@ -219,7 +235,7 @@ class MapLoaderController extends ChangeNotifier {
   /// Checks for map updates
   Future<MapUpdateAvailability?> checkMapUpdate() async {
     final Completer<MapUpdateAvailability?> completer = Completer();
-    _mapUpdater.checkMapUpdate((error, availability) {
+    (await mapUpdater).checkMapUpdate((error, availability) {
       if (error != null) {
         completer.completeError(error);
         return;
@@ -241,7 +257,7 @@ class MapLoaderController extends ChangeNotifier {
     _mapUpdateProgress = 0;
     notifyListeners();
 
-    _mapUpdateTask = _mapUpdater.performMapUpdate(MapUpdateProgressListener(
+    _mapUpdateTask = (await mapUpdater).performMapUpdate(MapUpdateProgressListener(
       _onMapUpdaterProgress,
       _onMapUpdaterPause,
       _onMapUpdaterComplete,

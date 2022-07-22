@@ -47,11 +47,13 @@ class RouteTextOptionsWidget extends StatelessWidget {
             child: DropdownWidget(
               data: EnumStringHelper.routeInstructionsFormatMap(context),
               selectedValue: textOptions.instructionFormat.index,
-              onChanged: (format) => context.read<RoutePreferencesModel>().sharedRouteTextOptions = RouteTextOptions(
-                textOptions.language,
-                TextFormat.values[format],
-                textOptions.unitSystem,
-              ),
+              onChanged: (format) {
+                final RouteTextOptions newOptions = RouteTextOptions.withDefaults()
+                  ..language = textOptions.language
+                  ..instructionFormat = TextFormat.values[format]
+                  ..unitSystem = textOptions.unitSystem;
+                context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
+              },
             ),
           ),
         ),
@@ -62,11 +64,13 @@ class RouteTextOptionsWidget extends StatelessWidget {
             child: DropdownWidget(
               data: EnumStringHelper.routeUnitSystemMap(context),
               selectedValue: textOptions.unitSystem.index,
-              onChanged: (unit) => context.read<RoutePreferencesModel>().sharedRouteTextOptions = RouteTextOptions(
-                textOptions.language,
-                textOptions.instructionFormat,
-                UnitSystem.values[unit],
-              ),
+              onChanged: (unit) {
+                final RouteTextOptions newOptions = RouteTextOptions.withDefaults()
+                  ..language = textOptions.language
+                  ..instructionFormat = textOptions.instructionFormat
+                  ..unitSystem = UnitSystem.values[unit];
+                context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
+              },
             ),
           ),
         ),
@@ -77,11 +81,13 @@ class RouteTextOptionsWidget extends StatelessWidget {
             child: DropdownWidget(
               data: EnumStringHelper.routeLanguageMap(context),
               selectedValue: textOptions.language.index,
-              onChanged: (language) => context.read<RoutePreferencesModel>().sharedRouteTextOptions = RouteTextOptions(
-                LanguageCode.values[language],
-                textOptions.instructionFormat,
-                textOptions.unitSystem,
-              ),
+              onChanged: (language) {
+                final RouteTextOptions newOptions = RouteTextOptions.withDefaults()
+                  ..language = LanguageCode.values[language]
+                  ..instructionFormat = textOptions.instructionFormat
+                  ..unitSystem = textOptions.unitSystem;
+                context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
+              },
             ),
           ),
         ),

@@ -50,12 +50,14 @@ class ScooterOptionsScreen extends StatelessWidget {
                 PreferencesRowTitle(title: AppLocalizations.of(context)!.allowHighwayTitle),
                 Switch.adaptive(
                   value: scooterOptions.allowHighway,
-                  onChanged: (value) => context.read<RoutePreferencesModel>().scooterOptions = ScooterOptions(
-                    scooterOptions.routeOptions,
-                    scooterOptions.textOptions,
-                    scooterOptions.avoidanceOptions,
-                    value,
-                  ),
+                  onChanged: (value) {
+                    final ScooterOptions newOptions = ScooterOptions.withDefaults()
+                      ..routeOptions = scooterOptions.routeOptions
+                      ..textOptions = scooterOptions.textOptions
+                      ..avoidanceOptions = scooterOptions.avoidanceOptions
+                      ..allowHighway = value;
+                    context.read<RoutePreferencesModel>().scooterOptions = newOptions;
+                  },
                 ),
               ],
             )

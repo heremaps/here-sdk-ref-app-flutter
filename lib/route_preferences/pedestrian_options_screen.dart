@@ -48,12 +48,14 @@ class PedestrianOptionsScreen extends StatelessWidget {
             NumericTextField(
               initialValue: pedestrianOptions.walkSpeedInMetersPerSecond.toString(),
               isInteger: false,
-              onChanged: (text) => context.read<RoutePreferencesModel>().pedestrianOptions = PedestrianOptions(
-                pedestrianOptions.routeOptions,
-                pedestrianOptions.textOptions,
-                AvoidanceOptions.withDefaults(),
-                double.tryParse(text) ?? 0,
-              ),
+              onChanged: (text) {
+                final PedestrianOptions newOptions = PedestrianOptions.withDefaults()
+                  ..routeOptions = pedestrianOptions.routeOptions
+                  ..textOptions = pedestrianOptions.textOptions
+                  ..avoidanceOptions = AvoidanceOptions.withDefaults()
+                  ..walkSpeedInMetersPerSecond = double.tryParse(text) ?? 0;
+                context.read<RoutePreferencesModel>().pedestrianOptions = newOptions;
+              },
             ),
           ],
         ),

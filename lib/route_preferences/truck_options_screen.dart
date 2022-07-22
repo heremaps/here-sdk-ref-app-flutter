@@ -20,6 +20,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:here_sdk/transport.dart' as Transport;
 import 'package:provider/provider.dart';
 
 import '../common/ui_style.dart';
@@ -32,7 +33,7 @@ import 'preferences_section_title_widget.dart';
 import 'route_options_widget.dart';
 import 'route_preferences_model.dart';
 import 'route_text_options_widget.dart';
-import 'truck_hazardous_goods_screen.dart';
+import 'truck_hazardous_materials_screen.dart';
 import 'truck_specifications_screen.dart';
 
 /// Routing settings widget for truck mode.
@@ -52,7 +53,7 @@ class TruckOptionsScreen extends StatelessWidget {
             PreferencesSectionTitle(title: AppLocalizations.of(context)!.truckSpecificationsTitle),
             PreferencesDisclosureRowWidget(
               title: AppLocalizations.of(context)!.specificationsTitle,
-              subTitle: _truckSpecificationsToString(context, truckOptions.specifications),
+              subTitle: _truckSpecificationsToString(context, truckOptions.truckSpecifications),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => TruckSpecificationsScreen()),
@@ -60,10 +61,10 @@ class TruckOptionsScreen extends StatelessWidget {
             ),
             PreferencesDisclosureRowWidget(
               title: AppLocalizations.of(context)!.hazardousGoodsTitle,
-              subTitle: EnumStringHelper.hazardousGoodsNamesToString(context, truckOptions.hazardousGoods),
+              subTitle: EnumStringHelper.hazardousMaterialsNamesToString(context, truckOptions.hazardousMaterials),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TruckHazardousGoodsScreen()),
+                MaterialPageRoute(builder: (context) => TruckHazardousMaterialsScreen()),
               ),
             ),
             PreferencesRowTitle(title: AppLocalizations.of(context)!.tunnelCategoryTitle),
@@ -72,15 +73,21 @@ class TruckOptionsScreen extends StatelessWidget {
               child: DropdownButtonHideUnderline(
                 child: DropdownWidget(
                   data: EnumStringHelper.tunnelCategoryMap(context),
-                  selectedValue: truckOptions.tunnelCategory?.index,
-                  onChanged: (category) => context.read<RoutePreferencesModel>().truckOptions = TruckOptions(
-                    truckOptions.routeOptions,
-                    truckOptions.textOptions,
-                    truckOptions.avoidanceOptions,
-                    truckOptions.specifications,
-                    category == EnumStringHelper.noneValueIndex ? null : TunnelCategory.values[category],
-                    truckOptions.hazardousGoods,
-                  ),
+                  selectedValue: truckOptions.linkTunnelCategory?.index,
+                  onChanged: (category) {
+                    Transport.TunnelCategory? tunnelCategory;
+                    if (category != EnumStringHelper.noneValueIndex) {
+                      tunnelCategory = Transport.TunnelCategory.values[category];
+                    }
+                    final TruckOptions newOptions = TruckOptions.withDefaults()
+                      ..routeOptions = truckOptions.routeOptions
+                      ..textOptions = truckOptions.textOptions
+                      ..avoidanceOptions = truckOptions.avoidanceOptions
+                      ..truckSpecifications = truckOptions.truckSpecifications
+                      ..linkTunnelCategory = tunnelCategory
+                      ..hazardousMaterials = truckOptions.hazardousMaterials;
+                    context.read<RoutePreferencesModel>().truckOptions = newOptions;
+                  },
                 ),
               ),
             ),
@@ -90,7 +97,7 @@ class TruckOptionsScreen extends StatelessWidget {
     );
   }
 
-  String _truckSpecificationsToString(BuildContext context, TruckSpecifications specifications) {
+  String _truckSpecificationsToString(BuildContext context, Transport.TruckSpecifications specifications) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
     return <String>[
       if (specifications.widthInCentimeters != null)

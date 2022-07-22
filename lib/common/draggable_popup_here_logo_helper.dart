@@ -87,9 +87,9 @@ class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHel
     final double margin = (popupHeight - (height - box.paintBounds.bottom)) * widget.hereMapController.pixelScale;
 
     if (margin >= 0) {
-      widget.hereMapController.setWatermarkPosition(WatermarkPlacement.bottomCenter, margin.truncate());
+      widget.hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter, margin.truncate());
     } else {
-      widget.hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
+      widget.hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
     }
   }
 }

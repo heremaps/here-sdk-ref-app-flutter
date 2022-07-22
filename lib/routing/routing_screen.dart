@@ -187,9 +187,12 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
       Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
-      hereMapController.setWatermarkPosition(WatermarkPlacement.bottomLeft, 0);
-      hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
-          widget.currentPosition, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
+      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+      hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
+        widget.currentPosition,
+        GeoOrientationUpdate(double.nan, double.nan),
+        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      );
       _routePoiHandler = RoutePoiHandler(
         hereMapController: hereMapController,
         wayPointsController: _wayPointsController,
@@ -232,9 +235,11 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   void _resetCurrentPosition() {
     GeoCoordinates coordinates = lastKnownLocation != null ? lastKnownLocation!.coordinates : widget.currentPosition;
 
-    _hereMapController.camera.lookAtPointWithGeoOrientationAndDistance(
-        coordinates, GeoOrientationUpdate(double.nan, double.nan), Positioning.initDistanceToEarth);
-
+    _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
+      coordinates,
+      GeoOrientationUpdate(double.nan, double.nan),
+      MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+    );
     setState(() => enableMapUpdate = true);
   }
 
@@ -286,7 +291,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
   int _appropriateIndexToInsertWaypoint(WayPointInfo wayPointInfo) {
     final List<WayPointInfo> waypoints = _wayPointsController.value;
-    final GeoPolyline routeLine = GeoPolyline(_routes[_selectedRouteIndex].polyline);
+    final GeoPolyline routeLine = _routes[_selectedRouteIndex].geometry;
     final int indexOnRoute = routeLine.getNearestIndexTo(wayPointInfo.coordinates);
 
     for (int i = 1; i < waypoints.length - 1; ++i) {
@@ -380,9 +385,11 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   }
 
   _addRouteToMap(Routing.Route route, bool selected) {
-    GeoPolyline routeGeoPolyline = GeoPolyline(route.polyline);
     MapPolyline routeMapPolyline = MapPolyline(
-        routeGeoPolyline, UIStyle.routeLineWidth, selected ? UIStyle.selectedRouteColor : UIStyle.routeColor);
+      route.geometry,
+      UIStyle.routeLineWidth,
+      selected ? UIStyle.selectedRouteColor : UIStyle.routeColor,
+    );
     routeMapPolyline.drawOrder = selected ? 1 : 0;
     routeMapPolyline.outlineColor = selected ? UIStyle.selectedRouteBorderColor : UIStyle.routeBorderColor;
     routeMapPolyline.outlineWidth = UIStyle.routeOutLineWidth;

@@ -73,7 +73,9 @@ class PlaceActionsPopup extends StatefulWidget {
 class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
   static const double _kMaxPopupWidth = 150;
 
-  final SearchOptions _searchOptions = SearchOptions(LanguageCode.enUs, 1);
+  final SearchOptions _searchOptions = SearchOptions.withDefaults()
+    ..languageCode = LanguageCode.enUs
+    ..maxItems = 1;
   late SearchEngineProxy _searchEngine;
   late TaskHandle _searchTask;
   late String _title;
