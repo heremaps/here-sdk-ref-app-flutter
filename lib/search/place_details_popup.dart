@@ -210,9 +210,14 @@ List<Widget>? _buildURLsList(BuildContext context, Place place) {
     return null;
   }
 
-  List<ListTile> urlsWidgets = place.details.contacts.first.websites
-      .map((site) => _buildInfoTile(Icons.language, site.address, () => launchUrl(Uri.parse(site.address))))
-      .toList();
+  List<ListTile> urlsWidgets = place.details.contacts.first.websites.map((site) {
+    return _buildInfoTile(Icons.language, site.address, () {
+      launchUrl(
+        Uri.parse(site.address),
+        mode: LaunchMode.externalApplication,
+      );
+    });
+  }).toList();
 
   return _convertToExpansionTile(urlsWidgets);
 }
