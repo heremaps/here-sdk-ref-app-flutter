@@ -38,6 +38,7 @@ class TruckHazardousMaterialsScreen extends StatelessWidget {
         EnumStringHelper.sortedHazardousMaterialsMap(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.hazardousGoodsTitle),
       ),

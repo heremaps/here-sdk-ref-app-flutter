@@ -69,6 +69,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
   @override
   Widget build(BuildContext context) => Consumer<MapLoaderController>(
         builder: (context, controller, child) => Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.close),

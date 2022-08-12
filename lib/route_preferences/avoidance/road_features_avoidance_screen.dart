@@ -38,6 +38,7 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
     LinkedHashMap<String, RoadFeatures> roadFeaturesMap = EnumStringHelper.sortedRoadFeaturesMap(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.avoidRoadFeaturesTitle),
       ),

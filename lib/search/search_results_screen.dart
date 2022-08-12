@@ -98,6 +98,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
             return false;
           },
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             body: HereMap(
               key: _hereMapKey,
               onMapCreated: _onMapCreated,
