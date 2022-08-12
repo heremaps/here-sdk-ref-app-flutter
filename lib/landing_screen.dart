@@ -81,6 +81,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       },
       child: Consumer<AppPreferences>(
         builder: (context, preferences, child) => Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
               HereMap(

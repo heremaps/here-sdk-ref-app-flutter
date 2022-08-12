@@ -158,6 +158,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
     return WillPopScope(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: topBarWidget,
         body: Padding(
           padding: EdgeInsets.only(

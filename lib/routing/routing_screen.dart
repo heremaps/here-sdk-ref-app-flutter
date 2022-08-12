@@ -148,6 +148,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   Widget build(BuildContext context) => Stack(
         children: [
           Scaffold(
+            resizeToAvoidBottomInset: false,
             key: _scaffoldKey,
             body: Stack(
               children: [

@@ -100,6 +100,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           return true;
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           key: _scaffoldKey,
           body: Column(
             children: [

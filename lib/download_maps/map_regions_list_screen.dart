@@ -63,6 +63,7 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
   @override
   Widget build(BuildContext context) => Consumer<MapLoaderController>(
         builder: (context, model, child) => Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back),

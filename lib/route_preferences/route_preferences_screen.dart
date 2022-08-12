@@ -69,6 +69,7 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with Ti
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.routePreferencesScreenTitle),
         bottom: PreferredSize(

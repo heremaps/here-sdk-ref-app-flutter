@@ -38,6 +38,7 @@ class CountryAvoidanceScreen extends StatelessWidget {
     List<String> sortedCountryNames = countryCodesMap.keys.toList()..sort();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.avoidCountriesTitle),
       ),
