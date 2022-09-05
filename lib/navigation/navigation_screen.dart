@@ -682,6 +682,11 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       SchedulerBinding.instance
           .addPostFrameCallback((timeStamp) => _visualNavigator.startRendering(_hereMapController));
     }
+    if (state == AppLifecycleState.detached) {
+      LocalNotificationsHelper.stopNotifications();
+      _stopNavigation();
+      Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
+    }
     _appLifecycleState = state;
   }
 }
