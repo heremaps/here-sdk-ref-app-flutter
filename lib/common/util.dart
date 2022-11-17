@@ -289,11 +289,13 @@ Future<bool> showCommonConfirmationDialog({
 /// offline mode).
 void setTrafficLayersVisibilityOnMap(BuildContext context, HereMapController hereMapController) {
   AppPreferences appPreferences = Provider.of<AppPreferences>(context, listen: false);
-  VisibilityState trafficVisibilityState = appPreferences.useAppOffline
-      ? VisibilityState.hidden
-      : appPreferences.showTrafficLayers
-          ? VisibilityState.visible
-          : VisibilityState.hidden;
-  hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficFlow, trafficVisibilityState);
-  hereMapController.mapScene.setLayerVisibility(MapSceneLayers.trafficIncidents, trafficVisibilityState);
+  bool enableTraffic = appPreferences.useAppOffline ? false : appPreferences.showTrafficLayers;
+  if (enableTraffic) {
+    hereMapController.mapScene.enableFeatures({
+      MapFeatures.trafficFlow: MapFeatureModes.trafficFlowWithFreeFlow,
+      MapFeatures.trafficIncidents: MapFeatureModes.trafficIncidentsAll
+    });
+  } else {
+    hereMapController.mapScene.disableFeatures([MapFeatures.trafficFlow, MapFeatures.trafficIncidents]);
+  }
 }

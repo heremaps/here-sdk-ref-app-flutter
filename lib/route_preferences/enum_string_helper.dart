@@ -185,8 +185,8 @@ class EnumStringHelper {
         case RoadFeatures.dirtRoad:
           result[localizations.dirtRoad] = value;
           break;
-        case RoadFeatures.difficultTurns:
-          result[localizations.difficultTurns] = value;
+        case RoadFeatures.uTurns:
+          result[localizations.uTurns] = value;
           break;
         default:
           throw StateError("Invalid enum value $value for RoadFeatures enum.");

@@ -149,6 +149,10 @@ extension ManeuverActionTextHelper on Maneuver {
       case ManeuverAction.slightRightTurn:
         return _makeActionString(
             localizations.slightRightTurnActionText, localizations.slightRightTurnActionNextRoadText, nextRoadName);
+      case ManeuverAction.enterHighwayFromLeft:
+        return localizations.enterHighwayFromLeftActionText;
+      case ManeuverAction.enterHighwayFromRight:
+        return localizations.enterHighwayFromRightActionText;
     }
   }
 }

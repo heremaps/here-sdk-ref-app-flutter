@@ -128,7 +128,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     _remainingDistanceInMeters = widget.route.lengthInMeters;
     _remainingDurationInSeconds = widget.route.duration.inSeconds;
     _currentRoute = widget.route;
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     _reroutingHandler = ReroutingHandler(
       visualNavigator: _visualNavigator,
@@ -145,7 +145,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     _reroutingHandler.release();
     _locationSimulator?.stop();
     _flutterTts.stop();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     Wakelock.disable();
     super.dispose();
   }
@@ -246,8 +246,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
   void _enableTracking(bool enable) {
     setState(() {
-      _visualNavigator.cameraMode =
-          enable ? Navigation.CameraTrackingMode.enabled : Navigation.CameraTrackingMode.disabled;
+      _visualNavigator.cameraBehavior = enable ? Navigation.DynamicCameraBehavior() : null;
     });
   }
 
@@ -542,7 +541,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (_visualNavigator.cameraMode == Navigation.CameraTrackingMode.disabled)
+        if (_visualNavigator.cameraBehavior == null)
           Padding(
             padding: EdgeInsets.only(bottom: UIStyle.contentMarginLarge),
             child: FloatingActionButton(
@@ -680,7 +679,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     }
     if (state == AppLifecycleState.resumed) {
       LocalNotificationsHelper.stopNotifications();
-      SchedulerBinding.instance!
+      SchedulerBinding.instance
           .addPostFrameCallback((timeStamp) => _visualNavigator.startRendering(_hereMapController));
     }
     _appLifecycleState = state;
@@ -689,7 +688,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
 extension _ManeuverImagePath on Routing.ManeuverAction {
   String get imagePath {
-    final String subDir = SchedulerBinding.instance!.window.platformBrightness == Brightness.light ? "dark" : "light";
+    final String subDir = SchedulerBinding.instance.window.platformBrightness == Brightness.light ? "dark" : "light";
     return "assets/maneuvers/$subDir/png/${toString().split(".").last}.png";
   }
 }

@@ -55,7 +55,7 @@ class DropdownWidget extends StatelessWidget {
           .toList(),
       onChanged: (value) {
         if (value != null) {
-          onChanged(value as int);
+          onChanged(value);
         }
       },
     );
