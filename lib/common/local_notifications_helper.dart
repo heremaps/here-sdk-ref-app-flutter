@@ -66,8 +66,8 @@ class LocalNotificationsHelper {
   static Future _showManeuverNotificationIOS(String title, String body, String imagePath, bool presentSound) async {
     final String savedImagePath = await FileUtility.saveManeuverImageFromBundle(imagePath);
 
-    final IOSNotificationDetails iOSNotificationDetails =
-        IOSNotificationDetails(presentSound: presentSound, attachments: [IOSNotificationAttachment(savedImagePath)]);
+    final DarwinNotificationDetails iOSNotificationDetails = DarwinNotificationDetails(
+        presentSound: presentSound, attachments: [DarwinNotificationAttachment(savedImagePath)]);
 
     var platformChannelSpecifics = NotificationDetails(
       iOS: iOSNotificationDetails,
@@ -93,7 +93,7 @@ class LocalNotificationsHelper {
 
     _maneuverLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initSettings = InitializationSettings(
-      iOS: IOSInitializationSettings(),
+      iOS: DarwinInitializationSettings(),
     );
 
     _maneuverLocalNotificationsPlugin!.initialize(initSettings);
