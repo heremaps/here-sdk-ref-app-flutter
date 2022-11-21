@@ -56,7 +56,7 @@ class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHel
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance!.scheduleFrameCallback((timeStamp) => SchedulerBinding.instance!.addPostFrameCallback(
+    SchedulerBinding.instance.scheduleFrameCallback((timeStamp) => SchedulerBinding.instance.addPostFrameCallback(
         (timeStamp) => _updateHereLogoPosition(widget.draggableScrollableSheet.initialChildSize)));
   }
 
