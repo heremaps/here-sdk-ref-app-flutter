@@ -151,8 +151,8 @@
   "@dirtRoad": {
     "description": "Avoid road feature name for route preferences"
   },
-  "difficultTurns": "Difficult turns",
-  "@difficultTurns": {
+  "uTurns": "U-turns",
+  "@uTurns": {
     "description": "Avoid road feature name for route preferences"
   },
   "avoidCountriesTitle": "Avoid countries",
@@ -1714,6 +1714,14 @@
   "slightRightTurnActionNextRoadText": "Bear right onto {{0}}",
   "@slightRightTurnActionNextRoadText": {
     "description": "Text for the slightRightTurn maneuver action"
+  },
+  "enterHighwayFromLeftActionText": "Join the highway from the left side",
+  "@slightRightTurnActionText": {
+    "description": "Text for the enterHighwayFromLeft maneuver action"
+  },
+  "enterHighwayFromRightActionText": "Join the highway from the right side",
+  "@slightRightTurnActionText": {
+    "description": "Text for the enterHighwayFromRight maneuver action"
   },
   "downloadMapsTitle": "Download maps",
   "@downloadMapsTitle": {

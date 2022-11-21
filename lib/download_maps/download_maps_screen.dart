@@ -84,7 +84,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
                 children: [
                   StorageSpace(),
                   if (controller.mapUpdateState != MapUpdateState.none) MapUpdateProgress(),
-                  ..._buildInstalledMapsList(context, snapshot.data as List<Region>?),
+                  ..._buildInstalledMapsList(context, snapshot.data),
                   _buildDownloadButton(context),
                 ],
               );

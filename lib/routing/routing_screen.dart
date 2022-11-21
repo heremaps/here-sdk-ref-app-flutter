@@ -596,7 +596,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     setState(() => _routingInProgress = false);
     _routePoiHandler.updatePoiForRoute(_routes[_selectedRouteIndex]);
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) => _zoomToRoutes());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _zoomToRoutes());
   }
 
   void _awaitOptionsFromPreferenceScreen(BuildContext context) async {
