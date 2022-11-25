@@ -19,20 +19,22 @@
 
 package com.example.RefApp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.core.view.WindowCompat
 import com.example.RefApp.FlutterForegroundService.Companion.START_FOREGROUND_ACTION
 import com.example.RefApp.FlutterForegroundService.Companion.STOP_FOREGROUND_ACTION
 import com.example.RefApp.FlutterForegroundService.Companion.UPDATE_FOREGROUND_ACTION
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     companion object {
+        const val FLUTTER_ENGINE_ID = "refAppFlutterEngine"
         private const val CHANNEL = "com.example.RefApp/foreground_service_channel"
         private const val START_SERVICE = "startService"
         private const val STOP_SERVICE = "stopService"
@@ -106,5 +108,9 @@ class MainActivity : FlutterActivity() {
     private fun stopForegroundService(intent: Intent) {
         intent.action = STOP_FOREGROUND_ACTION
         context.startService(intent)
+    }
+
+    override fun provideFlutterEngine(context: Context): FlutterEngine? {
+        return FlutterEngineCache.getInstance().get(FLUTTER_ENGINE_ID)
     }
 }
