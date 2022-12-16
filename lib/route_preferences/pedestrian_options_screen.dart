@@ -49,10 +49,10 @@ class PedestrianOptionsScreen extends StatelessWidget {
               initialValue: pedestrianOptions.walkSpeedInMetersPerSecond.toString(),
               isInteger: false,
               onChanged: (text) {
-                final PedestrianOptions newOptions = PedestrianOptions.withDefaults()
+                final PedestrianOptions newOptions = PedestrianOptions()
                   ..routeOptions = pedestrianOptions.routeOptions
                   ..textOptions = pedestrianOptions.textOptions
-                  ..avoidanceOptions = AvoidanceOptions.withDefaults()
+                  ..avoidanceOptions = AvoidanceOptions()
                   ..walkSpeedInMetersPerSecond = double.tryParse(text) ?? 0;
                 context.read<RoutePreferencesModel>().pedestrianOptions = newOptions;
               },

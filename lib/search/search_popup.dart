@@ -101,7 +101,7 @@ class _SearchPopupState extends State<_SearchPopup> {
   static const double _kHeaderHeightExt = 140;
 
   final TextEditingController _dstTextEditCtrl = TextEditingController();
-  final SearchOptions _searchOptions = SearchOptions.withDefaults()
+  final SearchOptions _searchOptions = SearchOptions()
     ..languageCode = LanguageCode.enUs
     ..maxItems = _kMaxSearchSuggestion;
   late SearchEngineProxy _searchEngine;

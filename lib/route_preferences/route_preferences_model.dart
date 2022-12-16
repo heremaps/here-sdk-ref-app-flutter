@@ -105,16 +105,16 @@ class RoutePreferencesModel extends ChangeNotifier {
 
   /// Constructs a settings objects with default values.
   RoutePreferencesModel.withDefaults()
-      : _carOptions = CarOptions.withDefaults(),
-        _truckOptions = TruckOptions.withDefaults(),
-        _scooterOptions = ScooterOptions.withDefaults(),
-        _pedestrianOptions = PedestrianOptions.withDefaults() {
+      : _carOptions = CarOptions(),
+        _truckOptions = TruckOptions(),
+        _scooterOptions = ScooterOptions(),
+        _pedestrianOptions = PedestrianOptions() {
     _setupSharedOptions();
   }
 
   _setupSharedOptions() {
-    _sharedRouteTextOptions = RouteTextOptions.withDefaults();
-    _sharedAvoidanceOptions = AvoidanceOptions.withDefaults();
+    _sharedRouteTextOptions = RouteTextOptions();
+    _sharedAvoidanceOptions = AvoidanceOptions();
     _sharedRouteOptions = RouteOptions.withDefaults();
 
     _sharedRouteOptions.alternatives = defaultAlternativeRoutes;

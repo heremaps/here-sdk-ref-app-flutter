@@ -59,7 +59,7 @@ class CountryAvoidanceScreen extends StatelessWidget {
                     updatedCountries.remove(code);
                   }
 
-                  final AvoidanceOptions newOptions = AvoidanceOptions.withDefaults()
+                  final AvoidanceOptions newOptions = AvoidanceOptions()
                     ..roadFeatures = avoidanceOptions.roadFeatures
                     ..countries = updatedCountries
                     ..avoidAreas = avoidanceOptions.avoidAreas

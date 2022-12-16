@@ -51,7 +51,7 @@ class ScooterOptionsScreen extends StatelessWidget {
                 Switch.adaptive(
                   value: scooterOptions.allowHighway,
                   onChanged: (value) {
-                    final ScooterOptions newOptions = ScooterOptions.withDefaults()
+                    final ScooterOptions newOptions = ScooterOptions()
                       ..routeOptions = scooterOptions.routeOptions
                       ..textOptions = scooterOptions.textOptions
                       ..avoidanceOptions = scooterOptions.avoidanceOptions
