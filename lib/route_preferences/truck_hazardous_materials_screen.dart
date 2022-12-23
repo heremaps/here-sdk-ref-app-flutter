@@ -58,7 +58,7 @@ class TruckHazardousMaterialsScreen extends StatelessWidget {
                   updatedFeatures.remove(changedFeature);
                 }
 
-                final TruckOptions newTruckOptions = TruckOptions.withDefaults()
+                final TruckOptions newTruckOptions = TruckOptions()
                   ..routeOptions = truckOptions.routeOptions
                   ..textOptions = truckOptions.textOptions
                   ..avoidanceOptions = truckOptions.avoidanceOptions

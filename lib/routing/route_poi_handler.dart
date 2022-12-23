@@ -45,7 +45,7 @@ class RoutePoiHandler {
     PlaceCategory.businessAndServicesAtm: PoiIconType.atm,
   };
 
-  final SearchOptions _searchOptions = SearchOptions.withDefaults()
+  final SearchOptions _searchOptions = SearchOptions()
     ..languageCode = LanguageCode.enUs
     ..maxItems = _kMaxSearchSuggestion;
 

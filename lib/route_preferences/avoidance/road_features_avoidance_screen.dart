@@ -60,7 +60,7 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
                 } else {
                   updatedFeatures.remove(changedFeature);
                 }
-                final AvoidanceOptions newOptions = AvoidanceOptions.withDefaults()
+                final AvoidanceOptions newOptions = AvoidanceOptions()
                   ..roadFeatures = updatedFeatures
                   ..countries = avoidanceOptions.countries
                   ..avoidAreas = avoidanceOptions.avoidAreas

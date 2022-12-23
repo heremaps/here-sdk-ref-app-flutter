@@ -48,7 +48,7 @@ class RouteTextOptionsWidget extends StatelessWidget {
               data: EnumStringHelper.routeInstructionsFormatMap(context),
               selectedValue: textOptions.instructionFormat.index,
               onChanged: (format) {
-                final RouteTextOptions newOptions = RouteTextOptions.withDefaults()
+                final RouteTextOptions newOptions = RouteTextOptions()
                   ..language = textOptions.language
                   ..instructionFormat = TextFormat.values[format]
                   ..unitSystem = textOptions.unitSystem;
@@ -65,7 +65,7 @@ class RouteTextOptionsWidget extends StatelessWidget {
               data: EnumStringHelper.routeUnitSystemMap(context),
               selectedValue: textOptions.unitSystem.index,
               onChanged: (unit) {
-                final RouteTextOptions newOptions = RouteTextOptions.withDefaults()
+                final RouteTextOptions newOptions = RouteTextOptions()
                   ..language = textOptions.language
                   ..instructionFormat = textOptions.instructionFormat
                   ..unitSystem = UnitSystem.values[unit];
@@ -82,7 +82,7 @@ class RouteTextOptionsWidget extends StatelessWidget {
               data: EnumStringHelper.routeLanguageMap(context),
               selectedValue: textOptions.language.index,
               onChanged: (language) {
-                final RouteTextOptions newOptions = RouteTextOptions.withDefaults()
+                final RouteTextOptions newOptions = RouteTextOptions()
                   ..language = LanguageCode.values[language]
                   ..instructionFormat = textOptions.instructionFormat
                   ..unitSystem = textOptions.unitSystem;

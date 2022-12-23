@@ -79,7 +79,7 @@ class TruckOptionsScreen extends StatelessWidget {
                     if (category != EnumStringHelper.noneValueIndex) {
                       tunnelCategory = Transport.TunnelCategory.values[category];
                     }
-                    final TruckOptions newOptions = TruckOptions.withDefaults()
+                    final TruckOptions newOptions = TruckOptions()
                       ..routeOptions = truckOptions.routeOptions
                       ..textOptions = truckOptions.textOptions
                       ..avoidanceOptions = truckOptions.avoidanceOptions

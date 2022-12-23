@@ -124,7 +124,7 @@ class TruckSpecificationsScreen extends StatelessWidget {
   }
 
   TruckOptions _truckOptionsFrom(TruckOptions truckOptions, Transport.TruckSpecifications truckSpecifications) {
-    final TruckOptions options = TruckOptions.withDefaults()
+    final TruckOptions options = TruckOptions()
       ..routeOptions = truckOptions.routeOptions
       ..textOptions = truckOptions.textOptions
       ..avoidanceOptions = truckOptions.avoidanceOptions

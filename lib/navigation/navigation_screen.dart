@@ -292,7 +292,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   }
 
   void _startSimulatedLocations() {
-    Navigation.LocationSimulatorOptions options = Navigation.LocationSimulatorOptions.withDefaults()
+    Navigation.LocationSimulatorOptions options = Navigation.LocationSimulatorOptions()
       ..speedFactor = _kSpeedFactor
       ..notificationInterval = Duration(milliseconds: _kNotificationIntervalInMilliseconds);
 
@@ -385,7 +385,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
         }
       });
 
-      final Navigation.SpeedLimitOffset offset = Navigation.SpeedLimitOffset.withDefaults()
+      final Navigation.SpeedLimitOffset offset = Navigation.SpeedLimitOffset()
         ..lowSpeedOffsetInMetersPerSecond = _kDefaultSpeedLimitOffset
         ..highSpeedOffsetInMetersPerSecond = _kDefaultSpeedLimitOffset
         ..highSpeedBoundaryInMetersPerSecond = _kDefaultSpeedLimitBoundary;
