@@ -34,6 +34,8 @@ import 'package:provider/provider.dart';
 import 'common/application_preferences.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
+import 'common/ui_style.dart';
+import 'common/util.dart' as Util;
 import 'download_maps/download_maps_screen.dart';
 import 'download_maps/map_loader_controller.dart';
 import 'positioning/no_location_warning_widget.dart';
@@ -42,8 +44,6 @@ import 'positioning/positioning_engine.dart';
 import 'routing/routing_screen.dart';
 import 'routing/waypoint_info.dart';
 import 'search/search_popup.dart';
-import 'common/ui_style.dart';
-import 'common/util.dart' as Util;
 
 /// The home screen of the application.
 class LandingScreen extends StatefulWidget {
@@ -118,10 +118,13 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
       PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
       positioningEngine.getLocationEngineStatusUpdates.listen(_checkLocationStatus);
-      positioningEngine.initLocationEngine(context: context).then((value) => initPositioning(
-            context: context,
-            hereMapController: hereMapController,
-          ));
+      positioningEngine.initLocationEngine(context: context).then((value) {
+        initPositioning(
+          context: context,
+          hereMapController: hereMapController,
+        );
+        setState(() {});
+      });
 
       setState(() {
         _mapInitSuccess = true;
