@@ -62,7 +62,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   late HereMapController _hereMapController;
   GlobalKey _hereMapKey = GlobalKey();
   OverlayEntry? _locationWarningOverlay;
-
+  ConsentUserReply? _consentState;
   MapMarker? _routeFromMarker;
   Place? _routeFromPlace;
 
@@ -119,11 +119,8 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
       positioningEngine.getLocationEngineStatusUpdates.listen(_checkLocationStatus);
       positioningEngine.initLocationEngine(context: context).then((value) {
-        initPositioning(
-          context: context,
-          hereMapController: hereMapController,
-        );
-        setState(() {});
+        initPositioning(context: context, hereMapController: hereMapController);
+        _updateConsentState(positioningEngine);
       });
 
       setState(() {
@@ -161,9 +158,9 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   List<Widget> _buildUserConsentItems(BuildContext context) {
     PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
-    ConsentUserReply? userConsentState = positioningEngine.userConsentState;
+    _consentState = positioningEngine.userConsentState;
 
-    if (userConsentState == null) {
+    if (_consentState == null) {
       return [];
     }
 
@@ -171,13 +168,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return [
-      if (userConsentState != ConsentUserReply.granted)
+      if (_consentState != ConsentUserReply.granted)
         ListTile(
           title: Text(
             appLocalizations.userConsentDescription,
-            style: TextStyle(
-              color: colorScheme.onSecondary,
-            ),
+            style: TextStyle(color: colorScheme.onSecondary),
           ),
         ),
       ListTile(
@@ -186,7 +181,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
           children: [
             Icon(
               Icons.privacy_tip,
-              color: userConsentState == ConsentUserReply.granted
+              color: _consentState == ConsentUserReply.granted
                   ? UIStyle.acceptedConsentColor
                   : UIStyle.revokedConsentColor,
             ),
@@ -194,22 +189,16 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
         title: Text(
           appLocalizations.userConsentTitle,
-          style: TextStyle(
-            color: colorScheme.onPrimary,
-          ),
+          style: TextStyle(color: colorScheme.onPrimary),
         ),
-        subtitle: userConsentState == ConsentUserReply.granted
+        subtitle: _consentState == ConsentUserReply.granted
             ? Text(
                 appLocalizations.consentGranted,
-                style: TextStyle(
-                  color: UIStyle.acceptedConsentColor,
-                ),
+                style: TextStyle(color: UIStyle.acceptedConsentColor),
               )
             : Text(
                 appLocalizations.consentDenied,
-                style: TextStyle(
-                  color: UIStyle.revokedConsentColor,
-                ),
+                style: TextStyle(color: UIStyle.revokedConsentColor),
               ),
         trailing: Icon(
           Icons.arrow_forward,
@@ -217,7 +206,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
         onTap: () {
           Navigator.of(context).pop();
-          positioningEngine.requestUserConsent(context)?.then((value) => setState(() {}));
+          positioningEngine.requestUserConsent(context)?.then((_) => _updateConsentState(positioningEngine));
         },
       ),
     ];
@@ -527,14 +516,16 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
                 : WayPointInfo.withCoordinates(
                     coordinates: _routeFromMarker!.coordinates,
                   )
-            : WayPointInfo(
-                coordinates: currentPosition,
-              ),
+            : WayPointInfo(coordinates: currentPosition),
         destination,
       ],
     );
 
     _routeFromPlace = null;
     _removeRouteFromMarker();
+  }
+
+  void _updateConsentState(PositioningEngine positioningEngine) {
+    setState(() => _consentState = positioningEngine.userConsentState);
   }
 }
