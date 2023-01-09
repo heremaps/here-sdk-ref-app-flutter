@@ -34,6 +34,8 @@ import 'package:provider/provider.dart';
 import 'common/application_preferences.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
+import 'common/ui_style.dart';
+import 'common/util.dart' as Util;
 import 'download_maps/download_maps_screen.dart';
 import 'download_maps/map_loader_controller.dart';
 import 'positioning/no_location_warning_widget.dart';
@@ -42,8 +44,6 @@ import 'positioning/positioning_engine.dart';
 import 'routing/routing_screen.dart';
 import 'routing/waypoint_info.dart';
 import 'search/search_popup.dart';
-import 'common/ui_style.dart';
-import 'common/util.dart' as Util;
 
 /// The home screen of the application.
 class LandingScreen extends StatefulWidget {
@@ -62,7 +62,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   late HereMapController _hereMapController;
   GlobalKey _hereMapKey = GlobalKey();
   OverlayEntry? _locationWarningOverlay;
-
+  ConsentUserReply? _consentState;
   MapMarker? _routeFromMarker;
   Place? _routeFromPlace;
 
@@ -118,10 +118,10 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
       PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
       positioningEngine.getLocationEngineStatusUpdates.listen(_checkLocationStatus);
-      positioningEngine.initLocationEngine(context: context).then((value) => initPositioning(
-            context: context,
-            hereMapController: hereMapController,
-          ));
+      positioningEngine.initLocationEngine(context: context).then((value) {
+        initPositioning(context: context, hereMapController: hereMapController);
+        _updateConsentState(positioningEngine);
+      });
 
       setState(() {
         _mapInitSuccess = true;
@@ -158,9 +158,9 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
   List<Widget> _buildUserConsentItems(BuildContext context) {
     PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
-    ConsentUserReply? userConsentState = positioningEngine.userConsentState;
+    _consentState = positioningEngine.userConsentState;
 
-    if (userConsentState == null) {
+    if (_consentState == null) {
       return [];
     }
 
@@ -168,13 +168,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return [
-      if (userConsentState != ConsentUserReply.granted)
+      if (_consentState != ConsentUserReply.granted)
         ListTile(
           title: Text(
             appLocalizations.userConsentDescription,
-            style: TextStyle(
-              color: colorScheme.onSecondary,
-            ),
+            style: TextStyle(color: colorScheme.onSecondary),
           ),
         ),
       ListTile(
@@ -183,7 +181,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
           children: [
             Icon(
               Icons.privacy_tip,
-              color: userConsentState == ConsentUserReply.granted
+              color: _consentState == ConsentUserReply.granted
                   ? UIStyle.acceptedConsentColor
                   : UIStyle.revokedConsentColor,
             ),
@@ -191,22 +189,16 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
         title: Text(
           appLocalizations.userConsentTitle,
-          style: TextStyle(
-            color: colorScheme.onPrimary,
-          ),
+          style: TextStyle(color: colorScheme.onPrimary),
         ),
-        subtitle: userConsentState == ConsentUserReply.granted
+        subtitle: _consentState == ConsentUserReply.granted
             ? Text(
                 appLocalizations.consentGranted,
-                style: TextStyle(
-                  color: UIStyle.acceptedConsentColor,
-                ),
+                style: TextStyle(color: UIStyle.acceptedConsentColor),
               )
             : Text(
                 appLocalizations.consentDenied,
-                style: TextStyle(
-                  color: UIStyle.revokedConsentColor,
-                ),
+                style: TextStyle(color: UIStyle.revokedConsentColor),
               ),
         trailing: Icon(
           Icons.arrow_forward,
@@ -214,7 +206,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
         onTap: () {
           Navigator.of(context).pop();
-          positioningEngine.requestUserConsent(context)?.then((value) => setState(() {}));
+          positioningEngine.requestUserConsent(context)?.then((_) => _updateConsentState(positioningEngine));
         },
       ),
     ];
@@ -524,14 +516,16 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
                 : WayPointInfo.withCoordinates(
                     coordinates: _routeFromMarker!.coordinates,
                   )
-            : WayPointInfo(
-                coordinates: currentPosition,
-              ),
+            : WayPointInfo(coordinates: currentPosition),
         destination,
       ],
     );
 
     _routeFromPlace = null;
     _removeRouteFromMarker();
+  }
+
+  void _updateConsentState(PositioningEngine positioningEngine) {
+    setState(() => _consentState = positioningEngine.userConsentState);
   }
 }
