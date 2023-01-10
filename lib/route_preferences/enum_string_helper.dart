@@ -18,6 +18,7 @@
  */
 
 import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/core.dart';
@@ -186,6 +187,7 @@ class EnumStringHelper {
           result[localizations.dirtRoad] = value;
           break;
         case RoadFeatures.uTurns:
+        case RoadFeatures.difficultTurns:
           result[localizations.uTurns] = value;
           break;
         default:
