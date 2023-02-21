@@ -25,6 +25,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'application_preferences.dart';
+import 'custom_map_style_settings.dart';
 import 'gradient_elevated_button.dart';
 import 'ui_style.dart';
 
@@ -298,4 +299,22 @@ void setTrafficLayersVisibilityOnMap(BuildContext context, HereMapController her
   } else {
     hereMapController.mapScene.disableFeatures([MapFeatures.trafficFlow, MapFeatures.trafficIncidents]);
   }
+}
+
+/// Function loads map scene using custom map style defined in [CustomMapStyleSettings]. [MapScheme.normalDay] style is
+/// used if custom map style is not defined.
+void loadMapScene(
+  CustomMapStyleSettings customMapStyleSettings,
+  HereMapController hereMapController,
+  MapSceneLoadSceneCallback mapSceneLoadSceneCallback,
+) {
+  customMapStyleSettings.customMapStyleFilepath != null
+      ? hereMapController.mapScene.loadSceneFromConfigurationFile(
+          customMapStyleSettings.customMapStyleFilepath!,
+          mapSceneLoadSceneCallback,
+        )
+      : hereMapController.mapScene.loadSceneForMapScheme(
+          MapScheme.normalDay,
+          mapSceneLoadSceneCallback,
+        );
 }

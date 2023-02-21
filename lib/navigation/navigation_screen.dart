@@ -35,6 +35,7 @@ import 'package:here_sdk/transport.dart' as Transport;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../common/custom_map_style_settings.dart';
 import '../landing_screen.dart';
 import '../route_preferences/route_preferences_model.dart';
 import '../common/application_preferences.dart';
@@ -200,7 +201,9 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError? error) async {
+    CustomMapStyleSettings customMapStyleSettings = Provider.of<CustomMapStyleSettings>(context, listen: false);
+
+    MapSceneLoadSceneCallback mapSceneLoadSceneCallback = (MapError? error) async {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
@@ -230,7 +233,9 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
       _startNavigation();
       _addGestureListeners();
-    });
+    };
+
+    Util.loadMapScene(customMapStyleSettings, hereMapController, mapSceneLoadSceneCallback);
   }
 
   void _addGestureListeners() {
