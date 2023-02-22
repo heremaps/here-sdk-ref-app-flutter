@@ -39,11 +39,6 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
 
-      # Enable bitcode by default as recommended by Apple.
-      # Including bitcode will allow Apple to re-optimize your app binary in the future
-      # without the need to submit a new version of your app to the App Store.
-      config.build_settings['ENABLE_BITCODE'] = 'YES'
-
       # Setup permission_handler plugin.
       # for more information: https://github.com/BaseflowIT/flutter-permission-handler/blob/develop/permission_handler/ios/Classes/PermissionHandlerEnums.h
       # e.g. when you don't need camera permission, just add 'PERMISSION_CAMERA=0'
