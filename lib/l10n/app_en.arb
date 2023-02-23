@@ -239,6 +239,18 @@
   "@languageCodeTitle": {
     "description": "Title of language code setting in route text options"
   },
+  "loadCustomScene": "Load custom scene",
+  "@loadCustomScene": {
+    "description": "Text for the load custom scene button in landing screen drawer menu"
+  },
+  "loadCustomSceneSuccess": "Scene loading succeeded",
+  "@loadCustomSceneSuccess": {
+    "description": "Short-time message text displayed when loading custom scene succeeded"
+  },
+  "loadCustomSceneFailure": "Scene loading failed",
+  "@loadCustomSceneFailure": {
+    "description": "Short-time message text displayed when loading custom scene failed"
+  },
   "unitSystemTitle": "Unit system",
   "@unitSystemTitle": {
     "description": "Title of unit system setting in route options"

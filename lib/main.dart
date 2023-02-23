@@ -27,6 +27,7 @@ import 'package:provider/provider.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 
 import 'common/application_preferences.dart';
+import 'common/custom_map_style_settings.dart';
 import 'common/ui_style.dart';
 import 'download_maps/download_maps_screen.dart';
 import 'download_maps/map_loader_controller.dart';
@@ -71,6 +72,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => MapLoaderController()),
         ChangeNotifierProvider(create: (context) => AppPreferences()),
         Provider(create: (context) => PositioningEngine()),
+        ChangeNotifierProvider(create: (context) => CustomMapStyleSettings()),
       ],
       child: MaterialApp(
         localizationsDelegates: [

@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.5.0
+version: 1.5.1
 
 environment:
   sdk: ">=2.18.6 <3.0.0"
@@ -45,6 +45,7 @@ dependencies:
   wakelock: ^0.6.2
   disk_space: ^0.2.1
   shared_preferences: ^2.0.15
+  file_picker: ^5.2.5
 
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:

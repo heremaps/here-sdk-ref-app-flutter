@@ -18,7 +18,9 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +34,8 @@ import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
 
 import 'common/application_preferences.dart';
+import 'common/custom_map_style_settings.dart';
+import 'common/load_custom_style_result_popup.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
 import 'common/ui_style.dart';
@@ -57,11 +61,13 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> with Positioning {
   static const int _kLocationWarningDismissPeriod = 5; // seconds
+  static const int _kLoadCustomStyleResultPopupDismissPeriod = 5; // seconds
 
   bool _mapInitSuccess = false;
   late HereMapController _hereMapController;
   GlobalKey _hereMapKey = GlobalKey();
   OverlayEntry? _locationWarningOverlay;
+  OverlayEntry? _loadCustomSceneResultOverlay;
   ConsentUserReply? _consentState;
   MapMarker? _routeFromMarker;
   Place? _routeFromPlace;
@@ -79,8 +85,8 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         stopPositioning();
         return true;
       },
-      child: Consumer<AppPreferences>(
-        builder: (context, preferences, child) => Scaffold(
+      child: Consumer2<AppPreferences, CustomMapStyleSettings>(
+        builder: (context, preferences, customStyleSettings, child) => Scaffold(
           resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
@@ -212,6 +218,44 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
     ];
   }
 
+  List<Widget> _buildLoadCustomSceneItem(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    CustomMapStyleSettings customMapStyleSettings = Provider.of<CustomMapStyleSettings>(context, listen: false);
+    return [
+      ListTile(
+        title: Text(
+          appLocalizations.loadCustomScene,
+          style: TextStyle(color: themeData.colorScheme.onPrimary),
+        ),
+        subtitle: customMapStyleSettings.customMapStyleFilepath != null
+            ? Text(
+                customMapStyleSettings.customMapStyleFilename,
+                style: TextStyle(color: themeData.hintColor),
+              )
+            : null,
+        onTap: () async {
+          final FilePickerResult? result = await FilePicker.platform.pickFiles();
+          if (result == null) {
+            return;
+          }
+          final File file = File(result.files.single.path!);
+          _hereMapController.mapScene.loadSceneFromConfigurationFile(
+            file.path,
+            (MapError? error) {
+              _showLoadCustomSceneResultPopup(error == null);
+              if (error != null) {
+                print('Custom scene load failed: ${error.toString()}');
+              } else {
+                customMapStyleSettings.customMapStyleFilepath = file.path;
+              }
+            },
+          );
+        },
+      ),
+    ];
+  }
+
   Widget _buildDrawer(BuildContext context, AppPreferences preferences) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
@@ -277,6 +321,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
                     ..pop()
                     ..pushNamed(DownloadMapsScreen.navRoute);
                 }),
+            ..._buildLoadCustomSceneItem(context),
             SwitchListTile(
               title: Text(
                 appLocalizations.useMapOfflineSwitch,
@@ -479,6 +524,25 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       Overlay.of(context)!.insert(_locationWarningOverlay!);
       Timer(Duration(seconds: _kLocationWarningDismissPeriod), _dismissLocationWarningPopup);
     }
+  }
+
+  void _showLoadCustomSceneResultPopup(bool result) {
+    _dismissLoadCustomSceneResultPopup();
+
+    _loadCustomSceneResultOverlay = OverlayEntry(
+      builder: (context) => LoadCustomStyleResultPopup(
+        loadCustomStyleResult: result,
+        onClosePressed: () => _dismissLoadCustomSceneResultPopup(),
+      ),
+    );
+
+    Overlay.of(context)!.insert(_loadCustomSceneResultOverlay!);
+    Timer(Duration(seconds: _kLoadCustomStyleResultPopupDismissPeriod), _dismissLoadCustomSceneResultPopup);
+  }
+
+  void _dismissLoadCustomSceneResultPopup() {
+    _loadCustomSceneResultOverlay?.remove();
+    _loadCustomSceneResultOverlay = null;
   }
 
   void _onSearch(BuildContext context) async {

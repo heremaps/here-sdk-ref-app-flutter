@@ -23,7 +23,9 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:provider/provider.dart';
 
+import '../common/custom_map_style_settings.dart';
 import "../common/draggable_popup_here_logo_helper.dart";
 import '../common/reset_location_button.dart';
 import '../positioning/positioning.dart';
@@ -117,7 +119,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;
 
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError? error) {
+    CustomMapStyleSettings customMapStyleSettings = Provider.of<CustomMapStyleSettings>(context, listen: false);
+
+    MapSceneLoadSceneCallback mapSceneLoadSceneCallback = (MapError? error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
@@ -137,7 +141,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
         context: context,
         hereMapController: hereMapController,
       );
-    });
+    };
+
+    Util.loadMapScene(customMapStyleSettings, hereMapController, mapSceneLoadSceneCallback);
   }
 
   void _addPanListener() {
