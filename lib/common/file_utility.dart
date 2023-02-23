@@ -26,6 +26,7 @@ import 'package:path_provider/path_provider.dart';
 class FileUtility {
   static const String _maneuverDarkImagesDir = "assets/maneuvers/dark/png/";
   static const String _maneuverLightImagesDir = "assets/maneuvers/light/png/";
+  static const String _sceneDirectory = 'scenes';
 
   static Future _createDirsIfNotExist(String docsDirectory, String imagesDirectory) async {
     final Directory maneuversDirectory = Directory("$docsDirectory/$imagesDirectory");
@@ -50,5 +51,38 @@ class FileUtility {
       await file.writeAsBytes(bytes, flush: true);
     }
     return filePath;
+  }
+
+  static Future<Directory> _scenesDirectory() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    return await Directory('${directory.path}/$_sceneDirectory');
+  }
+
+  /// Deletes the scenes directory and all its files if exists.
+  static Future<void> deleteScenesDirectory() async {
+    try {
+      final Directory directory = await _scenesDirectory();
+      // delete any files which we saved in the past.
+      if (await directory.exists()) {
+        directory.deleteSync(recursive: true);
+      }
+    } catch (e) {
+      print('Failed to delete the directory and its files: ${e.toString()}');
+    }
+  }
+
+  /// Creates and returns a local copy of the given file at scenes directory.
+  static Future<File?> createLocalSceneFile(String filePath) async {
+    try {
+      final Directory scenesDirectory = await _scenesDirectory();
+      await deleteScenesDirectory();
+      final Directory newDirectory = await scenesDirectory.create();
+      final File file = File('${newDirectory.path}/${filePath.split('/').last}');
+      // Write the file
+      return file.writeAsBytes(File(filePath).readAsBytesSync());
+    } catch (e) {
+      print('Failed to create a local copy of given file');
+      return null;
+    }
   }
 }

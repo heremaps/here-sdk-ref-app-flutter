@@ -17,30 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-
-const scene_directory_name = 'scenes';
 
 /// Class used to store custom map style filepath and to inform listeners when filepath changes.
 class CustomMapStyleSettings extends ChangeNotifier {
   String? _customMapStyleFilepath;
-
-  /// Creates and returns a local copy of the given file.
-  Future<File> createLocalFile(String filePath) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final scenesDirectory = await Directory('${directory.path}/$scene_directory_name');
-    // delete any files which we saved in the past.
-    if (await scenesDirectory.exists()) {
-      scenesDirectory.deleteSync(recursive: true);
-    }
-    await scenesDirectory.create();
-    final file = File('$scenesDirectory/${filePath.split('/').last}');
-    // Write the file
-    return file.writeAsBytes(File(filePath).readAsBytesSync());
-  }
 
   /// Getter for custom map style filepath.
   String? get customMapStyleFilepath => _customMapStyleFilepath;
@@ -48,14 +29,8 @@ class CustomMapStyleSettings extends ChangeNotifier {
   /// Setter for custom map style filepath.
   void set customMapStyleFilepath(String? newFilepath) {
     if (newFilepath != null) {
-      // create a copy to local application directory
-      createLocalFile(newFilepath).then((value) {
-        _customMapStyleFilepath = value.path;
-        notifyListeners();
-      }).onError((_, __) {
-        _customMapStyleFilepath = newFilepath;
-        notifyListeners();
-      });
+      _customMapStyleFilepath = newFilepath;
+      notifyListeners();
     }
   }
 
@@ -65,5 +40,10 @@ class CustomMapStyleSettings extends ChangeNotifier {
       return '';
     }
     return _customMapStyleFilepath!.split('/').last;
+  }
+
+  void reset() {
+    _customMapStyleFilepath = null;
+    notifyListeners();
   }
 }

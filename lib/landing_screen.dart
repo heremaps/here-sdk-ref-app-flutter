@@ -20,6 +20,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:RefApp/common/file_utility.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -218,12 +219,62 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
     ];
   }
 
+  void applyCustomStyle(CustomMapStyleSettings customMapStyleSettings, File file) {
+    _hereMapController.mapScene.loadSceneFromConfigurationFile(
+      file.path,
+      (MapError? error) {
+        _showLoadCustomSceneResultPopup(error == null);
+        if (error != null) {
+          print('Custom scene load failed: ${error.toString()}');
+        } else {
+          customMapStyleSettings.customMapStyleFilepath = file.path;
+        }
+      },
+    );
+  }
+
+  Future<void> loadCustomScene(CustomMapStyleSettings customMapStyleSettings) async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) {
+      return;
+    }
+    final File file = File(result.files.single.path!);
+    final File? localFile = await FileUtility.createLocalSceneFile(file.path);
+    if (localFile != null) {
+      applyCustomStyle(customMapStyleSettings, localFile);
+    } else {
+      customMapStyleSettings.reset();
+      FileUtility.deleteScenesDirectory();
+      _showLoadCustomSceneResultPopup(false);
+    }
+  }
+
+  void resetCustomScene(CustomMapStyleSettings customMapStyleSettings) {
+    customMapStyleSettings.reset();
+    FileUtility.deleteScenesDirectory();
+    _hereMapController.mapScene.loadSceneForMapScheme(
+      MapScheme.normalDay,
+      (MapError? error) {
+        if (error != null) {
+          print('Map scene not loaded. MapError: ${error.toString()}');
+        }
+      },
+    );
+  }
+
   List<Widget> _buildLoadCustomSceneItem(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     CustomMapStyleSettings customMapStyleSettings = Provider.of<CustomMapStyleSettings>(context, listen: false);
     return [
       ListTile(
+        onTap: () => loadCustomScene(customMapStyleSettings),
+        trailing: customMapStyleSettings.customMapStyleFilepath != null
+            ? IconButton(
+                icon: Icon(Icons.clear, color: Colors.white),
+                onPressed: () => resetCustomScene(customMapStyleSettings),
+              )
+            : null,
         title: Text(
           appLocalizations.loadCustomScene,
           style: TextStyle(color: themeData.colorScheme.onPrimary),
@@ -234,24 +285,6 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
                 style: TextStyle(color: themeData.hintColor),
               )
             : null,
-        onTap: () async {
-          final FilePickerResult? result = await FilePicker.platform.pickFiles();
-          if (result == null) {
-            return;
-          }
-          final File file = File(result.files.single.path!);
-          _hereMapController.mapScene.loadSceneFromConfigurationFile(
-            file.path,
-            (MapError? error) {
-              _showLoadCustomSceneResultPopup(error == null);
-              if (error != null) {
-                print('Custom scene load failed: ${error.toString()}');
-              } else {
-                customMapStyleSettings.customMapStyleFilepath = file.path;
-              }
-            },
-          );
-        },
       ),
     ];
   }
