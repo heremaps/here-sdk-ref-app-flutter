@@ -20,6 +20,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:RefApp/common/file_utility.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,7 +36,6 @@ import 'package:provider/provider.dart';
 
 import 'common/application_preferences.dart';
 import 'common/custom_map_style_settings.dart';
-import 'common/file_utils.dart' as FileUtils;
 import 'common/load_custom_style_result_popup.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
@@ -239,19 +239,19 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       return;
     }
     final File file = File(result.files.single.path!);
-    final localFile = await FileUtils.createLocalSceneFile(file.path);
+    final File? localFile = await FileUtility.createLocalSceneFile(file.path);
     if (localFile != null) {
       applyCustomStyle(customMapStyleSettings, localFile);
     } else {
       customMapStyleSettings.reset();
-      FileUtils.deleteScenesDirectory();
+      FileUtility.deleteScenesDirectory();
       _showLoadCustomSceneResultPopup(false);
     }
   }
 
   void resetCustomScene(CustomMapStyleSettings customMapStyleSettings) {
     customMapStyleSettings.reset();
-    FileUtils.deleteScenesDirectory();
+    FileUtility.deleteScenesDirectory();
     _hereMapController.mapScene.loadSceneForMapScheme(
       MapScheme.normalDay,
       (MapError? error) {
