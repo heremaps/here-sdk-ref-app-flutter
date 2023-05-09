@@ -38,7 +38,7 @@ class ResetLocationButton extends StatelessWidget {
       height: UIStyle.mediumButtonHeight,
       child: FloatingActionButton(
         heroTag: null,
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         child: Icon(Icons.gps_fixed),
         onPressed: onPressed,
       ),

@@ -554,7 +554,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
         ),
       );
 
-      Overlay.of(context)!.insert(_locationWarningOverlay!);
+      Overlay.of(context).insert(_locationWarningOverlay!);
       Timer(Duration(seconds: _kLocationWarningDismissPeriod), _dismissLocationWarningPopup);
     }
   }
@@ -569,7 +569,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       ),
     );
 
-    Overlay.of(context)!.insert(_loadCustomSceneResultOverlay!);
+    Overlay.of(context).insert(_loadCustomSceneResultOverlay!);
     Timer(Duration(seconds: _kLoadCustomStyleResultPopupDismissPeriod), _dismissLoadCustomSceneResultPopup);
   }
 

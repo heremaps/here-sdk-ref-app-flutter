@@ -43,14 +43,14 @@ class MarqueeWidget extends StatefulWidget {
   /// Constructs the widget.
   MarqueeWidget({
     required this.child,
-    this.direction: Axis.horizontal,
-    this.animationDuration: const Duration(
+    this.direction = Axis.horizontal,
+    this.animationDuration = const Duration(
       milliseconds: _kDefaultAnimationDuration,
     ),
-    this.backDuration: const Duration(
+    this.backDuration = const Duration(
       milliseconds: _kDefaultBackDuration,
     ),
-    this.pauseDuration: const Duration(
+    this.pauseDuration = const Duration(
       milliseconds: _kDefaultPauseDuration,
     ),
   });
