@@ -3,7 +3,7 @@
   "@appTitle": {
     "description": "Title of the Application"
   },
-  "appTitleHeader": "HERE SDK Reference Application for Flutter {{0}}\nBased on HERE SDK {{1}}.{{2}}.{{3}}",
+  "appTitleHeader": "HERE SDK Reference Application for Flutter '{{0}}'\nBased on HERE SDK '{{1}}'.'{{2}}'.'{{3}}'",
   "@appTitleHeader": {
     "description": "Title of the Application in the drawer header"
   },
@@ -51,7 +51,7 @@
   "@noResultsFoundDescription": {
     "description": "Message if no search results were found"
   },
-  "searchErrorText": "Search failed with error: {{error}}",
+  "searchErrorText": "Search failed with error: '{{error}}'",
   "@searchErrorText": {
     "description": "Search error message"
   },
@@ -91,7 +91,7 @@
   "@shortestRouteTitle": {
     "description": "Title of shortest route mode"
   },
-  "trafficDelayText": "Incl. {{0}} delay",
+  "trafficDelayText": "Incl. '{{0}}' delay",
   "@trafficDelayText": {
     "description": "Template for the traffic delay text"
   },
@@ -111,7 +111,7 @@
   "@preferencesTitle": {
     "description": "Preferences button title"
   },
-  "routingErrorText": "Routing failed with error: {{error}}",
+  "routingErrorText": "Routing failed with error: '{{error}}'",
   "@routingErrorText": {
     "description": "Routing error message"
   },
@@ -647,7 +647,7 @@
   "@countryCodeChn": {
     "description": "Country name title"
   },
-  "countryCodeCiv": "Cote D'ivoire",
+  "countryCodeCiv": "Cote D''ivoire",
   "@countryCodeCiv": {
     "description": "Country name title"
   },
@@ -967,7 +967,7 @@
   "@countryCodeKwt": {
     "description": "Country name title"
   },
-  "countryCodeLao": "Lao People's Democratic Republic",
+  "countryCodeLao": "Lao People''s Democratic Republic",
   "@countryCodeLao": {
     "description": "Country name title"
   },
@@ -1195,7 +1195,7 @@
   "@countryCodePri": {
     "description": "Country name title"
   },
-  "countryCodePrk": "Korea (democratic People's Republic Of)",
+  "countryCodePrk": "Korea (democratic People''s Republic Of)",
   "@countryCodePrk": {
     "description": "Country name title"
   },
@@ -1475,7 +1475,7 @@
   "@continueOnActionText": {
     "description": "Text for the continueOn maneuver action"
   },
-  "continueOnActionRoadText": "Continue on {{0}}",
+  "continueOnActionRoadText": "Continue on '{{0}}'",
   "@continueOnActionRoadText": {
     "description": "Text for the continueOn maneuver action"
   },
@@ -1483,7 +1483,7 @@
   "@departActionText": {
     "description": "Text for the depart maneuver action"
   },
-  "departActionRoadText": "Start at {{0}}",
+  "departActionRoadText": "Start at '{{0}}'",
   "@departActionRoadText": {
     "description": "Text for the depart maneuver action"
   },
@@ -1491,7 +1491,7 @@
   "@ferryActionText": {
     "description": "Text for the ferry maneuver action"
   },
-  "ferryActionNextRoadText": "Take the ferry to {{0}}",
+  "ferryActionNextRoadText": "Take the ferry to '{{0}}'",
   "@ferryActionNextRoadText": {
     "description": "Text for the ferry maneuver action"
   },
@@ -1499,7 +1499,7 @@
   "@leftExitActionText": {
     "description": "Text for the leftExit maneuver action"
   },
-  "leftExitActionNextRoadText": "Take the left exit to {{0}}",
+  "leftExitActionNextRoadText": "Take the left exit to '{{0}}'",
   "@leftExitActionNextRoadText": {
     "description": "Text for the leftExit maneuver action"
   },
@@ -1507,7 +1507,7 @@
   "@leftForkActionText": {
     "description": "Text for the leftFork maneuver action"
   },
-  "leftForkActionNextRoadText": "Take the left fork onto {{0}}",
+  "leftForkActionNextRoadText": "Take the left fork onto '{{0}}'",
   "@leftForkActionNextRoadText": {
     "description": "Text for the leftFork maneuver action"
   },
@@ -1515,7 +1515,7 @@
   "@leftRampActionText": {
     "description": "Text for the leftRamp maneuver action"
   },
-  "leftRampActionNextRoadText": "Take the left ramp onto {{0}}",
+  "leftRampActionNextRoadText": "Take the left ramp onto '{{0}}'",
   "@leftRampActionNextRoadText": {
     "description": "Text for the leftRamp maneuver action"
   },
@@ -1579,7 +1579,7 @@
   "@leftTurnActionText": {
     "description": "Text for the leftTurn maneuver action"
   },
-  "leftTurnActionNextRoadText": "Turn left on {{0}}",
+  "leftTurnActionNextRoadText": "Turn left on '{{0}}'",
   "@leftTurnActionNextRoadText": {
     "description": "Text for the leftTurn maneuver action"
   },
@@ -1587,7 +1587,7 @@
   "@leftUTurnActionText": {
     "description": "Text for the leftUTurn maneuver action"
   },
-  "leftUTurnActionNextRoadText": "Make a left U-turn at {{0}}",
+  "leftUTurnActionNextRoadText": "Make a left U-turn at '{{0}}'",
   "@leftUTurnActionNextRoadText": {
     "description": "Text for the leftUTurn maneuver action"
   },
@@ -1595,7 +1595,7 @@
   "@middleForkActionText": {
     "description": "Text for the middleFork maneuver action"
   },
-  "middleForkActionNextRoadText": "Take the middle fork onto {{0}}",
+  "middleForkActionNextRoadText": "Take the middle fork onto '{{0}}'",
   "@middleForkActionNextRoadText": {
     "description": "Text for the middleFork maneuver action"
   },
@@ -1603,7 +1603,7 @@
   "@rightExitActionText": {
     "description": "Text for the rightExit maneuver action"
   },
-  "rightExitActionNextRoadText": "Take the right exit to {{0}}",
+  "rightExitActionNextRoadText": "Take the right exit to '{{0}}'",
   "@rightExitActionNextRoadText": {
     "description": "Text for the rightExit maneuver action"
   },
@@ -1611,7 +1611,7 @@
   "@rightForkActionText": {
     "description": "Text for the rightFork maneuver action"
   },
-  "rightForkActionNextRoadText": "Take the right fork onto {{0}}",
+  "rightForkActionNextRoadText": "Take the right fork onto '{{0}}'",
   "@rightForkActionNextRoadText": {
     "description": "Text for the rightFork maneuver action"
   },
@@ -1619,7 +1619,7 @@
   "@rightRampActionText": {
     "description": "Text for the rightRamp maneuver action"
   },
-  "rightRampActionNextRoadText": "Take the right ramp onto {{0}}",
+  "rightRampActionNextRoadText": "Take the right ramp onto '{{0}}'",
   "@rightRampActionNextRoadText": {
     "description": "Text for the rightRamp maneuver action"
   },
@@ -1683,7 +1683,7 @@
   "@rightTurnActionText": {
     "description": "Text for the rightTurn maneuver action"
   },
-  "rightTurnActionNextRoadText": "Turn right on {{0}}",
+  "rightTurnActionNextRoadText": "Turn right on '{{0}}'",
   "@rightTurnActionNextRoadText": {
     "description": "Text for the rightTurn maneuver action"
   },
@@ -1691,7 +1691,7 @@
   "@rightUTurnActionText": {
     "description": "Text for the rightUTurn maneuver action"
   },
-  "rightUTurnActionNextRoadText": "Make a right U-turn at {{0}}",
+  "rightUTurnActionNextRoadText": "Make a right U-turn at '{{0}}'",
   "@rightUTurnActionNextRoadText": {
     "description": "Text for the rightUTurn maneuver action"
   },
@@ -1699,7 +1699,7 @@
   "@sharpLeftTurnActionText": {
     "description": "Text for the sharpLeftTurn maneuver action"
   },
-  "sharpLeftTurnActionNextRoadText": "Make a hard left turn onto {{0}}",
+  "sharpLeftTurnActionNextRoadText": "Make a hard left turn onto '{{0}}'",
   "@sharpLeftTurnActionNextRoadText": {
     "description": "Text for the sharpLeftTurn maneuver action"
   },
@@ -1707,7 +1707,7 @@
   "@sharpRightTurnActionText": {
     "description": "Text for the sharpRightTurn maneuver action"
   },
-  "sharpRightTurnActionNextRoadText": "Make a hard right turn onto {{0}}",
+  "sharpRightTurnActionNextRoadText": "Make a hard right turn onto '{{0}}'",
   "@sharpRightTurnActionNextRoadText": {
     "description": "Text for the sharpRightTurn maneuver action"
   },
@@ -1715,7 +1715,7 @@
   "@slightLeftTurnActionText": {
     "description": "Text for the slightLeftTurn maneuver action"
   },
-  "slightLeftTurnActionNextRoadText": "Bear left onto {{0}}",
+  "slightLeftTurnActionNextRoadText": "Bear left onto '{{0}}'",
   "@slightLeftTurnActionNextRoadText": {
     "description": "Text for the slightLeftTurn maneuver action"
   },
@@ -1723,7 +1723,7 @@
   "@slightRightTurnActionText": {
     "description": "Text for the slightRightTurn maneuver action"
   },
-  "slightRightTurnActionNextRoadText": "Bear right onto {{0}}",
+  "slightRightTurnActionNextRoadText": "Bear right onto '{{0}}'",
   "@slightRightTurnActionNextRoadText": {
     "description": "Text for the slightRightTurn maneuver action"
   },
@@ -1767,15 +1767,15 @@
   "@availableStorageText": {
     "description": "Text for available storage caption"
   },
-  "downloadMapsErrorText": "Map downloading failed with error: {{error}}",
+  "downloadMapsErrorText": "Map downloading failed with error: '{{error}}'",
   "@downloadMapsErrorText": {
     "description": "Map downloading error message"
   },
-  "mapRegionChildrenNumberText": "{{0}} items",
+  "mapRegionChildrenNumberText": "'{{0}}' items",
   "@mapRegionChildrenNumberText": {
     "description": "Text for children number of a map region"
   },
-  "sizeOfWholeAreaOfRegion": "Whole area {{0}}",
+  "sizeOfWholeAreaOfRegion": "Whole area '{{0}}'",
   "@sizeOfWholeAreaOfRegion": {
     "description": "Text for size of whole area of a map region"
   },
@@ -1783,7 +1783,7 @@
   "@incompleteDownloadMessage": {
     "description": "Text means that download is not completed"
   },
-  "stopMapDownloadDialogTitle": "Stop downloading \"{{0}}\"?",
+  "stopMapDownloadDialogTitle": "Stop downloading \"'{{0}}'\"?",
   "@stopMapDownloadDialogTitle": {
     "description": "Title text for stop map downloading confirmation dialog"
   },
@@ -1819,7 +1819,7 @@
   "@offlineAppMapsDialogMessage": {
     "description": "Text of the dialog box requesting the download of maps."
   },
-  "updateMapsErrorText": "Map updating failed with error: {{error}}",
+  "updateMapsErrorText": "Map updating failed with error: '{{error}}'",
   "@updateMapsErrorText": {
     "description": "Map updating error message"
   },

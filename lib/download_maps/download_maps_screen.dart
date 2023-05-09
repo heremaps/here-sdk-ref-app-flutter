@@ -24,15 +24,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/maploader.dart';
 import 'package:provider/provider.dart';
 
+import '../common/gradient_elevated_button.dart';
+import '../common/ui_style.dart';
+import '../common/util.dart' as Util;
 import 'map_loader_controller.dart';
 import 'map_loader_dialogs.dart';
 import 'map_region_tile_widget.dart';
 import 'map_regions_list_screen.dart';
 import 'map_update_progress_widget.dart';
 import 'storage_space_widget.dart';
-import '../common/gradient_elevated_button.dart';
-import '../common/ui_style.dart';
-import '../common/util.dart' as Util;
 
 /// Download maps screen widget.
 class DownloadMapsScreen extends StatefulWidget {
@@ -189,7 +189,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
                   ),
                   Text(
                     appLocalizations.downloadedMapOptionsTitle,
-                    style: textTheme.subtitle1,
+                    style: textTheme.titleMedium,
                   ),
                 ],
               ),
@@ -247,18 +247,16 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
   void _openMapRegions(BuildContext context) async {
     MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
 
-    controller
-        .getDownloadableRegions()
-        .then((regions) => Navigator.of(context).pushNamed(
-              MapRegionsListScreen.navRoute,
-              arguments: [regions],
-            ))
-        .catchError((error) {
-      Util.displayErrorSnackBar(
-        context,
-        Util.formatString(AppLocalizations.of(context)!.downloadMapsErrorText, [error.toString()]),
-      );
-    });
+    controller.getDownloadableRegions().then((regions) {
+      Navigator.of(context).pushNamed(MapRegionsListScreen.navRoute, arguments: [regions]);
+    }).catchError(
+      (error) async {
+        Util.displayErrorSnackBar(
+          context,
+          Util.formatString(AppLocalizations.of(context)!.downloadMapsErrorText, [error.toString()]),
+        );
+      },
+    );
   }
 
   Widget _buildDownloadedMapsHeader(BuildContext context, MapLoaderController controller) => Container(

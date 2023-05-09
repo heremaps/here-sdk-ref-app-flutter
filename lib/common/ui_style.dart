@@ -119,14 +119,6 @@ class UIStyle {
         color: _lightAccent,
       ),
     ),
-    colorScheme: const ColorScheme.light(
-      primary: _lightForeground,
-      secondary: _lightAccent,
-      secondaryContainer: _lightAccentSecondary,
-      onPrimary: _lightBackground,
-      onSecondary: _lightForegroundSecondary,
-      background: _lightBackground,
-    ),
     iconTheme: const IconThemeData(
       color: _lightAccent,
     ),
@@ -137,9 +129,16 @@ class UIStyle {
       selectionHandleColor: _lightAccent,
     ),
     inputDecorationTheme: _lightInputDecorationTheme,
-    backgroundColor: _lightBackground,
     hintColor: _lightForegroundHint,
     highlightColor: _lightAccentSecondary,
+    colorScheme: const ColorScheme.light(
+      primary: _lightForeground,
+      secondary: _lightAccent,
+      secondaryContainer: _lightAccentSecondary,
+      onPrimary: _lightBackground,
+      onSecondary: _lightForegroundSecondary,
+      background: _lightBackground,
+    ).copyWith(background: _lightBackground),
   );
 
   static const TextStyle _lightBodyTextStyle = TextStyle(
@@ -170,13 +169,13 @@ class UIStyle {
   );
 
   static const TextTheme _lightTextTheme = TextTheme(
-    bodyText1: _lightBodyTextStyle,
-    bodyText2: _lightLabelTextStyle,
-    button: _lightButtonTextStyle,
-    headline5: _lightHeading,
-    headline6: _lightHeadlinePrimary,
-    subtitle1: _lightSecondaryTextStyle,
-    subtitle2: _lightHintTextStyle,
+    bodyLarge: _lightBodyTextStyle,
+    bodyMedium: _lightLabelTextStyle,
+    labelLarge: _lightButtonTextStyle,
+    headlineSmall: _lightHeading,
+    titleLarge: _lightHeadlinePrimary,
+    titleMedium: _lightSecondaryTextStyle,
+    titleSmall: _lightHintTextStyle,
   );
 
   static const InputDecorationTheme _lightInputDecorationTheme = InputDecorationTheme(
