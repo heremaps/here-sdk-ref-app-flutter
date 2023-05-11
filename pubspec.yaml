@@ -35,11 +35,11 @@ dependencies:
   permission_handler: ^10.2.0
   provider: ^6.0.3
   sqflite: ^2.0.2
-  flutter_svg: ^1.0.3
+  flutter_svg: ^2.0.5
   flutter_tts: ^3.5.0
-  reorderables: ^0.5.1
+  reorderables: ^0.6.0
   ringtone_player: ^0.1.1
-  flutter_local_notifications: ^12.0.3+1
+  flutter_local_notifications: ^14.0.0+1
   path_provider: ^2.0.11
   url_launcher: ^6.1.5
   wakelock: ^0.6.2
