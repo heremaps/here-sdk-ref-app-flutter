@@ -269,7 +269,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
 
   void _checkMapUpdate(MapLoaderController controller) async {
     try {
-      bool? isMapUpdateAvailable = await controller.checkMapUpdate;
+      bool? isMapUpdateAvailable = await controller.isMapUpdateAvailable();
       if (isMapUpdateAvailable && await showMapUpdatesAvailableDialog(context)) {
         controller.performMapUpdate();
       }

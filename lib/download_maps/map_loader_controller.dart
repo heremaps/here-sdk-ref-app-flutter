@@ -236,7 +236,7 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
   }
 
   /// Checks for map updates
-  Future<bool> get checkMapUpdate async {
+  Future<bool> isMapUpdateAvailable() async {
     final Completer<List<CatalogUpdateInfo>?> getCatalogs = Completer<List<CatalogUpdateInfo>?>();
     (await mapUpdater).retrieveCatalogsUpdateInfo(
       (MapLoaderError? error, List<CatalogUpdateInfo>? catalogs) {
