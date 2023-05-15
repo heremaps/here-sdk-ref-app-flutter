@@ -64,7 +64,7 @@ class TransportModesWidget extends StatelessWidget {
     return Tab(
       icon: SvgPicture.asset(
         transportModes[index].icon,
-        color: color,
+        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
         width: UIStyle.bigIconSize,
         height: UIStyle.bigIconSize,
       ),

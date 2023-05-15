@@ -91,7 +91,13 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           if (_hasBeenZoomedToManeuver) {
             if (_maneuversSheetIsExpanded) {
               DraggableScrollableActuator.reset(_bottomSheetKey.currentContext!);
-              _hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter, 0);
+              _hereMapController.setWatermarkLocation(
+                Anchor2D.withHorizontalAndVertical(0.5, 1),
+                Point2D(
+                  -_hereMapController.watermarkSize.width / 2,
+                  -_hereMapController.watermarkSize.height / 2,
+                ),
+              );
             }
 
             _zoomToWholeRoute();
@@ -134,7 +140,13 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
         return;
       }
 
-      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter, 0);
+      hereMapController.setWatermarkLocation(
+        Anchor2D.withHorizontalAndVertical(0.5, 1),
+        Point2D(
+          -hereMapController.watermarkSize.width / 2,
+          -hereMapController.watermarkSize.height / 2,
+        ),
+      );
       _addRouteToMap();
       _setTapGestureHandler();
       setState(() => _mapInitSuccess = true);

@@ -58,7 +58,7 @@ class NoLocationWarning extends StatelessWidget {
                     padding: EdgeInsets.all(UIStyle.contentMarginMedium),
                     child: SvgPicture.asset(
                       "assets/gps.svg",
-                      color: UIStyle.noLocationWarningColor,
+                      colorFilter: ColorFilter.mode(UIStyle.noLocationWarningColor, BlendMode.srcIn),
                       width: UIStyle.bigIconSize,
                       height: UIStyle.bigIconSize,
                     ),

@@ -191,7 +191,14 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
       Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
-      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+      hereMapController.setWatermarkLocation(
+        Anchor2D.withHorizontalAndVertical(0, 1),
+        Point2D(
+          -hereMapController.watermarkSize.width / 2,
+          -hereMapController.watermarkSize.height / 2,
+        ),
+      );
+
       hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
         widget.currentPosition,
         GeoOrientationUpdate(double.nan, double.nan),
@@ -437,7 +444,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
                 padding: EdgeInsets.all(UIStyle.contentMarginMedium),
                 child: SvgPicture.asset(
                   appPreferences.showTrafficLayers ? "assets/traffic_off.svg" : "assets/traffic_on.svg",
-                  color: colorScheme.primary,
+                  colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
                   width: UIStyle.bigIconSize,
                   height: UIStyle.bigIconSize,
                 ),

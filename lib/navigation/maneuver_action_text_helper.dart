@@ -46,8 +46,6 @@ extension ManeuverActionTextHelper on Maneuver {
         return _makeActionString(localizations.continueOnActionText, localizations.continueOnActionRoadText, roadName);
       case ManeuverAction.depart:
         return _makeActionString(localizations.departActionText, localizations.departActionRoadText, roadName);
-      case ManeuverAction.ferry:
-        return _makeActionString(localizations.ferryActionText, localizations.ferryActionNextRoadText, nextRoadName);
       case ManeuverAction.leftExit:
         return _makeActionString(
             localizations.leftExitActionText, localizations.leftExitActionNextRoadText, nextRoadName);
@@ -153,6 +151,8 @@ extension ManeuverActionTextHelper on Maneuver {
         return localizations.enterHighwayFromLeftActionText;
       case ManeuverAction.enterHighwayFromRight:
         return localizations.enterHighwayFromRightActionText;
+      default:
+        return _makeActionString(localizations.departActionText, localizations.departActionRoadText, roadName);
     }
   }
 }

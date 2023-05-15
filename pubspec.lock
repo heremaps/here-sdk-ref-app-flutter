@@ -179,7 +179,7 @@ packages:
       path: "plugins/here_sdk"
       relative: true
     source: path
-    version: "4.13.4"
+    version: "4.14.0"
   intl:
     dependency: "direct main"
     description:

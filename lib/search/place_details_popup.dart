@@ -147,7 +147,7 @@ Widget _createPopupFromPlace(BuildContext context, Place place, bool routeToEnab
                   context,
                   SvgPicture.asset(
                     "assets/route.svg",
-                    color: Theme.of(context).colorScheme.primary,
+                    colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
                     width: UIStyle.smallIconSize,
                     height: UIStyle.smallIconSize,
                   ),

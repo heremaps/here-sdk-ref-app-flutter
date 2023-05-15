@@ -19,6 +19,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 
 /// A widget that controls position of the HERE logo on the map.
@@ -87,9 +88,21 @@ class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHel
     final double margin = (popupHeight - (height - box.paintBounds.bottom)) * widget.hereMapController.pixelScale;
 
     if (margin >= 0) {
-      widget.hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter, margin.truncate());
+      widget.hereMapController.setWatermarkLocation(
+        Anchor2D.withHorizontalAndVertical(0.5, 1),
+        Point2D(
+          -widget.hereMapController.watermarkSize.width / 2,
+          -(widget.hereMapController.watermarkSize.height / 2) - margin.truncate(),
+        ),
+      );
     } else {
-      widget.hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+      widget.hereMapController.setWatermarkLocation(
+        Anchor2D.withHorizontalAndVertical(0, 1),
+        Point2D(
+          -widget.hereMapController.watermarkSize.width / 2,
+          -widget.hereMapController.watermarkSize.height / 2,
+        ),
+      );
     }
   }
 }

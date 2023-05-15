@@ -127,7 +127,14 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
         return;
       }
 
-      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+      hereMapController.setWatermarkLocation(
+        Anchor2D.withHorizontalAndVertical(0, 1),
+        Point2D(
+          -hereMapController.watermarkSize.width / 2,
+          -hereMapController.watermarkSize.height / 2,
+        ),
+      );
+
       hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
         widget.currentPosition,
         GeoOrientationUpdate(double.nan, double.nan),
@@ -365,7 +372,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
                 child: Center(
                   child: SvgPicture.asset(
                     "assets/route.svg",
-                    color: Theme.of(context).colorScheme.onSecondary,
+                    colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSecondary, BlendMode.srcIn),
                     width: UIStyle.smallIconSize,
                     height: UIStyle.smallIconSize,
                   ),
@@ -453,6 +460,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       ),
     );
 
-    _hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+    _hereMapController.setWatermarkLocation(
+      Anchor2D.withHorizontalAndVertical(0, 1),
+      Point2D(
+        -_hereMapController.watermarkSize.width / 2,
+        -_hereMapController.watermarkSize.height / 2,
+      ),
+    );
   }
 }

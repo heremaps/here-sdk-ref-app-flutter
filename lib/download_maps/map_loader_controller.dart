@@ -23,6 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/maploader.dart';
 
+import 'map_catalog_update_handler.dart';
+
 abstract class _RegionTask {
   final RegionId regionId;
 
@@ -104,7 +106,7 @@ enum MapUpdateState {
 }
 
 /// Data controller that manages offline maps.
-class MapLoaderController extends ChangeNotifier {
+class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateListener {
   MapUpdater? _mapUpdater;
   final Completer<MapUpdater> _mapUpdaterCompleter = Completer();
   Future<MapUpdater> get mapUpdater async => await _mapUpdaterCompleter.future;
@@ -115,10 +117,11 @@ class MapLoaderController extends ChangeNotifier {
 
   Map<RegionId, _RegionTask> _regionsInProgress = {};
 
-  MapUpdateTask? _mapUpdateTask;
   MapUpdateState _mapUpdateState = MapUpdateState.none;
   int? _mapUpdateProgress;
   StreamController<MapLoaderError> _mapUpdateErrors = StreamController.broadcast();
+  List<MapCatalogUpdateHandler>? _catalogHandlers;
+  MapCatalogUpdateHandler? _currentCatalogHandler;
 
   /// Default constructor
   MapLoaderController() {
@@ -233,39 +236,63 @@ class MapLoaderController extends ChangeNotifier {
   }
 
   /// Checks for map updates
-  Future<MapUpdateAvailability?> checkMapUpdate() async {
-    final Completer<MapUpdateAvailability?> completer = Completer();
-    (await mapUpdater).checkMapUpdate((error, availability) {
-      if (error != null) {
-        completer.completeError(error);
-        return;
-      }
-
-      completer.complete(availability);
-    });
-
-    return completer.future;
-  }
-
-  /// Performs map update.
-  void performMapUpdate() async {
-    if (_mapUpdateTask != null) {
-      return;
+  Future<bool> get checkMapUpdate async {
+    final Completer<List<CatalogUpdateInfo>?> getCatalogs = Completer<List<CatalogUpdateInfo>?>();
+    (await mapUpdater).retrieveCatalogsUpdateInfo(
+      (MapLoaderError? error, List<CatalogUpdateInfo>? catalogs) {
+        if (error != null) {
+          getCatalogs.completeError(error);
+          return;
+        }
+        getCatalogs.complete(catalogs);
+      },
+    );
+    final List<CatalogUpdateInfo>? newCatalogs = await getCatalogs.future;
+    if (newCatalogs != null && newCatalogs.isNotEmpty && _mapUpdater != null) {
+      _catalogHandlers = newCatalogs.map((CatalogUpdateInfo catalog) {
+        final MapCatalogUpdateHandler handler = MapCatalogUpdateHandler(_mapUpdater, catalog)..addListener(this);
+        return handler;
+      }).toList();
+    } else {
+      _catalogHandlers = null;
     }
 
-    _mapUpdateState = MapUpdateState.progress;
-    _mapUpdateProgress = 0;
-    notifyListeners();
-
-    _mapUpdateTask = (await mapUpdater).performMapUpdate(MapUpdateProgressListener(
-      _onMapUpdaterProgress,
-      _onMapUpdaterPause,
-      _onMapUpdaterComplete,
-      _onMapUpdaterResume,
-    ));
+    return newCatalogs?.isNotEmpty ?? false;
   }
 
-  void _onMapUpdaterProgress(RegionId region, int percentage) {
+  @override
+  void onCatalogUpdateComplete(MapLoaderError? error) {
+    if (error != null && error != MapLoaderError.operationCancelled) {
+      print("map update error ${error}");
+      _mapUpdateErrors.add(error);
+    }
+
+    bool checkForNextCatalog = false;
+    if (error == null && _currentCatalogHandler != null) {
+      _catalogHandlers?.remove(_currentCatalogHandler);
+      checkForNextCatalog = true;
+    }
+
+    _mapUpdateState = MapUpdateState.none;
+    _currentCatalogHandler = null;
+    _mapUpdateProgress = null;
+    notifyListeners();
+    if (checkForNextCatalog && (_catalogHandlers?.isNotEmpty ?? false)) {
+      performMapUpdate();
+    }
+  }
+
+  @override
+  void onCatalogUpdatePause(MapLoaderError? error) {
+    if (error != null) {
+      _mapUpdateErrors.add(error);
+    }
+    _mapUpdateState = MapUpdateState.paused;
+    notifyListeners();
+  }
+
+  @override
+  void onCatalogUpdateProgress(RegionId region, int percentage) {
     if (_mapUpdateState == MapUpdateState.paused) {
       // Progress callback can be called after a pause.
       return;
@@ -275,28 +302,28 @@ class MapLoaderController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _onMapUpdaterPause(MapLoaderError? error) {
-    if (error != null) {
-      _mapUpdateErrors.add(error);
-    }
-    _mapUpdateState = MapUpdateState.paused;
-    notifyListeners();
-  }
-
-  void _onMapUpdaterComplete(MapLoaderError? error) {
-    if (error != null && error != MapLoaderError.operationCancelled) {
-      print("map update error ${error}");
-      _mapUpdateErrors.add(error);
-    }
-    _mapUpdateState = MapUpdateState.none;
-    _mapUpdateTask = null;
-    _mapUpdateProgress = null;
-    notifyListeners();
-  }
-
-  void _onMapUpdaterResume() {
+  @override
+  void onCatalogUpdateResume() {
     _mapUpdateState = MapUpdateState.progress;
     notifyListeners();
+  }
+
+  /// Performs map update.
+  void performMapUpdate() async {
+    if (_catalogHandlers == null || _catalogHandlers!.isEmpty) {
+      return;
+    }
+    if (_currentCatalogHandler != null) {
+      _currentCatalogHandler!.cancel();
+    }
+    _currentCatalogHandler = _catalogHandlers?.first;
+    if (_currentCatalogHandler == null) {
+      return;
+    }
+    _mapUpdateState = MapUpdateState.progress;
+    _mapUpdateProgress = 0;
+    notifyListeners();
+    _currentCatalogHandler?.start();
   }
 
   /// Gets current map updating state.
@@ -310,7 +337,7 @@ class MapLoaderController extends ChangeNotifier {
 
   /// Pauses map update.
   void pauseMapUpdate() {
-    _mapUpdateTask?.pause();
+    _currentCatalogHandler?.pause();
     _mapUpdateState = MapUpdateState.paused;
     notifyListeners();
   }
@@ -318,7 +345,7 @@ class MapLoaderController extends ChangeNotifier {
   /// Resumes map update.
   void resumeMapUpdate() {
     _mapUpdateState = MapUpdateState.progress;
-    _mapUpdateTask?.resume();
+    _currentCatalogHandler?.resume();
     notifyListeners();
   }
 
@@ -326,6 +353,6 @@ class MapLoaderController extends ChangeNotifier {
   void cancelMapUpdate() {
     _mapUpdateState = MapUpdateState.cancelling;
     notifyListeners();
-    _mapUpdateTask?.cancel();
+    _currentCatalogHandler?.cancel();
   }
 }

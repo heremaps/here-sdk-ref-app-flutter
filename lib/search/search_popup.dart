@@ -74,7 +74,14 @@ Future<SearchResult?> showSearchPopup({
       ),
     ),
   ).then((value) {
-    hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+    hereMapController.setWatermarkLocation(
+      Anchor2D.withHorizontalAndVertical(0, 1),
+      Point2D(
+        -hereMapController.watermarkSize.width / 2,
+        -hereMapController.watermarkSize.height / 2,
+      ),
+    );
+
     return value;
   });
 }
