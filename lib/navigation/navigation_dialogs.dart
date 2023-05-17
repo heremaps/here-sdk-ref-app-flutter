@@ -38,7 +38,7 @@ Future<bool?> askForPositionSource(BuildContext context) async {
           child: ListTile(
             leading: SvgPicture.asset(
               "assets/route.svg",
-              color: Theme.of(context).colorScheme.onSecondary,
+              colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSecondary, BlendMode.srcIn),
               width: UIStyle.mediumIconSize,
               height: UIStyle.mediumIconSize,
             ),

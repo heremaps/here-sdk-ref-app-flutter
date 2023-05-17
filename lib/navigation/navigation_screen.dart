@@ -213,7 +213,14 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
         _currentRoute.geometry.vertices.first,
         MapMeasure(MapMeasureKind.distance, _kInitDistanceToEarth),
       );
-      hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomLeft, 0);
+
+      hereMapController.setWatermarkLocation(
+        Anchor2D.withHorizontalAndVertical(0, 1),
+        Point2D(
+          -hereMapController.watermarkSize.width / 2,
+          -hereMapController.watermarkSize.height / 2,
+        ),
+      );
 
       Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
@@ -593,8 +600,16 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   }
 
   void _setupLogoAndPrincipalPointPosition() {
-    _hereMapController.setWatermarkPlacement(WatermarkPlacement.bottomCenter,
-        _currentStreetName != null ? (_kHereLogoOffset * _hereMapController.pixelScale).truncate() : 0);
+    final int margin = _currentStreetName != null ? (_kHereLogoOffset * _hereMapController.pixelScale).truncate() : 0;
+
+    _hereMapController.setWatermarkLocation(
+      Anchor2D.withHorizontalAndVertical(0.5, 1),
+      Point2D(
+        -_hereMapController.watermarkSize.width / 2,
+        -(_hereMapController.watermarkSize.height / 2) - margin,
+      ),
+    );
+
     _hereMapController.camera.principalPoint = Point2D(_hereMapController.viewportSize.width / 2,
         _hereMapController.viewportSize.height - _kPrincipalPointOffset * _hereMapController.pixelScale);
   }
