@@ -27,9 +27,9 @@ import 'package:provider/provider.dart';
 
 import '../common/custom_map_style_settings.dart';
 import '../common/draggable_popup_here_logo_helper.dart';
-import '../navigation/navigation_screen.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
+import '../navigation/navigation_screen.dart';
 import 'route_info_widget.dart';
 import 'waypoints_controller.dart';
 

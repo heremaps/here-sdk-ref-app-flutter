@@ -28,9 +28,9 @@ import 'package:provider/provider.dart';
 import '../common/custom_map_style_settings.dart';
 import "../common/draggable_popup_here_logo_helper.dart";
 import '../common/reset_location_button.dart';
-import '../positioning/positioning.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
+import '../positioning/positioning.dart';
 import 'place_details_popup.dart';
 
 /// Search results screen widget.
