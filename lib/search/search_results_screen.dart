@@ -103,6 +103,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
             resizeToAvoidBottomInset: false,
             body: HereMap(
               key: _hereMapKey,
+              options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
               onMapCreated: _onMapCreated,
             ),
             bottomNavigationBar: _buildBottomNavigationBar(context),

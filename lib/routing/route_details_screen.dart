@@ -115,6 +115,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               Expanded(
                 child: HereMap(
                   key: _mapKey,
+                  options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
                   onMapCreated: _onMapCreated,
                 ),
               ),

@@ -155,6 +155,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
               children: [
                 HereMap(
                   key: _hereMapKey,
+                  options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
                   onMapCreated: _onMapCreated,
                 ),
                 if (!Provider.of<AppPreferences>(context, listen: false).useAppOffline) _buildTrafficButton(context),
