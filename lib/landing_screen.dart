@@ -93,6 +93,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
             children: [
               HereMap(
                 key: _hereMapKey,
+                options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
                 onMapCreated: _onMapCreated,
               ),
               _buildMenuButton(),
