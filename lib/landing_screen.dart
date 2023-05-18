@@ -21,6 +21,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:RefApp/common/file_utility.dart';
+import 'package:RefApp/routing/routing_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,7 +47,6 @@ import 'download_maps/map_loader_controller.dart';
 import 'positioning/no_location_warning_widget.dart';
 import 'positioning/positioning.dart';
 import 'positioning/positioning_engine.dart';
-import 'routing/routing_screen.dart';
 import 'routing/waypoint_info.dart';
 import 'search/search_popup.dart';
 
@@ -60,12 +60,13 @@ class LandingScreen extends StatefulWidget {
   _LandingScreenState createState() => _LandingScreenState();
 }
 
-class _LandingScreenState extends State<LandingScreen> with Positioning {
+class _LandingScreenState extends State<LandingScreen> with Positioning, WidgetsBindingObserver {
   static const int _kLocationWarningDismissPeriod = 5; // seconds
   static const int _kLoadCustomStyleResultPopupDismissPeriod = 5; // seconds
 
   bool _mapInitSuccess = false;
   late HereMapController _hereMapController;
+  late PositioningEngine _positioningEngine;
   GlobalKey _hereMapKey = GlobalKey();
   OverlayEntry? _locationWarningOverlay;
   OverlayEntry? _loadCustomSceneResultOverlay;
@@ -74,36 +75,49 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
   Place? _routeFromPlace;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
   void dispose() {
     stopPositioning();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Stops the location engine when app is detached.
+    if (state == AppLifecycleState.detached) {
+      stopPositioning();
+    } else if (state == AppLifecycleState.resumed) {
+      // Restart the location engine and initiate positioning when the app is resumed.
+      _positioningEngine.initLocationEngine(context: context).then((value) {
+        initPositioning(context: context, hereMapController: _hereMapController);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        stopPositioning();
-        return true;
-      },
-      child: Consumer2<AppPreferences, CustomMapStyleSettings>(
-        builder: (context, preferences, customStyleSettings, child) => Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              HereMap(
-                key: _hereMapKey,
-                options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
-                onMapCreated: _onMapCreated,
-              ),
-              _buildMenuButton(),
-            ],
-          ),
-          floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
-          drawer: _buildDrawer(context, preferences),
-          extendBodyBehindAppBar: true,
-          onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
+    return Consumer2<AppPreferences, CustomMapStyleSettings>(
+      builder: (context, preferences, customStyleSettings, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            HereMap(
+              key: _hereMapKey,
+              onMapCreated: _onMapCreated,
+            ),
+            _buildMenuButton(),
+          ],
         ),
+        floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
+        drawer: _buildDrawer(context, preferences),
+        extendBodyBehindAppBar: true,
+        onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
       ),
     );
   }
@@ -132,11 +146,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
 
       _addGestureListeners();
 
-      PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
-      positioningEngine.getLocationEngineStatusUpdates.listen(_checkLocationStatus);
-      positioningEngine.initLocationEngine(context: context).then((value) {
+      _positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
+      _positioningEngine.getLocationEngineStatusUpdates.listen(_checkLocationStatus);
+      _positioningEngine.initLocationEngine(context: context).then((value) {
         initPositioning(context: context, hereMapController: hereMapController);
-        _updateConsentState(positioningEngine);
+        _updateConsentState(_positioningEngine);
       });
 
       setState(() {
@@ -556,7 +570,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning {
       return;
     }
 
-    if (_locationWarningOverlay == null) {
+    if (_locationWarningOverlay == null && status != LocationEngineStatus.engineStopped) {
       _locationWarningOverlay = OverlayEntry(
         builder: (context) => NoLocationWarning(
           onPressed: () => _dismissLocationWarningPopup(),

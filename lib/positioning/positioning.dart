@@ -73,6 +73,15 @@ mixin Positioning {
     }
   }
 
+  void _removeMarkers() {
+    if (_locationMarker != null) {
+      _hereMapController.mapScene.removeMapMarker(_locationMarker!);
+    }
+    if (_locationAccuracyCircle != null) {
+      _hereMapController.mapScene.removeMapPolygon(_locationAccuracyCircle!);
+    }
+  }
+
   /// Initializes positioning. The [hereMapController] is used to display current position marker,
   /// [onLocationUpdated] callbacks is required to get location updates.
   void initPositioning({
@@ -84,6 +93,9 @@ mixin Positioning {
     _onLocationUpdatedCallback = onLocationUpdated;
 
     _positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
+    // Ensure that any previously applied markers are removed before applying a new one,
+    // when the app is resumed.
+    _removeMarkers();
     _initMapLocation();
 
     _locationUpdatesSubscription = _positioningEngine!.getLocationUpdates.listen(_onLocationUpdated);
@@ -92,12 +104,7 @@ mixin Positioning {
   /// Stops positioning.
   void stopPositioning() {
     _locationUpdatesSubscription?.cancel();
-    if (_locationMarker != null) {
-      _hereMapController.mapScene.removeMapMarker(_locationMarker!);
-    }
-    if (_locationAccuracyCircle != null) {
-      _hereMapController.mapScene.removeMapPolygon(_locationAccuracyCircle!);
-    }
+    _removeMarkers();
   }
 
   void _initMapLocation() {
