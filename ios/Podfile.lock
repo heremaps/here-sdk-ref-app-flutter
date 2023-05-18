@@ -43,7 +43,7 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - here_sdk (4.14.0.0.10855.release):
+  - here_sdk (4.13.3.0.10485.release):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -127,7 +127,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  here_sdk: 8fbe2f1524835a5f5e9551f68ac3b6a7c60f94d3
+  here_sdk: a9567b0e57f496683d22023622f80fcfa31d7154
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   ringtone_player: 151303fcb26e9daa11257fa6947faed36b198f13
