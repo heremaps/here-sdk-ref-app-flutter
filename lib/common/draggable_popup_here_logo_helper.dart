@@ -90,10 +90,7 @@ class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHel
     if (margin >= 0) {
       widget.hereMapController.setWatermarkLocation(
         Anchor2D.withHorizontalAndVertical(0.5, 1),
-        Point2D(
-          -widget.hereMapController.watermarkSize.width / 2,
-          -(widget.hereMapController.watermarkSize.height / 2) - margin.truncate(),
-        ),
+        Point2D(0, -(widget.hereMapController.watermarkSize.height / 2) - margin.truncate()),
       );
     } else {
       widget.hereMapController.setWatermarkLocation(
