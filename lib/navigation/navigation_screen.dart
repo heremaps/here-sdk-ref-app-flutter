@@ -620,10 +620,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
     _hereMapController.setWatermarkLocation(
       Anchor2D.withHorizontalAndVertical(0.5, 1),
-      Point2D(
-        -_hereMapController.watermarkSize.width / 2,
-        -(_hereMapController.watermarkSize.height / 2) - margin,
-      ),
+      Point2D(0, -(_hereMapController.watermarkSize.height / 2) - margin),
     );
 
     _hereMapController.camera.principalPoint = Point2D(_hereMapController.viewportSize.width / 2,

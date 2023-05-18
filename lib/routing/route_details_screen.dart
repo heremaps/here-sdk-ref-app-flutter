@@ -93,10 +93,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               DraggableScrollableActuator.reset(_bottomSheetKey.currentContext!);
               _hereMapController.setWatermarkLocation(
                 Anchor2D.withHorizontalAndVertical(0.5, 1),
-                Point2D(
-                  -_hereMapController.watermarkSize.width / 2,
-                  -_hereMapController.watermarkSize.height / 2,
-                ),
+                Point2D(0, -_hereMapController.watermarkSize.height / 2),
               );
             }
 
@@ -143,10 +140,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
       hereMapController.setWatermarkLocation(
         Anchor2D.withHorizontalAndVertical(0.5, 1),
-        Point2D(
-          -hereMapController.watermarkSize.width / 2,
-          -hereMapController.watermarkSize.height / 2,
-        ),
+        Point2D(0, -hereMapController.watermarkSize.height / 2),
       );
       _addRouteToMap();
       _setTapGestureHandler();
