@@ -19,30 +19,30 @@
 
 import 'dart:io';
 
-import 'package:flutter/scheduler.dart';
-import 'package:here_sdk/gestures.dart';
-import 'package:ringtone_player/ringtone_player.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/transport.dart' as Transport;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:ringtone_player/ringtone_player.dart';
 import 'package:wakelock/wakelock.dart';
 
-import '../common/custom_map_style_settings.dart';
-import '../landing_screen.dart';
-import '../route_preferences/route_preferences_model.dart';
 import '../common/application_preferences.dart';
+import '../common/custom_map_style_settings.dart';
+import '../common/local_notifications_helper.dart';
 import '../common/marquee_widget.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
-import '../common/local_notifications_helper.dart';
+import '../landing_screen.dart';
+import '../route_preferences/route_preferences_model.dart';
 import 'current_maneuver_widget.dart';
 import 'maneuver_action_text_helper.dart';
 import 'navigation_dialogs.dart' as Dialogs;
@@ -169,6 +169,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
             children: [
               HereMap(
                 key: _mapKey,
+                options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
                 onMapCreated: _onMapCreated,
               ),
               if (nextManeuverWidget != null) nextManeuverWidget,

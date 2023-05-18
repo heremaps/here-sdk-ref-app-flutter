@@ -37,7 +37,6 @@ class TruckSpecificationsScreen extends StatelessWidget {
     AppLocalizations localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(localizations.truckSpecificationsTitle),
       ),
