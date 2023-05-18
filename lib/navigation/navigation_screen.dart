@@ -130,6 +130,9 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     _remainingDurationInSeconds = widget.route.duration.inSeconds;
     _currentRoute = widget.route;
     WidgetsBinding.instance.addObserver(this);
+    if (Platform.isIOS) {
+      _configTextSpeakerForIOS();
+    }
 
     _reroutingHandler = ReroutingHandler(
       visualNavigator: _visualNavigator,
@@ -196,6 +199,18 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
         }
         return false;
       },
+    );
+  }
+
+  Future<void> _configTextSpeakerForIOS() async {
+    await _flutterTts.setSharedInstance(true);
+    await _flutterTts.setIosAudioCategory(
+      IosTextToSpeechAudioCategory.playback,
+      <IosTextToSpeechAudioCategoryOptions>[
+        IosTextToSpeechAudioCategoryOptions.mixWithOthers,
+        IosTextToSpeechAudioCategoryOptions.duckOthers,
+      ],
+      IosTextToSpeechAudioMode.voicePrompt,
     );
   }
 
