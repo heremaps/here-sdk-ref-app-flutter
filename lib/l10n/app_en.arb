@@ -35,7 +35,7 @@
   "@doneTitle": {
     "description": "Done button title"
   },
-  "recentlySearchTitle": "Recent searches",
+  "recentlySearchTitle": "Recent Search Results",
   "@recentlySearchTitle": {
     "description": "Title of the recent searches header"
   },

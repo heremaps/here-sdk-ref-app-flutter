@@ -46,12 +46,16 @@ class SearchResultsScreen extends StatefulWidget {
   /// Current position.
   final GeoCoordinates currentPosition;
 
+  /// flag to indicate Resulting list [places] is from Recent Search Results or Search query
+  final bool isRecentSearchResult;
+
   /// Creates a widget.
   SearchResultsScreen({
     Key? key,
     required this.queryString,
     required this.places,
     required this.currentPosition,
+    required this.isRecentSearchResult,
   }) : super(key: key);
 
   @override
@@ -345,7 +349,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
           ),
           child: RichText(
             text: TextSpan(
-                text: Util.makeDistanceString(context, place.distanceInMeters),
+                text: widget.isRecentSearchResult ? null : Util.makeDistanceString(context, place.distanceInMeters),
                 style: TextStyle(
                   color: colorScheme.onSecondary,
                   fontWeight: FontWeight.bold,

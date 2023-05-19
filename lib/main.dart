@@ -91,11 +91,12 @@ class _MyAppState extends State<MyApp> {
             LandingScreen.navRoute: (BuildContext context) => LandingScreen(),
             SearchResultsScreen.navRoute: (BuildContext context) {
               List<dynamic> arguments = settings.arguments as List<dynamic>;
-              assert(arguments.length == 3);
+              assert(arguments.length == 4);
               return SearchResultsScreen(
                 queryString: arguments[0] as String,
                 places: arguments[1] as List<Place>,
                 currentPosition: arguments[2] as GeoCoordinates,
+                isRecentSearchResult: arguments[3] as bool,
               );
             },
             RoutingScreen.navRoute: (BuildContext context) {
