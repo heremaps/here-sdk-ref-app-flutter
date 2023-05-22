@@ -342,7 +342,12 @@ class _SearchPopupState extends State<_SearchPopup> {
     );
   }
 
-  Widget _buildPlaceTile(BuildContext context, Place place, {Map<HighlightType, List<IndexRange>>? highlights}) {
+  Widget _buildPlaceTile(
+    BuildContext context,
+    Place place, {
+    Map<HighlightType, List<IndexRange>>? highlights,
+    required bool isRecentSearchResult,
+  }) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     List<TextSpan> titleTextSpans = _makeHighlightedText(place.title, (highlights ?? const {})[HighlightType.title]);
     List<TextSpan> addressTextSpans =
@@ -383,7 +388,7 @@ class _SearchPopupState extends State<_SearchPopup> {
         FocusScope.of(context).unfocus();
         RecentSearchDataModel model = Provider.of<RecentSearchDataModel>(context, listen: false);
         model.insertPlace(place);
-        _showSearchResults(context, null, [place]);
+        _showSearchResults(context, null, [place], isRecentSearchResult);
       },
     );
   }
@@ -405,7 +410,7 @@ class _SearchPopupState extends State<_SearchPopup> {
 
                   final RecentSearchItem item = snapshot.data![index ~/ 2];
                   return item.place != null
-                      ? _buildPlaceTile(context, item.place!)
+                      ? _buildPlaceTile(context, item.place!, isRecentSearchResult: true)
                       : _buildSearchTile(context, item.title!);
                 },
                 semanticIndexCallback: (Widget widget, int localIndex) {
@@ -447,6 +452,7 @@ class _SearchPopupState extends State<_SearchPopup> {
               context,
               place,
               highlights: highlights,
+              isRecentSearchResult: false,
             );
           }
 
@@ -563,7 +569,7 @@ class _SearchPopupState extends State<_SearchPopup> {
       if (error != null) {
         print('Search failed. Error: ${error.toString()}');
       } else {
-        await _showSearchResults(context, text, places!);
+        await _showSearchResults(context, text, places!, false);
       }
       setState(() {
         _lastError = error;
@@ -572,10 +578,11 @@ class _SearchPopupState extends State<_SearchPopup> {
     });
   }
 
-  Future _showSearchResults(BuildContext context, String? queryString, List<Place> places) async {
+  Future _showSearchResults(
+      BuildContext context, String? queryString, List<Place> places, bool isRecentSearchResult) async {
     final result = await Navigator.of(context).pushNamed(
       SearchResultsScreen.navRoute,
-      arguments: [queryString ?? "", places, _lastPosition],
+      arguments: [queryString ?? "", places, _lastPosition, isRecentSearchResult],
     );
 
     if (result != null) {
