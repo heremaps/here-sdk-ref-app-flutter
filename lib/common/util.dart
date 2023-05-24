@@ -178,6 +178,11 @@ extension Point2DExtensions on Point2D {
   Point2D operator /(double factor) => Point2D(x / factor, y / factor);
 }
 
+/// An extension for the [Size2D].
+extension Size2DExtensions on Size2D {
+  Size2D operator *(double factor) => Size2D(width * factor, height * factor);
+}
+
 /// Utility function that shows [SnackBar] with [errorMessage]
 void displayErrorSnackBar(BuildContext context, String errorMessage) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
