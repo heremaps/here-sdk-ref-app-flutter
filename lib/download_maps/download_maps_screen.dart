@@ -47,6 +47,7 @@ class DownloadMapsScreen extends StatefulWidget {
 class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
   static const double _kDownloadedMapMenuTitleHeight = 80;
   late StreamSubscription<MapLoaderError> _errorStreamSubscription;
+  bool _isRegionsSearchInProgress = false;
 
   @override
   void initState() {
@@ -77,18 +78,29 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
             ),
             title: Text(AppLocalizations.of(context)!.downloadMapsTitle),
           ),
-          body: FutureBuilder(
-            future: Provider.of<MapLoaderController>(context, listen: false).getDownloadableRegions(),
-            builder: (context, snapshot) {
-              return ListView(
-                children: [
-                  StorageSpace(),
-                  if (controller.mapUpdateState != MapUpdateState.none) MapUpdateProgress(),
-                  ..._buildInstalledMapsList(context, snapshot.data),
-                  _buildDownloadButton(context),
-                ],
-              );
-            },
+          body: Stack(
+            children: [
+              FutureBuilder(
+                future: Provider.of<MapLoaderController>(context, listen: false).getDownloadableRegions(),
+                builder: (context, snapshot) {
+                  return ListView(
+                    children: [
+                      StorageSpace(),
+                      if (controller.mapUpdateState != MapUpdateState.none) MapUpdateProgress(),
+                      ..._buildInstalledMapsList(context, snapshot.data),
+                      _buildDownloadButton(context),
+                    ],
+                  );
+                },
+              ),
+              if (_isRegionsSearchInProgress)
+                Container(
+                  color: Colors.white54,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            ],
           ),
         ),
       );
@@ -245,18 +257,23 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       );
 
   void _openMapRegions(BuildContext context) async {
-    MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
-
-    controller.getDownloadableRegions().then((regions) {
+    setState(() {
+      _isRegionsSearchInProgress = true;
+    });
+    try {
+      MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
+      List<Region> regions = await controller.getDownloadableRegions();
       Navigator.of(context).pushNamed(MapRegionsListScreen.navRoute, arguments: [regions]);
-    }).catchError(
-      (error) async {
-        Util.displayErrorSnackBar(
-          context,
-          Util.formatString(AppLocalizations.of(context)!.downloadMapsErrorText, [error.toString()]),
-        );
-      },
-    );
+    } catch (error) {
+      Util.displayErrorSnackBar(
+        context,
+        Util.formatString(AppLocalizations.of(context)!.downloadMapsErrorText, [error.toString()]),
+      );
+    } finally {
+      setState(() {
+        _isRegionsSearchInProgress = false;
+      });
+    }
   }
 
   Widget _buildDownloadedMapsHeader(BuildContext context, MapLoaderController controller) => Container(
@@ -269,9 +286,12 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
 
   void _checkMapUpdate(MapLoaderController controller) async {
     try {
-      bool? isMapUpdateAvailable = await controller.isMapUpdateAvailable();
-      if (isMapUpdateAvailable && await showMapUpdatesAvailableDialog(context)) {
-        controller.performMapUpdate();
+      // Display the "MapUpdate" option only if it has not been initiated before.
+      if (controller.mapUpdateState == MapUpdateState.none) {
+        bool? isMapUpdateAvailable = await controller.isMapUpdateAvailable();
+        if (isMapUpdateAvailable && await showMapUpdatesAvailableDialog(context)) {
+          controller.performMapUpdate();
+        }
       }
     } catch (error) {
       print('Error while checking map update $error');
