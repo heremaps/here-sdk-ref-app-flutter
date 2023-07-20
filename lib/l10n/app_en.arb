@@ -7,6 +7,10 @@
   "@appTitleHeader": {
     "description": "Title of the Application in the drawer header"
   },
+  "batterySaverWarningText": "Battery saving mode is enabled and can harm the background navigation with screen lock.",
+  "@batterySaverWarningText": {
+    "description": "Content message of the battery saver dialog"
+  },
   "userConsentDescription": "Please help HERE to improve the provided services",
   "@userConsentDescription": {
     "description": "Description text about information gathering"
@@ -322,6 +326,10 @@
   "truckTotalWeightHint": "Total weight in kg",
   "@truckTotalWeightHint": {
     "description": "Hint for truck specification preferences"
+  },
+  "turnOff": "Turn Off",
+  "@turnOff": {
+    "description": "Turn off action text"
   },
   "languageCodeArSa": "Arabic (Saudi Arabia)",
   "@languageCodeArSa": {

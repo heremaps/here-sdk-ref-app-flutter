@@ -19,6 +19,7 @@
 
 import 'dart:io';
 
+import 'package:RefApp/common/battery_saver_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -254,11 +255,27 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
         _startRealLocations();
       }
 
+      // on realtime locations, and platform is Android,
+      // check if battery saver is on, which might effect the
+      // navigation
+      _checkDeviceBatteryStatus(context, isRealTimeNavigation: !result);
       _startNavigation();
       _addGestureListeners();
     };
 
     Util.loadMapScene(customMapStyleSettings, hereMapController, mapSceneLoadSceneCallback);
+  }
+
+  /// Checks and shows the battery saver warning dialog, if realtime navigation is on
+  /// Only for Platform Android
+  void _checkDeviceBatteryStatus(BuildContext context, {required bool isRealTimeNavigation}) {
+    if (context.mounted && isRealTimeNavigation && Platform.isAndroid) {
+      isBatterySaverOn().then((bool isBatterySaverOn) {
+        if (isBatterySaverOn) {
+          showBatterySaverWarningDialog(context);
+        }
+      });
+    }
   }
 
   void _addGestureListeners() {

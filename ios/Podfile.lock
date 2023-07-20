@@ -1,4 +1,6 @@
 PODS:
+  - battery_plus (1.0.0):
+    - Flutter
   - disk_space (0.0.1):
     - Flutter
   - DKImagePickerController/Core (4.3.4):
@@ -68,6 +70,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - battery_plus (from `.symlinks/plugins/battery_plus/ios`)
   - disk_space (from `.symlinks/plugins/disk_space/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
@@ -91,6 +94,8 @@ SPEC REPOS:
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  battery_plus:
+    :path: ".symlinks/plugins/battery_plus/ios"
   disk_space:
     :path: ".symlinks/plugins/disk_space/ios"
   file_picker:
@@ -119,6 +124,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
+  battery_plus: 7851ab482c336dd101ae735dc9363f01e1223c7c
   disk_space: e94d34bbdf77954adfb39e60bde9cc5c7233eda6
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
