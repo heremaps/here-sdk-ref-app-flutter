@@ -53,9 +53,8 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with Ti
   @override
   void initState() {
     super.initState();
-    AppPreferences appPreferences = Provider.of<AppPreferences>(context, listen: false);
-    // As of now, the HERE SDK supports only car and truck for use with the OfflineRoutingEngine.
-    _transportModes = appPreferences.useAppOffline ? [TransportModes.car, TransportModes.truck] : TransportModes.values;
+    // The HERE SDK supports car, truck, scooter and walk transport modes.
+    _transportModes = TransportModes.values;
     _transportModesTabController = TabController(length: _transportModes.length, vsync: this);
     _transportModesTabController.index = max(_transportModes.indexOf(widget.activeTransportMode), 0);
   }
