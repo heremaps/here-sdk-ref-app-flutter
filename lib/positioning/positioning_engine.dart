@@ -20,6 +20,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:RefApp/common/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/consent.dart';
 import 'package:here_sdk/core.dart';
@@ -31,12 +32,12 @@ import 'package:permission_handler/permission_handler.dart';
 /// The current implementation will only ask for user consent on Android devices.
 class PositioningEngine {
   static final ConsentEngine? _consentEngine = Platform.isAndroid ? ConsentEngine() : null;
+  static const int _locationServicePeriodicDurationInSeconds = 3;
+  static const int _androidApiLevel30 = 30;
   LocationEngine? _locationEngine;
 
   StreamController<Location> _locationUpdatesController = StreamController.broadcast();
   StreamController<LocationEngineStatus> _locationEngineStatusController = StreamController.broadcast();
-
-  bool _locationServicesIsEnabled = false;
 
   /// Initializes the location engine.
   Future initLocationEngine({required BuildContext context}) async {
@@ -61,34 +62,45 @@ class PositioningEngine {
   /// Gets stream with location engine status updates.
   Stream<LocationEngineStatus> get getLocationEngineStatusUpdates => _locationEngineStatusController.stream;
 
-  Future _initialize(BuildContext context) async {
+  /// Returns [true] by check if permission location service status is enabled.
+  Future<bool> get _didLocationServicesEnabled => Permission.location.serviceStatus.isEnabled;
+
+  Future<void> _initialize(BuildContext context) async {
+    // Check user consent state.
     if (userConsentState == ConsentUserReply.notHandled) {
       await requestUserConsent(context);
     }
-
-    _locationServicesIsEnabled = await Permission.location.serviceStatus.isEnabled;
-
-    if (!await _askPermissions()) {
-      _locationEngineStatusController.add(LocationEngineStatus.missingPermissions);
-    }
-
-    Timer.periodic(Duration(seconds: 3), (timer) => _checkLocationServicesStatus());
+    await _createLocationEngineIfPermissionsGranted();
+    _checkLocationServicesPeriodically();
   }
 
-  Future<bool> _askPermissions() async {
-    if (_locationServicesIsEnabled) {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.location,
-      ].request();
+  /// Periodically checks location services and permissions
+  /// and requests them if not granted.
+  void _checkLocationServicesPeriodically() {
+    Future.delayed(Duration(seconds: _locationServicePeriodicDurationInSeconds), () {
+      _checkLocationServicesStatus().then((value) {
+        _checkLocationServicesPeriodically();
+      });
+    });
+  }
 
-      if (statuses.containsKey(Permission.location) && statuses[Permission.location]!.isGranted) {
-        // The required permissions have been granted, let's start the location engine
-        _createAndInitLocationEngine();
-        return true;
+  /// Returns [true] if both [Permission.location] and [Permission.locationAlways]
+  /// are granted, otherwise returns [false].
+  ///
+  /// Returns [false] if location services is not enabled.
+  Future<bool> _didLocationPermissionsGranted() async {
+    if (await _didLocationServicesEnabled) {
+      final PermissionStatus locationPermission = await Permission.location.request();
+      PermissionStatus locationAlwaysPermission = await Permission.locationAlways.request();
+      if (Platform.isAndroid && await getAndroidApiVersion() >= _androidApiLevel30) {
+        // Checking background location permission status again because result of request is denied even if user granted
+        // this permission (on Android 11). It looks like a permission_handler plugin bug.
+        locationAlwaysPermission = await Permission.locationAlways.status;
       }
+      return locationPermission == PermissionStatus.granted && locationAlwaysPermission == PermissionStatus.granted;
+    } else {
+      return false;
     }
-
-    return false;
   }
 
   void _createAndInitLocationEngine() {
@@ -102,16 +114,21 @@ class PositioningEngine {
     _locationEngine!.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
   }
 
-  void _checkLocationServicesStatus() async {
-    bool isEnabled = await Permission.location.serviceStatus.isEnabled;
-    if (isEnabled == _locationServicesIsEnabled) {
-      return;
+  /// Creates and initialises the location engine if all required permissions
+  /// are granted.
+  Future<void> _createLocationEngineIfPermissionsGranted() async {
+    if (await _didLocationPermissionsGranted()) {
+      // The required permissions have been granted, let's start the location engine
+      _createAndInitLocationEngine();
+    } else {
+      _locationEngineStatusController.add(LocationEngineStatus.missingPermissions);
     }
+  }
 
-    _locationServicesIsEnabled = isEnabled;
-    if (_locationServicesIsEnabled) {
+  Future<void> _checkLocationServicesStatus() async {
+    if (await _didLocationServicesEnabled) {
       if (_locationEngine == null) {
-        _askPermissions();
+        await _createLocationEngineIfPermissionsGranted();
       } else {
         _locationEngine!.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
       }

@@ -2,26 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>UIRequiredDeviceCapabilities</key>
-    <array>
-        <string>location-services</string>
-        <string>gps</string>
-    </array>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>This app needs to access your current location to display it on the map.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app needs to access your current location to display it on the map.</string>
-    <key>NSMotionUsageDescription</key>
-    <string>Motion detection is needed to determine more accurate locations, when no GPS signal is found or used.</string>
-    <key>io.flutter.embedded_views_preview</key>
-    <true/>
-    <key>UIBackgroundModes</key>
-    <array>
-        <string>audio</string>
-        <string>location</string>
-    </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>HERE SDK Ref App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -30,8 +14,6 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>RefApp</string>
-	<key>CFBundleDisplayName</key>
-	<string>HERE&#x2007;SDK&#x2007;Ref&#x2007;App</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -49,10 +31,28 @@
 	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs to access your location at all times to provide background updates during navigation.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs to access your current location to display it on the map.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs to access your current location to display it on the map.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Motion detection is needed to determine more accurate locations, when no GPS signal is found or used.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>location-services</string>
+		<string>gps</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -66,5 +66,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>

@@ -7,6 +7,10 @@
   "@appTitleHeader": {
     "description": "Title of the Application in the drawer header"
   },
+  "backgroundPositioningWarning": "Positioning is not enabled for the background handling.",
+  "@backgroundPositioningWarning": {
+    "description": "No background location services warning"
+  },
   "batterySaverWarningText": "Battery saving mode is enabled and can harm the background navigation with screen lock.",
   "@batterySaverWarningText": {
     "description": "Content message of the battery saver dialog"
