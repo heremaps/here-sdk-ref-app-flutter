@@ -22,9 +22,9 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 
 Future<int> getAndroidApiVersion() async {
-  final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   int apiVersion = -1;
   if (Platform.isAndroid) {
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     apiVersion = androidInfo.version.sdkInt;
   }
