@@ -113,7 +113,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
       vsync: this,
     );
 
-    _transportModes = appPreferences.useAppOffline ? [TransportModes.car, TransportModes.truck] : TransportModes.values;
+    _transportModes = TransportModes.values;
     _transportModesTabController = TabController(
       length: _transportModes.length,
       vsync: this,
