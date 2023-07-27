@@ -65,6 +65,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   static const int _kLoadCustomStyleResultPopupDismissPeriod = 5; // seconds
 
   bool _mapInitSuccess = false;
+  bool _didBackPressedAndPositionStopped = false;
   late HereMapController _hereMapController;
   late PositioningEngine _positioningEngine;
   GlobalKey _hereMapKey = GlobalKey();
@@ -91,8 +92,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Stops the location engine when app is detached.
     if (state == AppLifecycleState.detached) {
+      // This flag helps us to re-init the positioning when app is resumed.
+      _didBackPressedAndPositionStopped = true;
       stopPositioning();
-    } else if (state == AppLifecycleState.resumed) {
+    } else if (state == AppLifecycleState.resumed && _didBackPressedAndPositionStopped) {
+      _didBackPressedAndPositionStopped = false;
       // Restart the location engine and initiate positioning when the app is resumed.
       _positioningEngine.initLocationEngine(context: context).then((value) {
         initPositioning(context: context, hereMapController: _hereMapController);
@@ -569,12 +573,16 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
       _dismissLocationWarningPopup();
       return;
     }
+    // If we manually stopped the [_positioning], then no need to show the
+    // warning dialog.
+    if (status == LocationEngineStatus.engineStopped && _didBackPressedAndPositionStopped) {
+      _dismissLocationWarningPopup();
+      return;
+    }
 
-    if (_locationWarningOverlay == null && status != LocationEngineStatus.engineStopped) {
+    if (_locationWarningOverlay == null) {
       _locationWarningOverlay = OverlayEntry(
-        builder: (context) => NoLocationWarning(
-          onPressed: () => _dismissLocationWarningPopup(),
-        ),
+        builder: (context) => NoLocationWarning(onPressed: () => _dismissLocationWarningPopup()),
       );
 
       Overlay.of(context).insert(_locationWarningOverlay!);

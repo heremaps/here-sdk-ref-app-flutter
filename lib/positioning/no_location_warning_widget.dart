@@ -20,6 +20,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../common/ui_style.dart';
 
@@ -37,52 +38,73 @@ class NoLocationWarning extends StatelessWidget {
     required this.onPressed,
   }) : super(key: key);
 
+  Future<String> _warningMessage(BuildContext context) async {
+    final PermissionStatus locationPermission = await Permission.location.status;
+    final PermissionStatus locationAlwaysPermission = await Permission.locationAlways.status;
+    if (locationPermission == PermissionStatus.granted && locationAlwaysPermission != PermissionStatus.granted) {
+      return AppLocalizations.of(context)!.backgroundPositioningWarning;
+    } else {
+      return AppLocalizations.of(context)!.noLocationWarning;
+    }
+  }
+
   @override
-  Widget build(BuildContext context) => Positioned(
-        left: UIStyle.contentMarginMedium,
-        right: UIStyle.contentMarginMedium,
-        bottom: _kOverlayPosition,
-        child: Material(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius)),
-          ),
-          color: UIStyle.noLocationWarningBackgroundColor,
-          elevation: 2,
-          child: SizedBox(
-            height: _kOverlayHeight,
-            child: Center(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(UIStyle.contentMarginMedium),
-                    child: SvgPicture.asset(
-                      "assets/gps.svg",
-                      colorFilter: ColorFilter.mode(UIStyle.noLocationWarningColor, BlendMode.srcIn),
-                      width: UIStyle.bigIconSize,
-                      height: UIStyle.bigIconSize,
-                    ),
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: UIStyle.contentMarginMedium,
+      right: UIStyle.contentMarginMedium,
+      bottom: _kOverlayPosition,
+      child: Material(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius)),
+        ),
+        color: UIStyle.noLocationWarningBackgroundColor,
+        elevation: 2,
+        child: SizedBox(
+          height: _kOverlayHeight,
+          child: Center(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(UIStyle.contentMarginMedium),
+                  child: SvgPicture.asset(
+                    "assets/gps.svg",
+                    colorFilter: ColorFilter.mode(UIStyle.noLocationWarningColor, BlendMode.srcIn),
+                    width: UIStyle.bigIconSize,
+                    height: UIStyle.bigIconSize,
                   ),
-                  Expanded(
-                    child: Text(
-                      AppLocalizations.of(context)!.noLocationWarning,
-                      style: TextStyle(
-                        fontSize: UIStyle.bigFontSize,
-                        color: UIStyle.noLocationWarningColor,
-                      ),
-                    ),
+                ),
+                Expanded(
+                  child: FutureBuilder<String>(
+                    future: _warningMessage(context),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          snapshot.data!,
+                          style: TextStyle(
+                            fontSize: UIStyle.bigFontSize,
+                            color: UIStyle.noLocationWarningColor,
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: UIStyle.noLocationWarningColor,
-                    ),
-                    onPressed: onPressed,
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: UIStyle.noLocationWarningColor,
                   ),
-                ],
-              ),
+                  onPressed: onPressed,
+                ),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

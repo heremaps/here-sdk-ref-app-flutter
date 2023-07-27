@@ -36,9 +36,12 @@ class MainActivity : FlutterActivity() {
     companion object {
         const val FLUTTER_ENGINE_ID = "refAppFlutterEngine"
         private const val CHANNEL = "com.example.RefApp/foreground_service_channel"
+        private const val BATTERY_SAVER_INTENT_ACTION = "android.settings.BATTERY_SAVER_SETTINGS"
         private const val START_SERVICE = "startService"
         private const val STOP_SERVICE = "stopService"
         private const val UPDATE_SERVICE = "updateService"
+        private const val OPEN_BATTERY_SAVER_SETTINGS = "openBatterySaverSettings"
+        private const val BATTERY_SAVER_ARGUMENTS = "battery_saver"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +55,10 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL
+        ).setMethodCallHandler { call, result ->
             when (call.method) {
                 START_SERVICE -> launchForegroundService(createIntent(call))
 
@@ -60,8 +66,19 @@ class MainActivity : FlutterActivity() {
 
                 UPDATE_SERVICE -> updateForegroundService(createIntent(call))
 
+                OPEN_BATTERY_SAVER_SETTINGS -> openBatterySaverSettings(call)
+
                 else -> result.notImplemented()
             }
+        }
+    }
+
+    /// Opens Android device battery saver settings screen
+    private fun openBatterySaverSettings(call: MethodCall) {
+        if (call.arguments == BATTERY_SAVER_ARGUMENTS) {
+            val intent = Intent(BATTERY_SAVER_INTENT_ACTION)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
     }
 
