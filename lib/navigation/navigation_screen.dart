@@ -268,13 +268,12 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
   /// Checks and shows the battery saver warning dialog, if realtime navigation is on
   /// Only for Platform Android
-  void _checkDeviceBatteryStatus(BuildContext context, {required bool isRealTimeNavigation}) {
+  Future<void> _checkDeviceBatteryStatus(BuildContext context, {required bool isRealTimeNavigation}) async {
     if (Platform.isAndroid && context.mounted && isRealTimeNavigation) {
-      isBatterySaverOn().then((bool isBatterySaverOn) {
-        if (isBatterySaverOn) {
-          showBatterySaverWarningDialog(context);
-        }
-      });
+      final bool result = await isBatterySaverOn();
+      if (result) {
+        showBatterySaverWarningDialog(context);
+      }
     }
   }
 

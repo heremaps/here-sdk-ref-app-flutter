@@ -77,10 +77,9 @@ class PositioningEngine {
   /// Periodically checks location services and permissions
   /// and requests them if not granted.
   void _checkLocationServicesPeriodically() {
-    Future.delayed(Duration(seconds: _locationServicePeriodicDurationInSeconds), () {
-      _checkLocationServicesStatus().then((value) {
-        _checkLocationServicesPeriodically();
-      });
+    Future.delayed(Duration(seconds: _locationServicePeriodicDurationInSeconds), () async {
+      await _checkLocationServicesStatus();
+      _checkLocationServicesPeriodically();
     });
   }
 
