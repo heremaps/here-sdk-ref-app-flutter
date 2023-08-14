@@ -39,6 +39,9 @@ class NoLocationWarning extends StatelessWidget {
   }) : super(key: key);
 
   Future<String> _warningMessage(BuildContext context) async {
+    if (!await Permission.location.serviceStatus.isEnabled) {
+      return AppLocalizations.of(context)!.noLocationWarning;
+    }
     final PermissionStatus locationPermission = await Permission.location.status;
     final PermissionStatus locationAlwaysPermission = await Permission.locationAlways.status;
     if (locationPermission == PermissionStatus.granted && locationAlwaysPermission != PermissionStatus.granted) {

@@ -65,16 +65,26 @@ class PositioningEngine {
   /// Returns [true] by check if permission location service status is enabled.
   Future<bool> get _didLocationServicesEnabled => Permission.location.serviceStatus.isEnabled;
 
+  /// This flag helps to request the location permission, when location service status is enabled.
+  bool _didLocationPermissionsRequested = false;
+
   Future<void> _initialize(BuildContext context) async {
     // Check user consent state.
     if (userConsentState == ConsentUserReply.notHandled) {
       await requestUserConsent(context);
     }
-    // Request location permission on engine creation.
-    if (!await _requestLocationPermissions()) {
+    final didLocationServicesEnabled = await _didLocationServicesEnabled;
+
+    // Check location services status
+    if (!didLocationServicesEnabled) {
+      _locationEngineStatusController.add(LocationEngineStatus.notAllowed);
+    } else if (didLocationServicesEnabled && !await _requestLocationPermissions()) {
+      _didLocationPermissionsRequested = true;
+      // Request location permission on engine creation.
       _locationEngineStatusController.add(LocationEngineStatus.missingPermissions);
+    } else {
+      await _createLocationEngineIfPermissionsGranted();
     }
-    await _createLocationEngineIfPermissionsGranted();
     _checkLocationServicesPeriodically();
   }
 
@@ -113,18 +123,18 @@ class PositioningEngine {
   ///
   /// Returns [false] if location services is not enabled.
   Future<bool> _didLocationPermissionsGranted() async {
-    if (await _didLocationServicesEnabled) {
-      final bool isLocationPermissionGranted = await Permission.location.isGranted;
-      bool isLocationAlwaysPermissionGranted = await Permission.locationAlways.isGranted;
-      if (Platform.isAndroid && await getAndroidApiVersion() >= _androidApiLevel30) {
-        // Checking background location permission status again because result of request is denied even if user granted
-        // this permission (on Android 11). It looks like a permission_handler plugin bug.
-        isLocationAlwaysPermissionGranted = await Permission.locationAlways.status.isGranted;
-      }
-      return isLocationPermissionGranted && isLocationAlwaysPermissionGranted;
-    } else {
+    if (!await _didLocationServicesEnabled) {
       return false;
     }
+
+    final bool isLocationPermissionGranted = await Permission.location.isGranted;
+    if (Platform.isAndroid && await getAndroidApiVersion() >= _androidApiLevel30) {
+      // Checking background location permission status again because result of request is denied even if user granted
+      // this permission (on Android 11). It looks like a permission_handler plugin bug.
+      final bool isLocationAlwaysPermissionGranted = await Permission.locationAlways.status.isGranted;
+      return isLocationPermissionGranted && isLocationAlwaysPermissionGranted;
+    }
+    return isLocationPermissionGranted;
   }
 
   void _createAndInitLocationEngine() {
@@ -144,19 +154,21 @@ class PositioningEngine {
     if (await _didLocationPermissionsGranted()) {
       // The required permissions have been granted, let's start the location engine
       _createAndInitLocationEngine();
+    } else if (!_didLocationPermissionsRequested) {
+      _didLocationPermissionsRequested = true;
+      final isGranted = await _requestLocationPermissions();
+      if (!isGranted) {
+        _locationEngineStatusController.add(LocationEngineStatus.missingPermissions);
+      }
     }
   }
 
   Future<void> _checkLocationServicesStatus() async {
     final bool didLocationServicesEnabled = await _didLocationServicesEnabled;
     if (didLocationServicesEnabled && _locationEngine != null) {
-      // As location engine is already created, we do not need to create
-      // a new one.
-      return;
+      return; // As location engine is already created, we do not need to create a new one.
     }
-    if (!didLocationServicesEnabled) {
-      _locationEngineStatusController.add(LocationEngineStatus.notAllowed);
-    } else if (didLocationServicesEnabled && _locationEngine == null) {
+    if (didLocationServicesEnabled) {
       await _createLocationEngineIfPermissionsGranted();
     }
   }
