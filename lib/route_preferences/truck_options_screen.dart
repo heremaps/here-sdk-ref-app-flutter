@@ -111,7 +111,23 @@ class TruckOptionsScreen extends StatelessWidget {
       if (specifications.weightPerAxleInKilograms != null)
         localizations.truckWeightPerAxleRowTitle + " = " + specifications.weightPerAxleInKilograms.toString(),
       if (specifications.grossWeightInKilograms != null)
-        localizations.truckGrossWeightRowTitle + " = " + specifications.grossWeightInKilograms.toString()
+        localizations.truckGrossWeightRowTitle + " = " + specifications.grossWeightInKilograms.toString(),
+      if (specifications.weightPerAxleGroup?.singleAxleGroupInKilograms != null)
+        localizations.singleAxleGroup +
+            " = " +
+            specifications.weightPerAxleGroup!.singleAxleGroupInKilograms!.toString(),
+      if (specifications.weightPerAxleGroup?.tandemAxleGroupInKilograms != null)
+        localizations.tandemAxleGroup +
+            " = " +
+            specifications.weightPerAxleGroup!.tandemAxleGroupInKilograms!.toString(),
+      if (specifications.weightPerAxleGroup?.tripleAxleGroupInKilograms != null)
+        localizations.tripleAxleGroup +
+            " = " +
+            specifications.weightPerAxleGroup!.tripleAxleGroupInKilograms!.toString(),
+      if (specifications.weightPerAxleGroup?.quadAxleGroupInKilograms != null)
+        localizations.quadAxleGroup + " = " + specifications.weightPerAxleGroup!.quadAxleGroupInKilograms!.toString(),
+      if (specifications.weightPerAxleGroup?.quintAxleGroupInKilograms != null)
+        localizations.quintAxleGroup + " = " + specifications.weightPerAxleGroup!.quintAxleGroupInKilograms!.toString(),
     ].join(", ");
   }
 }
