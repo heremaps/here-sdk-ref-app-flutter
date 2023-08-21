@@ -19,14 +19,15 @@
 
 import 'dart:async';
 
+import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/maploader.dart';
 import 'package:provider/provider.dart';
 
+import '../common/error_toast.dart';
 import '../common/gradient_elevated_button.dart';
 import '../common/ui_style.dart';
-import '../common/util.dart' as Util;
 import 'map_loader_controller.dart';
 import 'map_loader_dialogs.dart';
 import 'map_region_tile_widget.dart';
@@ -53,10 +54,12 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
   void initState() {
     super.initState();
     MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
-    _errorStreamSubscription = controller.getMapUpdateErrors.listen((error) => Util.displayErrorSnackBar(
-          context,
-          Util.formatString(AppLocalizations.of(context)!.downloadMapsErrorText, [error.toString()]),
-        ));
+    _errorStreamSubscription = controller.getMapUpdateErrors.listen((MapLoaderError error) {
+      print('Map downloading failed. Error: ${error.toString()}');
+      if (mounted) {
+        ErrorToaster.makeToast(context, error.getErrorMessage(AppLocalizations.of(context)!));
+      }
+    });
 
     _checkMapUpdate(controller);
   }
@@ -265,10 +268,13 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       List<Region> regions = await controller.getDownloadableRegions();
       Navigator.of(context).pushNamed(MapRegionsListScreen.navRoute, arguments: [regions]);
     } catch (error) {
-      Util.displayErrorSnackBar(
-        context,
-        Util.formatString(AppLocalizations.of(context)!.downloadMapsErrorText, [error.toString()]),
-      );
+      print('Map downloading failed. Error: ${error.toString()}');
+      if (mounted) {
+        ErrorToaster.makeToast(
+          context,
+          (error is MapLoaderError) ? error.getErrorMessage(AppLocalizations.of(context)!) : error.toString(),
+        );
+      }
     } finally {
       setState(() {
         _isRegionsSearchInProgress = false;
