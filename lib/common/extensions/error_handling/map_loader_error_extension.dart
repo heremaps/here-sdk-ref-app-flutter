@@ -30,10 +30,6 @@ extension MapLoaderErrorExtension on MapLoaderError {
         message = localized.errorAuthenticationFailed;
         break;
 
-      /* case MapLoaderError.brokenUpdate:
-        message = "Update failed, please clear all data";
-        break;*/
-
       case MapLoaderError.invalidArgument:
         message = localized.errorNoResultFound;
         break;
