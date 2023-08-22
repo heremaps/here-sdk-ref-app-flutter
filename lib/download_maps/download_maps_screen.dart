@@ -57,7 +57,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     _errorStreamSubscription = controller.getMapUpdateErrors.listen((MapLoaderError error) {
       print('Map downloading failed. Error: ${error.toString()}');
       if (mounted) {
-        ErrorToaster.makeToast(context, error.getErrorMessage(AppLocalizations.of(context)!));
+        ErrorToaster.makeToast(context, error.errorMessage(AppLocalizations.of(context)!));
       }
     });
 
@@ -272,7 +272,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       if (mounted) {
         ErrorToaster.makeToast(
           context,
-          (error is MapLoaderError) ? error.getErrorMessage(AppLocalizations.of(context)!) : error.toString(),
+          (error is MapLoaderError) ? error.errorMessage(AppLocalizations.of(context)!) : error.toString(),
         );
       }
     } finally {

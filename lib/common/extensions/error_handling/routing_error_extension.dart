@@ -21,7 +21,7 @@ import 'package:here_sdk/routing.dart' as Routing;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 extension RoutingErrorExtension on Routing.RoutingError {
-  String getErrorMessage(AppLocalizations localized) {
+  String errorMessage(AppLocalizations localized) {
     String message;
     switch (this) {
       case Routing.RoutingError.internalError:

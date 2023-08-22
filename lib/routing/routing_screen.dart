@@ -590,7 +590,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
         if (mounted) {
           ErrorToaster.makeToast(
             context,
-            error.getErrorMessage(AppLocalizations.of(context)!),
+            error.errorMessage(AppLocalizations.of(context)!),
           );
         }
       }

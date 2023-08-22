@@ -21,7 +21,7 @@ import 'package:here_sdk/search.dart' show SearchError;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 extension SearchErrorExtension on SearchError {
-  String getErrorMessage(AppLocalizations localized) {
+  String errorMessage(AppLocalizations localized) {
     String message;
     switch (this) {
       case SearchError.authenticationFailed:

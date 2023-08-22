@@ -21,7 +21,7 @@ import 'package:here_sdk/maploader.dart' show MapLoaderError;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 extension MapLoaderErrorExtension on MapLoaderError {
-  String getErrorMessage(AppLocalizations localized) {
+  String errorMessage(AppLocalizations localized) {
     String message;
     switch (this) {
       case MapLoaderError.accessDenied:

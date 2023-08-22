@@ -193,7 +193,7 @@ class _SearchPopupState extends State<_SearchPopup> {
                       ),
                       toolbarHeight: widget.currentLocationTitle != null ? _kHeaderHeightExt : _kHeaderHeight,
                     ),
-                    if (_lastError != null) _buildErrorWidget(context),
+                    if (_lastError != null) _buildErrorWidget(),
                     if (_lastError == null)
                       _suggestions != null ? _buildSuggestionsWidget(context) : _buildRecentSearchWidget(context),
                   ],
@@ -470,7 +470,7 @@ class _SearchPopupState extends State<_SearchPopup> {
     );
   }
 
-  Widget _buildErrorWidget(BuildContext ctx) {
+  Widget _buildErrorWidget() {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
@@ -590,7 +590,7 @@ class _SearchPopupState extends State<_SearchPopup> {
     if (mounted) {
       ErrorToaster.makeToast(
         context,
-        searchError.getErrorMessage(AppLocalizations.of(context)!),
+        searchError.errorMessage(AppLocalizations.of(context)!),
       );
     }
   }
