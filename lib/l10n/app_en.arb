@@ -1,12 +1,4 @@
 {
-  "addToRouteButton": "Add",
-  "@addToRouteButton": {
-    "description": "Title of the add to route button"
-  },
-  "allowHighwayTitle": "Allow highway",
-  "@allowHighwayTitle": {
-    "description": "Route preferences switcher title"
-  },
   "appTitle": "HERE SDK for Flutter - Reference Application",
   "@appTitle": {
     "description": "Title of the Application"
@@ -14,38 +6,6 @@
   "appTitleHeader": "HERE SDK Reference Application for Flutter '{{0}}'\nBased on HERE SDK '{{1}}'.'{{2}}'.'{{3}}'",
   "@appTitleHeader": {
     "description": "Title of the Application in the drawer header"
-  },
-  "arrivalTimeTitle": "Arrival time",
-  "@arrivalTimeTitle": {
-    "description": "Label for the arrival time local notification"
-  },
-  "arrivalTitle": "arrival",
-  "@arrivalTitle": {
-    "description": "Label for the arrival time"
-  },
-  "arriveActionText": "Arrive at destination",
-  "@arriveActionText": {
-    "description": "Text for the arrive maneuver action"
-  },
-  "atmTitle": "ATM",
-  "@atmTitle": {
-    "description": "Text for the ATM place category"
-  },
-  "availableStorageText": "Available",
-  "@availableStorageText": {
-    "description": "Text for available storage caption"
-  },
-  "avoidanceOptionsTitle": "Avoidance Options",
-  "@avoidanceOptionsTitle": {
-    "description": "Title of avoidance options section in route preferences"
-  },
-  "avoidCountriesTitle": "Avoid countries",
-  "@avoidCountriesTitle": {
-    "description": "Title of avoid country row in route preferences"
-  },
-  "avoidRoadFeaturesTitle": "Avoid road features",
-  "@avoidRoadFeaturesTitle": {
-    "description": "Title of avoid road row in route preferences"
   },
   "backgroundPositioningWarning": "Positioning is not enabled for the background handling.",
   "@backgroundPositioningWarning": {
@@ -55,40 +15,473 @@
   "@batterySaverWarningText": {
     "description": "Content message of the battery saver dialog"
   },
-  "byteAbbreviationText": "bytes",
-  "@byteAbbreviationText": {
-    "description": "Text for the abbreviation of the bytes"
+  "userConsentDescription": "Please help HERE to improve the provided services",
+  "@userConsentDescription": {
+    "description": "Description text about information gathering"
   },
-  "cancelTitle": "Cancel",
-  "@cancelTitle": {
-    "description": "Cancel button title"
-  },
-  "carShuttleTrain": "Car shuttle train",
-  "@carShuttleTrain": {
-    "description": "Avoid road feature name for route preferences"
-  },
-  "consentDenied": "Revoked",
-  "@consentDenied": {
-    "description": "Text for denied consent"
+  "userConsentTitle": "Consent",
+  "@userConsentTitle": {
+    "description": "Text for the user consent menu"
   },
   "consentGranted": "Accepted",
   "@consentGranted": {
     "description": "Text for granted consent"
   },
-  "continueOnActionRoadText": "Continue on '{{0}}'",
-  "@continueOnActionRoadText": {
-    "description": "Text for the continueOn maneuver action"
+  "consentDenied": "Revoked",
+  "@consentDenied": {
+    "description": "Text for denied consent"
   },
-  "continueOnActionText": "Continue on",
-  "@continueOnActionText": {
-    "description": "Text for the continueOn maneuver action"
+  "searchHint": "Where to?",
+  "@searchHint": {
+    "description": "Hint for the search text field"
+  },
+  "cancelTitle": "Cancel",
+  "@cancelTitle": {
+    "description": "Cancel button title"
+  },
+  "doneTitle": "Done",
+  "@doneTitle": {
+    "description": "Done button title"
+  },
+  "recentlySearchTitle": "Recent Search Results",
+  "@recentlySearchTitle": {
+    "description": "Title of the recent searches header"
+  },
+  "matchingResultsTitle": "Matching results",
+  "@matchingResultsTitle": {
+    "description": "Title of the matching results header"
+  },
+  "noResultsFoundText": "Sorry, nothing found",
+  "@noResultsFoundText": {
+    "description": "Message if no search results were found"
+  },
+  "noResultsFoundDescription": "Try to use another keywords",
+  "@noResultsFoundDescription": {
+    "description": "Message if no search results were found"
+  },
+  "searchErrorText": "Search failed with error: '{{error}}'",
+  "@searchErrorText": {
+    "description": "Search error message"
+  },
+  "meterAbbreviationText": "m",
+  "@meterAbbreviationText": {
+    "description": "Text for the abbreviation of the meter"
+  },
+  "kilometerAbbreviationText": "km",
+  "@kilometerAbbreviationText": {
+    "description": "Text for the abbreviation of the kilometer"
+  },
+  "minuteAbbreviationText": "min",
+  "@minuteAbbreviationText": {
+    "description": "Text for the abbreviation of the minute"
+  },
+  "hourAbbreviationText": "h",
+  "@hourAbbreviationText": {
+    "description": "Text for the abbreviation of the hour"
+  },
+  "kmhAbbreviationText": "km/h",
+  "@kmhAbbreviationText": {
+    "description": "Text for the abbreviation of the kilometer per hour"
+  },
+  "yourLocationTitle": "Your location",
+  "@yourLocationTitle": {
+    "description": "Your location title"
+  },
+  "defaultLocationTitle": "Default location",
+  "@defaultLocationTitle": {
+    "description": "Default location title"
+  },
+  "fastestRouteTitle": "Fastest route",
+  "@fastestRouteTitle": {
+    "description": "Title of fastest route mode"
+  },
+  "shortestRouteTitle": "Shortest route",
+  "@shortestRouteTitle": {
+    "description": "Title of shortest route mode"
+  },
+  "trafficDelayText": "Incl. '{{0}}' delay",
+  "@trafficDelayText": {
+    "description": "Template for the traffic delay text"
+  },
+  "noTrafficDelaysText": "No delays",
+  "@noTrafficDelaysText": {
+    "description": "No traffic delays text"
+  },
+  "routeToButtonTitle": "Route",
+  "@routeToButtonTitle": {
+    "description": "Title of the route to button"
+  },
+  "addToRouteButton": "Add",
+  "@addToRouteButton": {
+    "description": "Title of the add to route button"
+  },
+  "preferencesTitle": "Preferences",
+  "@preferencesTitle": {
+    "description": "Preferences button title"
+  },
+  "routingErrorText": "Routing failed with error: '{{error}}'",
+  "@routingErrorText": {
+    "description": "Routing error message"
+  },
+  "avoidanceOptionsTitle": "Avoidance Options",
+  "@avoidanceOptionsTitle": {
+    "description": "Title of avoidance options section in route preferences"
+  },
+  "avoidRoadFeaturesTitle": "Avoid road features",
+  "@avoidRoadFeaturesTitle": {
+    "description": "Title of avoid road row in route preferences"
+  },
+  "seasonalClosure": "Seasonal closure",
+  "@seasonalClosure": {
+    "description": "Avoid road feature name for route preferences"
+  },
+  "tollRoad": "Toll road",
+  "@tollRoad": {
+    "description": "Avoid road feature name for route preferences"
   },
   "controlledAccessHighway": "Controlled access highway",
   "@controlledAccessHighway": {
     "description": "Avoid road feature name for route preferences"
   },
-  "@countryCode": {
-    "description": "Country name title"
+  "ferry": "Ferry",
+  "@ferry": {
+    "description": "Avoid road feature name for route preferences"
+  },
+  "carShuttleTrain": "Car shuttle train",
+  "@carShuttleTrain": {
+    "description": "Avoid road feature name for route preferences"
+  },
+  "tunnel": "Tunnel",
+  "@tunnel": {
+    "description": "Avoid road feature name for route preferences"
+  },
+  "dirtRoad": "Dirt road",
+  "@dirtRoad": {
+    "description": "Avoid road feature name for route preferences"
+  },
+  "uTurns": "U-turns",
+  "@uTurns": {
+    "description": "Avoid road feature name for route preferences"
+  },
+  "avoidCountriesTitle": "Avoid countries",
+  "@avoidCountriesTitle": {
+    "description": "Title of avoid country row in route preferences"
+  },
+  "routePreferencesScreenTitle": "Route Preferences",
+  "@routePreferencesScreenTitle": {
+    "description": "Title of route preferences screen"
+  },
+  "routeOptionsTitle": "Route Options",
+  "@routeOptionsTitle": {
+    "description": "Title of route options section in preferences"
+  },
+  "routeTextOptionsTitle": "Route Text Options",
+  "@routeTextOptionsTitle": {
+    "description": "Title of route text options section in preferences"
+  },
+  "routeAlternativesTitle": "Route alternatives",
+  "@routeAlternativesTitle": {
+    "description": "Title of route alternatives setting in route options"
+  },
+  "eatAndDrinkTitle": "Eat and Drink",
+  "@eatAndDrinkTitle": {
+    "description": "Text for the Eat and Drink place category"
+  },
+  "fuelingStationsTitle": "Fueling Stations",
+  "@fuelingStationsTitle": {
+    "description": "Text for the Fueling Stations place category"
+  },
+  "atmTitle": "ATM",
+  "@atmTitle": {
+    "description": "Text for the ATM place category"
+  },
+  "selectPositioningDialogTitle": "Choose a positioning method",
+  "@selectPositioningDialogTitle": {
+    "description": "Title of the navigation positioning source dialog"
+  },
+  "simulatedLocationSourceTitle": "Simulated location events (along the route)",
+  "@simulatedLocationSourceTitle": {
+    "description": "Title of the simulated location events source"
+  },
+  "realLocationSourceTitle": "Real location events",
+  "@realLocationSourceTitle": {
+    "description": "Title of the real location events source"
+  },
+  "arrivalTitle": "arrival",
+  "@arrivalTitle": {
+    "description": "Label for the arrival time"
+  },
+  "arrivalTimeTitle": "Arrival time",
+  "@arrivalTimeTitle": {
+    "description": "Label for the arrival time local notification"
+  },
+  "stopNavigationDialogTitle": "Do you want to exit navigation mode?",
+  "@stopNavigationDialogTitle": {
+    "description": "Title of the navigation stop dialog"
+  },
+  "stopNavigationDialogSubtitle": "You will permanently lose you progress and destination history",
+  "@stopNavigationDialogSubtitle": {
+    "description": "Title of the navigation stop dialog"
+  },
+  "stopNavigationAcceptButtonCaption": "Exit navigation mode",
+  "@stopNavigationAcceptButtonCaption": {
+    "description": "Caption of the navigation stop dialog"
+  },
+  "reroutingInProgressText": "Updating...",
+  "@reroutingInProgressText": {
+    "description": "Text for the rerouting indicator"
+  },
+  "departureTimeTitle": "Departure time",
+  "@departureTimeTitle": {
+    "description": "Title of departure time setting in route options"
+  },
+  "optimizationModeTitle": "Optimization mode",
+  "@optimizationModeTitle": {
+    "description": "Title of optimization mode setting in route options"
+  },
+  "textFormatTitle": "Text format",
+  "@textFormatTitle": {
+    "description": "Title of text mode setting in route text options"
+  },
+  "languageCodeTitle": "Language code",
+  "@languageCodeTitle": {
+    "description": "Title of language code setting in route text options"
+  },
+  "loadCustomScene": "Load custom scene",
+  "@loadCustomScene": {
+    "description": "Text for the load custom scene button in landing screen drawer menu"
+  },
+  "loadCustomSceneSuccess": "Scene loading succeeded",
+  "@loadCustomSceneSuccess": {
+    "description": "Short-time message text displayed when loading custom scene succeeded"
+  },
+  "loadCustomSceneFailure": "Scene loading failed",
+  "@loadCustomSceneFailure": {
+    "description": "Short-time message text displayed when loading custom scene failed"
+  },
+  "unitSystemTitle": "Unit system",
+  "@unitSystemTitle": {
+    "description": "Title of unit system setting in route options"
+  },
+  "textFormatHtml": "Html",
+  "@textFormatHtml": {
+    "description": "Title of text instructions html format setting in route text options"
+  },
+  "textFormatPlain": "Plain",
+  "@textFormatPlain": {
+    "description": "Title of text instructions plain format setting in route text options"
+  },
+  "unitSystemMetric": "Metric",
+  "@unitSystemMetric": {
+    "description": "Title of metric unit system setting in route text options"
+  },
+  "unitSystemImperialUk": "Imperial UK",
+  "@unitSystemImperialUk": {
+    "description": "Title of imperial UK unit system setting in route text options"
+  },
+  "unitSystemImperialUs": "Imperial US",
+  "@unitSystemImperialUs": {
+    "description": "Title of imperial US unit system setting in route text options"
+  },
+  "truckWidthRowTitle": "Width",
+  "@truckWidthRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckWidthHint": "Width in cm",
+  "@truckWidthHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckHeightRowTitle": "Height",
+  "@truckHeightRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckHeightHint": "Height in cm",
+  "@truckHeightHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckLengthRowTitle": "Length",
+  "@truckLengthRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckLengthtHint": "Length in cm",
+  "@truckLengthtHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckAxleCountRowTitle": "Axel count",
+  "@truckAxleCountRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckAxlesCountHint": "Total number of vehicle axles",
+  "@truckAxlesCountHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckWeightPerAxleRowTitle": "Weight per axle",
+  "@truckWeightPerAxleRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckAxleWeightHint": "Axle weight in kg",
+  "@truckAxleWeightHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckGrossWeightRowTitle": "Gross weight",
+  "@truckGrossWeightRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckTotalWeightHint": "Total weight in kg",
+  "@truckTotalWeightHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "turnOff": "Turn Off",
+  "@turnOff": {
+    "description": "Turn off action text"
+  },
+  "languageCodeArSa": "Arabic (Saudi Arabia)",
+  "@languageCodeArSa": {
+    "description": "Language code for Arabic (Saudi Arabia)"
+  },
+  "languageCodeZhCn": "Chinese (Simplified China)",
+  "@languageCodeZhCn": {
+    "description": "Language code for Chinese (Simplified China)"
+  },
+  "languageCodeEnUs": "English (United States)",
+  "@languageCodeEnUs": {
+    "description": "Language code for English (United States)"
+  },
+  "languageCodeFrFr": "French",
+  "@languageCodeFrFr": {
+    "description": "Language code for French"
+  },
+  "languageCodeDeDe": "German",
+  "@languageCodeDeDe": {
+    "description": "Language code for German"
+  },
+  "languageCodeHiIn": "Hindi",
+  "@languageCodeHiIn": {
+    "description": "Language code for Hindi"
+  },
+  "languageCodePtPt": "Portuguese (Portugal)",
+  "@languageCodePtPt": {
+    "description": "Language code for Portuguese (Portugal)"
+  },
+  "languageCodeEsEs": "Spanish (Spain)",
+  "@languageCodeEsEs": {
+    "description": "Language code for Spanish (Spain)"
+  },
+  "highwayTitle": "Highway",
+  "@highwayTitle": {
+    "description": "Route preferences section title"
+  },
+  "allowHighwayTitle": "Allow highway",
+  "@allowHighwayTitle": {
+    "description": "Route preferences switcher title"
+  },
+  "walkSpeedTitle": "Walk Speed",
+  "@walkSpeedTitle": {
+    "description": "Pedestrian route settings title"
+  },
+  "walkSpeedUnitTitle": "Walk speed (m/s)",
+  "@walkSpeedUnitTitle": {
+    "description": "Pedestrian route settings"
+  },
+  "truckSpecificationsTitle": "Truck Specifications",
+  "@truckSpecificationsTitle": {
+    "description": "Route truck preferences section title"
+  },
+  "specificationsTitle": "Specifications",
+  "@specificationsTitle": {
+    "description": "Route truck specification preferences row title"
+  },
+  "hazardousGoodsTitle": "Hazardous goods",
+  "@hazardousGoodsTitle": {
+    "description": "Route truck hazardous goods preferences row title"
+  },
+  "hazardousGoodsExplosive": "Explosive",
+  "@hazardousGoodsExplosive": {
+    "description": "Hazardous goods explosive"
+  },
+  "hazardousGoodsGas": "Gas",
+  "@hazardousGoodsGas": {
+    "description": "Hazardous goods gas"
+  },
+  "hazardousGoodsFlammable": "Flammable",
+  "@hazardousGoodsFlammable": {
+    "description": "Hazardous goods flammable"
+  },
+  "hazardousGoodsCombustible": "Combustible",
+  "@hazardousGoodsCombustible": {
+    "description": "Hazardous goods combustible"
+  },
+  "hazardousGoodsOrganic": "Organic",
+  "@hazardousGoodsOrganic": {
+    "description": "Hazardous goods organic"
+  },
+  "hazardousGoodsPoison": "Poison",
+  "@hazardousGoodsPoison": {
+    "description": "Hazardous goods poison"
+  },
+  "hazardousGoodsRadioactive": "Radioactive",
+  "@hazardousGoodsRadioactive": {
+    "description": "Hazardous goods radioactive"
+  },
+  "hazardousGoodsCorrosive": "Corrosive",
+  "@hazardousGoodsCorrosive": {
+    "description": "Hazardous goods corrosive"
+  },
+  "hazardousGoodsPoisonousInhalation": "Poisonous Inhalation",
+  "@hazardousGoodsPoisonousInhalation": {
+    "description": "Hazardous goods poisonous inhalation"
+  },
+  "hazardousGoodsHarmfulToWater": "Harmful To Water",
+  "@hazardousGoodsHarmfulToWater": {
+    "description": "Hazardous goods harmful to water"
+  },
+  "hazardousGoodsOther": "Other",
+  "@hazardousGoodsOther": {
+    "description": "Hazardous goods other"
+  },
+  "tunnelCategoryTitle": "Tunnel category",
+  "@tunnelCategoryTitle": {
+    "description": "Route truck preferences setting"
+  },
+  "tunnelCategoryB": "B category",
+  "@tunnelCategoryB": {
+    "description": "Tunnel category B"
+  },
+  "tunnelCategoryC": "C category",
+  "@tunnelCategoryC": {
+    "description": "Tunnel category C"
+  },
+  "tunnelCategoryD": "D category",
+  "@tunnelCategoryD": {
+    "description": "Tunnel category D"
+  },
+  "tunnelCategoryE": "E category",
+  "@tunnelCategoryE": {
+    "description": "Tunnel category E"
+  },
+  "noneTitle": "None",
+  "@noneTitle": {
+    "description": "Route setting is missing"
+  },
+  "selectDateTimeTitle": "Select date and time",
+  "@selectDateTimeTitle": {
+    "description": "Title for date time picker"
+  },
+  "dateTimeFormat": "dd/MM/yyyy, hh:mm a",
+  "@dateTimeFormat": {
+    "description": "Date and time format"
+  },
+  "poiSettingsTitle": "Points of interest",
+  "@poiSettingsTitle": {
+    "description": "Title of the settings for POI"
+  },
+  "wayPointsListTitle": "Waypoints",
+  "@wayPointsListTitle": {
+    "description": "Title of the waypoints list"
+  },
+  "noLocationWarning": "Location Services are not available. We cannot locate your position.",
+  "@noLocationWarning": {
+    "description": "No location services warning"
   },
   "countryCodeAbw": "Aruba",
   "@countryCodeAbw": {
@@ -255,6 +648,9 @@
     "description": "Country name title"
   },
   "countryCodeChe": "Switzerland",
+  "@countryCode": {
+    "description": "Country name title"
+  },
   "countryCodeChl": "Chile",
   "@countryCodeChl": {
     "description": "Country name title"
@@ -1083,227 +1479,65 @@
   "@countryCodeZwe": {
     "description": "Country name title"
   },
-  "dateTimeFormat": "dd/MM/yyyy, hh:mm a",
-  "@dateTimeFormat": {
-    "description": "Date and time format"
+  "arriveActionText": "Arrive at destination",
+  "@arriveActionText": {
+    "description": "Text for the arrive maneuver action"
   },
-  "defaultLocationTitle": "Default location",
-  "@defaultLocationTitle": {
-    "description": "Default location title"
+  "continueOnActionText": "Continue on",
+  "@continueOnActionText": {
+    "description": "Text for the continueOn maneuver action"
   },
-  "deleteMapOptionTitle": "Delete map",
-  "@deleteMapOptionTitle": {
-    "description": "Title of the delete map option"
-  },
-  "departActionRoadText": "Start at '{{0}}'",
-  "@departActionRoadText": {
-    "description": "Text for the depart maneuver action"
+  "continueOnActionRoadText": "Continue on '{{0}}'",
+  "@continueOnActionRoadText": {
+    "description": "Text for the continueOn maneuver action"
   },
   "departActionText": "Start",
   "@departActionText": {
     "description": "Text for the depart maneuver action"
   },
-  "departureTimeTitle": "Departure time",
-  "@departureTimeTitle": {
-    "description": "Title of departure time setting in route options"
-  },
-  "dirtRoad": "Dirt road",
-  "@dirtRoad": {
-    "description": "Avoid road feature name for route preferences"
-  },
-  "doneTitle": "Done",
-  "@doneTitle": {
-    "description": "Done button title"
-  },
-  "downloadedMapOptionsTitle": "Options",
-  "@downloadedMapOptionsTitle": {
-    "description": "Title of the options of downloaded map"
-  },
-  "downloadedMapsTitle": "DOWNLOADED",
-  "@downloadedMapsTitle": {
-    "description": "Title of the list of downloaded maps"
-  },
-  "downloadMapsButtonTitle": "Download Maps",
-  "@downloadMapsButtonTitle": {
-    "description": "Text for the download maps button"
-  },
-  "downloadMapsErrorText": "Map downloading failed with error: '{{error}}'",
-  "@downloadMapsErrorText": {
-    "description": "Map downloading error message"
-  },
-  "downloadMapsTitle": "Download maps",
-  "@downloadMapsTitle": {
-    "description": "Text for the download maps menu"
-  },
-  "eatAndDrinkTitle": "Eat and Drink",
-  "@eatAndDrinkTitle": {
-    "description": "Text for the Eat and Drink place category"
-  },
-  "enterHighwayFromLeftActionText": "Join the highway from the left side",
-  "enterHighwayFromRightActionText": "Join the highway from the right side",
-  "fastestRouteTitle": "Fastest route",
-  "@fastestRouteTitle": {
-    "description": "Title of fastest route mode"
-  },
-  "ferry": "Ferry",
-  "@ferry": {
-    "description": "Avoid road feature name for route preferences"
-  },
-  "ferryActionNextRoadText": "Take the ferry to '{{0}}'",
-  "@ferryActionNextRoadText": {
-    "description": "Text for the ferry maneuver action"
+  "departActionRoadText": "Start at '{{0}}'",
+  "@departActionRoadText": {
+    "description": "Text for the depart maneuver action"
   },
   "ferryActionText": "Take the ferry",
   "@ferryActionText": {
     "description": "Text for the ferry maneuver action"
   },
-  "fuelingStationsTitle": "Fueling Stations",
-  "@fuelingStationsTitle": {
-    "description": "Text for the Fueling Stations place category"
-  },
-  "gigabyteAbbreviationText": "GB",
-  "@gigabyteAbbreviationText": {
-    "description": "Text for the abbreviation of the giga bytes"
-  },
-  "hazardousGoodsCombustible": "Combustible",
-  "@hazardousGoodsCombustible": {
-    "description": "Hazardous goods combustible"
-  },
-  "hazardousGoodsCorrosive": "Corrosive",
-  "@hazardousGoodsCorrosive": {
-    "description": "Hazardous goods corrosive"
-  },
-  "hazardousGoodsExplosive": "Explosive",
-  "@hazardousGoodsExplosive": {
-    "description": "Hazardous goods explosive"
-  },
-  "hazardousGoodsFlammable": "Flammable",
-  "@hazardousGoodsFlammable": {
-    "description": "Hazardous goods flammable"
-  },
-  "hazardousGoodsGas": "Gas",
-  "@hazardousGoodsGas": {
-    "description": "Hazardous goods gas"
-  },
-  "hazardousGoodsHarmfulToWater": "Harmful To Water",
-  "@hazardousGoodsHarmfulToWater": {
-    "description": "Hazardous goods harmful to water"
-  },
-  "hazardousGoodsOrganic": "Organic",
-  "@hazardousGoodsOrganic": {
-    "description": "Hazardous goods organic"
-  },
-  "hazardousGoodsOther": "Other",
-  "@hazardousGoodsOther": {
-    "description": "Hazardous goods other"
-  },
-  "hazardousGoodsPoison": "Poison",
-  "@hazardousGoodsPoison": {
-    "description": "Hazardous goods poison"
-  },
-  "hazardousGoodsPoisonousInhalation": "Poisonous Inhalation",
-  "@hazardousGoodsPoisonousInhalation": {
-    "description": "Hazardous goods poisonous inhalation"
-  },
-  "hazardousGoodsRadioactive": "Radioactive",
-  "@hazardousGoodsRadioactive": {
-    "description": "Hazardous goods radioactive"
-  },
-  "hazardousGoodsTitle": "Hazardous goods",
-  "@hazardousGoodsTitle": {
-    "description": "Route truck hazardous goods preferences row title"
-  },
-  "highwayTitle": "Highway",
-  "@highwayTitle": {
-    "description": "Route preferences section title"
-  },
-  "hourAbbreviationText": "h",
-  "@hourAbbreviationText": {
-    "description": "Text for the abbreviation of the hour"
-  },
-  "incompleteDownloadMessage": "Download is not completed",
-  "@incompleteDownloadMessage": {
-    "description": "Text means that download is not completed"
-  },
-  "internalStorageText": "Internal storage",
-  "@internalStorageText": {
-    "description": "Text for internal storage caption"
-  },
-  "kilobyteAbbreviationText": "KB",
-  "@kilobyteAbbreviationText": {
-    "description": "Text for the abbreviation of the kilo bytes"
-  },
-  "kilometerAbbreviationText": "km",
-  "@kilometerAbbreviationText": {
-    "description": "Text for the abbreviation of the kilometer"
-  },
-  "kmhAbbreviationText": "km/h",
-  "@kmhAbbreviationText": {
-    "description": "Text for the abbreviation of the kilometer per hour"
-  },
-  "languageCodeArSa": "Arabic (Saudi Arabia)",
-  "@languageCodeArSa": {
-    "description": "Language code for Arabic (Saudi Arabia)"
-  },
-  "languageCodeDeDe": "German",
-  "@languageCodeDeDe": {
-    "description": "Language code for German"
-  },
-  "languageCodeEnUs": "English (United States)",
-  "@languageCodeEnUs": {
-    "description": "Language code for English (United States)"
-  },
-  "languageCodeEsEs": "Spanish (Spain)",
-  "@languageCodeEsEs": {
-    "description": "Language code for Spanish (Spain)"
-  },
-  "languageCodeFrFr": "French",
-  "@languageCodeFrFr": {
-    "description": "Language code for French"
-  },
-  "languageCodeHiIn": "Hindi",
-  "@languageCodeHiIn": {
-    "description": "Language code for Hindi"
-  },
-  "languageCodePtPt": "Portuguese (Portugal)",
-  "@languageCodePtPt": {
-    "description": "Language code for Portuguese (Portugal)"
-  },
-  "languageCodeTitle": "Language code",
-  "@languageCodeTitle": {
-    "description": "Title of language code setting in route text options"
-  },
-  "languageCodeZhCn": "Chinese (Simplified China)",
-  "@languageCodeZhCn": {
-    "description": "Language code for Chinese (Simplified China)"
-  },
-  "leftExitActionNextRoadText": "Take the left exit to '{{0}}'",
-  "@leftExitActionNextRoadText": {
-    "description": "Text for the leftExit maneuver action"
+  "ferryActionNextRoadText": "Take the ferry to '{{0}}'",
+  "@ferryActionNextRoadText": {
+    "description": "Text for the ferry maneuver action"
   },
   "leftExitActionText": "Take the left exit",
   "@leftExitActionText": {
     "description": "Text for the leftExit maneuver action"
   },
-  "leftForkActionNextRoadText": "Take the left fork onto '{{0}}'",
-  "@leftForkActionNextRoadText": {
-    "description": "Text for the leftFork maneuver action"
+  "leftExitActionNextRoadText": "Take the left exit to '{{0}}'",
+  "@leftExitActionNextRoadText": {
+    "description": "Text for the leftExit maneuver action"
   },
   "leftForkActionText": "Take the left fork",
   "@leftForkActionText": {
     "description": "Text for the leftFork maneuver action"
   },
-  "leftRampActionNextRoadText": "Take the left ramp onto '{{0}}'",
-  "@leftRampActionNextRoadText": {
-    "description": "Text for the leftRamp maneuver action"
+  "leftForkActionNextRoadText": "Take the left fork onto '{{0}}'",
+  "@leftForkActionNextRoadText": {
+    "description": "Text for the leftFork maneuver action"
   },
   "leftRampActionText": "Take the left ramp",
   "@leftRampActionText": {
     "description": "Text for the leftRamp maneuver action"
   },
+  "leftRampActionNextRoadText": "Take the left ramp onto '{{0}}'",
+  "@leftRampActionNextRoadText": {
+    "description": "Text for the leftRamp maneuver action"
+  },
   "leftRoundaboutEnterActionText": "Enter the roundabout",
   "@leftRoundaboutEnterActionText": {
     "description": "Text for the leftRoundaboutEnter maneuver action"
+  },
+  "leftRoundaboutExit1ActionText": "Take the first exit of the roundabout",
+  "@leftRoundaboutExit1ActionText": {
+    "description": "Text for the leftRoundaboutExit1 maneuver action"
   },
   "leftRoundaboutExit10ActionText": "Take the 10th exit of the roundabout",
   "@leftRoundaboutExit10ActionText": {
@@ -1316,10 +1550,6 @@
   "leftRoundaboutExit12ActionText": "Take the 12th exit of the roundabout",
   "@leftRoundaboutExit12ActionText": {
     "description": "Text for the leftRoundaboutExit12 maneuver action"
-  },
-  "leftRoundaboutExit1ActionText": "Take the first exit of the roundabout",
-  "@leftRoundaboutExit1ActionText": {
-    "description": "Text for the leftRoundaboutExit1 maneuver action"
   },
   "leftRoundaboutExit2ActionText": "Take the second exit of the roundabout",
   "@leftRoundaboutExit2ActionText": {
@@ -1357,155 +1587,61 @@
   "@leftRoundaboutPassActionText": {
     "description": "Text for the leftRoundaboutPass maneuver action"
   },
-  "leftTurnActionNextRoadText": "Turn left on '{{0}}'",
-  "@leftTurnActionNextRoadText": {
-    "description": "Text for the leftTurn maneuver action"
-  },
   "leftTurnActionText": "Turn left",
   "@leftTurnActionText": {
     "description": "Text for the leftTurn maneuver action"
   },
-  "leftUTurnActionNextRoadText": "Make a left U-turn at '{{0}}'",
-  "@leftUTurnActionNextRoadText": {
-    "description": "Text for the leftUTurn maneuver action"
+  "leftTurnActionNextRoadText": "Turn left on '{{0}}'",
+  "@leftTurnActionNextRoadText": {
+    "description": "Text for the leftTurn maneuver action"
   },
   "leftUTurnActionText": "Make a left U-turn",
   "@leftUTurnActionText": {
     "description": "Text for the leftUTurn maneuver action"
   },
-  "loadCustomScene": "Load custom scene",
-  "@loadCustomScene": {
-    "description": "Text for the load custom scene button in landing screen drawer menu"
-  },
-  "loadCustomSceneFailure": "Scene loading failed",
-  "@loadCustomSceneFailure": {
-    "description": "Short-time message text displayed when loading custom scene failed"
-  },
-  "loadCustomSceneSuccess": "Scene loading succeeded",
-  "@loadCustomSceneSuccess": {
-    "description": "Short-time message text displayed when loading custom scene succeeded"
-  },
-  "mapRegionChildrenNumberText": "'{{0}}' items",
-  "@mapRegionChildrenNumberText": {
-    "description": "Text for children number of a map region"
-  },
-  "mapUpdateAvailableDialogMessage": "Would you like to update maps to the latest version?",
-  "@mapUpdateAvailableDialogMessage": {
-    "description": "Message of the map update available dialog"
-  },
-  "mapUpdateAvailableDialogTitle": "Map update available",
-  "@mapUpdateAvailableDialogTitle": {
-    "description": "Title of the map update available dialog"
-  },
-  "matchingResultsTitle": "Matching results",
-  "@matchingResultsTitle": {
-    "description": "Title of the matching results header"
-  },
-  "megabyteAbbreviationText": "MB",
-  "@megabyteAbbreviationText": {
-    "description": "Text for the abbreviation of the mega bytes"
-  },
-  "meterAbbreviationText": "m",
-  "@meterAbbreviationText": {
-    "description": "Text for the abbreviation of the meter"
-  },
-  "middleForkActionNextRoadText": "Take the middle fork onto '{{0}}'",
-  "@middleForkActionNextRoadText": {
-    "description": "Text for the middleFork maneuver action"
+  "leftUTurnActionNextRoadText": "Make a left U-turn at '{{0}}'",
+  "@leftUTurnActionNextRoadText": {
+    "description": "Text for the leftUTurn maneuver action"
   },
   "middleForkActionText": "Take the middle fork",
   "@middleForkActionText": {
     "description": "Text for the middleFork maneuver action"
   },
-  "minuteAbbreviationText": "min",
-  "@minuteAbbreviationText": {
-    "description": "Text for the abbreviation of the minute"
-  },
-  "noLocationWarning": "Location Services are not available. We cannot locate your position.",
-  "@noLocationWarning": {
-    "description": "No location services warning"
-  },
-  "noneTitle": "None",
-  "@noneTitle": {
-    "description": "Route setting is missing"
-  },
-  "noResultsFoundDescription": "Try to use another keywords",
-  "@noResultsFoundDescription": {
-    "description": "Message if no search results were found"
-  },
-  "noResultsFoundText": "Sorry, nothing found",
-  "@noResultsFoundText": {
-    "description": "Message if no search results were found"
-  },
-  "noTrafficDelaysText": "No delays",
-  "@noTrafficDelaysText": {
-    "description": "No traffic delays text"
-  },
-  "offlineAppMapsDialogMessage": "Before using the app offline, you need to download the map of your area.",
-  "@offlineAppMapsDialogMessage": {
-    "description": "Text of the dialog box requesting the download of maps."
-  },
-  "offlineAppMapsDialogTitle": "All you need is maps",
-  "@offlineAppMapsDialogTitle": {
-    "description": "Title of the dialog box requesting the download of maps."
-  },
-  "optimizationModeTitle": "Optimization mode",
-  "@optimizationModeTitle": {
-    "description": "Title of optimization mode setting in route options"
-  },
-  "poiSettingsTitle": "Points of interest",
-  "@poiSettingsTitle": {
-    "description": "Title of the settings for POI"
-  },
-  "preferencesTitle": "Preferences",
-  "@preferencesTitle": {
-    "description": "Preferences button title"
-  },
-  "quadAxleGroup": "Quad Axle Group",
-  "quintAxleGroup": "Quint Axle Group",
-  "realLocationSourceTitle": "Real location events",
-  "@realLocationSourceTitle": {
-    "description": "Title of the real location events source"
-  },
-  "recentlySearchTitle": "Recent Search Results",
-  "@recentlySearchTitle": {
-    "description": "Title of the recent searches header"
-  },
-  "reroutingInProgressText": "Updating...",
-  "@reroutingInProgressText": {
-    "description": "Text for the rerouting indicator"
-  },
-  "retryDownloadMapOptionTitle": "Retry download",
-  "@retryDownloadMapOptionTitle": {
-    "description": "Title of the retry download map option"
-  },
-  "rightExitActionNextRoadText": "Take the right exit to '{{0}}'",
-  "@rightExitActionNextRoadText": {
-    "description": "Text for the rightExit maneuver action"
+  "middleForkActionNextRoadText": "Take the middle fork onto '{{0}}'",
+  "@middleForkActionNextRoadText": {
+    "description": "Text for the middleFork maneuver action"
   },
   "rightExitActionText": "Take the right exit",
   "@rightExitActionText": {
     "description": "Text for the rightExit maneuver action"
   },
-  "rightForkActionNextRoadText": "Take the right fork onto '{{0}}'",
-  "@rightForkActionNextRoadText": {
-    "description": "Text for the rightFork maneuver action"
+  "rightExitActionNextRoadText": "Take the right exit to '{{0}}'",
+  "@rightExitActionNextRoadText": {
+    "description": "Text for the rightExit maneuver action"
   },
   "rightForkActionText": "Take the right fork",
   "@rightForkActionText": {
     "description": "Text for the rightFork maneuver action"
   },
-  "rightRampActionNextRoadText": "Take the right ramp onto '{{0}}'",
-  "@rightRampActionNextRoadText": {
-    "description": "Text for the rightRamp maneuver action"
+  "rightForkActionNextRoadText": "Take the right fork onto '{{0}}'",
+  "@rightForkActionNextRoadText": {
+    "description": "Text for the rightFork maneuver action"
   },
   "rightRampActionText": "Take the right ramp",
   "@rightRampActionText": {
     "description": "Text for the rightRamp maneuver action"
   },
+  "rightRampActionNextRoadText": "Take the right ramp onto '{{0}}'",
+  "@rightRampActionNextRoadText": {
+    "description": "Text for the rightRamp maneuver action"
+  },
   "rightRoundaboutEnterActionText": "Enter the roundabout",
   "@rightRoundaboutEnterActionText": {
     "description": "Text for the rightRoundaboutEnter maneuver action"
+  },
+  "rightRoundaboutExit1ActionText": "Take the first exit of the roundabout",
+  "@rightRoundaboutExit1ActionText": {
+    "description": "Text for the rightRoundaboutExit1 maneuver action"
   },
   "rightRoundaboutExit10ActionText": "Take the 10th exit of the roundabout",
   "@rightRoundaboutExit10ActionText": {
@@ -1518,10 +1654,6 @@
   "rightRoundaboutExit12ActionText": "Take the 12th exit of the roundabout",
   "@rightRoundaboutExit12ActionText": {
     "description": "Text for the rightRoundaboutExit12 maneuver action"
-  },
-  "rightRoundaboutExit1ActionText": "Take the first exit of the roundabout",
-  "@rightRoundaboutExit1ActionText": {
-    "description": "Text for the rightRoundaboutExit1 maneuver action"
   },
   "rightRoundaboutExit2ActionText": "Take the second exit of the roundabout",
   "@rightRoundaboutExit2ActionText": {
@@ -1559,297 +1691,164 @@
   "@rightRoundaboutPassActionText": {
     "description": "Text for the rightRoundaboutPass maneuver action"
   },
-  "rightTurnActionNextRoadText": "Turn right on '{{0}}'",
-  "@rightTurnActionNextRoadText": {
-    "description": "Text for the rightTurn maneuver action"
-  },
   "rightTurnActionText": "Turn right",
   "@rightTurnActionText": {
     "description": "Text for the rightTurn maneuver action"
   },
-  "rightUTurnActionNextRoadText": "Make a right U-turn at '{{0}}'",
-  "@rightUTurnActionNextRoadText": {
-    "description": "Text for the rightUTurn maneuver action"
+  "rightTurnActionNextRoadText": "Turn right on '{{0}}'",
+  "@rightTurnActionNextRoadText": {
+    "description": "Text for the rightTurn maneuver action"
   },
   "rightUTurnActionText": "Make a right U-turn",
   "@rightUTurnActionText": {
     "description": "Text for the rightUTurn maneuver action"
   },
-  "routeAlternativesTitle": "Route alternatives",
-  "@routeAlternativesTitle": {
-    "description": "Title of route alternatives setting in route options"
-  },
-  "routeOptionsTitle": "Route Options",
-  "@routeOptionsTitle": {
-    "description": "Title of route options section in preferences"
-  },
-  "routePreferencesScreenTitle": "Route Preferences",
-  "@routePreferencesScreenTitle": {
-    "description": "Title of route preferences screen"
-  },
-  "routeTextOptionsTitle": "Route Text Options",
-  "@routeTextOptionsTitle": {
-    "description": "Title of route text options section in preferences"
-  },
-  "routeToButtonTitle": "Route",
-  "@routeToButtonTitle": {
-    "description": "Title of the route to button"
-  },
-  "routingErrorText": "Routing failed with error: '{{error}}'",
-  "@routingErrorText": {
-    "description": "Routing error message"
-  },
-  "searchErrorText": "Search failed with error: '{{error}}'",
-  "@searchErrorText": {
-    "description": "Search error message"
-  },
-  "searchHint": "Where to?",
-  "@searchHint": {
-    "description": "Hint for the search text field"
-  },
-  "seasonalClosure": "Seasonal closure",
-  "@seasonalClosure": {
-    "description": "Avoid road feature name for route preferences"
-  },
-  "selectDateTimeTitle": "Select date and time",
-  "@selectDateTimeTitle": {
-    "description": "Title for date time picker"
-  },
-  "selectPositioningDialogTitle": "Choose a positioning method",
-  "@selectPositioningDialogTitle": {
-    "description": "Title of the navigation positioning source dialog"
-  },
-  "sharpLeftTurnActionNextRoadText": "Make a hard left turn onto '{{0}}'",
-  "@sharpLeftTurnActionNextRoadText": {
-    "description": "Text for the sharpLeftTurn maneuver action"
+  "rightUTurnActionNextRoadText": "Make a right U-turn at '{{0}}'",
+  "@rightUTurnActionNextRoadText": {
+    "description": "Text for the rightUTurn maneuver action"
   },
   "sharpLeftTurnActionText": "Make a hard left turn",
   "@sharpLeftTurnActionText": {
     "description": "Text for the sharpLeftTurn maneuver action"
   },
-  "sharpRightTurnActionNextRoadText": "Make a hard right turn onto '{{0}}'",
-  "@sharpRightTurnActionNextRoadText": {
-    "description": "Text for the sharpRightTurn maneuver action"
+  "sharpLeftTurnActionNextRoadText": "Make a hard left turn onto '{{0}}'",
+  "@sharpLeftTurnActionNextRoadText": {
+    "description": "Text for the sharpLeftTurn maneuver action"
   },
   "sharpRightTurnActionText": "Make a hard right turn",
   "@sharpRightTurnActionText": {
     "description": "Text for the sharpRightTurn maneuver action"
   },
-  "shortestRouteTitle": "Shortest route",
-  "@shortestRouteTitle": {
-    "description": "Title of shortest route mode"
-  },
-  "simulatedLocationSourceTitle": "Simulated location events (along the route)",
-  "@simulatedLocationSourceTitle": {
-    "description": "Title of the simulated location events source"
-  },
-  "singleAxleGroup": "Single Axle Group",
-  "sizeOfWholeAreaOfRegion": "Whole area '{{0}}'",
-  "@sizeOfWholeAreaOfRegion": {
-    "description": "Text for size of whole area of a map region"
-  },
-  "slightLeftTurnActionNextRoadText": "Bear left onto '{{0}}'",
-  "@slightLeftTurnActionNextRoadText": {
-    "description": "Text for the slightLeftTurn maneuver action"
+  "sharpRightTurnActionNextRoadText": "Make a hard right turn onto '{{0}}'",
+  "@sharpRightTurnActionNextRoadText": {
+    "description": "Text for the sharpRightTurn maneuver action"
   },
   "slightLeftTurnActionText": "Bear left",
   "@slightLeftTurnActionText": {
     "description": "Text for the slightLeftTurn maneuver action"
   },
+  "slightLeftTurnActionNextRoadText": "Bear left onto '{{0}}'",
+  "@slightLeftTurnActionNextRoadText": {
+    "description": "Text for the slightLeftTurn maneuver action"
+  },
+  "slightRightTurnActionText": "Bear right",
+  "@slightRightTurnActionText": {
+    "description": "Text for the slightRightTurn maneuver action"
+  },
   "slightRightTurnActionNextRoadText": "Bear right onto '{{0}}'",
   "@slightRightTurnActionNextRoadText": {
     "description": "Text for the slightRightTurn maneuver action"
   },
-  "slightRightTurnActionText": "Bear right",
+  "enterHighwayFromLeftActionText": "Join the highway from the left side",
+  "@slightRightTurnActionText": {
+    "description": "Text for the enterHighwayFromLeft maneuver action"
+  },
+  "enterHighwayFromRightActionText": "Join the highway from the right side",
   "@slightRightTurnActionText": {
     "description": "Text for the enterHighwayFromRight maneuver action"
   },
-  "specificationsTitle": "Specifications",
-  "@specificationsTitle": {
-    "description": "Route truck specification preferences row title"
+  "downloadMapsTitle": "Download maps",
+  "@downloadMapsTitle": {
+    "description": "Text for the download maps menu"
   },
-  "stopMapDownloadButtonTitle": "Stop downloading",
-  "@stopMapDownloadButtonTitle": {
-    "description": "Title text for stop map downloading button"
+  "downloadMapsButtonTitle": "Download Maps",
+  "@downloadMapsButtonTitle": {
+    "description": "Text for the download maps button"
+  },
+  "byteAbbreviationText": "bytes",
+  "@byteAbbreviationText": {
+    "description": "Text for the abbreviation of the bytes"
+  },
+  "kilobyteAbbreviationText": "KB",
+  "@kilobyteAbbreviationText": {
+    "description": "Text for the abbreviation of the kilo bytes"
+  },
+  "megabyteAbbreviationText": "MB",
+  "@megabyteAbbreviationText": {
+    "description": "Text for the abbreviation of the mega bytes"
+  },
+  "gigabyteAbbreviationText": "GB",
+  "@gigabyteAbbreviationText": {
+    "description": "Text for the abbreviation of the giga bytes"
+  },
+  "internalStorageText": "Internal storage",
+  "@internalStorageText": {
+    "description": "Text for internal storage caption"
+  },
+  "availableStorageText": "Available",
+  "@availableStorageText": {
+    "description": "Text for available storage caption"
+  },
+  "downloadMapsErrorText": "Map downloading failed with error: '{{error}}'",
+  "@downloadMapsErrorText": {
+    "description": "Map downloading error message"
+  },
+  "mapRegionChildrenNumberText": "'{{0}}' items",
+  "@mapRegionChildrenNumberText": {
+    "description": "Text for children number of a map region"
+  },
+  "sizeOfWholeAreaOfRegion": "Whole area '{{0}}'",
+  "@sizeOfWholeAreaOfRegion": {
+    "description": "Text for size of whole area of a map region"
+  },
+  "incompleteDownloadMessage": "Download is not completed",
+  "@incompleteDownloadMessage": {
+    "description": "Text means that download is not completed"
   },
   "stopMapDownloadDialogTitle": "Stop downloading \"'{{0}}'\"?",
   "@stopMapDownloadDialogTitle": {
     "description": "Title text for stop map downloading confirmation dialog"
   },
-  "stopNavigationAcceptButtonCaption": "Exit navigation mode",
-  "@stopNavigationAcceptButtonCaption": {
-    "description": "Caption of the navigation stop dialog"
+  "stopMapDownloadButtonTitle": "Stop downloading",
+  "@stopMapDownloadButtonTitle": {
+    "description": "Title text for stop map downloading button"
   },
-  "stopNavigationDialogSubtitle": "You will permanently lose you progress and destination history",
-  "@stopNavigationDialogSubtitle": {
-    "description": "Title of the navigation stop dialog"
+  "downloadedMapsTitle": "DOWNLOADED",
+  "@downloadedMapsTitle": {
+    "description": "Title of the list of downloaded maps"
   },
-  "stopNavigationDialogTitle": "Do you want to exit navigation mode?",
-  "@stopNavigationDialogTitle": {
-    "description": "Title of the navigation stop dialog"
+  "downloadedMapOptionsTitle": "Options",
+  "@downloadedMapOptionsTitle": {
+    "description": "Title of the options of downloaded map"
   },
-  "tandemAxleGroup": "Tandem Axle Group",
-  "textFormatHtml": "Html",
-  "@textFormatHtml": {
-    "description": "Title of text instructions html format setting in route text options"
+  "retryDownloadMapOptionTitle": "Retry download",
+  "@retryDownloadMapOptionTitle": {
+    "description": "Title of the retry download map option"
   },
-  "textFormatPlain": "Plain",
-  "@textFormatPlain": {
-    "description": "Title of text instructions plain format setting in route text options"
-  },
-  "textFormatTitle": "Text format",
-  "@textFormatTitle": {
-    "description": "Title of text mode setting in route text options"
-  },
-  "tollRoad": "Toll road",
-  "@tollRoad": {
-    "description": "Avoid road feature name for route preferences"
-  },
-  "trafficDelayText": "Incl. '{{0}}' delay",
-  "@trafficDelayText": {
-    "description": "Template for the traffic delay text"
-  },
-  "tripleAxleGroup": "Triple Axle Group",
-  "truckAxleCountRowTitle": "Axel count",
-  "@truckAxleCountRowTitle": {
-    "description": "Title for truck specification preferences"
-  },
-  "truckAxlesCountHint": "Total number of vehicle axles",
-  "@truckAxlesCountHint": {
-    "description": "Hint for truck specification preferences"
-  },
-  "truckAxleWeightHint": "Axle weight in kg",
-  "@truckAxleWeightHint": {
-    "description": "Hint for truck specification preferences"
-  },
-  "truckGrossWeightRowTitle": "Gross weight",
-  "@truckGrossWeightRowTitle": {
-    "description": "Title for truck specification preferences"
-  },
-  "truckHeightHint": "Height in cm",
-  "@truckHeightHint": {
-    "description": "Hint for truck specification preferences"
-  },
-  "truckHeightRowTitle": "Height",
-  "@truckHeightRowTitle": {
-    "description": "Title for truck specification preferences"
-  },
-  "truckLengthRowTitle": "Length",
-  "@truckLengthRowTitle": {
-    "description": "Title for truck specification preferences"
-  },
-  "truckLengthtHint": "Length in cm",
-  "@truckLengthtHint": {
-    "description": "Hint for truck specification preferences"
-  },
-  "truckSpecificationsTitle": "Truck Specifications",
-  "@truckSpecificationsTitle": {
-    "description": "Route truck preferences section title"
-  },
-  "truckTotalWeightHint": "Total weight in kg",
-  "@truckTotalWeightHint": {
-    "description": "Hint for truck specification preferences"
-  },
-  "truckWeightPerAxleRowTitle": "Weight per axle",
-  "@truckWeightPerAxleRowTitle": {
-    "description": "Title for truck specification preferences"
-  },
-  "truckWidthHint": "Width in cm",
-  "@truckWidthHint": {
-    "description": "Hint for truck specification preferences"
-  },
-  "truckWidthRowTitle": "Width",
-  "@truckWidthRowTitle": {
-    "description": "Title for truck specification preferences"
-  },
-  "tunnel": "Tunnel",
-  "@tunnel": {
-    "description": "Avoid road feature name for route preferences"
-  },
-  "tunnelCategoryB": "B category",
-  "@tunnelCategoryB": {
-    "description": "Tunnel category B"
-  },
-  "tunnelCategoryC": "C category",
-  "@tunnelCategoryC": {
-    "description": "Tunnel category C"
-  },
-  "tunnelCategoryD": "D category",
-  "@tunnelCategoryD": {
-    "description": "Tunnel category D"
-  },
-  "tunnelCategoryE": "E category",
-  "@tunnelCategoryE": {
-    "description": "Tunnel category E"
-  },
-  "tunnelCategoryTitle": "Tunnel category",
-  "@tunnelCategoryTitle": {
-    "description": "Route truck preferences setting"
-  },
-  "turnOff": "Turn Off",
-  "@turnOff": {
-    "description": "Turn off action text"
-  },
-  "unitSystemImperialUk": "Imperial UK",
-  "@unitSystemImperialUk": {
-    "description": "Title of imperial UK unit system setting in route text options"
-  },
-  "unitSystemImperialUs": "Imperial US",
-  "@unitSystemImperialUs": {
-    "description": "Title of imperial US unit system setting in route text options"
-  },
-  "unitSystemMetric": "Metric",
-  "@unitSystemMetric": {
-    "description": "Title of metric unit system setting in route text options"
-  },
-  "unitSystemTitle": "Unit system",
-  "@unitSystemTitle": {
-    "description": "Title of unit system setting in route options"
-  },
-  "updateButtonTitle": "Update",
-  "@updateButtonTitle": {
-    "description": "Update button title"
-  },
-  "updateMapsErrorText": "Map updating failed with error: '{{error}}'",
-  "@updateMapsErrorText": {
-    "description": "Map updating error message"
-  },
-  "updatingMapTitle": "Updating map...",
-  "@updatingMapTitle": {
-    "description": "Title of the map updating progress"
+  "deleteMapOptionTitle": "Delete map",
+  "@deleteMapOptionTitle": {
+    "description": "Title of the delete map option"
   },
   "useMapOfflineSwitch": "Use app offline",
   "@useMapOfflineSwitch": {
     "description": "Title of the switch app to offline"
   },
-  "userConsentDescription": "Please help HERE to improve the provided services",
-  "@userConsentDescription": {
-    "description": "Description text about information gathering"
+  "offlineAppMapsDialogTitle": "All you need is maps",
+  "@offlineAppMapsDialogTitle": {
+    "description": "Title of the dialog box requesting the download of maps."
   },
-  "userConsentTitle": "Consent",
-  "@userConsentTitle": {
-    "description": "Text for the user consent menu"
+  "offlineAppMapsDialogMessage": "Before using the app offline, you need to download the map of your area.",
+  "@offlineAppMapsDialogMessage": {
+    "description": "Text of the dialog box requesting the download of maps."
   },
-  "uTurns": "U-turns",
-  "@uTurns": {
-    "description": "Avoid road feature name for route preferences"
+  "updateMapsErrorText": "Map updating failed with error: '{{error}}'",
+  "@updateMapsErrorText": {
+    "description": "Map updating error message"
   },
-  "walkSpeedTitle": "Walk Speed",
-  "@walkSpeedTitle": {
-    "description": "Pedestrian route settings title"
+  "mapUpdateAvailableDialogTitle": "Map update available",
+  "@mapUpdateAvailableDialogTitle": {
+    "description": "Title of the map update available dialog"
   },
-  "walkSpeedUnitTitle": "Walk speed (m/s)",
-  "@walkSpeedUnitTitle": {
-    "description": "Pedestrian route settings"
+  "mapUpdateAvailableDialogMessage": "Would you like to update maps to the latest version?",
+  "@mapUpdateAvailableDialogMessage": {
+    "description": "Message of the map update available dialog"
   },
-  "wayPointsListTitle": "Waypoints",
-  "@wayPointsListTitle": {
-    "description": "Title of the waypoints list"
+  "updateButtonTitle": "Update",
+  "@updateButtonTitle": {
+    "description": "Update button title"
   },
-  "weightInKg": "Weight in kg",
-  "weightPerAxleGroup": "Weight Per Axle Group",
-  "yourLocationTitle": "Your location",
-  "@yourLocationTitle": {
-    "description": "Your location title"
+  "updatingMapTitle": "Updating map...",
+  "@updatingMapTitle": {
+    "description": "Title of the map updating progress"
   }
 }
