@@ -19,6 +19,7 @@
 
 import 'dart:async';
 
+import 'package:RefApp/common/extensions/error_handling/search_error_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,11 +32,11 @@ import 'package:provider/provider.dart';
 import '../common/application_preferences.dart';
 import '../common/dismiss_keyboard_on_scroll.dart';
 import '../common/draggable_popup_here_logo_helper.dart';
+import '../common/error_toast.dart';
+import '../common/ui_style.dart';
 import 'recent_search_data_model.dart';
 import 'search_engine_proxy.dart';
 import 'search_results_screen.dart';
-import '../common/ui_style.dart';
-import '../common/util.dart' as Util;
 
 class SearchResult {
   final Place? place; // if null the current location should be used
@@ -192,7 +193,7 @@ class _SearchPopupState extends State<_SearchPopup> {
                       ),
                       toolbarHeight: widget.currentLocationTitle != null ? _kHeaderHeightExt : _kHeaderHeight,
                     ),
-                    if (_lastError != null) _buildErrorWidget(context),
+                    if (_lastError != null) _buildErrorWidget(),
                     if (_lastError == null)
                       _suggestions != null ? _buildSuggestionsWidget(context) : _buildRecentSearchWidget(context),
                   ],
@@ -469,50 +470,35 @@ class _SearchPopupState extends State<_SearchPopup> {
     );
   }
 
-  Widget _buildErrorWidget(BuildContext context) {
+  Widget _buildErrorWidget() {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    if (_lastError == SearchError.noResultsFound) {
-      return SliverFillRemaining(
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset("assets/nothing_found.svg"),
-              Text(
-                appLocalizations.noResultsFoundText,
-                style: TextStyle(
-                  fontSize: UIStyle.hugeFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.primary,
-                ),
+    return SliverFillRemaining(
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset("assets/nothing_found.svg"),
+            Text(
+              appLocalizations.noResultsFoundText,
+              style: TextStyle(
+                fontSize: UIStyle.hugeFontSize,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
               ),
-              Text(
-                appLocalizations.noResultsFoundDescription,
-                style: TextStyle(
-                  fontSize: UIStyle.bigFontSize,
-                  color: colorScheme.onSecondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return SliverFillRemaining(
-        child: Center(
-          child: Text(
-            Util.formatString(appLocalizations.searchErrorText, [_lastError.toString()]),
-            style: TextStyle(
-              fontSize: UIStyle.hugeFontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
             ),
-          ),
+            Text(
+              appLocalizations.noResultsFoundDescription,
+              style: TextStyle(
+                fontSize: UIStyle.bigFontSize,
+                color: colorScheme.onSecondary,
+              ),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 
   void _stopCurrentSearch() {
@@ -540,6 +526,7 @@ class _SearchPopupState extends State<_SearchPopup> {
       _searchTaskHandle = _searchEngine.suggest(query, _searchOptions, (error, suggestions) {
         if (error != null) {
           print('Search failed. Error: ${error.toString()}');
+          _showErrorMessage(error);
         }
 
         setState(() {
@@ -568,6 +555,7 @@ class _SearchPopupState extends State<_SearchPopup> {
     _searchTaskHandle = _searchEngine.searchByText(query, _searchOptions, (error, places) async {
       if (error != null) {
         print('Search failed. Error: ${error.toString()}');
+        _showErrorMessage(error);
       } else {
         await _showSearchResults(context, text, places!, false);
       }
@@ -595,6 +583,15 @@ class _SearchPopupState extends State<_SearchPopup> {
       } else {
         assert(false);
       }
+    }
+  }
+
+  void _showErrorMessage(SearchError searchError) {
+    if (mounted) {
+      ErrorToaster.makeToast(
+        context,
+        searchError.errorMessage(AppLocalizations.of(context)!),
+      );
     }
   }
 }

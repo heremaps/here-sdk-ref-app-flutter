@@ -19,6 +19,7 @@
 
 import 'dart:math';
 
+import 'package:RefApp/common/extensions/error_handling/routing_error_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +32,7 @@ import 'package:provider/provider.dart';
 
 import '../common/application_preferences.dart';
 import '../common/custom_map_style_settings.dart';
+import '../common/error_toast.dart';
 import '../common/place_actions_popup.dart';
 import '../common/reset_location_button.dart';
 import '../common/ui_style.dart';
@@ -584,10 +586,13 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     if (routes == null || routes.isEmpty) {
       if (error != null) {
         setState(() => _routingInProgress = false);
-        Util.displayErrorSnackBar(
-          _scaffoldKey.currentContext!,
-          Util.formatString(AppLocalizations.of(context)!.routingErrorText, [error.toString()]),
-        );
+        print('Routing failed. Error: ${error.toString()}');
+        if (mounted) {
+          ErrorToaster.makeToast(
+            context,
+            error.errorMessage(AppLocalizations.of(context)!),
+          );
+        }
       }
       return;
     }

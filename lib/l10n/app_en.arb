@@ -1499,6 +1499,46 @@
   "@departActionRoadText": {
     "description": "Text for the depart maneuver action"
   },
+  "errorAuthenticationFailed": "Authentication failed. Please check your credentials",
+  "@errorAuthenticationFailed": {
+    "description": "Text for the authentication failure"
+  },
+  "errorMapLoaderErrorOccurred": "A map loader error occurred",
+  "@errorMapLoaderErrorOccurred": {
+    "description": "Text for the map loader error"
+  },
+  "errorMapLoaderErrorOccurredPleaseTryAgain": "A map loader error occurred, please try again",
+  "@errorMapLoaderErrorOccurredPleaseTryAgain": {
+    "description": "Text for the map loader,please try again"
+  },
+  "errorMapLoaderErrorPerformMigration": "Call MapDownloader.repairPersistentMap to perform migration",
+  "@errorMapLoaderErrorPerformMigration": {
+    "description": "Text for the map loader error related to migration"
+  },
+  "errorNetworkIssueOccurred": "A network issue occurred",
+  "@errorNetworkIssueOccurred": {
+    "description": "Text for the network issue"
+  },
+  "errorNoResultFound": "No result found for the provided input",
+  "@errorNoResultFound": {
+    "description": "Text for No result found for the provided input"
+  },
+  "errorRoutingFailed": "Routing failed",
+  "@errorRoutingFailed": {
+    "description": "Text for the routing error"
+  },
+  "errorRoutingFailedPleaseTryAgain": "Routing failed, please try again",
+  "@errorRoutingFailedPleaseTryAgain": {
+    "description": "Text for the routing error with please try again"
+  },
+  "errorSearchFailed": "Search failed",
+  "@errorSearchFailed": {
+    "description": "Text for the search error"
+  },
+  "errorSearchFailedPleaseTryAgain": "Search failed, please try again",
+  "@errorSearchFailedPleaseTryAgain": {
+    "description": "Text for the search error with please try again"
+  },
   "ferryActionText": "Take the ferry",
   "@ferryActionText": {
     "description": "Text for the ferry maneuver action"
