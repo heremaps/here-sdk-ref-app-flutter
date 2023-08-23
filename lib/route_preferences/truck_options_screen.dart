@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import 'package:RefApp/common/extensions/truck_specification_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/routing.dart';
@@ -41,7 +42,7 @@ class TruckOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TruckOptions truckOptions = context.select((RoutePreferencesModel model) => model.truckOptions);
-
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
@@ -50,24 +51,24 @@ class TruckOptionsScreen extends StatelessWidget {
             RouteOptionsWidget(),
             RouteTextOptionsWidget(),
             RouteAvoidanceOptionsWidget(),
-            PreferencesSectionTitle(title: AppLocalizations.of(context)!.truckSpecificationsTitle),
+            PreferencesSectionTitle(title: localizations.truckSpecificationsTitle),
             PreferencesDisclosureRowWidget(
-              title: AppLocalizations.of(context)!.specificationsTitle,
-              subTitle: _truckSpecificationsToString(context, truckOptions.truckSpecifications),
+              title: localizations.specificationsTitle,
+              subTitle: truckOptions.truckSpecifications.specificationsString(localizations),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => TruckSpecificationsScreen()),
               ),
             ),
             PreferencesDisclosureRowWidget(
-              title: AppLocalizations.of(context)!.hazardousGoodsTitle,
+              title: localizations.hazardousGoodsTitle,
               subTitle: EnumStringHelper.hazardousMaterialsNamesToString(context, truckOptions.hazardousMaterials),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => TruckHazardousMaterialsScreen()),
               ),
             ),
-            PreferencesRowTitle(title: AppLocalizations.of(context)!.tunnelCategoryTitle),
+            PreferencesRowTitle(title: localizations.tunnelCategoryTitle),
             Container(
               decoration: UIStyle.roundedRectDecoration(),
               child: DropdownButtonHideUnderline(
@@ -95,23 +96,5 @@ class TruckOptionsScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _truckSpecificationsToString(BuildContext context, Transport.TruckSpecifications specifications) {
-    AppLocalizations localizations = AppLocalizations.of(context)!;
-    return <String>[
-      if (specifications.widthInCentimeters != null)
-        localizations.truckWidthRowTitle + " = " + specifications.widthInCentimeters.toString(),
-      if (specifications.heightInCentimeters != null)
-        localizations.truckHeightRowTitle + " = " + specifications.heightInCentimeters.toString(),
-      if (specifications.lengthInCentimeters != null)
-        localizations.truckLengthRowTitle + " = " + specifications.lengthInCentimeters.toString(),
-      if (specifications.axleCount != null)
-        localizations.truckAxleCountRowTitle + " = " + specifications.axleCount.toString(),
-      if (specifications.weightPerAxleInKilograms != null)
-        localizations.truckWeightPerAxleRowTitle + " = " + specifications.weightPerAxleInKilograms.toString(),
-      if (specifications.grossWeightInKilograms != null)
-        localizations.truckGrossWeightRowTitle + " = " + specifications.grossWeightInKilograms.toString()
-    ].join(", ");
   }
 }

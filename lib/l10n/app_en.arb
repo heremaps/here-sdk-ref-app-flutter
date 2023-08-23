@@ -1501,6 +1501,14 @@
   "@preferencesTitle": {
     "description": "Preferences button title"
   },
+  "quadAxleGroup": "Quad Axle Group",
+  "@quadAxleGroup": {
+    "description": "Title for WeightPerAxleGroup preference for truck specification"
+  },
+  "quintAxleGroup": "Quint Axle Group",
+  "@quintAxleGroup": {
+    "description": "Title for WeightPerAxleGroup preference for truck specification"
+  },
   "realLocationSourceTitle": "Real location events",
   "@realLocationSourceTitle": {
     "description": "Title of the real location events source"
@@ -1681,6 +1689,10 @@
   "@simulatedLocationSourceTitle": {
     "description": "Title of the simulated location events source"
   },
+  "singleAxleGroup": "Single Axle Group",
+  "@singleAxleGroup": {
+    "description": "Title for WeightPerAxleGroup preference for truck specification"
+  },
   "sizeOfWholeAreaOfRegion": "Whole area '{{0}}'",
   "@sizeOfWholeAreaOfRegion": {
     "description": "Text for size of whole area of a map region"
@@ -1725,6 +1737,10 @@
   "@stopNavigationDialogTitle": {
     "description": "Title of the navigation stop dialog"
   },
+  "tandemAxleGroup": "Tandem Axle Group",
+  "@tandemAxleGroup": {
+    "description": "Title for WeightPerAxleGroup preference for truck specification"
+  },
   "textFormatHtml": "Html",
   "@textFormatHtml": {
     "description": "Title of text instructions html format setting in route text options"
@@ -1744,6 +1760,10 @@
   "trafficDelayText": "Incl. '{{0}}' delay",
   "@trafficDelayText": {
     "description": "Template for the traffic delay text"
+  },
+  "tripleAxleGroup": "Triple Axle Group",
+  "@tripleAxleGroup": {
+    "description": "Title for WeightPerAxleGroup preference for truck specification"
   },
   "truckAxleCountRowTitle": "Axel count",
   "@truckAxleCountRowTitle": {
@@ -1880,6 +1900,14 @@
   "wayPointsListTitle": "Waypoints",
   "@wayPointsListTitle": {
     "description": "Title of the waypoints list"
+  },
+  "weightInKg": "Weight in kg",
+  "@weightInKg": {
+    "description": "Title for WeightPerAxleGroup preference for truck specification"
+  },
+  "weightPerAxleGroup": "Weight Per Axle Group",
+  "@weightPerAxleGroup": {
+    "description": "Title for section of WeightPerAxleGroup preferences for truck specification"
   },
   "yourLocationTitle": "Your location",
   "@yourLocationTitle": {
