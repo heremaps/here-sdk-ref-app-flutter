@@ -22,7 +22,7 @@ environment:
   flutter: ">=3.10.6"
 
 dependencies:
-  battery_plus: ^3.0.6
+  battery_plus: ^4.0.2
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -41,7 +41,7 @@ dependencies:
   flutter_tts: ^3.5.0
   reorderables: ^0.6.0
   ringtone_player: ^0.1.1
-  flutter_local_notifications: ^14.0.0+1
+  flutter_local_notifications: ^15.1.0+1
   path_provider: ^2.0.11
   url_launcher: ^6.1.5
   wakelock: ^0.6.2
