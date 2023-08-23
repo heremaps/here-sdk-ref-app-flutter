@@ -145,6 +145,7 @@ class TruckSpecificationsScreen extends StatelessWidget {
     return Transport.TruckSpecifications(
       grossWeightInKilograms ?? specs.grossWeightInKilograms,
       weightPerAxleInKilograms ?? specs.weightPerAxleInKilograms,
+      null,
       heightInCentimeters ?? specs.heightInCentimeters,
       widthInCentimeters ?? specs.widthInCentimeters,
       lengthInCentimeters ?? specs.lengthInCentimeters,

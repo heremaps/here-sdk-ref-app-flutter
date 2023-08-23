@@ -148,38 +148,42 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
-        children: [
-          Scaffold(
-            resizeToAvoidBottomInset: false,
-            key: _scaffoldKey,
-            body: Stack(
-              children: [
-                HereMap(
-                  key: _hereMapKey,
-                  options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
-                  onMapCreated: _onMapCreated,
-                ),
-                if (!Provider.of<AppPreferences>(context, listen: false).useAppOffline) _buildTrafficButton(context),
-              ],
-            ),
-            extendBodyBehindAppBar: true,
-            bottomNavigationBar: _mapInitSuccess ? _buildBottomNavigationBar(context) : null,
-            floatingActionButton: enableMapUpdate && _mapInitSuccess
-                ? null
-                : ResetLocationButton(
-                    onPressed: _resetCurrentPosition,
-                  ),
-          ),
-          if (_routingInProgress)
-            Container(
-              color: Colors.white54,
-              child: Center(
-                child: CircularProgressIndicator(),
+  Widget build(BuildContext context) {
+    final HereMapOptions options = HereMapOptions.withDefaults()
+      ..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    return Stack(
+      children: [
+        Scaffold(
+          resizeToAvoidBottomInset: false,
+          key: _scaffoldKey,
+          body: Stack(
+            children: [
+              HereMap(
+                key: _hereMapKey,
+                options: options,
+                onMapCreated: _onMapCreated,
               ),
+              if (!Provider.of<AppPreferences>(context, listen: false).useAppOffline) _buildTrafficButton(context),
+            ],
+          ),
+          extendBodyBehindAppBar: true,
+          bottomNavigationBar: _mapInitSuccess ? _buildBottomNavigationBar(context) : null,
+          floatingActionButton: enableMapUpdate && _mapInitSuccess
+              ? null
+              : ResetLocationButton(
+                  onPressed: _resetCurrentPosition,
+                ),
+        ),
+        if (_routingInProgress)
+          Container(
+            color: Colors.white54,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-        ],
-      );
+          ),
+      ],
+    );
+  }
 
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;

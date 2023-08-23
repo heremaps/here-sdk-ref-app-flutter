@@ -187,7 +187,6 @@ class EnumStringHelper {
           result[localizations.dirtRoad] = value;
           break;
         case RoadFeatures.uTurns:
-        case RoadFeatures.difficultTurns:
           result[localizations.uTurns] = value;
           break;
         default:

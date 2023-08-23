@@ -96,30 +96,34 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   @override
-  Widget build(BuildContext context) => DefaultTabController(
-        length: widget.places.length,
-        child: WillPopScope(
-          onWillPop: () async {
-            Navigator.of(context).pop(_hereMapController.camera.state.targetCoordinates);
-            return false;
-          },
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: HereMap(
-              key: _hereMapKey,
-              options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
-              onMapCreated: _onMapCreated,
-            ),
-            bottomNavigationBar: _buildBottomNavigationBar(context),
-            extendBodyBehindAppBar: true,
-            floatingActionButton: enableMapUpdate
-                ? null
-                : ResetLocationButton(
-                    onPressed: _resetCurrentPosition,
-                  ),
+  Widget build(BuildContext context) {
+    final HereMapOptions options = HereMapOptions.withDefaults()
+      ..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    return DefaultTabController(
+      length: widget.places.length,
+      child: WillPopScope(
+        onWillPop: () async {
+          Navigator.of(context).pop(_hereMapController.camera.state.targetCoordinates);
+          return false;
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: HereMap(
+            key: _hereMapKey,
+            options: options,
+            onMapCreated: _onMapCreated,
           ),
+          bottomNavigationBar: _buildBottomNavigationBar(context),
+          extendBodyBehindAppBar: true,
+          floatingActionButton: enableMapUpdate
+              ? null
+              : ResetLocationButton(
+                  onPressed: _resetCurrentPosition,
+                ),
         ),
-      );
+      ),
+    );
+  }
 
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;

@@ -211,7 +211,7 @@ packages:
       path: "plugins/here_sdk"
       relative: true
     source: path
-    version: "4.14.0"
+    version: "4.15.0"
   intl:
     dependency: "direct main"
     description:

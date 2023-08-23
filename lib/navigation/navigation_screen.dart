@@ -18,6 +18,7 @@
  */
 
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:RefApp/common/battery_saver_utils.dart';
 import 'package:flutter/material.dart';
@@ -160,7 +161,8 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     Widget? nextManeuverWidget = _reroutingInProgress ? null : _buildNextManeuver(context);
     PreferredSize? topBarWidget = _buildTopBar(context);
     double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
-
+    final HereMapOptions options = HereMapOptions.withDefaults()
+      ..initialBackgroundColor = Theme.of(context).colorScheme.background;
     return WillPopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -173,7 +175,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
             children: [
               HereMap(
                 key: _mapKey,
-                options: HereMapOptions.fromColor(Theme.of(context).colorScheme.background),
+                options: options,
                 onMapCreated: _onMapCreated,
               ),
               if (nextManeuverWidget != null) nextManeuverWidget,
@@ -742,7 +744,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
 extension _ManeuverImagePath on Routing.ManeuverAction {
   String get imagePath {
-    final String subDir = SchedulerBinding.instance.window.platformBrightness == Brightness.light ? "dark" : "light";
+    final String subDir = PlatformDispatcher.instance.platformBrightness == Brightness.light ? "dark" : "light";
     return "assets/maneuvers/$subDir/png/${toString().split(".").last}.png";
   }
 }
