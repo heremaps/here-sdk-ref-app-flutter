@@ -587,11 +587,9 @@ class _SearchPopupState extends State<_SearchPopup> {
   }
 
   void _showErrorMessage(SearchError searchError) {
-    if (mounted) {
-      ErrorToaster.makeToast(
-        context,
-        searchError.errorMessage(AppLocalizations.of(context)!),
-      );
+    final String? message = searchError.errorMessage(AppLocalizations.of(context)!);
+    if (mounted && message != null) {
+      ErrorToaster.makeToast(context, message);
     }
   }
 }
