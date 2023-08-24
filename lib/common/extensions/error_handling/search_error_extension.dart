@@ -21,13 +21,14 @@ import 'package:here_sdk/search.dart' show SearchError;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 extension SearchErrorExtension on SearchError {
-  String errorMessage(AppLocalizations localized) {
-    String message;
+  String? errorMessage(AppLocalizations localized) {
     switch (this) {
+      case SearchError.operationCancelled:
+        return null;
+
       case SearchError.authenticationFailed:
       case SearchError.forbidden:
-        message = localized.errorAuthenticationFailed;
-        break;
+        return localized.errorAuthenticationFailed;
 
       case SearchError.maxItemsOutOfRange:
       case SearchError.polylineTooLong:
@@ -35,27 +36,22 @@ extension SearchErrorExtension on SearchError {
       case SearchError.invalidParameter:
       case SearchError.queryTooLong:
       case SearchError.filterTooLong:
-        message = localized.errorNoResultFound;
-        break;
+        return localized.errorNoResultFound;
 
       case SearchError.parsingError:
       case SearchError.exceededUsageLimit:
       case SearchError.operationFailed:
-        message = localized.errorSearchFailed;
-        break;
+        return localized.errorSearchFailed;
 
       case SearchError.httpError:
       case SearchError.serverUnreachable:
       case SearchError.offline:
       case SearchError.proxyAuthenticationFailed:
       case SearchError.proxyServerUnreachable:
-        message = localized.errorNetworkIssueOccurred;
-        break;
+        return localized.errorNetworkIssueOccurred;
 
       default:
-        message = localized.errorSearchFailedPleaseTryAgain;
-        break;
+        return localized.errorSearchFailedPleaseTryAgain;
     }
-    return message;
   }
 }
