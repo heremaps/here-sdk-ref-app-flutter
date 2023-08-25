@@ -42,7 +42,8 @@ class DeviceLocationServicesStatusNotifier {
 
   /// Starts the location services status listener and will notifies about the status change.
   void start(PositioningStatusListener listener) {
-    _serviceStatusSteam?.cancel();
+    // Stop the previous status stream, if there is any.
+    stop();
     _listener = listener;
     _serviceStatusSteam = Geolocator.getServiceStatusStream().listen(_serviceListener);
   }
