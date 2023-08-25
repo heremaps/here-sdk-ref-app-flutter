@@ -24,34 +24,42 @@ import '../common/ui_style.dart';
 
 /// A widget indicating that a rerouting is in progress.
 class ReroutingIndicator extends StatelessWidget {
+  const ReroutingIndicator({super.key, this.title});
+
+  final String? title;
+
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(UIStyle.contentMarginLarge),
-          child: Container(
-            width: UIStyle.bigButtonHeight,
-            height: UIStyle.bigButtonHeight,
-            child: CircularProgressIndicator(
-              backgroundColor: UIStyle.reroutingProgressBackgroundColor,
-              valueColor: AlwaysStoppedAnimation<Color>(UIStyle.reroutingProgressColor),
+    return Align(
+      alignment: Alignment.center,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(width: UIStyle.contentMarginMedium),
+          Padding(
+            padding: EdgeInsets.all(UIStyle.contentMarginLarge),
+            child: Container(
+              width: UIStyle.bigButtonHeight,
+              height: UIStyle.bigButtonHeight,
+              child: CircularProgressIndicator(
+                backgroundColor: UIStyle.reroutingProgressBackgroundColor,
+                valueColor: AlwaysStoppedAnimation<Color>(UIStyle.reroutingProgressColor),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Text(
-            AppLocalizations.of(context)!.reroutingInProgressText,
-            style: TextStyle(
-              color: colorScheme.background,
-              fontSize: UIStyle.extraHugeFontSize,
+          Expanded(
+            child: Text(
+              title ?? AppLocalizations.of(context)!.reroutingInProgressText,
+              style: TextStyle(
+                color: colorScheme.background,
+                fontSize: UIStyle.extraHugeFontSize,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
