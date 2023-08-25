@@ -140,6 +140,7 @@ class PositioningEngine {
   void _createAndInitLocationEngine() {
     _locationEngine = LocationEngine();
     _locationUpdatesController.onCancel = () => _locationEngine!.stop();
+    _locationEngine!.setBackgroundLocationAllowed(false);
     _locationEngine!.addLocationListener(LocationListener((location) => _locationUpdatesController.add(location)));
     _locationEngine!.addLocationStatusListener(LocationStatusListener(
       (status) => _locationEngineStatusController.add(status),

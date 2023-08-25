@@ -21,13 +21,15 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:RefApp/common/battery_saver_utils.dart';
+import 'package:RefApp/common/utils/navigation/location_provider_interface.dart';
+import 'package:RefApp/common/utils/navigation/location_utils.dart';
+import 'package:RefApp/common/utils/navigation/position_status_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
-import 'package:here_sdk/location.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
@@ -75,7 +77,9 @@ class NavigationScreen extends StatefulWidget {
   _NavigationScreenState createState() => _NavigationScreenState();
 }
 
-class _NavigationScreenState extends State<NavigationScreen> with WidgetsBindingObserver {
+class _NavigationScreenState extends State<NavigationScreen>
+    with WidgetsBindingObserver
+    implements PositioningStatusListener, LocationListener {
   static const double _kInitDistanceToEarth = 1000; // meters
   static const double _kSpeedFactor = 1.3;
   static const int _kNotificationIntervalInMilliseconds = 500;
@@ -91,6 +95,9 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   static const double _kDefaultSpeedLimitBoundary = 50;
 
   final GlobalKey _mapKey = GlobalKey();
+  DeviceLocationServicesStatusNotifier? _servicesStatusNotifier;
+  LocationProviderInterface? _locationProvider;
+  Location? _currentLocationForLocationStatus;
 
   late Routing.Route _currentRoute;
 
@@ -99,10 +106,10 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
   late MapMarker _startMarker;
   late MapMarker _finishMarker;
 
-  Navigation.LocationSimulator? _locationSimulator;
-  LocationEngine? _locationEngine;
   late Navigation.VisualNavigator _visualNavigator;
   bool _navigationStarted = false;
+  bool _canLocateUserPosition = true;
+  bool _shouldMonitorPositioning = false;
 
   bool _soundEnabled = true;
   FlutterTts _flutterTts = FlutterTts();
@@ -148,8 +155,10 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
   @override
   void dispose() {
+    _locationProvider?.removeListeners();
+    _locationProvider?.stop();
     _reroutingHandler.release();
-    _locationSimulator?.stop();
+    _servicesStatusNotifier?.stop();
     _flutterTts.stop();
     WidgetsBinding.instance.removeObserver(this);
     Wakelock.disable();
@@ -158,7 +167,7 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
-    Widget? nextManeuverWidget = _reroutingInProgress ? null : _buildNextManeuver(context);
+    Widget? nextManeuverWidget = _reroutingInProgress || !_canLocateUserPosition ? null : _buildNextManeuver(context);
     PreferredSize? topBarWidget = _buildTopBar(context);
     double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
     final HereMapOptions options = HereMapOptions.withDefaults()
@@ -252,9 +261,18 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       }
 
       if (result) {
-        _startSimulatedLocations();
+        _shouldMonitorPositioning = false;
+        _startPositioning(
+          context,
+          simulated: true,
+          options: Navigation.LocationSimulatorOptions()
+            ..speedFactor = _kSpeedFactor
+            ..notificationInterval = Duration(milliseconds: _kNotificationIntervalInMilliseconds),
+        );
       } else {
-        _startRealLocations();
+        _shouldMonitorPositioning = true;
+        _initialiseUserPositioning();
+        _startPositioning(context);
       }
 
       // on realtime locations, and platform is Android,
@@ -335,32 +353,6 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     if (context != null) {
       _hereMapController.zoomToLogicalViewPort(geoBox: widget.route.boundingBox, context: context);
     }
-  }
-
-  void _startSimulatedLocations() {
-    Navigation.LocationSimulatorOptions options = Navigation.LocationSimulatorOptions()
-      ..speedFactor = _kSpeedFactor
-      ..notificationInterval = Duration(milliseconds: _kNotificationIntervalInMilliseconds);
-
-    _locationSimulator = Navigation.LocationSimulator.withRoute(widget.route, options);
-    _locationSimulator!.listener = _visualNavigator;
-    _locationSimulator!.start();
-
-    // Start location engine to allow background mode under iOS
-    if (Platform.isIOS) {
-      _startRealLocations(addListener: false);
-    }
-  }
-
-  void _startRealLocations({bool addListener = true}) {
-    _locationEngine = LocationEngine();
-    _locationEngine!.setBackgroundLocationAllowed(true);
-    _locationEngine!.setBackgroundLocationIndicatorVisible(true);
-    _locationEngine!.setPauseLocationUpdatesAutomatically(true);
-    if (addListener) {
-      _locationEngine!.addLocationListener(_visualNavigator);
-    }
-    _locationEngine!.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
   }
 
   void _startNavigation() {
@@ -485,11 +477,10 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
 
   void _stopNavigation() {
     _visualNavigator.route = null;
+    _servicesStatusNotifier?.stop();
     _visualNavigator.stopRendering();
-    _locationSimulator?.stop();
-    _locationEngine?.setBackgroundLocationAllowed(false);
-    _locationEngine?.setBackgroundLocationIndicatorVisible(false);
-    _locationEngine?.setPauseLocationUpdatesAutomatically(false);
+    _locationProvider?.removeListeners();
+    _locationProvider?.stop();
   }
 
   void _onNewRoute(Routing.Route? newRoute) {
@@ -521,8 +512,12 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
     }
 
     Widget child;
-    if (_reroutingInProgress || _currentManeuverIndex == null) {
-      child = ReroutingIndicator();
+    if (_shouldMonitorPositioning && !_canLocateUserPosition) {
+      child = ReroutingIndicator(title: AppLocalizations.of(context)!.locationWaitingForPositioning);
+    } else if (_reroutingInProgress) {
+      child = ReroutingIndicator(title: AppLocalizations.of(context)!.navigationStatusRerouting);
+    } else if (_currentManeuverIndex == null) {
+      child = ReroutingIndicator(title: AppLocalizations.of(context)!.navigationStatusWaitingForManeuvers);
     } else {
       Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
       if (maneuver == null) {
@@ -739,6 +734,50 @@ class _NavigationScreenState extends State<NavigationScreen> with WidgetsBinding
       Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
     }
     _appLifecycleState = state;
+  }
+
+  @override
+  void didDevicePositioningStatusUpdated({
+    required bool isPositioningAvailable,
+    required bool hasPermissionsGranted,
+  }) {
+    if (mounted) {
+      setState(() {
+        _canLocateUserPosition = isPositioningAvailable && hasPermissionsGranted;
+        _startPositioning(context);
+      });
+    }
+  }
+
+  void _initialiseUserPositioning() {
+    _servicesStatusNotifier = DeviceLocationServicesStatusNotifier();
+    _servicesStatusNotifier!.start(this);
+    _servicesStatusNotifier!.canLocateUserPositioning().then((value) {
+      setState(() => _canLocateUserPosition = value);
+    });
+  }
+
+  Future<void> _startPositioning(
+    BuildContext context, {
+    bool simulated = false,
+    Navigation.LocationSimulatorOptions? options,
+  }) async {
+    _locationProvider = createLocationProvider(
+      route: widget.route,
+      simulated: simulated,
+      simulatorOptions: options,
+    );
+    _locationProvider?.addListener(this);
+    _locationProvider?.addListener(_visualNavigator);
+    _locationProvider?.start();
+  }
+
+  @override
+  void onLocationUpdated(Location location) {
+    if (_currentLocationForLocationStatus == null) {
+      _currentLocationForLocationStatus = location;
+      _servicesStatusNotifier?.onLocationReceived(location);
+    }
   }
 }
 
