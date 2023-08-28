@@ -488,13 +488,6 @@ class _SearchPopupState extends State<_SearchPopup> {
                 color: colorScheme.primary,
               ),
             ),
-            Text(
-              appLocalizations.noResultsFoundDescription,
-              style: TextStyle(
-                fontSize: UIStyle.bigFontSize,
-                color: colorScheme.onSecondary,
-              ),
-            ),
           ],
         ),
       ),
