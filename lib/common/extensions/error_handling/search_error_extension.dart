@@ -24,6 +24,7 @@ extension SearchErrorExtension on SearchError {
   String? errorMessage(AppLocalizations localized) {
     switch (this) {
       case SearchError.operationCancelled:
+      case SearchError.noResultsFound:
         return null;
 
       case SearchError.authenticationFailed:
@@ -32,7 +33,6 @@ extension SearchErrorExtension on SearchError {
 
       case SearchError.maxItemsOutOfRange:
       case SearchError.polylineTooLong:
-      case SearchError.noResultsFound:
       case SearchError.invalidParameter:
       case SearchError.queryTooLong:
       case SearchError.filterTooLong:

@@ -1469,10 +1469,6 @@
   "@noneTitle": {
     "description": "Route setting is missing"
   },
-  "noResultsFoundDescription": "Try to use another keywords",
-  "@noResultsFoundDescription": {
-    "description": "Message if no search results were found"
-  },
   "noResultsFoundText": "Sorry, nothing found",
   "@noResultsFoundText": {
     "description": "Message if no search results were found"
