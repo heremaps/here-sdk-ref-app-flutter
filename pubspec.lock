@@ -105,14 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-  disk_space:
+  disk_space_plus:
     dependency: "direct main"
     description:
-      name: disk_space
-      sha256: fb27eb2d09ac04784f45b95b1355538b2355c76a081eeaa8439d1a5cfa263888
+      name: disk_space_plus
+      sha256: "5158e9fab92426e1f1083531de9a48bbeb76168df9fa6d25c5c5d2d37c642216"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "0.2.3"
   fake_async:
     dependency: transitive
     description:

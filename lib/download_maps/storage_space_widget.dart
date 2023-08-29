@@ -19,7 +19,7 @@
 
 import 'dart:async';
 
-import 'package:disk_space/disk_space.dart';
+import 'package:disk_space_plus/disk_space_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -125,8 +125,8 @@ class _StorageSpaceState extends State<StorageSpace> {
   }
 
   Future<void> _updateDiskSpace() async {
-    double? freeDiskSpace = await DiskSpace.getFreeDiskSpace;
-    double? totalDiskSpace = await DiskSpace.getTotalDiskSpace;
+    double? freeDiskSpace = await DiskSpacePlus.getFreeDiskSpace;
+    double? totalDiskSpace = await DiskSpacePlus.getTotalDiskSpace;
     if (mounted) {
       setState(() {
         if (freeDiskSpace != null) {
