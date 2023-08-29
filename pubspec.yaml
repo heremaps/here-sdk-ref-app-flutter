@@ -46,7 +46,7 @@ dependencies:
   path_provider: ^2.0.11
   url_launcher: ^6.1.5
   wakelock: ^0.6.2
-  disk_space: ^0.2.1
+  disk_space_plus: ^0.2.3
   shared_preferences: ^2.0.15
   file_picker: ^5.2.5
 
