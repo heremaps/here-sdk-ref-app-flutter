@@ -314,16 +314,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     });
   }
 
-  void _createMapRoute() {
-    _mapRoute = MapPolyline(_currentRoute.geometry, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
-    _mapRoute.outlineColor = UIStyle.selectedRouteBorderColor;
-    _mapRoute.outlineWidth = UIStyle.routeOutLineWidth;
-    _hereMapController.mapScene.addMapPolyline(_mapRoute);
-  }
-
   void _addRouteToMap() {
-    _createMapRoute();
-
     int markerSize = (_hereMapController.pixelScale * UIStyle.locationMarkerSize).round();
     _startMarker = Util.createMarkerWithImagePath(
       _currentRoute.geometry.vertices.first,
@@ -359,7 +350,6 @@ class _NavigationScreenState extends State<NavigationScreen>
     _hereMapController.mapScene.removeMapMarker(_startMarker);
 
     _visualNavigator.startRendering(_hereMapController);
-    _visualNavigator.isRouteVisible = false;
 
     _setupListeners();
     _setupVoiceTextMessages();
@@ -500,7 +490,6 @@ class _NavigationScreenState extends State<NavigationScreen>
     _nextManeuverIndex = null;
     _currentManeuverDistance = 0;
     _visualNavigator.route = _currentRoute;
-    _createMapRoute();
     _finishMarker.coordinates = newRoute.geometry.vertices.last;
 
     setState(() => _reroutingInProgress = false);
