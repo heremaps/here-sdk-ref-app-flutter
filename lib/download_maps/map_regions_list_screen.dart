@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import 'package:RefApp/common/extensions/region_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,15 +25,35 @@ import 'package:here_sdk/maploader.dart';
 import 'package:provider/provider.dart';
 
 import 'map_loader_controller.dart';
-import 'map_region_tile_widget.dart';
 import 'map_loader_dialogs.dart';
+import 'map_region_tile_widget.dart';
 
 class _ParentRegion extends Region {
   _ParentRegion.fromRegion(Region region) : super(region.regionId) {
     name = region.name;
     sizeOnDiskInBytes = region.sizeOnDiskInBytes;
     sizeOnNetworkInBytes = region.sizeOnNetworkInBytes;
+    this.childRegionIds = getChildRegionIds(region);
   }
+
+  /// Retrieves a list of child region IDs recursively for a given parent [Region].
+  ///
+  /// This method takes a [Region] as input and returns a nullable [List] of [RegionId]s.
+  /// It traverses the child regions of the input region and compiles a list of their
+  /// corresponding region IDs. The process is recursive, including all nested child regions.
+  ///
+  /// If the input region or its child regions are null, the method returns null.
+  List<RegionId>? getChildRegionIds(Region region) {
+    return region.childRegions?.expand<RegionId>((e) {
+      if (e.childRegions != null) {
+        return [e.regionId, ...getChildRegionIds(e) ?? <RegionId>[]];
+      } else {
+        return [e.regionId];
+      }
+    }).toList();
+  }
+
+  List<RegionId>? childRegionIds;
 }
 
 /// Map regions list screen widget.
@@ -102,12 +123,24 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
       isChild: _displayParent && index > 0,
       downloadProgress: progress,
       onTap: () => progress != null
-          ? controller.cancelDownloadWithConfirmation(context, region)
+          ? _cancelDownload(controller, region)
           : hasChildren
               ? _openChildRegions(region)
               : installedRegion?.status != InstalledRegionStatus.installed
                   ? controller.downloadRegion(region.regionId)
                   : null,
+    );
+  }
+
+  void _cancelDownload(MapLoaderController controller, Region region) {
+    controller.cancelDownloadWithConfirmation(
+      context,
+      region,
+      //  If the canceled tile is a Parent/Header tile,
+      //  we can utilize [childRegionIds] to cancel all associated child region downloads.
+      //  Alternatively, if the canceled tile is a child tile with its own children,
+      //  we pass their region IDs to cancel the respective downloads for those children as well.
+      region is _ParentRegion ? region.childRegionIds : region.childRegions.regionIds(),
     );
   }
 
