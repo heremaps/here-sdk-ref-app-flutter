@@ -17,14 +17,17 @@
  * License-Filename: LICENSE
  */
 
+import 'package:RefApp/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/core.engine.dart';
+import 'package:here_sdk/core.errors.dart';
 import 'package:here_sdk/maploader.dart';
+import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
-import 'package:here_sdk/routing.dart' as Routing;
 
 import 'common/application_preferences.dart';
 import 'common/custom_map_style_settings.dart';
@@ -47,7 +50,31 @@ import 'search/search_results_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init();
+
+  _createSDKNativeEngine(
+    sdkOptions: SDKOptions.withAccessKeySecret(
+      Environment.accessKeyId,
+      Environment.accessKeySecret,
+    ),
+  );
+
   runApp(MyApp());
+}
+
+Future<void> _createSDKNativeEngine({
+  required SDKOptions sdkOptions,
+  VoidCallback? onSuccess,
+  Function(String)? onFailure,
+}) async {
+  try {
+    await SDKNativeEngine.makeSharedInstance(sdkOptions);
+    print('SDKNativeEngine created successfully!');
+    onSuccess?.call();
+  } on Exception catch (e) {
+    final String error = e is InstantiationException ? '${e.error}' : e.toString();
+    print('Failed to create SDKNativeEngine: $error');
+    onFailure?.call(error);
+  }
 }
 
 /// Application root widget.

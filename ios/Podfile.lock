@@ -49,7 +49,7 @@ PODS:
   - FMDB/standard (2.7.5)
   - geolocator_apple (1.2.0):
     - Flutter
-  - here_sdk (4.15.0.0.11311.release):
+  - here_sdk (4.16.0.0.11798.release):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -145,7 +145,7 @@ SPEC CHECKSUMS:
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
-  here_sdk: ca78c1fb7ee699a902a68cda3a805d41e1e0e916
+  here_sdk: 3ed32955f47d91bdf50f976f8f14a0e8474a6f07
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   ringtone_player: 151303fcb26e9daa11257fa6947faed36b198f13
