@@ -33,27 +33,8 @@ class _ParentRegion extends Region {
     name = region.name;
     sizeOnDiskInBytes = region.sizeOnDiskInBytes;
     sizeOnNetworkInBytes = region.sizeOnNetworkInBytes;
-    this.childRegionIds = getChildRegionIds(region);
+    this.childRegions = region.childRegions;
   }
-
-  /// Retrieves a list of child region IDs recursively for a given parent [Region].
-  ///
-  /// This method takes a [Region] as input and returns a nullable [List] of [RegionId]s.
-  /// It traverses the child regions of the input region and compiles a list of their
-  /// corresponding region IDs. The process is recursive, including all nested child regions.
-  ///
-  /// If the input region or its child regions are null, the method returns null.
-  List<RegionId>? getChildRegionIds(Region region) {
-    return region.childRegions?.expand<RegionId>((e) {
-      if (e.childRegions != null) {
-        return [e.regionId, ...getChildRegionIds(e) ?? <RegionId>[]];
-      } else {
-        return [e.regionId];
-      }
-    }).toList();
-  }
-
-  List<RegionId>? childRegionIds;
 }
 
 /// Map regions list screen widget.
@@ -73,14 +54,6 @@ class MapRegionsListScreen extends StatefulWidget {
 }
 
 class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
-  late bool _displayParent;
-
-  @override
-  void initState() {
-    super.initState();
-    _displayParent = widget.regions.first is _ParentRegion;
-  }
-
   @override
   Widget build(BuildContext context) => Consumer<MapLoaderController>(
         builder: (context, model, child) => Scaffold(
@@ -115,16 +88,16 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
         controller.getInstalledRegions().where((element) => element.regionId == region.regionId).firstOrNull;
     bool hasChildren = region.childRegions != null;
     int? progress = controller.getDownloadProgress(region.regionId);
-
+    bool hasParentRegion = widget.regions.any((element) => element is _ParentRegion);
     return MapRegionTile(
       region: widget.regions[index],
       installedRegion: installedRegion,
-      isHeader: _displayParent && index == 0,
-      isChild: _displayParent && index > 0,
+      isHeader: region is _ParentRegion,
+      isChild: hasParentRegion && region is! _ParentRegion,
       downloadProgress: progress,
       onTap: () => progress != null
           ? _cancelDownload(controller, region)
-          : hasChildren
+          : hasChildren && region is! _ParentRegion
               ? _openChildRegions(region)
               : installedRegion?.status != InstalledRegionStatus.installed
                   ? controller.downloadRegion(region.regionId)
@@ -140,7 +113,7 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
       //  we can utilize [childRegionIds] to cancel all associated child region downloads.
       //  Alternatively, if the canceled tile is a child tile with its own children,
       //  we pass their region IDs to cancel the respective downloads for those children as well.
-      region is _ParentRegion ? region.childRegionIds : region.childRegions.regionIds(),
+      region.childRegions.regionIds(),
     );
   }
 

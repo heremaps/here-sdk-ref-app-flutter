@@ -67,11 +67,13 @@ class MapRegionTile extends StatelessWidget {
 
     late String subtitle;
 
-    if (hasChildren) {
+    if (hasChildren && !isHeader) {
       subtitle = Util.formatString(appLocalizations.mapRegionChildrenNumberText, [region.childRegions!.length]);
     } else if (isHeader) {
       subtitle = Util.formatString(
-          appLocalizations.sizeOfWholeAreaOfRegion, [Util.makeStorageSizeString(context, region.sizeOnDiskInBytes)]);
+        appLocalizations.sizeOfWholeAreaOfRegion,
+        [Util.makeStorageSizeString(context, region.sizeOnDiskInBytes)],
+      );
     } else {
       subtitle = Util.makeStorageSizeString(context, region.sizeOnDiskInBytes);
     }
@@ -90,7 +92,7 @@ class MapRegionTile extends StatelessWidget {
           Icon(
             installedRegion?.status == InstalledRegionStatus.installed
                 ? Icons.check_circle
-                : hasChildren
+                : hasChildren && !isHeader
                     ? Icons.arrow_forward
                     : Icons.download,
             color: installedRegion?.status == InstalledRegionStatus.installed ? Colors.green : null,
