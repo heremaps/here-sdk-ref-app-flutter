@@ -351,22 +351,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
             top: UIStyle.contentMarginSmall,
             bottom: UIStyle.contentMarginSmall,
           ),
-          child: RichText(
-            text: TextSpan(
-                text: widget.isRecentSearchResult ? null : Util.makeDistanceString(context, place.distanceInMeters),
-                style: TextStyle(
-                  color: colorScheme.onSecondary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: UIStyle.bigFontSize,
-                ),
-                children: [
-                  TextSpan(
-                    text: place.address.addressText,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ]),
+          child: Text(
+            place.address.addressText,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
