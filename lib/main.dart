@@ -56,9 +56,8 @@ void main() {
       Environment.accessKeyId,
       Environment.accessKeySecret,
     ),
+    onSuccess: () => runApp(MyApp()),
   );
-
-  runApp(MyApp());
 }
 
 Future<void> _createSDKNativeEngine({
