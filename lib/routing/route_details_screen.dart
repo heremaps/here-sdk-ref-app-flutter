@@ -184,7 +184,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       _maneuvers[index].coordinates,
       MapMeasure(MapMeasureKind.distance, _kZoomDistanceToManeuver),
     );
-    _hasBeenZoomedToManeuver = true;
+    setState(() => _hasBeenZoomedToManeuver = true);
   }
 
   void _zoomToWholeRoute() {
@@ -218,17 +218,16 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !_hasBeenZoomedToManeuver,
+      onPopInvoked: (_) {
         // If the route is currently zoomed in on a maneuver, zoom out to the full route view.
         // Otherwise, go back to the previous screen.
         if (_hasBeenZoomedToManeuver) {
           _resetIfBottomSheetIsExpanded();
           _zoomToWholeRoute();
-          _hasBeenZoomedToManeuver = false;
-          return false;
+          setState(() => _hasBeenZoomedToManeuver = false);
         }
-        return true;
       },
       child: Scaffold(
         key: _scaffoldKey,

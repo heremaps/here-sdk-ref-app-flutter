@@ -113,6 +113,7 @@ class UIStyle {
   static const Color _lightForegroundHint = Color.fromARGB(0xff, 0xb7, 0xb9, 0xbc);
 
   static final ThemeData lightTheme = ThemeData(
+    useMaterial3: false,
     scaffoldBackgroundColor: _lightBackground,
     appBarTheme: const AppBarTheme(
       backgroundColor: _lightBackground,
