@@ -28,7 +28,7 @@ The reference application hosted in this repo focuses on how specific features c
 
 The reference application for the HERE SDK for Flutter (_Navigate Edition_) requires the following prerequisites:
 
--  The [HERE SDK for Flutter (_Navigate Edition_), version 4.15.0.0](https://developer.here.com/documentation/flutter-sdk-navigate/4.15.0.0/dev_guide/index.html) is required and needs to be downloaded from the [HERE platform](https://platform.here.com). For now, the _Navigate Edition_ is only available upon request. Please [contact us](https://developer.here.com/help#how-can-we-help-you) to receive access including a set of evaluation credentials.
+-  The [HERE SDK for Flutter (_Navigate Edition_), version 4.16.0.0](https://developer.here.com/documentation/flutter-sdk-navigate/4.16.0.0/dev_guide/index.html) is required and needs to be downloaded from the [HERE platform](https://platform.here.com). For now, the _Navigate Edition_ is only available upon request. Please [contact us](https://developer.here.com/help#how-can-we-help-you) to receive access including a set of evaluation credentials.
 - If not already done, install the [Flutter SDK](https://flutter.dev/docs/get-started/install). You need at least [version 3.10.6](https://flutter.dev/docs/development/tools/sdk/releases). Newer versions may also work, but are _not guaranteed_ to work.
 - Make sure to specify `JAVA_HOME` in your `env` variables. The minimum supported JDK version is Java 8.
 
@@ -48,14 +48,18 @@ Make sure you have cloned this repository and you have downloaded the HERE SDK f
 
 ### Build the Reference Application
 
-1. Set your HERE SDK credentials: The reference application does not require hardcoded credentials for the `AndroidManifest` or `Plist` file. Instead the credentials are read from your local environment. Therefore, you need to add two _system environment_ variables, `HERESDK_ACCESS_KEY_ID` and `HERESDK_ACCESS_KEY_SECRET`. For example, from a MacOS terminal execute:
-
-    -  `export HERESDK_ACCESS_KEY_ID="YOUR_ACCESS_KEY_ID"`
-    -  `export HERESDK_ACCESS_KEY_SECRET="YOUR_ACCESS_KEY_SECRET"`
-
-    You may need to restart the terminal application to take effect.
-
-    Note that for iOS builds an extra step is needed: Execute the bash script [setup_ios_here_sdk_keys.sh](./ios/setup_ios_here_sdk_keys.sh) with `setup_ios_here_sdk_keys.sh` from within the `iOS` folder of this repository. As a result, a new file should be created under `ios/Flutter/GeneratedKeys.xcconfig` which will contain your credentials.
+1. Set your HERE SDK credentials: 
+The credentials are read from the environment variables which are set using --dart-define. 
+- If you want to set up environment variables from the CLI, run the command:
+  `flutter run --dart-define=HERESDK_ACCESS_KEY_ID=<YOUR_ACCESS_KEY_ID> --dart-define=HERESDK_ACCESS_KEY_SECRET=<YOUR_ACCESS_KEY_SECRET>`
+- If you want to run from any IDE, you can add credentials to the .json file for your environment.
+Create a file .env/dev.json as:
+  > {
+  >   "HERESDK_ACCESS_KEY_ID": "<YOUR_ACCESS_KEY_ID>",
+  >   "HERESDK_ACCESS_KEY_SECRET": "<YOUR_ACCESS_KEY_SECRET>"
+  > }
+  
+  And add additional run args in the IDE: `--dart-define-from-file=.env/dev.json`
 
 2. Go to the repository root folder which contains the `pubspec.yaml` and run the terminal command `flutter pub get` to fetch the required dependencies.
 

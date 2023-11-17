@@ -26,13 +26,6 @@
         android:label="HERE SDK Ref App"
         tools:ignore="AllowBackup">
 
-        <meta-data
-            android:name="com.here.sdk.access_key_id"
-            android:value="${HERESDK_ACCESS_KEY_ID}" />
-        <meta-data
-            android:name="com.here.sdk.access_key_secret"
-            android:value="${HERESDK_ACCESS_KEY_SECRET}" />
-
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

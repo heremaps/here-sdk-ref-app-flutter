@@ -24,7 +24,6 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply from: "${rootProject.projectDir}/readCredentials.gradle"
 
 android {
     compileSdkVersion 33
@@ -44,7 +43,6 @@ android {
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        manifestPlaceholders = readCredentials()
     }
 
     buildTypes {
