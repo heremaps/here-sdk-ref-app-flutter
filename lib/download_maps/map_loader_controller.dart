@@ -109,10 +109,12 @@ enum MapUpdateState {
 class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateListener {
   MapUpdater? _mapUpdater;
   final Completer<MapUpdater> _mapUpdaterCompleter = Completer();
+
   Future<MapUpdater> get mapUpdater async => await _mapUpdaterCompleter.future;
 
   MapDownloader? _mapDownloader;
   final Completer<MapDownloader> _mapDownloaderCompleter = Completer();
+
   Future<MapDownloader> get mapDownloader async => await _mapDownloaderCompleter.future;
 
   Map<RegionId, _RegionTask> _regionsInProgress = {};
@@ -213,6 +215,15 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
   /// Cancels download a [Region].
   void cancelDownload(RegionId region) {
     _regionsInProgress[region]?.cancel();
+    notifyListeners();
+  }
+
+  /// Cancels download of all the [Region].
+  void cancelDownloads(List<RegionId> regions) {
+    final Iterable<RegionId> downloadingRegions = _regionsInProgress.keys.where((e) => regions.contains(e));
+    for (final region in downloadingRegions) {
+      _regionsInProgress[region]?.cancel();
+    }
     notifyListeners();
   }
 

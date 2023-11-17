@@ -27,11 +27,15 @@ import 'map_loader_controller.dart';
 
 /// Shows confirmation dialog and then cancels download a [Region].
 extension CancelDownloadExtension on MapLoaderController {
-  void cancelDownloadWithConfirmation(BuildContext context, Region region) async {
+  void cancelDownloadWithConfirmation(BuildContext context, Region region, [List<RegionId>? childRegions]) async {
     this.pauseDownload(region.regionId);
 
     if (await _askForCancelMapLoading(context, region.name)) {
-      this.cancelDownload(region.regionId);
+      if (childRegions != null) {
+        this.cancelDownloads([region.regionId, ...childRegions]);
+      } else {
+        this.cancelDownload(region.regionId);
+      }
     } else {
       this.resumeDownload(region.regionId);
     }

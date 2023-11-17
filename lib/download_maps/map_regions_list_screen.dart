@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import 'package:RefApp/common/extensions/region_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,14 +25,15 @@ import 'package:here_sdk/maploader.dart';
 import 'package:provider/provider.dart';
 
 import 'map_loader_controller.dart';
-import 'map_region_tile_widget.dart';
 import 'map_loader_dialogs.dart';
+import 'map_region_tile_widget.dart';
 
 class _ParentRegion extends Region {
   _ParentRegion.fromRegion(Region region) : super(region.regionId) {
     name = region.name;
     sizeOnDiskInBytes = region.sizeOnDiskInBytes;
     sizeOnNetworkInBytes = region.sizeOnNetworkInBytes;
+    this.childRegions = region.childRegions;
   }
 }
 
@@ -52,14 +54,6 @@ class MapRegionsListScreen extends StatefulWidget {
 }
 
 class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
-  late bool _displayParent;
-
-  @override
-  void initState() {
-    super.initState();
-    _displayParent = widget.regions.first is _ParentRegion;
-  }
-
   @override
   Widget build(BuildContext context) => Consumer<MapLoaderController>(
         builder: (context, model, child) => Scaffold(
@@ -94,20 +88,32 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
         controller.getInstalledRegions().where((element) => element.regionId == region.regionId).firstOrNull;
     bool hasChildren = region.childRegions != null;
     int? progress = controller.getDownloadProgress(region.regionId);
-
+    bool hasParentRegion = widget.regions.any((element) => element is _ParentRegion);
     return MapRegionTile(
       region: widget.regions[index],
       installedRegion: installedRegion,
-      isHeader: _displayParent && index == 0,
-      isChild: _displayParent && index > 0,
+      isHeader: region is _ParentRegion,
+      isChild: hasParentRegion && region is! _ParentRegion,
       downloadProgress: progress,
       onTap: () => progress != null
-          ? controller.cancelDownloadWithConfirmation(context, region)
-          : hasChildren
+          ? _cancelDownload(controller, region)
+          : hasChildren && region is! _ParentRegion
               ? _openChildRegions(region)
               : installedRegion?.status != InstalledRegionStatus.installed
                   ? controller.downloadRegion(region.regionId)
                   : null,
+    );
+  }
+
+  void _cancelDownload(MapLoaderController controller, Region region) {
+    controller.cancelDownloadWithConfirmation(
+      context,
+      region,
+      //  If the canceled tile is a Parent/Header tile,
+      //  we can utilize [childRegionIds] to cancel all associated child region downloads.
+      //  Alternatively, if the canceled tile is a child tile with its own children,
+      //  we pass their region IDs to cancel the respective downloads for those children as well.
+      region.childRegions.regionIds(),
     );
   }
 
