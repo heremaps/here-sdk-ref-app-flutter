@@ -119,6 +119,10 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
 
   Map<RegionId, _RegionTask> _regionsInProgress = {};
 
+  /// Contains list of RegionId which get paused.
+  /// return `List<RegionId>`
+  final List<RegionId> _pausedTagsOnBackground = <RegionId>[];
+
   MapUpdateState _mapUpdateState = MapUpdateState.none;
   int? _mapUpdateProgress;
   StreamController<MapLoaderError> _mapUpdateErrors = StreamController.broadcast();
@@ -183,13 +187,16 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
         [region],
         DownloadRegionsStatusListener((error, regions) {
           _regionsInProgress.remove(region);
+          _pausedTagsOnBackground.remove(region);
           notifyListeners();
         }, (id, progress) {
           _regionsInProgress[region]?.progress = progress;
           notifyListeners();
         }, (error) {
+          _pausedTagsOnBackground.add(region);
           notifyListeners();
         }, () {
+          _pausedTagsOnBackground.remove(region);
           notifyListeners();
         }));
 
@@ -244,6 +251,14 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
   /// Returns progress of the currently loaded [Region].
   int? getDownloadProgress(RegionId region) {
     return _regionsInProgress[region]?.progress;
+  }
+
+  // Handle pending Map Downloads
+  void resumePendingMapDownloads() {
+    if (_pausedTagsOnBackground.isNotEmpty) {
+      _pausedTagsOnBackground.forEach((RegionId region) => _regionsInProgress[region]?.resume());
+      notifyListeners();
+    }
   }
 
   /// Checks for map updates
