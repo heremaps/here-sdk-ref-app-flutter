@@ -134,7 +134,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
-  battery_plus: 9bff772a7e5e4d5381ca3ca92a97373a3d8b2738
+  battery_plus: 091633b7f01cb33dfc4aeedb450816f4d33818fa
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   disk_space_plus: faa27633429bb392ecf7342395bf12040ca4ac9b
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
@@ -153,7 +153,7 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
-  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
 PODFILE CHECKSUM: 822a9144fb49b8d0bcd5424000246cc05c14d395
