@@ -101,10 +101,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       ..initialBackgroundColor = Theme.of(context).colorScheme.background;
     return DefaultTabController(
       length: widget.places.length,
-      child: WillPopScope(
-        onWillPop: () async {
-          Navigator.of(context).pop(_hereMapController.camera.state.targetCoordinates);
-          return false;
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (bool didPop) {
+          if (!didPop) {
+            Navigator.of(context).pop(_hereMapController.camera.state.targetCoordinates);
+          }
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,

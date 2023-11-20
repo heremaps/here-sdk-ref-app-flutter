@@ -172,7 +172,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
     final HereMapOptions options = HereMapOptions.withDefaults()
       ..initialBackgroundColor = Theme.of(context).colorScheme.background;
-    return WillPopScope(
+    return PopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: topBarWidget,
@@ -204,12 +204,12 @@ class _NavigationScreenState extends State<NavigationScreen>
               )
             : null,
       ),
-      onWillPop: () async {
-        if (await Dialogs.askForExitFromNavigation(context)) {
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (!didPop && await Dialogs.askForExitFromNavigation(context)) {
           _stopNavigation();
-          return true;
+          Navigator.of(context).pop();
         }
-        return false;
       },
     );
   }

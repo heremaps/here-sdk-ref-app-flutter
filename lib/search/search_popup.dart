@@ -138,10 +138,9 @@ class _SearchPopupState extends State<_SearchPopup> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Consumer<RecentSearchDataModel>(
-      builder: (context, model, child) => WillPopScope(
-        onWillPop: () async {
+      builder: (context, model, child) => PopScope(
+        onPopInvoked: (_) {
           _stopCurrentSearch();
-          return true;
         },
         child: DismissKeyboardOnScroll(
           child: SafeArea(

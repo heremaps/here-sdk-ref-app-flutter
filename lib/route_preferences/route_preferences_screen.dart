@@ -79,10 +79,12 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with Ti
           ),
         ),
       ),
-      body: WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context, _transportModes[_transportModesTabController.index]);
-          return false;
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (bool didPop) {
+          if (!didPop) {
+            Navigator.pop(context, _transportModes[_transportModesTabController.index]);
+          }
         },
         child: Container(
           color: UIStyle.preferencesBackgroundColor,
