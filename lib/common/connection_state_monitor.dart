@@ -62,5 +62,5 @@ class _ConnectionStateMonitorState extends State<ConnectionStateMonitor> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.child!;
+  Widget build(BuildContext context) => widget.child;
 }
