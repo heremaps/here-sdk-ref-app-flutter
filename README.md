@@ -70,12 +70,15 @@ Create a file .env/dev.json as:
 If you are new to Flutter, here are more detailed steps for you. You may also want to consult the official [Flutter](https://flutter.dev) site in general and the [Flutter SDK](https://flutter.dev/docs/development/tools/sdk/overview) documentation in particular first.
 
 - Build for Android:
-  - Build an Android APK by executing `flutter build apk` or use the command `flutter run` to build and run on an attached device.
+  - Build an Android APK by executing `flutter build apk --dart-define-from-file=.env/dev.json` or use the command `flutter run --dart-define-from-file=.env/dev.json` to build and run on an attached device.
 - Build for iOS:
   - Run `pod install` in the [ios folder](./ios/).
-  - Then go back to the repository root folder and type `flutter build ios` to build a Runner.app. Type `flutter run` to build and run on an attached device.
+  - Then go back to the repository root folder and type `flutter build ios --dart-define-from-file=.env/dev.json` to build a Runner.app. Type `flutter run --dart-define-from-file=.env/dev.json` to build and run on an attached device.
   - You can open the `/repository root/ios/Runner.xcworkspace` project in Xcode and execute and debug from there.
   - Note: You need to have valid _development certificates_ available to sign the app for device deployment.
+
+Note: You can alternatively also pass the credentails during build by: 
+`flutter build apk --dart-define=HERESDK_ACCESS_KEY_ID=<YOUR_ACCESS_KEY_ID> --dart-define=HERESDK_ACCESS_KEY_SECRET=<YOUR_ACCESS_KEY_SECRET>`
 
 ## Contributing
 
