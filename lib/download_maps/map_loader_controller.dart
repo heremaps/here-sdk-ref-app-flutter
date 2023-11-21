@@ -121,7 +121,7 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
 
   /// Contains list of RegionId which get paused.
   /// return `List<RegionId>`
-  final List<RegionId> _pausedTagsOnBackground = <RegionId>[];
+  final List<RegionId> _pausedRegionsWhenOffline = <RegionId>[];
 
   MapUpdateState _mapUpdateState = MapUpdateState.none;
   int? _mapUpdateProgress;
@@ -187,16 +187,16 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
         [region],
         DownloadRegionsStatusListener((error, regions) {
           _regionsInProgress.remove(region);
-          _pausedTagsOnBackground.remove(region);
+          _pausedRegionsWhenOffline.remove(region);
           notifyListeners();
         }, (id, progress) {
           _regionsInProgress[region]?.progress = progress;
           notifyListeners();
         }, (error) {
-          _pausedTagsOnBackground.add(region);
+          _pausedRegionsWhenOffline.add(region);
           notifyListeners();
         }, () {
-          _pausedTagsOnBackground.remove(region);
+          _pausedRegionsWhenOffline.remove(region);
           notifyListeners();
         }));
 
@@ -255,8 +255,8 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
 
   // Handle pending Map Downloads
   void resumePendingMapDownloads() {
-    if (_pausedTagsOnBackground.isNotEmpty) {
-      _pausedTagsOnBackground.forEach((RegionId region) => _regionsInProgress[region]?.resume());
+    if (_pausedRegionsWhenOffline.isNotEmpty) {
+      _pausedRegionsWhenOffline.forEach((RegionId region) => _regionsInProgress[region]?.resume());
       notifyListeners();
     }
   }

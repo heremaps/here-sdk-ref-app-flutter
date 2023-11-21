@@ -25,9 +25,9 @@ import 'package:flutter/material.dart';
 import '../download_maps/map_loader_controller.dart';
 
 class ConnectionStateMonitor extends StatefulWidget {
-  const ConnectionStateMonitor({this.child, super.key, required this.mapLoaderController});
+  const ConnectionStateMonitor({super.key, required this.child, required this.mapLoaderController});
 
-  final Widget? child;
+  final Widget child;
   final MapLoaderController mapLoaderController;
 
   @override
