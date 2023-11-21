@@ -36,6 +36,7 @@ import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
 
 import 'common/application_preferences.dart';
+import 'common/connection_state_monitor.dart';
 import 'common/custom_map_style_settings.dart';
 import 'common/load_custom_style_result_popup.dart';
 import 'common/place_actions_popup.dart';
@@ -106,22 +107,25 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AppPreferences, CustomMapStyleSettings>(
-      builder: (context, preferences, customStyleSettings, child) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            HereMap(
-              key: _hereMapKey,
-              onMapCreated: _onMapCreated,
-            ),
-            _buildMenuButton(),
-          ],
+    return ConnectionStateMonitor(
+      mapLoaderController: Provider.of<MapLoaderController>(context, listen: false),
+      child: Consumer2<AppPreferences, CustomMapStyleSettings>(
+        builder: (context, preferences, customStyleSettings, child) => Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Stack(
+            children: [
+              HereMap(
+                key: _hereMapKey,
+                onMapCreated: _onMapCreated,
+              ),
+              _buildMenuButton(),
+            ],
+          ),
+          floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
+          drawer: _buildDrawer(context, preferences),
+          extendBodyBehindAppBar: true,
+          onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
         ),
-        floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
-        drawer: _buildDrawer(context, preferences),
-        extendBodyBehindAppBar: true,
-        onDrawerChanged: (isOpened) => _dismissLocationWarningPopup(),
       ),
     );
   }
