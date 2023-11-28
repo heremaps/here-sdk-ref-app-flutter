@@ -102,7 +102,6 @@ class _NavigationScreenState extends State<NavigationScreen>
   late Routing.Route _currentRoute;
 
   late HereMapController _hereMapController;
-  late MapPolyline _mapRoute;
   late MapMarker _startMarker;
   late MapMarker _finishMarker;
 
@@ -481,7 +480,6 @@ class _NavigationScreenState extends State<NavigationScreen>
     }
 
     _visualNavigator.route = null;
-    _hereMapController.mapScene.removeMapPolyline(_mapRoute);
 
     _currentRoute = newRoute;
     _remainingDistanceInMeters = _currentRoute.lengthInMeters;
