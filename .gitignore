@@ -9,6 +9,8 @@
 .history
 .svn/
 .env/
+build.sh
+export-distribution.plist
 
 # IntelliJ related
 *.iml
