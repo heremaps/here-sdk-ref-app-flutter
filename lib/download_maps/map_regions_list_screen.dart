@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 HERE Europe B.V.
+ * Copyright (C) 2020-2024 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
 import 'package:RefApp/common/extensions/region_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -83,9 +84,14 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
       context,
       listen: false,
     );
-
-    InstalledRegion? installedRegion =
-        controller.getInstalledRegions().where((element) => element.regionId == region.regionId).firstOrNull;
+    InstalledRegion? installedRegion;
+    try {
+      installedRegion = controller.getInstalledRegions().where((element) {
+        return element.regionId == region.regionId;
+      }).firstOrNull;
+    } on MapLoaderExceptionException catch (error) {
+      print(error.error.errorMessage(AppLocalizations.of(context)!));
+    }
     bool hasChildren = region.childRegions != null;
     int? progress = controller.getDownloadProgress(region.regionId);
     bool hasParentRegion = widget.regions.any((element) => element is _ParentRegion);

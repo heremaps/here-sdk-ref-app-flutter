@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 HERE Europe B.V.
+ * Copyright (C) 2020-2024 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
 import 'package:RefApp/common/file_utility.dart';
 import 'package:RefApp/routing/routing_screen.dart';
 import 'package:file_picker/file_picker.dart';
@@ -31,6 +32,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/location.dart';
+import 'package:here_sdk/maploader.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
@@ -397,7 +399,13 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
               onChanged: (newValue) async {
                 if (newValue) {
                   MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
-                  if (controller.getInstalledRegions().isEmpty) {
+                  List<InstalledRegion> installedRegions = [];
+                  try {
+                    installedRegions = controller.getInstalledRegions();
+                  } on MapLoaderExceptionException catch (error) {
+                    print(error.error.errorMessage(AppLocalizations.of(context)!));
+                  }
+                  if (installedRegions.isEmpty) {
                     Navigator.of(context).pop();
                     if (!await Util.showCommonConfirmationDialog(
                       context: context,
