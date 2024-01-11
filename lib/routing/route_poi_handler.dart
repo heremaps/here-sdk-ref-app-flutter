@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
@@ -116,7 +117,7 @@ class RoutePoiHandler {
   }
 
   /// Searches POI for the [route].
-  void updatePoiForRoute(Routing.Route route) {
+  void updatePoiForRoute(Routing.Route route) async {
     _clearMarkers();
     _stopCurrentSearch();
 
@@ -127,23 +128,60 @@ class RoutePoiHandler {
         return;
       }
 
-      GeoCorridor geoCorridor = GeoCorridor(route.geometry.vertices, _kGeoCorridorRadius);
-
-      List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
-      CategoryQuery categoryQuery = CategoryQuery.withCategoriesInArea(
-        categories,
-        CategoryQueryArea.withCorridor(geoCorridor),
-      );
-      _poiSearchTask = _searchEngine.searchByCategory(categoryQuery, _searchOptions, (error, places) {
-        if (error != null) {
-          print('Search failed. Error: ${error.toString()}');
-          return;
-        }
-
+      int nestedSearchLimit = 3;
+      List<Place>? places = await _searchForVertices(route.geometry.vertices, nestedSearchLimit);
+      print('Total results: ${places?.length}');
+      if (places?.isNotEmpty ?? false) {
         _placesForRoutes[route] = places!;
         _addMarkersForPlaces(places);
-      });
+      }
     }
+  }
+
+  Future<List<Place>?> _searchForVertices(List<GeoCoordinates> vertices, int nestedCount) async {
+    if (nestedCount < 0) {
+      print('Nested search limit exeeded!');
+      return null;
+    }
+    List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
+    CategoryQuery categoryQuery = CategoryQuery.withCategoriesInArea(
+      categories,
+      CategoryQueryArea.withCorridor(GeoCorridor(vertices, _kGeoCorridorRadius)),
+    );
+    SearchError? searchError;
+    List<Place>? searchedPlaces = await _searchPois(categoryQuery).onError((SearchError? error, stackTrace) {
+      searchError = error;
+      return null;
+    });
+
+    List<Place> places = [];
+    if (searchError == SearchError.polylineTooLong) {
+      print('Search failed. Error: ${searchError.toString()}, splitting vertices to search again...');
+      final List<GeoCoordinates> split1 = vertices.sublist(0, vertices.length ~/ 2);
+      final List<GeoCoordinates> split2 = vertices.sublist(vertices.length ~/ 2);
+      for (List<GeoCoordinates> coordinates in [split1, split2]) {
+        List<Place>? nestedPlaces = await _searchForVertices(coordinates, nestedCount - 1);
+        if (nestedPlaces != null) {
+          places.addAll(nestedPlaces);
+        }
+      }
+    } else if (searchError != null) {
+      print('Search failed. Error: ${searchError.toString()}');
+    } else if (searchedPlaces != null) {
+      places.addAll(searchedPlaces);
+    }
+    return places;
+  }
+
+  Future<List<Place>?> _searchPois(CategoryQuery categoryQuery) {
+    final Completer<List<Place>?> completer = new Completer();
+    _poiSearchTask = _searchEngine.searchByCategory(categoryQuery, _searchOptions, (error, places) {
+      if (error != null) {
+        return completer.completeError(error);
+      }
+      return completer.complete(places);
+    });
+    return completer.future;
   }
 
   List<Place> _filterPlaces(List<Place> places) {
