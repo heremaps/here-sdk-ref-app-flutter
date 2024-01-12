@@ -543,12 +543,10 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
                       elevation: 2,
                       child: RouteInfo(
                         route: route,
-                        onRouteDetails: appPreferences.useAppOffline
-                            ? null
-                            : () => Navigator.of(context).pushNamed(
-                                  RouteDetailsScreen.navRoute,
-                                  arguments: [_routes[_routesTabController.index], _wayPointsController],
-                                ),
+                        onRouteDetails: () => Navigator.of(context).pushNamed(
+                          RouteDetailsScreen.navRoute,
+                          arguments: [_routes[_routesTabController.index], _wayPointsController],
+                        ),
                         onNavigation: () => Navigator.of(context).pushNamed(
                           NavigationScreen.navRoute,
                           arguments: [route, _wayPointsController.value],

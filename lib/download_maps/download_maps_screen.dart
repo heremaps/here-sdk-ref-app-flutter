@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 HERE Europe B.V.
+ * Copyright (C) 2020-2024 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,8 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     }
 
     MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
-    List<InstalledRegion> installedRegions = controller.getInstalledRegions();
+    try {
+      List<InstalledRegion> installedRegions = controller.getInstalledRegions();
 
     installedRegions.forEach((element) {
       Region region = _findInstalledRegionByID(regions, element.regionId)!;
@@ -154,9 +155,19 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
         icon: Icon(Icons.menu),
       );
 
-      result.add(tile);
-      result.add(Divider());
-    });
+        result.add(tile);
+        result.add(Divider());
+      });
+    } on MapLoaderExceptionException catch (error) {
+      // Ignoring the 'operationCancelled' error when displaying it to the user, but logging it to the console.
+      if (error.error != MapLoaderError.operationCancelled) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            ErrorToaster.makeToast(context, error.error.errorMessage(AppLocalizations.of(context)!));
+          }
+        });
+      }
+    }
 
     if (result.isNotEmpty && controller.mapUpdateState == MapUpdateState.none) {
       result.insert(0, _buildDownloadedMapsHeader(context, controller));

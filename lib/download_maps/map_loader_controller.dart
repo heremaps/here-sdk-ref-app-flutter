@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 HERE Europe B.V.
+ * Copyright (C) 2020-2024 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,8 +171,9 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
                     element.status == InstalledRegionStatus.pending && element.regionId == elementToRemove.parentId)
                 .isNotEmpty);
       }
-    } catch (error) {
-      print('Failed to get installed regions: ${error.toString()}');
+    } on MapLoaderExceptionException catch (error) {
+      print('Failed to get installed regions: ${error.error.toString()}');
+      throw error;
     }
     return installedRegions;
   }
