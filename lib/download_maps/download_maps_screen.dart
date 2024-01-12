@@ -20,6 +20,7 @@
 import 'dart:async';
 
 import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
+import 'package:RefApp/common/extensions/region_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/maploader.dart';
@@ -134,20 +135,25 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     try {
       List<InstalledRegion> installedRegions = controller.getInstalledRegions();
 
-      installedRegions.forEach((element) {
-        Region region = _findInstalledRegionByID(regions, element.regionId)!;
-        int? progress = controller.getDownloadProgress(element.regionId);
-        MapRegionTile tile = MapRegionTile(
-          region: region,
-          installedRegion: element,
-          downloadProgress: progress,
-          onTap: () {
-            progress != null
-                ? controller.cancelDownloadWithConfirmation(context, region)
-                : _displayDownloadedMapMenu(context, controller, region, element);
-          },
-          icon: Icon(Icons.menu),
-        );
+    installedRegions.forEach((element) {
+      Region region = _findInstalledRegionByID(regions, element.regionId)!;
+      int? progress = controller.getDownloadProgress(element.regionId);
+      MapRegionTile tile = MapRegionTile(
+        region: region,
+        installedRegion: element,
+        downloadProgress: progress,
+        onTap: () => progress != null
+            ? controller.cancelDownloadWithConfirmation(
+                context, region,
+                //  If the canceled tile is a Parent/Header tile,
+                //  we can utilize [childRegionIds] to cancel all associated child region downloads.
+                //  Alternatively, if the canceled tile is a child tile with its own children,
+                //  we pass their region IDs to cancel the respective downloads for those children as well.
+                region.childRegions.regionIds(),
+              )
+            : _displayDownloadedMapMenu(context, controller, region, element),
+        icon: Icon(Icons.menu),
+      );
 
         result.add(tile);
         result.add(Divider());
