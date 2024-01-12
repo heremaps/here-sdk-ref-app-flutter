@@ -126,11 +126,16 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
   }
 
   List<Widget> _buildInstalledMapsList(BuildContext context, List<Region>? regions) {
-    List<Widget> result = [];
     if (regions == null) {
-      return result;
+      return [
+        SizedBox(
+          height: 100,
+          child: Center(child: CircularProgressIndicator()),
+        )
+      ];
     }
 
+    List<Widget> result = [];
     MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
     try {
       List<InstalledRegion> installedRegions = controller.getInstalledRegions();
