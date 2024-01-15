@@ -407,8 +407,8 @@ class _NavigationScreenState extends State<NavigationScreen>
 
     if (_currentRoute.requestedTransportMode != Transport.TransportMode.pedestrian) {
       _visualNavigator.speedLimitListener = Navigation.SpeedLimitListener((speedLimit) {
-        if (_currentSpeedLimit != speedLimit.speedLimitInMetersPerSecond) {
-          setState(() => _currentSpeedLimit = speedLimit.speedLimitInMetersPerSecond);
+        if (_currentSpeedLimit != speedLimit.effectiveSpeedLimitInMetersPerSecond()) {
+          setState(() => _currentSpeedLimit = speedLimit.effectiveSpeedLimitInMetersPerSecond());
         }
       });
 
