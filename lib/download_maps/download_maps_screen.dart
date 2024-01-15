@@ -140,25 +140,25 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     try {
       List<InstalledRegion> installedRegions = controller.getInstalledRegions();
 
-    installedRegions.forEach((element) {
-      Region region = _findInstalledRegionByID(regions, element.regionId)!;
-      int? progress = controller.getDownloadProgress(element.regionId);
-      MapRegionTile tile = MapRegionTile(
-        region: region,
-        installedRegion: element,
-        downloadProgress: progress,
-        onTap: () => progress != null
-            ? controller.cancelDownloadWithConfirmation(
-                context, region,
-                //  If the canceled tile is a Parent/Header tile,
-                //  we can utilize [childRegionIds] to cancel all associated child region downloads.
-                //  Alternatively, if the canceled tile is a child tile with its own children,
-                //  we pass their region IDs to cancel the respective downloads for those children as well.
-                region.childRegions.regionIds(),
-              )
-            : _displayDownloadedMapMenu(context, controller, region, element),
-        icon: Icon(Icons.menu),
-      );
+      installedRegions.forEach((element) {
+        Region region = _findInstalledRegionByID(regions, element.regionId)!;
+        int? progress = controller.getDownloadProgress(element.regionId);
+        MapRegionTile tile = MapRegionTile(
+          region: region,
+          installedRegion: element,
+          downloadProgress: progress,
+          onTap: () => progress != null
+              ? controller.cancelDownloadWithConfirmation(
+                  context, region,
+                  //  If the canceled tile is a Parent/Header tile,
+                  //  we can utilize [childRegionIds] to cancel all associated child region downloads.
+                  //  Alternatively, if the canceled tile is a child tile with its own children,
+                  //  we pass their region IDs to cancel the respective downloads for those children as well.
+                  region.childRegions.regionIds(),
+                )
+              : _displayDownloadedMapMenu(context, controller, region, element),
+          icon: Icon(Icons.menu),
+        );
 
         result.add(tile);
         result.add(Divider());
@@ -168,7 +168,10 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       if (error.error != MapLoaderError.operationCancelled) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
-            ErrorToaster.makeToast(context, error.error.errorMessage(AppLocalizations.of(context)!));
+            ErrorToaster.makeToast(
+              context,
+              '${error.error.errorMessage(AppLocalizations.of(context)!)} (${error.error.index})',
+            );
           }
         });
       }
