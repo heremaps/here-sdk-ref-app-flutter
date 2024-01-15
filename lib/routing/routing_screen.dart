@@ -478,7 +478,6 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   Widget _buildBottomNavigationBar(context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AppLocalizations appLocalization = AppLocalizations.of(context)!;
-    AppPreferences appPreferences = Provider.of<AppPreferences>(context, listen: false);
 
     return BottomAppBar(
       key: _bottomBarKey,
