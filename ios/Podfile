@@ -56,6 +56,7 @@ post_install do |installer|
       config.build_settings["CODE_SIGNING_REQUIRED"] = 'NO'
       config.build_settings["PROVISIONING_PROFILE"] = ''
       config.build_settings["PROVISIONING_PROFILE_SPECIFIER"] = ''
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
       end
   end
 end
