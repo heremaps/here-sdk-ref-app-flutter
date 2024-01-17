@@ -168,10 +168,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       if (error.error != MapLoaderError.operationCancelled) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
-            ErrorToaster.makeToast(
-              context,
-              '${error.error.errorMessage(AppLocalizations.of(context)!)} (${error.error.index})',
-            );
+            ErrorToaster.makeToast(context, error.error.errorMessage(AppLocalizations.of(context)!));
           }
         });
       }
@@ -325,6 +322,16 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
         if (isMapUpdateAvailable && await showMapUpdatesAvailableDialog(context)) {
           controller.performMapUpdate();
         }
+      }
+    } on MapLoaderError catch (error) {
+      print('Error while checking map update $error');
+      // Ignoring the 'operationCancelled' error when displaying it to the user, but logging it to the console.
+      if (error != MapLoaderError.operationCancelled) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            ErrorToaster.makeToast(context, error.errorMessage(AppLocalizations.of(context)!));
+          }
+        });
       }
     } catch (error) {
       print('Error while checking map update $error');

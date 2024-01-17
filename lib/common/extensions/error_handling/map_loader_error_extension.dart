@@ -17,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import 'package:here_sdk/maploader.dart' show MapLoaderError;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:here_sdk/maploader.dart' show MapLoaderError;
 
 extension MapLoaderErrorExtension on MapLoaderError {
   String errorMessage(AppLocalizations localized) {
@@ -59,6 +59,6 @@ extension MapLoaderErrorExtension on MapLoaderError {
         break;
     }
 
-    return message;
+    return '$message (${index})';
   }
 }
