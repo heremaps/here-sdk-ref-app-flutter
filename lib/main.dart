@@ -57,6 +57,7 @@ void main() {
       Environment.accessKeySecret,
     ),
     onSuccess: () => runApp(MyApp()),
+    onFailure: (_) => runApp(const InitErrorScreen()),
   );
 }
 
@@ -170,6 +171,36 @@ class _MyAppState extends State<MyApp> {
         },
         initialRoute: LandingScreen.navRoute,
       ),
+    );
+  }
+}
+
+class InitErrorScreen extends StatelessWidget {
+  const InitErrorScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Builder(
+        builder: (context) {
+          return Container(
+            color: Theme.of(context).colorScheme.background,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(UIStyle.contentMarginExtraHuge),
+                child: Text(
+                  AppLocalizations.of(context)!.sdkInitFailError,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      theme: UIStyle.lightTheme,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+      ],
     );
   }
 }
