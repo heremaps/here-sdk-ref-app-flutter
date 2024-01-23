@@ -36,6 +36,8 @@ import 'map_regions_list_screen.dart';
 import 'map_update_progress_widget.dart';
 import 'storage_space_widget.dart';
 
+enum MenuActionType { clearAppCache, clearPersistentMapStorage }
+
 /// Download maps screen widget.
 class DownloadMapsScreen extends StatefulWidget {
   static const String navRoute = "/download_maps";
@@ -81,6 +83,24 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(AppLocalizations.of(context)!.downloadMapsTitle),
+            actions: [
+              PopupMenuButton(
+                icon: Icon(Icons.menu),
+                onSelected: _menuActionHandler,
+                itemBuilder: (BuildContext bc) {
+                  return [
+                    PopupMenuItem(
+                      child: Text(AppLocalizations.of(context)!.clearPrefetchedCache),
+                      value: MenuActionType.clearAppCache,
+                    ),
+                    PopupMenuItem(
+                      child: Text(AppLocalizations.of(context)!.clearPersistentMapStorage),
+                      value: MenuActionType.clearPersistentMapStorage,
+                    ),
+                  ];
+                },
+              ),
+            ],
           ),
           body: Stack(
             children: [
@@ -335,6 +355,25 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       }
     } catch (error) {
       print('Error while checking map update $error');
+    }
+  }
+
+  void _menuActionHandler(MenuActionType type) async {
+    try {
+      MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
+      if (type == MenuActionType.clearPersistentMapStorage) {
+        await controller.clearPersistentMapStorage();
+      } else if (type == MenuActionType.clearAppCache) {
+        await controller.clearAppCache();
+      }
+    } catch (error) {
+      print('${type.name} failed. Error: ${error.toString()}');
+      if (mounted && error != MapLoaderError.operationCancelled) {
+        ErrorToaster.makeToast(
+          context,
+          (error is MapLoaderError) ? error.errorMessage(AppLocalizations.of(context)!) : error.toString(),
+        );
+      }
     }
   }
 }
