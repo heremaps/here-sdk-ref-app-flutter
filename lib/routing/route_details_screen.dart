@@ -235,11 +235,13 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           child: NotificationListener<DraggableScrollableNotification>(
             onNotification: (DraggableScrollableNotification notification) {
               _maneuversSheetIsExpanded = notification.minExtent != notification.extent;
-              setState(() {
-                final deviceHeight = MediaQuery.of(context).size.height;
-                _updateCamera(bottomPanelHeight: deviceHeight * notification.extent);
-                _updatePrincipalPoint(bottomPanelHeight: deviceHeight * notification.extent);
-                _updateWatermarkPosition(margin: notification.extent);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() {
+                  final deviceHeight = MediaQuery.of(context).size.height;
+                  _updateCamera(bottomPanelHeight: deviceHeight * notification.extent);
+                  _updatePrincipalPoint(bottomPanelHeight: deviceHeight * notification.extent);
+                  _updateWatermarkPosition(margin: notification.extent);
+                });
               });
               return true;
             },
