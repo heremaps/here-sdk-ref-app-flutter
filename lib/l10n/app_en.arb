@@ -1757,10 +1757,6 @@
   "@textFormatPlain": {
     "description": "Title of text instructions plain format setting in route text options"
   },
-  "textFormatTitle": "Text format",
-  "@textFormatTitle": {
-    "description": "Title of text mode setting in route text options"
-  },
   "tollRoad": "Toll road",
   "@tollRoad": {
     "description": "Avoid road feature name for route preferences"

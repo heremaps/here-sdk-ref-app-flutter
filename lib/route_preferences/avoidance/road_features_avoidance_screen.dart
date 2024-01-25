@@ -63,7 +63,7 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
                 final AvoidanceOptions newOptions = AvoidanceOptions()
                   ..roadFeatures = updatedFeatures
                   ..countries = avoidanceOptions.countries
-                  ..avoidAreas = avoidanceOptions.avoidAreas
+                  ..avoidBoundingBoxAreas = avoidanceOptions.avoidBoundingBoxAreas
                   ..zoneCategories = avoidanceOptions.zoneCategories
                   ..segments = avoidanceOptions.segments;
                 context.read<RoutePreferencesModel>().sharedAvoidanceOptions = newOptions;

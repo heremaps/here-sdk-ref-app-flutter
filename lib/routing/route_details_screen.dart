@@ -18,6 +18,7 @@
  */
 
 import 'package:RefApp/common/extensions/geo_box_extensions.dart';
+import 'package:RefApp/common/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';
@@ -155,9 +156,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   void _addRouteToMap() {
-    _mapRoute = MapPolyline(widget.route.geometry, UIStyle.routeLineWidth, UIStyle.selectedRouteColor);
-    _mapRoute.outlineColor = UIStyle.selectedRouteBorderColor;
-    _mapRoute.outlineWidth = UIStyle.routeOutLineWidth;
+    _mapRoute = MapPolyline.withRepresentation(widget.route.geometry, mapRouteRepresentation());
     _hereMapController.mapScene.addMapPolyline(_mapRoute);
     MapImage mapImage = MapImage.withFilePathAndWidthAndHeight("assets/maneuver.svg", _markerSize, _markerSize);
     widget.route.sections.forEach((section) {
