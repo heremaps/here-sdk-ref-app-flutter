@@ -288,23 +288,14 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
   }
 
   /// Clear persisted map data
-  Future<void> clearPersistentMapStorage() async {
-    final Completer<void> completer = Completer<void>();
-
-    void callback(MapLoaderError? error) {
-      if (error != null) {
-        completer.completeError(error);
-      } else {
-        completer.complete();
-      }
-    }
-
-    _mapDownloader!.clearPersistentMapStorage(callback);
-    return completer.future;
-  }
+  Future<void> clearPersistentMapStorage() async => _onCallback(_mapDownloader!.clearPersistentMapStorage);
 
   /// Clear app cache
   Future<void> clearAppCache() async {
+    return _onCallback(SDKCache.fromSdkEngine(SDKNativeEngine.sharedInstance!).clearAppCache);
+  }
+
+  Future<void> _onCallback(Function callbackFunction) {
     final Completer<void> completer = Completer<void>();
 
     void callback(MapLoaderError? error) {
@@ -315,7 +306,7 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
       }
     }
 
-    SDKCache.fromSdkEngine(SDKNativeEngine.sharedInstance!).clearAppCache(callback);
+    callbackFunction(callback);
     return completer.future;
   }
 
