@@ -87,7 +87,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
               PopupMenuButton(
                 icon: Icon(Icons.menu),
                 onSelected: _menuActionHandler,
-                itemBuilder: (BuildContext bc) {
+                itemBuilder: (_) {
                   return [
                     PopupMenuItem(
                       child: Text(AppLocalizations.of(context)!.clearPrefetchedCache),
