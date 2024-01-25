@@ -1649,6 +1649,10 @@
   "@routingErrorText": {
     "description": "Routing error message"
   },
+  "sdkInitFailError": "The initialisation of the HERE SDK failed. Please check your code and/or start the native engine with the default options.",
+  "@sdkInitFailError": {
+    "description": "HERE SDK initialisation failure message"
+  },
   "searchErrorText": "Search failed with error: '{{error}}'",
   "@searchErrorText": {
     "description": "Search error message"
