@@ -67,6 +67,14 @@
   "@carShuttleTrain": {
     "description": "Avoid road feature name for route preferences"
   },
+  "clearPersistentMapStorage": "Clear Persistent Map Storage",
+  "@clearPersistentMapStorage": {
+    "description": "Text for clear Persistent Map Storage action"
+  },
+  "clearPrefetchedCache": "Clear Prefetched Cache",
+  "@clearPrefetchedCache": {
+    "description": "Text for clear Prefetched Cache action"
+  },
   "consentDenied": "Revoked",
   "@consentDenied": {
     "description": "Text for denied consent"

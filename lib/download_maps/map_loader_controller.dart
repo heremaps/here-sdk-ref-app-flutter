@@ -287,6 +287,29 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
     return newCatalogs?.isNotEmpty ?? false;
   }
 
+  /// Clear persisted map data
+  Future<void> clearPersistentMapStorage() async => _onCallback(_mapDownloader!.clearPersistentMapStorage);
+
+  /// Clear app cache
+  Future<void> clearAppCache() async {
+    return _onCallback(SDKCache.fromSdkEngine(SDKNativeEngine.sharedInstance!).clearAppCache);
+  }
+
+  Future<void> _onCallback(Function callbackFunction) {
+    final Completer<void> completer = Completer<void>();
+
+    void callback(MapLoaderError? error) {
+      if (error != null) {
+        completer.completeError(error);
+      } else {
+        completer.complete();
+      }
+    }
+
+    callbackFunction(callback);
+    return completer.future;
+  }
+
   @override
   void onCatalogUpdateComplete(MapLoaderError? error) {
     if (error != null && error != MapLoaderError.operationCancelled) {
