@@ -29,24 +29,6 @@ import 'package:here_sdk/transport.dart' as Transport;
 class EnumStringHelper {
   static int noneValueIndex = -1;
 
-  /// Returns the mapping of [TextFormat] values to the corresponding strings.
-  static Map<int, String> routeInstructionsFormatMap(BuildContext context) {
-    final Map<int, String> result = Map<int, String>();
-    for (TextFormat value in TextFormat.values) {
-      switch (value) {
-        case TextFormat.html:
-          result[value.index] = AppLocalizations.of(context)!.textFormatHtml;
-          break;
-        case TextFormat.plain:
-          result[value.index] = AppLocalizations.of(context)!.textFormatPlain;
-          break;
-        default:
-          throw StateError("Invalid enum value $value for TextFormat enum.");
-      }
-    }
-    return result;
-  }
-
   /// Returns the mapping of [OptimizationMode] values to the corresponding strings.
   static Map<int, String> routeOptimizationModeMap(BuildContext context) {
     final Map<int, String> result = Map<int, String>();

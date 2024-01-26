@@ -26,8 +26,8 @@ import 'package:provider/provider.dart';
 import '../common/ui_style.dart';
 import 'dropdown_widget.dart';
 import 'enum_string_helper.dart';
-import 'preferences_section_title_widget.dart';
 import 'preferences_row_title_widget.dart';
+import 'preferences_section_title_widget.dart';
 import 'route_preferences_model.dart';
 
 /// Route text options widget.
@@ -40,23 +40,6 @@ class RouteTextOptionsWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         PreferencesSectionTitle(title: AppLocalizations.of(context)!.routeTextOptionsTitle),
-        PreferencesRowTitle(title: AppLocalizations.of(context)!.textFormatTitle),
-        Container(
-          decoration: UIStyle.roundedRectDecoration(),
-          child: DropdownButtonHideUnderline(
-            child: DropdownWidget(
-              data: EnumStringHelper.routeInstructionsFormatMap(context),
-              selectedValue: textOptions.instructionFormat.index,
-              onChanged: (format) {
-                final RouteTextOptions newOptions = RouteTextOptions()
-                  ..language = textOptions.language
-                  ..instructionFormat = TextFormat.values[format]
-                  ..unitSystem = textOptions.unitSystem;
-                context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
-              },
-            ),
-          ),
-        ),
         PreferencesRowTitle(title: AppLocalizations.of(context)!.unitSystemTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
@@ -67,7 +50,6 @@ class RouteTextOptionsWidget extends StatelessWidget {
               onChanged: (unit) {
                 final RouteTextOptions newOptions = RouteTextOptions()
                   ..language = textOptions.language
-                  ..instructionFormat = textOptions.instructionFormat
                   ..unitSystem = UnitSystem.values[unit];
                 context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
               },
@@ -84,7 +66,6 @@ class RouteTextOptionsWidget extends StatelessWidget {
               onChanged: (language) {
                 final RouteTextOptions newOptions = RouteTextOptions()
                   ..language = LanguageCode.values[language]
-                  ..instructionFormat = textOptions.instructionFormat
                   ..unitSystem = textOptions.unitSystem;
                 context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
               },

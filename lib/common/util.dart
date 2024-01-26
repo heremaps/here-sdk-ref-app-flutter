@@ -323,3 +323,16 @@ void loadMapScene(
           mapSceneLoadSceneCallback,
         );
 }
+
+/// Function provides a MapPolylineRepresentation which is to be applied on a polyline for displaying a route on map
+/// a [MapPolylineSolidRepresentation] type is returned for the map route. Gives selected/unselected repesentation on
+/// the basis of [selected] flag.
+MapPolylineRepresentation mapRouteRepresentation({bool selected = true}) {
+  return MapPolylineSolidRepresentation.withOutline(
+    MapMeasureDependentRenderSize.withSingleSize(RenderSizeUnit.pixels, UIStyle.routeLineWidth),
+    selected ? UIStyle.selectedRouteColor : UIStyle.routeColor,
+    MapMeasureDependentRenderSize.withSingleSize(RenderSizeUnit.pixels, UIStyle.routeOutLineWidth),
+    selected ? UIStyle.selectedRouteBorderColor : UIStyle.routeBorderColor,
+    LineCap.round,
+  );
+}

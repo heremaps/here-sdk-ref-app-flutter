@@ -169,7 +169,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     Widget? nextManeuverWidget = _reroutingInProgress || !_canLocateUserPosition ? null : _buildNextManeuver(context);
     PreferredSize? topBarWidget = _buildTopBar(context);
     double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
-    final HereMapOptions options = HereMapOptions.withDefaults()
+    final HereMapOptions options = HereMapOptions()
       ..initialBackgroundColor = Theme.of(context).colorScheme.background;
     return PopScope(
       child: Scaffold(

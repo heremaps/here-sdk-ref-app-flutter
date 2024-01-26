@@ -20,6 +20,7 @@
 import 'dart:math';
 
 import 'package:RefApp/common/extensions/error_handling/routing_error_extension.dart';
+import 'package:RefApp/common/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -149,8 +150,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final HereMapOptions options = HereMapOptions.withDefaults()
-      ..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.background;
     return Stack(
       children: [
         Scaffold(
@@ -405,26 +405,19 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   }
 
   _addRouteToMap(Routing.Route route, bool selected) {
-    MapPolyline routeMapPolyline = MapPolyline(
+    MapPolyline routeMapPolyline = MapPolyline.withRepresentation(
       route.geometry,
-      UIStyle.routeLineWidth,
-      selected ? UIStyle.selectedRouteColor : UIStyle.routeColor,
+      mapRouteRepresentation(selected: selected),
     );
     routeMapPolyline.drawOrder = selected ? 1 : 0;
-    routeMapPolyline.outlineColor = selected ? UIStyle.selectedRouteBorderColor : UIStyle.routeBorderColor;
-    routeMapPolyline.outlineWidth = UIStyle.routeOutLineWidth;
-
     _hereMapController.mapScene.addMapPolyline(routeMapPolyline);
     _mapRoutes.add(routeMapPolyline);
   }
 
   _updateSelectedRoute() {
-    _mapRoutes[_selectedRouteIndex].lineColor = UIStyle.routeColor;
-    _mapRoutes[_selectedRouteIndex].outlineColor = UIStyle.routeBorderColor;
+    _mapRoutes[_selectedRouteIndex].setRepresentation(mapRouteRepresentation(selected: false));
     _mapRoutes[_selectedRouteIndex].drawOrder = 0;
-
-    _mapRoutes[_routesTabController.index].lineColor = UIStyle.selectedRouteColor;
-    _mapRoutes[_routesTabController.index].outlineColor = UIStyle.selectedRouteBorderColor;
+    _mapRoutes[_routesTabController.index].setRepresentation(mapRouteRepresentation());
     _mapRoutes[_routesTabController.index].drawOrder = 1;
 
     _selectedRouteIndex = _routesTabController.index;

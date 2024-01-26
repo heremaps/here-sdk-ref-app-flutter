@@ -1,6 +1,9 @@
 PODS:
   - battery_plus (1.0.0):
     - Flutter
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - ReachabilitySwift
   - device_info_plus (0.0.1):
     - Flutter
   - disk_space_plus (0.0.1):
@@ -49,13 +52,14 @@ PODS:
   - FMDB/standard (2.7.5)
   - geolocator_apple (1.2.0):
     - Flutter
-  - here_sdk (4.16.0.0.11798.release):
+  - here_sdk (4.17.0.0.12128.release):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
+  - ReachabilitySwift (5.0.0)
   - ringtone_player (0.0.1):
     - Flutter
   - SDWebImage (5.14.2):
@@ -75,6 +79,7 @@ PODS:
 
 DEPENDENCIES:
   - battery_plus (from `.symlinks/plugins/battery_plus/ios`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - disk_space_plus (from `.symlinks/plugins/disk_space_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -96,12 +101,15 @@ SPEC REPOS:
     - DKImagePickerController
     - DKPhotoGallery
     - FMDB
+    - ReachabilitySwift
     - SDWebImage
     - SwiftyGif
 
 EXTERNAL SOURCES:
   battery_plus:
     :path: ".symlinks/plugins/battery_plus/ios"
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   disk_space_plus:
@@ -135,6 +143,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   battery_plus: 091633b7f01cb33dfc4aeedb450816f4d33818fa
+  connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   disk_space_plus: faa27633429bb392ecf7342395bf12040ca4ac9b
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
@@ -145,9 +154,10 @@ SPEC CHECKSUMS:
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
-  here_sdk: 3ed32955f47d91bdf50f976f8f14a0e8474a6f07
+  here_sdk: 83f4e394405f31fdc57083be93ce1bcce739d694
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   ringtone_player: 151303fcb26e9daa11257fa6947faed36b198f13
   SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
@@ -156,6 +166,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
-PODFILE CHECKSUM: 822a9144fb49b8d0bcd5424000246cc05c14d395
+PODFILE CHECKSUM: d0c5cdb80c6b1a5d17f8d9a007326c470e9d6e04
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.14.3
