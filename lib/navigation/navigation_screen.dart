@@ -37,7 +37,7 @@ import 'package:here_sdk/transport.dart' as Transport;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:ringtone_player/ringtone_player.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../common/application_preferences.dart';
 import '../common/custom_map_style_settings.dart';
@@ -132,7 +132,7 @@ class _NavigationScreenState extends State<NavigationScreen>
   @override
   void initState() {
     super.initState();
-    Wakelock.enable();
+    WakelockPlus.enable();
     _visualNavigator = Navigation.VisualNavigator();
     _remainingDistanceInMeters = widget.route.lengthInMeters;
     _remainingDurationInSeconds = widget.route.duration.inSeconds;
@@ -160,7 +160,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     _servicesStatusNotifier?.stop();
     _flutterTts.stop();
     WidgetsBinding.instance.removeObserver(this);
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -169,8 +169,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     Widget? nextManeuverWidget = _reroutingInProgress || !_canLocateUserPosition ? null : _buildNextManeuver(context);
     PreferredSize? topBarWidget = _buildTopBar(context);
     double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
-    final HereMapOptions options = HereMapOptions()
-      ..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.background;
     return PopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
