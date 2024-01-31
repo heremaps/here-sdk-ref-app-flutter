@@ -351,7 +351,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                     ),
                     FutureBuilder<PackageInfo>(
                       future: PackageInfo.fromPlatform(),
-                      builder: (context, snapshot) {
+                      builder: (_, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.done:
                             String title = Util.formatString(
