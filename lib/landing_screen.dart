@@ -35,6 +35,7 @@ import 'package:here_sdk/location.dart';
 import 'package:here_sdk/maploader.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import 'common/application_preferences.dart';
@@ -326,16 +327,6 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
-    String title = Util.formatString(
-      appLocalizations.appTitleHeader,
-      [
-        Util.applicationVersion,
-        SDKBuildInformation.sdkVersion().versionGeneration,
-        SDKBuildInformation.sdkVersion().versionMajor,
-        SDKBuildInformation.sdkVersion().versionMinor,
-      ],
-    );
-
     return Drawer(
       child: Ink(
         color: colorScheme.primary,
@@ -358,13 +349,32 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                     SizedBox(
                       width: UIStyle.contentMarginMedium,
                     ),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          color: colorScheme.onPrimary,
-                        ),
-                      ),
+                    FutureBuilder<PackageInfo>(
+                      future: PackageInfo.fromPlatform(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.done:
+                            String title = Util.formatString(
+                              appLocalizations.appTitleHeader,
+                              [
+                                snapshot.data?.version ?? '',
+                                SDKBuildInformation.sdkVersion().versionGeneration,
+                                SDKBuildInformation.sdkVersion().versionMajor,
+                                SDKBuildInformation.sdkVersion().versionMinor,
+                              ],
+                            );
+                            return Expanded(
+                              child: Text(
+                                title,
+                                style: TextStyle(
+                                  color: colorScheme.onPrimary,
+                                ),
+                              ),
+                            );
+                          default:
+                            return const SizedBox();
+                        }
+                      },
                     ),
                   ],
                 ),
