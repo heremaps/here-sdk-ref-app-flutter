@@ -1,0 +1,3 @@
+<resources>
+    <string name="service_description">Service to keep HERE navigation running in the background</string>
+</resources>
