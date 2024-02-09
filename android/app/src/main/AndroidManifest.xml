@@ -19,6 +19,7 @@
         android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
 
     <application
         android:name=".MainApplication"
@@ -56,7 +57,9 @@
 
         <service
             android:name=".FlutterForegroundService"
-            android:foregroundServiceType="location" />
+            android:foregroundServiceType="location"
+            android:description="@string/service_description"
+            android:exported="false" />
         <service android:name="dev.cruv.ringtone_player.PlayerService" />
     </application>
 </manifest>

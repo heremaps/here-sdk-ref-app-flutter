@@ -19,15 +19,19 @@
 
 package com.example.RefApp
 
+
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 
 class FlutterForegroundService : Service() {
     companion object {
@@ -48,9 +52,13 @@ class FlutterForegroundService : Service() {
         super.onCreate()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_HIGH)
-            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
+            val channel = NotificationChannel(
+                NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(
+                channel
+            )
         }
     }
 
@@ -62,7 +70,26 @@ class FlutterForegroundService : Service() {
         when (intent.action) {
             START_FOREGROUND_ACTION -> {
                 val bundle = intent.extras ?: return START_NOT_STICKY
-                startForeground(ONGOING_NOTIFICATION_ID, createNotification(bundle))
+                try {
+                    if (Build.VERSION.SDK_INT >= 34) {
+                        ServiceCompat.startForeground(
+                            this,
+                            ONGOING_NOTIFICATION_ID,
+                            createNotification(bundle),
+                            FOREGROUND_SERVICE_TYPE_LOCATION,
+                        )
+                    } else {
+                        startForeground(ONGOING_NOTIFICATION_ID, createNotification(bundle))
+                    }
+                } catch (e: Exception) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e is ForegroundServiceStartNotAllowedException) {
+                        // App not in a valid state to start foreground service
+                        // (e.g. started from bg)
+                        Log.e("RefApp FGS Not Allowed: ", e.message.toString())
+                    } else {
+                        Log.e("RefApp", e.message + "")
+                    }
+                }
             }
 
             UPDATE_FOREGROUND_ACTION -> {
@@ -72,7 +99,11 @@ class FlutterForegroundService : Service() {
             }
 
             STOP_FOREGROUND_ACTION -> {
-                stopForeground(true)
+                if (Build.VERSION.SDK_INT >= 34) {
+                    stopForeground(STOP_FOREGROUND_REMOVE)
+                } else {
+                    stopForeground(true)
+                }
                 stopSelf()
             }
         }
@@ -91,14 +122,14 @@ class FlutterForegroundService : Service() {
         }
 
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_notification)
-                .setContentTitle(bundle.getString(TITLE_ARG))
-                .setContentText(bundle.getString(CONTENT_ARG))
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setContentIntent(pendingIntent)
-                .setOngoing(true)
-                .setLocalOnly(true)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setSmallIcon(R.mipmap.ic_launcher_notification)
+            .setContentTitle(bundle.getString(TITLE_ARG))
+            .setContentText(bundle.getString(CONTENT_ARG))
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setContentIntent(pendingIntent)
+            .setOngoing(true)
+            .setLocalOnly(true)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
 
         if (bundle.getString(LARGE_ICON_ARG) != null) {
             val bitmap = BitmapFactory.decodeFile(bundle.getString(LARGE_ICON_ARG))
