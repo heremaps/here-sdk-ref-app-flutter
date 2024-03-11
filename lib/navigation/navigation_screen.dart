@@ -357,6 +357,9 @@ class _NavigationScreenState extends State<NavigationScreen>
     setState(() {
       _navigationStarted = true;
     });
+    if (Platform.isAndroid) {
+      LocalNotificationsHelper.requestPermission();
+    }
   }
 
   void _setupListeners() {
@@ -711,8 +714,9 @@ class _NavigationScreenState extends State<NavigationScreen>
     }
     if (state == AppLifecycleState.resumed) {
       LocalNotificationsHelper.stopNotifications();
-      SchedulerBinding.instance
-          .addPostFrameCallback((timeStamp) => _visualNavigator.startRendering(_hereMapController));
+      SchedulerBinding.instance.addPostFrameCallback(
+        (timeStamp) => _visualNavigator.startRendering(_hereMapController),
+      );
     }
     if (state == AppLifecycleState.detached) {
       LocalNotificationsHelper.stopNotifications();
