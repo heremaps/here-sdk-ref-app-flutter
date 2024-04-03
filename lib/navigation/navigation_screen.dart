@@ -170,6 +170,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     PreferredSize? topBarWidget = _buildTopBar(context);
     double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
     final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    options.renderMode = MapRenderMode.texture;
     return PopScope(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
