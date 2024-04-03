@@ -99,6 +99,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   Widget build(BuildContext context) {
     final HereMapOptions options = HereMapOptions()
       ..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    options.renderMode = MapRenderMode.texture;
     return DefaultTabController(
       length: widget.places.length,
       child: PopScope(
