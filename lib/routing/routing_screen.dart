@@ -151,6 +151,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    options.renderMode = MapRenderMode.texture;
     return Stack(
       children: [
         Scaffold(
