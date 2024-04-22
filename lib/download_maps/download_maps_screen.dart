@@ -214,7 +214,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(UIStyle.popupsBorderRadius),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(UIStyle.popupsBorderRadius)),
       ),
       builder: (context) => SafeArea(
         child: Column(

@@ -23,9 +23,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import com.example.RefApp.FlutterForegroundService
 import com.example.RefApp.FlutterForegroundService.Companion.START_FOREGROUND_ACTION
 import com.example.RefApp.FlutterForegroundService.Companion.STOP_FOREGROUND_ACTION
-import com.example.RefApp.FlutterForegroundService.Companion.UPDATE_FOREGROUND_ACTION
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -63,8 +64,6 @@ class MainActivity : FlutterActivity() {
                 START_SERVICE -> launchForegroundService(createIntent(call))
 
                 STOP_SERVICE -> stopForegroundService(createIntent(call))
-
-                UPDATE_SERVICE -> updateForegroundService(createIntent(call))
 
                 OPEN_BATTERY_SAVER_SETTINGS -> openBatterySaverSettings(call)
 
@@ -115,11 +114,6 @@ class MainActivity : FlutterActivity() {
         } else {
             context.startService(intent)
         }
-    }
-
-    private fun updateForegroundService(intent: Intent) {
-        intent.action = UPDATE_FOREGROUND_ACTION
-        context.startService(intent)
     }
 
     private fun stopForegroundService(intent: Intent) {

@@ -30,13 +30,11 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 
 class FlutterForegroundService : Service() {
     companion object {
         const val START_FOREGROUND_ACTION = "com.example.RefApp.flutter_foreground_service.action.start_foreground"
-        const val UPDATE_FOREGROUND_ACTION = "com.example.RefApp.flutter_foreground_service.action.update_foreground"
         const val STOP_FOREGROUND_ACTION = "com.example.RefApp.flutter_foreground_service.action.stop_foreground"
         const val NOTIFICATION_CHANNEL_ID = "flutter_channel_id"
         const val NOTIFICATION_CHANNEL_NAME = "flutter_foreground_service_channel"
@@ -92,12 +90,6 @@ class FlutterForegroundService : Service() {
                 }
             }
 
-            UPDATE_FOREGROUND_ACTION -> {
-                val bundle = intent.extras ?: return START_NOT_STICKY
-                val nm = NotificationManagerCompat.from(this)
-                nm.notify(ONGOING_NOTIFICATION_ID, createNotification(bundle))
-            }
-
             STOP_FOREGROUND_ACTION -> {
                 if (Build.VERSION.SDK_INT >= 34) {
                     stopForeground(STOP_FOREGROUND_REMOVE)
@@ -130,6 +122,7 @@ class FlutterForegroundService : Service() {
             .setOngoing(true)
             .setLocalOnly(true)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 
         if (bundle.getString(LARGE_ICON_ARG) != null) {
             val bitmap = BitmapFactory.decodeFile(bundle.getString(LARGE_ICON_ARG))

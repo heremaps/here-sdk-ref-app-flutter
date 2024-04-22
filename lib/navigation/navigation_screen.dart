@@ -21,6 +21,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:RefApp/common/battery_saver_utils.dart';
+import 'package:RefApp/common/notifications/android_notifications.dart';
+import 'package:RefApp/common/notifications/ios_notifications.dart';
+import 'package:RefApp/common/notifications/notifications_manager.dart';
 import 'package:RefApp/common/utils/navigation/location_provider_interface.dart';
 import 'package:RefApp/common/utils/navigation/location_utils.dart';
 import 'package:RefApp/common/utils/navigation/position_status_listener.dart';
@@ -41,7 +44,6 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../common/application_preferences.dart';
 import '../common/custom_map_style_settings.dart';
-import '../common/local_notifications_helper.dart';
 import '../common/marquee_widget.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
@@ -126,8 +128,11 @@ class _NavigationScreenState extends State<NavigationScreen>
 
   late ReroutingHandler _reroutingHandler;
   bool _reroutingInProgress = false;
+  late NotificationsManager _notificationsManager;
 
   AppLifecycleState? _appLifecycleState;
+
+  bool get _canShowNotification => _appLifecycleState == AppLifecycleState.paused;
 
   @override
   void initState() {
@@ -139,17 +144,24 @@ class _NavigationScreenState extends State<NavigationScreen>
     _currentRoute = widget.route;
     WidgetsBinding.instance.addObserver(this);
     if (Platform.isIOS) {
+      _notificationsManager = IosNotificationsManager();
       _configTextSpeakerForIOS();
+    } else {
+      _notificationsManager = AndroidNotificationsManager();
     }
 
     _reroutingHandler = ReroutingHandler(
       visualNavigator: _visualNavigator,
       wayPoints: widget.wayPoints,
       preferences: context.read<RoutePreferencesModel>(),
-      onBeginRerouting: () => setState(() => _reroutingInProgress = true),
+      onBeginRerouting: () {
+        setState(() => _reroutingInProgress = true);
+        _showNotification();
+      },
       onNewRoute: _onNewRoute,
       offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline,
     );
+    _notificationsManager.init();
   }
 
   @override
@@ -161,6 +173,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     _flutterTts.stop();
     WidgetsBinding.instance.removeObserver(this);
     WakelockPlus.disable();
+    _notificationsManager.dismissNotification();
     super.dispose();
   }
 
@@ -358,9 +371,6 @@ class _NavigationScreenState extends State<NavigationScreen>
     setState(() {
       _navigationStarted = true;
     });
-    if (Platform.isAndroid) {
-      LocalNotificationsHelper.requestPermission();
-    }
   }
 
   void _setupListeners() {
@@ -449,15 +459,28 @@ class _NavigationScreenState extends State<NavigationScreen>
         Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
 
         if (maneuver != null) {
-          LocalNotificationsHelper.showManeuverNotification(
-            _getRemainingTimeString(),
-            text,
-            maneuver.action.imagePath,
-            !_soundEnabled,
-          );
+          _notificationsManager.showNotification(_buildManeuverNotificationBody(maneuver, text: text));
         }
       }
     });
+  }
+
+  NotificationBody _buildManeuverNotificationBody(Routing.Maneuver maneuver, {String? text}) {
+    return NotificationBody(
+      title: _getRemainingTimeString(),
+      body: text ?? maneuver.getActionText(context),
+      imagePath: maneuver.action.imagePath,
+      presentSound: !_soundEnabled,
+    );
+  }
+
+  NotificationBody _buildNavigationStatusNotificationBody() {
+    return NotificationBody(
+      title: _navigationStatus() ?? _getRemainingTimeString(),
+      body: '',
+      imagePath: '',
+      presentSound: !_soundEnabled,
+    );
   }
 
   String _getRemainingTimeString() {
@@ -473,6 +496,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     _visualNavigator.stopRendering();
     _locationProvider?.removeListeners();
     _locationProvider?.stop();
+    _notificationsManager.dismissNotification();
   }
 
   void _onNewRoute(Routing.Route? newRoute) {
@@ -494,6 +518,37 @@ class _NavigationScreenState extends State<NavigationScreen>
     _finishMarker.coordinates = newRoute.geometry.vertices.last;
 
     setState(() => _reroutingInProgress = false);
+    _showNotification();
+  }
+
+  void _showNotification() {
+    // if navigation is not started yet or app is not in background,
+    // we will not show notification.
+    // we will cancel notification that displayed already.
+    if (!_navigationStarted || !_canShowNotification) {
+      _notificationsManager.dismissNotification();
+      return;
+    }
+    if (_navigationStatus() != null) {
+      _notificationsManager.showNotification(_buildNavigationStatusNotificationBody());
+    } else if (_currentManeuverIndex != null) {
+      final Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
+      if (maneuver != null) {
+        _notificationsManager.showNotification(_buildManeuverNotificationBody(maneuver));
+      }
+    }
+  }
+
+  String? _navigationStatus() {
+    if (_shouldMonitorPositioning && !_canLocateUserPosition) {
+      return AppLocalizations.of(context)!.locationWaitingForPositioning;
+    } else if (_reroutingInProgress) {
+      return AppLocalizations.of(context)!.navigationStatusRerouting;
+    } else if (_currentManeuverIndex == null) {
+      return AppLocalizations.of(context)!.navigationStatusWaitingForManeuvers;
+    } else {
+      return null;
+    }
   }
 
   PreferredSize? _buildTopBar(BuildContext context) {
@@ -502,12 +557,8 @@ class _NavigationScreenState extends State<NavigationScreen>
     }
 
     Widget child;
-    if (_shouldMonitorPositioning && !_canLocateUserPosition) {
-      child = ReroutingIndicator(title: AppLocalizations.of(context)!.locationWaitingForPositioning);
-    } else if (_reroutingInProgress) {
-      child = ReroutingIndicator(title: AppLocalizations.of(context)!.navigationStatusRerouting);
-    } else if (_currentManeuverIndex == null) {
-      child = ReroutingIndicator(title: AppLocalizations.of(context)!.navigationStatusWaitingForManeuvers);
+    if (_navigationStatus() != null) {
+      child = ReroutingIndicator(title: _navigationStatus()!);
     } else {
       Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
       if (maneuver == null) {
@@ -698,33 +749,24 @@ class _NavigationScreenState extends State<NavigationScreen>
     if (!_navigationStarted) {
       return;
     }
+    _appLifecycleState = state;
 
     if (state == AppLifecycleState.paused) {
-      if (_currentManeuverIndex != null) {
-        final Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
-
-        if (maneuver != null) {
-          LocalNotificationsHelper.startNotifications(
-            _getRemainingTimeString(),
-            maneuver.getActionText(context),
-            maneuver.action.imagePath,
-          );
-        }
-      }
+      // start notifications.
+      _showNotification();
       _visualNavigator.stopRendering();
     }
     if (state == AppLifecycleState.resumed) {
-      LocalNotificationsHelper.stopNotifications();
+      _notificationsManager.dismissNotification();
       SchedulerBinding.instance.addPostFrameCallback(
         (timeStamp) => _visualNavigator.startRendering(_hereMapController),
       );
     }
     if (state == AppLifecycleState.detached) {
-      LocalNotificationsHelper.stopNotifications();
+      _notificationsManager.dismissNotification();
       _stopNavigation();
       Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
     }
-    _appLifecycleState = state;
   }
 
   @override
