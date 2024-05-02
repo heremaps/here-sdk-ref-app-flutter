@@ -35,16 +35,16 @@ class ConnectionStateMonitor extends StatefulWidget {
 }
 
 class _ConnectionStateMonitorState extends State<ConnectionStateMonitor> {
-  bool get isConnected => _status != ConnectivityResult.none;
-  ConnectivityResult? _status;
-  late StreamSubscription<ConnectivityResult> _subscription;
+  bool get isConnected => !_status.contains(ConnectivityResult.none);
+  List<ConnectivityResult> _status = <ConnectivityResult>[];
+  late StreamSubscription<List<ConnectivityResult>> _subscription;
 
   @override
   void initState() {
     super.initState();
     _subscription = Connectivity().onConnectivityChanged.listen((_) async {
       // Check latest connectivity status on connection change.
-      final ConnectivityResult status = await Connectivity().checkConnectivity();
+      final List<ConnectivityResult> status = await Connectivity().checkConnectivity();
       if (_status != status) {
         _status = status;
         if (isConnected) {
