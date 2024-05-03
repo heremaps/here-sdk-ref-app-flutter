@@ -49,7 +49,7 @@ PODS:
     - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
-  - here_sdk (4.18.0.0.95722.nightly):
+  - here_sdk (4.17.0.0.12128.release):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
