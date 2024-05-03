@@ -128,8 +128,7 @@ class RoutePoiHandler {
         return;
       }
 
-      int nestedSearchLimit = 3;
-      List<Place>? places = await _searchForVertices(route.geometry.vertices, nestedSearchLimit);
+      List<Place>? places = await _searchForVertices(route.geometry.vertices);
       print('Total results: ${places?.length}');
       if (places?.isNotEmpty ?? false) {
         _placesForRoutes[route] = places!;
@@ -138,39 +137,17 @@ class RoutePoiHandler {
     }
   }
 
-  Future<List<Place>?> _searchForVertices(List<GeoCoordinates> vertices, int nestedCount) async {
-    if (nestedCount < 0) {
-      print('Nested search limit exeeded!');
-      return null;
-    }
+  Future<List<Place>?> _searchForVertices(List<GeoCoordinates> vertices) async {
     List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
     CategoryQuery categoryQuery = CategoryQuery.withCategoriesInArea(
       categories,
-      CategoryQueryArea.withCorridor(GeoCorridor(vertices, _kGeoCorridorRadius)),
+      CategoryQueryArea.withCorridorAndCenter(GeoCorridor(vertices, _kGeoCorridorRadius), vertices.first),
     );
-    SearchError? searchError;
-    List<Place>? searchedPlaces = await _searchPois(categoryQuery).onError((SearchError? error, stackTrace) {
-      searchError = error;
+
+    return _searchPois(categoryQuery).onError((SearchError? error, stackTrace) {
+      print('Search failed. Error: ${error.toString()}');
       return null;
     });
-
-    List<Place> places = [];
-    if (searchError == SearchError.polylineTooLong) {
-      print('Search failed. Error: ${searchError.toString()}, splitting vertices to search again...');
-      final List<GeoCoordinates> split1 = vertices.sublist(0, vertices.length ~/ 2);
-      final List<GeoCoordinates> split2 = vertices.sublist(vertices.length ~/ 2);
-      for (List<GeoCoordinates> coordinates in [split1, split2]) {
-        List<Place>? nestedPlaces = await _searchForVertices(coordinates, nestedCount - 1);
-        if (nestedPlaces != null) {
-          places.addAll(nestedPlaces);
-        }
-      }
-    } else if (searchError != null) {
-      print('Search failed. Error: ${searchError.toString()}');
-    } else if (searchedPlaces != null) {
-      places.addAll(searchedPlaces);
-    }
-    return places;
   }
 
   Future<List<Place>?> _searchPois(CategoryQuery categoryQuery) {
