@@ -32,7 +32,6 @@ extension SearchErrorExtension on SearchError {
         return localized.errorAuthenticationFailed;
 
       case SearchError.maxItemsOutOfRange:
-      case SearchError.polylineTooLong:
       case SearchError.invalidParameter:
       case SearchError.queryTooLong:
       case SearchError.filterTooLong:

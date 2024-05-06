@@ -450,16 +450,18 @@ class _NavigationScreenState extends State<NavigationScreen>
   void _setupVoiceTextMessages() async {
     await _flutterTts.setLanguage("en-US");
 
-    _visualNavigator.maneuverNotificationListener = Navigation.ManeuverNotificationListener((text) {
-      if (_soundEnabled) {
-        _flutterTts.speak(text);
-      }
+    _visualNavigator.eventTextListener = Navigation.EventTextListener((Navigation.EventText eventText) {
+      if (eventText.type == Navigation.TextNotificationType.maneuver) {
+        if (_soundEnabled) {
+          _flutterTts.speak(eventText.text);
+        }
 
-      if (_appLifecycleState == AppLifecycleState.paused && _currentManeuverIndex != null) {
-        Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
+        if (_appLifecycleState == AppLifecycleState.paused && _currentManeuverIndex != null) {
+          Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
 
-        if (maneuver != null) {
-          _notificationsManager.showNotification(_buildManeuverNotificationBody(maneuver, text: text));
+          if (maneuver != null) {
+            _notificationsManager.showNotification(_buildManeuverNotificationBody(maneuver, text: eventText.text));
+          }
         }
       }
     });

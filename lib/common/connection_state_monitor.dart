@@ -45,7 +45,8 @@ class _ConnectionStateMonitorState extends State<ConnectionStateMonitor> {
     _subscription = Connectivity().onConnectivityChanged.listen((_) async {
       // Check latest connectivity status on connection change.
       final List<ConnectivityResult> status = await Connectivity().checkConnectivity();
-      if (_status != status) {
+      final bool hasSameConnectionStatus = _status.length == status.length && _status.every(status.contains);
+      if (!hasSameConnectionStatus) {
         _status = status;
         if (isConnected) {
           // Check for any pending downloads and resume
