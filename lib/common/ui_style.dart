@@ -140,8 +140,8 @@ class UIStyle {
       secondaryContainer: _lightAccentSecondary,
       onPrimary: _lightBackground,
       onSecondary: _lightForegroundSecondary,
-      background: _lightBackground,
-    ).copyWith(background: _lightBackground),
+      surface: _lightBackground,
+    ).copyWith(surface: _lightBackground),
   );
 
   static const TextStyle _lightBodyTextStyle = TextStyle(

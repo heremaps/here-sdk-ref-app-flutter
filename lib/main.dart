@@ -184,7 +184,7 @@ class InitErrorScreen extends StatelessWidget {
       home: Builder(
         builder: (context) {
           return Container(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(UIStyle.contentMarginExtraHuge),

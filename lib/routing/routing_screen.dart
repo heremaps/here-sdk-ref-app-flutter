@@ -150,7 +150,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.surface;
     options.renderMode = MapRenderMode.texture;
     return Stack(
       children: [
@@ -437,7 +437,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
         child: Padding(
           padding: EdgeInsets.all(UIStyle.contentMarginLarge),
           child: Material(
-            color: colorScheme.background,
+            color: colorScheme.surface,
             borderRadius: BorderRadius.circular(UIStyle.popupsBorderRadius),
             elevation: 2,
             child: InkWell(
@@ -475,7 +475,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
     return BottomAppBar(
       key: _bottomBarKey,
-      color: colorScheme.background,
+      color: colorScheme.surface,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

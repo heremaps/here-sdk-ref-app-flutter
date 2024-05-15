@@ -107,7 +107,7 @@ class RouteInfo extends StatelessWidget {
                     child: Ink(
                       width: UIStyle.smallButtonHeight,
                       height: UIStyle.smallButtonHeight,
-                      color: colorScheme.background,
+                      color: colorScheme.surface,
                       child: InkWell(
                         child: Icon(
                           Icons.directions,
@@ -129,7 +129,7 @@ class RouteInfo extends StatelessWidget {
                     child: Ink(
                       width: UIStyle.smallButtonHeight,
                       height: UIStyle.smallButtonHeight,
-                      color: colorScheme.background,
+                      color: colorScheme.surface,
                       child: InkWell(
                         child: Icon(
                           Icons.navigation,

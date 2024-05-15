@@ -232,7 +232,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
                   topRight: Radius.circular(UIStyle.popupsBorderRadius),
                 ),
               ),
-              backgroundColor: colorScheme.background,
+              backgroundColor: colorScheme.surface,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

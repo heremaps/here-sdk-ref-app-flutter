@@ -139,7 +139,7 @@ class RoutePoiOptionsButton extends StatelessWidget {
                   topRight: Radius.circular(UIStyle.popupsBorderRadius),
                 ),
               ),
-              backgroundColor: colorScheme.background,
+              backgroundColor: colorScheme.surface,
               title: Text(AppLocalizations.of(context)!.poiSettingsTitle),
               actions: [
                 IconButton(

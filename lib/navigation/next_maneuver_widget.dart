@@ -65,7 +65,7 @@ class NextManeuver extends StatelessWidget {
         Text(
           Util.makeDistanceString(context, distance),
           style: TextStyle(
-            color: colorScheme.background,
+            color: colorScheme.surface,
             fontSize: UIStyle.hugeFontSize,
           ),
         ),
@@ -77,7 +77,7 @@ class NextManeuver extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              color: colorScheme.background,
+              color: colorScheme.surface,
               fontSize: UIStyle.bigFontSize,
             ),
           ),

@@ -217,8 +217,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final HereMapOptions options = HereMapOptions()
-      ..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.surface;
     options.renderMode = MapRenderMode.texture;
     return PopScope(
       canPop: !_hasBeenZoomedToManeuver,
