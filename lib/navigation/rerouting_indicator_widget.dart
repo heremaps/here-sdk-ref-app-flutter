@@ -53,7 +53,7 @@ class ReroutingIndicator extends StatelessWidget {
             child: Text(
               title ?? AppLocalizations.of(context)!.reroutingInProgressText,
               style: TextStyle(
-                color: colorScheme.background,
+                color: colorScheme.surface,
                 fontSize: UIStyle.extraHugeFontSize,
               ),
             ),

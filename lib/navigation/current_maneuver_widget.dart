@@ -70,7 +70,7 @@ class CurrentManeuver extends StatelessWidget {
               Text(
                 Util.makeDistanceString(context, distance),
                 style: TextStyle(
-                  color: colorScheme.background,
+                  color: colorScheme.surface,
                   fontSize: UIStyle.extraHugeFontSize,
                 ),
               ),
@@ -81,7 +81,7 @@ class CurrentManeuver extends StatelessWidget {
                 text,
                 maxLines: 2,
                 style: TextStyle(
-                  color: colorScheme.background,
+                  color: colorScheme.surface,
                   fontSize: UIStyle.bigFontSize,
                 ),
                 overflow: TextOverflow.ellipsis,

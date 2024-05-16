@@ -182,7 +182,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     Widget? nextManeuverWidget = _reroutingInProgress || !_canLocateUserPosition ? null : _buildNextManeuver(context);
     PreferredSize? topBarWidget = _buildTopBar(context);
     double topOffset = MediaQuery.of(context).padding.top - UIStyle.popupsBorderRadius;
-    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.surface;
     options.renderMode = MapRenderMode.texture;
     return PopScope(
       child: Scaffold(
@@ -633,7 +633,7 @@ class _NavigationScreenState extends State<NavigationScreen>
               child: Icon(
                 Icons.videocam,
               ),
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               onPressed: () {
                 _enableTracking(true);
               },
@@ -644,7 +644,7 @@ class _NavigationScreenState extends State<NavigationScreen>
           child: Icon(
             _soundEnabled ? Icons.volume_up : Icons.volume_off,
           ),
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           onPressed: () async {
             await _flutterTts.stop();
             setState(() => _soundEnabled = !_soundEnabled);
@@ -713,7 +713,7 @@ class _NavigationScreenState extends State<NavigationScreen>
                   ),
                   child: Material(
                     elevation: 2,
-                    color: colorScheme.background,
+                    color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
                     child: Padding(
                       padding: EdgeInsets.only(

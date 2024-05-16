@@ -69,7 +69,7 @@ class _RouteWayPointsListState extends State<RouteWayPointsList> {
           leading: Container(),
           shape: UIStyle.topRoundedBorder(),
           leadingWidth: 0,
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           pinned: true,
           titleSpacing: 0,
           title: _buildHeader(context),

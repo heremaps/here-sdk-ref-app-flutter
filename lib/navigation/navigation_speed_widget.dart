@@ -58,7 +58,7 @@ class NavigationSpeed extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Material(
               elevation: 2,
-              color: colorScheme.background,
+              color: colorScheme.surface,
               borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
               child: Padding(
                 padding: EdgeInsets.only(
@@ -100,7 +100,7 @@ class NavigationSpeed extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: Material(
                 elevation: 2,
-                color: colorScheme.background,
+                color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
                 child: Container(
                   width: UIStyle.bigButtonHeight + _kSpeedSignBorderWidth * 2,

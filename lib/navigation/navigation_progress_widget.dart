@@ -62,7 +62,7 @@ class NavigationProgress extends StatelessWidget {
     }
 
     return BottomAppBar(
-      color: colorScheme.background,
+      color: colorScheme.surface,
       child: Padding(
         padding: EdgeInsets.all(UIStyle.contentMarginMedium),
         child: Column(

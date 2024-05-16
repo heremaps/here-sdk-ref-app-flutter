@@ -97,8 +97,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    final HereMapOptions options = HereMapOptions()
-      ..initialBackgroundColor = Theme.of(context).colorScheme.background;
+    final HereMapOptions options = HereMapOptions()..initialBackgroundColor = Theme.of(context).colorScheme.surface;
     options.renderMode = MapRenderMode.texture;
     return DefaultTabController(
       length: widget.places.length,
@@ -318,7 +317,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   Widget _buildBottomNavigationBar(BuildContext context) {
     return BottomAppBar(
       key: _bottomBarKey,
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -365,7 +364,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
             child: Ink(
               width: UIStyle.smallButtonHeight,
               height: UIStyle.smallButtonHeight,
-              color: colorScheme.background,
+              color: colorScheme.surface,
               child: InkWell(
                 child: Center(
                   child: SvgPicture.asset(
@@ -428,7 +427,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
                 leading: Container(),
                 shape: UIStyle.topRoundedBorder(),
                 leadingWidth: 0,
-                backgroundColor: Theme.of(context).colorScheme.background,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 pinned: true,
                 titleSpacing: 0,
                 title: _buildNavigationHeader(context, true),

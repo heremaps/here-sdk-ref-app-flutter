@@ -155,7 +155,7 @@ class _SearchPopupState extends State<_SearchPopup> {
                       ),
                       leading: Container(),
                       leadingWidth: 0,
-                      backgroundColor: colorScheme.background,
+                      backgroundColor: colorScheme.surface,
                       pinned: true,
                       primary: false,
                       titleSpacing: UIStyle.contentMarginMedium,
