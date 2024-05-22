@@ -78,6 +78,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   ConsentUserReply? _consentState;
   MapMarker? _routeFromMarker;
   Place? _routeFromPlace;
+  MapCameraState? _cameraState;
 
   @override
   void initState() {
@@ -98,6 +99,9 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     if (state == AppLifecycleState.detached) {
       // This flag helps us to re-init the positioning when app is resumed.
       _didBackPressedAndPositionStopped = true;
+      if (Platform.isAndroid) {
+        _cameraState = _hereMapController.camera.state;
+      }
       stopPositioning();
     } else if (state == AppLifecycleState.resumed && _didBackPressedAndPositionStopped) {
       _didBackPressedAndPositionStopped = false;
@@ -105,6 +109,13 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
       _positioningEngine.initLocationEngine(context: context).then((value) {
         initPositioning(context: context, hereMapController: _hereMapController);
       });
+
+      // Rebuilding the HereMap widget when the app is resumed after it was detached via back button
+      // this is a workaround to fix the issue of blank PlatformView on Android during app resume
+      // Ref: https://github.com/flutter/flutter/issues/148662
+      if (Platform.isAndroid) {
+        setState(() => _hereMapKey = GlobalKey());
+      }
     }
   }
 
@@ -145,10 +156,19 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
         return;
       }
 
-      hereMapController.camera.lookAtPointWithMeasure(
-        Positioning.initPosition,
-        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
-      );
+      if (_cameraState != null) {
+        _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
+          _cameraState!.targetCoordinates,
+          GeoOrientationUpdate(_cameraState!.orientationAtTarget.bearing, _cameraState!.orientationAtTarget.tilt),
+          MapMeasure(MapMeasureKind.distance, _cameraState!.distanceToTargetInMeters),
+        );
+        _cameraState = null;
+      } else {
+        hereMapController.camera.lookAtPointWithMeasure(
+          Positioning.initPosition,
+          MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+        );
+      }
 
       hereMapController.setWatermarkLocation(
         Anchor2D.withHorizontalAndVertical(0, 1),
