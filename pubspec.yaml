@@ -19,7 +19,7 @@ version: 1.10.0
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  flutter: ">=3.22.2"
 
 dependencies:
   battery_plus: 6.0.1
