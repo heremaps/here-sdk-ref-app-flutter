@@ -57,7 +57,7 @@ class RouteDetailsScreen extends StatefulWidget {
 
 class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   static const double _kBottomSheetHeaderSize = 75;
-  static const double _kTapRadius = 5;
+  static const double _kTapRadius = 10;
   static const double _kZoomDistanceToManeuver = 500;
   static const double _principalPointYFactor = 0.5;
   static const double _minBottomSheetExtent = 0.25;
@@ -106,18 +106,22 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   void _pickMapMarker(Point2D touchPoint) {
-    _hereMapController.pickMapItems(touchPoint, _kTapRadius, (pickMapItemsResult) {
-      List<MapMarker>? mapMarkersList = pickMapItemsResult?.markers;
-      if (mapMarkersList == null || mapMarkersList.length == 0) {
-        print("No map markers found.");
-        return;
-      }
+    _hereMapController.pick(
+      MapSceneMapPickFilter(<MapSceneMapPickFilterContentType>[MapSceneMapPickFilterContentType.mapItems]),
+      Rectangle2D(touchPoint, Size2D(_kTapRadius, _kTapRadius)),
+      (MapPickResult? result) {
+        List<MapMarker>? mapMarkersList = result?.mapItems?.markers;
+        if (mapMarkersList == null || mapMarkersList.length == 0) {
+          print("No map markers found.");
+          return;
+        }
 
-      int index = _maneuverMarkers.indexOf(mapMarkersList.first);
-      if (index >= 0) {
-        _zoomToManeuver(index);
-      }
-    });
+        int index = _maneuverMarkers.indexOf(mapMarkersList.first);
+        if (index >= 0) {
+          _zoomToManeuver(index);
+        }
+      },
+    );
   }
 
   /// Update the camera to focus on the provided route and adjust the camera view

@@ -64,7 +64,7 @@ class SearchResultsScreen extends StatefulWidget {
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerProviderStateMixin, Positioning {
   static const double _kZoomDistanceToEarth = 1000; // meters
-  static const double _kTapRadius = 3; // pixels
+  static const double _kTapRadius = 6; // pixels
   static const double _kPlaceCardHeight = 80;
 
   final GlobalKey _bottomBarKey = GlobalKey();
@@ -188,17 +188,21 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   }
 
   void _pickMapMarker(Point2D touchPoint) {
-    _hereMapController.pickMapItems(touchPoint, _kTapRadius, (pickMapItemsResult) {
-      List<MapMarker>? mapMarkerList = pickMapItemsResult?.markers;
-      if (mapMarkerList == null || mapMarkerList.length == 0) {
-        print("No map markers found.");
-        return;
-      }
+    _hereMapController.pick(
+      MapSceneMapPickFilter(<MapSceneMapPickFilterContentType>[MapSceneMapPickFilterContentType.mapItems]),
+      Rectangle2D(touchPoint, Size2D(_kTapRadius, _kTapRadius)),
+      (MapPickResult? result) {
+        List<MapMarker>? mapMarkerList = result?.mapItems?.markers;
+        if (mapMarkerList == null || mapMarkerList.length == 0) {
+          print("No map markers found.");
+          return;
+        }
 
-      int index = _markers.indexOf(mapMarkerList.first);
-      _tabController.animateTo(index);
-      _showPlaceDetailsPopup(context, widget.places[index]);
-    });
+        int index = _markers.indexOf(mapMarkerList.first);
+        _tabController.animateTo(index);
+        _showPlaceDetailsPopup(context, widget.places[index]);
+      },
+    );
   }
 
   void _updateSelectedPlace() {

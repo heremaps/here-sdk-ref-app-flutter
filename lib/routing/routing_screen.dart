@@ -78,7 +78,7 @@ class RoutingScreen extends StatefulWidget {
 }
 
 class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateMixin, Positioning {
-  static const double _kTapRadius = 30; // pixels
+  static const double _kTapRadius = 60; // pixels
   static const double _kRouteCardHeight = 85;
 
   final GlobalKey _bottomBarKey = GlobalKey();
@@ -265,49 +265,55 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   }
 
   void _pickMapItem(Point2D touchPoint) {
-    _hereMapController.pickMapItems(touchPoint, _kTapRadius, (pickMapItemsResult) async {
-      List<MapMarker>? mapMarkersList = pickMapItemsResult?.markers;
-      if (mapMarkersList != null && mapMarkersList.length != 0 && _routePoiHandler.isPoiMarker(mapMarkersList.first)) {
-        Place place = _routePoiHandler.getPlaceFromMarker(mapMarkersList.first);
+    _hereMapController.pick(
+      MapSceneMapPickFilter(<MapSceneMapPickFilterContentType>[MapSceneMapPickFilterContentType.mapItems]),
+      Rectangle2D(touchPoint, Size2D(_kTapRadius, _kTapRadius)),
+      (MapPickResult? result) async {
+        List<MapMarker>? mapMarkersList = result?.mapItems?.markers;
+        if (mapMarkersList != null &&
+            mapMarkersList.length != 0 &&
+            _routePoiHandler.isPoiMarker(mapMarkersList.first)) {
+          Place place = _routePoiHandler.getPlaceFromMarker(mapMarkersList.first);
 
-        PlaceDetailsPopupResult? result = await showPlaceDetailsPopup(
-          context: context,
-          place: place,
-          routeToEnabled: true,
-          addToRouteEnabled: true,
-        );
+          PlaceDetailsPopupResult? result = await showPlaceDetailsPopup(
+            context: context,
+            place: place,
+            routeToEnabled: true,
+            addToRouteEnabled: true,
+          );
 
-        if (result == null) {
+          if (result == null) {
+            return;
+          }
+
+          WayPointInfo wp = WayPointInfo.withPlace(
+            place: place,
+          );
+
+          switch (result) {
+            case PlaceDetailsPopupResult.routeTo:
+              _wayPointsController.value = [
+                WayPointInfo(coordinates: lastKnownLocation?.coordinates ?? widget.currentPosition),
+                wp,
+              ];
+              break;
+            case PlaceDetailsPopupResult.addToRoute:
+              _wayPointsController.insert(_appropriateIndexToInsertWaypoint(wp), wp);
+              break;
+          }
+
           return;
         }
 
-        WayPointInfo wp = WayPointInfo.withPlace(
-          place: place,
-        );
-
-        switch (result) {
-          case PlaceDetailsPopupResult.routeTo:
-            _wayPointsController.value = [
-              WayPointInfo(coordinates: lastKnownLocation?.coordinates ?? widget.currentPosition),
-              wp,
-            ];
-            break;
-          case PlaceDetailsPopupResult.addToRoute:
-            _wayPointsController.insert(_appropriateIndexToInsertWaypoint(wp), wp);
-            break;
+        List<MapPolyline>? mapPolyLinesList = result?.mapItems?.polylines;
+        if (mapPolyLinesList == null || mapPolyLinesList.length == 0) {
+          print("No map poly lines found.");
+          return;
         }
 
-        return;
-      }
-
-      List<MapPolyline>? mapPolyLinesList = pickMapItemsResult?.polylines;
-      if (mapPolyLinesList == null || mapPolyLinesList.length == 0) {
-        print("No map poly lines found.");
-        return;
-      }
-
-      _routesTabController.animateTo(_mapRoutes.indexOf(mapPolyLinesList.first));
-    });
+        _routesTabController.animateTo(_mapRoutes.indexOf(mapPolyLinesList.first));
+      },
+    );
   }
 
   int _appropriateIndexToInsertWaypoint(WayPointInfo wayPointInfo) {
