@@ -299,7 +299,7 @@ packages:
       path: "plugins/here_sdk"
       relative: true
     source: path
-    version: "4.18.0"
+    version: "4.19.0"
   http:
     dependency: transitive
     description:
