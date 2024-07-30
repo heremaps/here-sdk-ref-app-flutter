@@ -19,7 +19,6 @@
 
 import 'dart:async';
 
-import 'package:RefApp/common/extensions/error_handling/search_error_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,6 +32,7 @@ import '../common/application_preferences.dart';
 import '../common/dismiss_keyboard_on_scroll.dart';
 import '../common/draggable_popup_here_logo_helper.dart';
 import '../common/error_toast.dart';
+import '../common/extensions/error_handling/search_error_extension.dart';
 import '../common/ui_style.dart';
 import 'recent_search_data_model.dart';
 import 'search_engine_proxy.dart';

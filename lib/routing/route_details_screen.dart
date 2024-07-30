@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/extensions/geo_box_extensions.dart';
-import 'package:RefApp/common/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as Routing;
+import 'package:here_sdk_reference_application_flutter/common/extensions/geo_box_extensions.dart';
+import 'package:here_sdk_reference_application_flutter/common/util.dart';
 import 'package:provider/provider.dart';
 
 import '../common/custom_map_style_settings.dart';

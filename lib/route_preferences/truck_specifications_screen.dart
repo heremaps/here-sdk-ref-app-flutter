@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/extensions/truck_specification_extensions.dart';
-import 'package:RefApp/route_preferences/preferences_section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/routing.dart';
 import 'package:here_sdk/transport.dart' as Transport;
+import 'package:here_sdk_reference_application_flutter/common/extensions/truck_specification_extensions.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/preferences_section_title_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../common/ui_style.dart';

@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/extensions/location_listener_extension.dart';
-import 'package:RefApp/common/utils/navigation/location_provider_interface.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk/navigation.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:here_sdk_reference_application_flutter/common/extensions/location_listener_extension.dart';
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/location_provider_interface.dart';
 
 class SimulatedLocationProvider extends LocationProviderInterface implements LocationListener {
   SimulatedLocationProvider.withRoute(Route route, LocationSimulatorOptions options) {

@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/draggable_popup_here_logo_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:here_sdk_reference_application_flutter/common/draggable_popup_here_logo_helper.dart';
 
-import '../search/search_popup.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
+import '../search/search_popup.dart';
 import 'route_waypoints_list.dart';
 import 'waypoint_info.dart';
 import 'waypoints_controller.dart';

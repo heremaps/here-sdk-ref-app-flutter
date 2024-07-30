@@ -20,11 +20,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:RefApp/common/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/consent.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/location.dart';
+import 'package:here_sdk_reference_application_flutter/common/device_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// Class that implements logic for positioning. It asks for user consent, obtains the necessary permissions,
