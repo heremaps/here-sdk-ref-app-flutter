@@ -20,9 +20,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
-import 'package:RefApp/common/file_utility.dart';
-import 'package:RefApp/routing/routing_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,6 +32,9 @@ import 'package:here_sdk/location.dart';
 import 'package:here_sdk/maploader.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
+import 'package:here_sdk_reference_application_flutter/common/extensions/error_handling/map_loader_error_extension.dart';
+import 'package:here_sdk_reference_application_flutter/common/file_utility.dart';
+import 'package:here_sdk_reference_application_flutter/routing/routing_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 

@@ -19,8 +19,6 @@
 
 import 'dart:math';
 
-import 'package:RefApp/common/extensions/error_handling/routing_error_extension.dart';
-import 'package:RefApp/common/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,6 +27,8 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/search.dart';
+import 'package:here_sdk_reference_application_flutter/common/extensions/error_handling/routing_error_extension.dart';
+import 'package:here_sdk_reference_application_flutter/common/util.dart';
 import 'package:provider/provider.dart';
 
 import '../common/application_preferences.dart';

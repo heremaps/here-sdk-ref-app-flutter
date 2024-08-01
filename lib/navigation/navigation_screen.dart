@@ -20,13 +20,6 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:RefApp/common/battery_saver_utils.dart';
-import 'package:RefApp/common/notifications/android_notifications.dart';
-import 'package:RefApp/common/notifications/ios_notifications.dart';
-import 'package:RefApp/common/notifications/notifications_manager.dart';
-import 'package:RefApp/common/utils/navigation/location_provider_interface.dart';
-import 'package:RefApp/common/utils/navigation/location_utils.dart';
-import 'package:RefApp/common/utils/navigation/position_status_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -37,6 +30,13 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/transport.dart' as Transport;
+import 'package:here_sdk_reference_application_flutter/common/battery_saver_utils.dart';
+import 'package:here_sdk_reference_application_flutter/common/notifications/android_notifications.dart';
+import 'package:here_sdk_reference_application_flutter/common/notifications/ios_notifications.dart';
+import 'package:here_sdk_reference_application_flutter/common/notifications/notifications_manager.dart';
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/location_provider_interface.dart';
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/location_utils.dart';
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/position_status_listener.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:ringtone_player/ringtone_player.dart';

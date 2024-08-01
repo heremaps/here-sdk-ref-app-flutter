@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/file_utility.dart';
-import 'package:RefApp/common/notifications/notifications_manager.dart';
 import 'package:flutter/services.dart';
+import 'package:here_sdk_reference_application_flutter/common/file_utility.dart';
+import 'package:here_sdk_reference_application_flutter/common/notifications/notifications_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AndroidNotificationsManager implements NotificationsManager {

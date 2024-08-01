@@ -19,11 +19,11 @@
 
 import 'dart:io';
 
-import 'package:RefApp/common/util.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/common/util.dart';
 
 const String _methodChannelName = 'com.example.RefApp/foreground_service_channel';
 const String _methodChannelMethodName = 'openBatterySaverSettings';

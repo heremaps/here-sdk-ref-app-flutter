@@ -19,8 +19,8 @@
 
 import 'dart:async';
 
-import 'package:RefApp/common/ui_style.dart';
 import 'package:flutter/material.dart';
+import 'package:here_sdk_reference_application_flutter/common/ui_style.dart';
 
 const int _toastDurationInMs = 3000;
 const double _toastVerticalMargin = 50;

@@ -16,11 +16,11 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-import 'package:RefApp/common/utils/navigation/location_provider_interface.dart';
-import 'package:RefApp/common/utils/navigation/location_providers/positioning_location_provider.dart';
-import 'package:RefApp/common/utils/navigation/location_providers/simulated_location_provider.dart';
 import 'package:here_sdk/navigation.dart';
 import 'package:here_sdk/routing.dart' as here;
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/location_provider_interface.dart';
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/location_providers/positioning_location_provider.dart';
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/location_providers/simulated_location_provider.dart';
 
 LocationProviderInterface createLocationProvider({
   bool simulated = false,
