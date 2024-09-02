@@ -322,7 +322,7 @@ class _NavigationScreenState extends State<NavigationScreen>
 
   void _enableTracking(bool enable) {
     setState(() {
-      _visualNavigator.cameraBehavior = enable ? Navigation.DynamicCameraBehavior() : null;
+      _visualNavigator.cameraBehavior = enable ? Navigation.FixedCameraBehavior() : null;
     });
   }
 
