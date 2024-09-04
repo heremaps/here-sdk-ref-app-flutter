@@ -59,6 +59,6 @@ extension MapLoaderErrorExtension on MapLoaderError {
         break;
     }
 
-    return '$message (${index})';
+    return '$message ($name)';
   }
 }
