@@ -17,40 +17,46 @@
  * License-Filename: LICENSE
  */
 
-import 'package:here_sdk/search.dart' show SearchError;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:here_sdk/search.dart' show SearchError;
 
 extension SearchErrorExtension on SearchError {
   String? errorMessage(AppLocalizations localized) {
+    String? message;
     switch (this) {
       case SearchError.operationCancelled:
       case SearchError.noResultsFound:
-        return null;
+        message = null;
 
       case SearchError.authenticationFailed:
       case SearchError.forbidden:
-        return localized.errorAuthenticationFailed;
+        message = localized.errorAuthenticationFailed;
 
       case SearchError.maxItemsOutOfRange:
       case SearchError.invalidParameter:
       case SearchError.queryTooLong:
       case SearchError.filterTooLong:
-        return localized.errorNoResultFound;
+        message = localized.errorNoResultFound;
 
       case SearchError.parsingError:
       case SearchError.exceededUsageLimit:
       case SearchError.operationFailed:
-        return localized.errorSearchFailed;
+        message = localized.errorSearchFailed;
 
       case SearchError.httpError:
       case SearchError.serverUnreachable:
       case SearchError.offline:
       case SearchError.proxyAuthenticationFailed:
       case SearchError.proxyServerUnreachable:
-        return localized.errorNetworkIssueOccurred;
+        message = localized.errorNetworkIssueOccurred;
 
       default:
-        return localized.errorSearchFailedPleaseTryAgain;
+        message = localized.errorSearchFailedPleaseTryAgain;
     }
+
+    if (message != null) {
+      return '$message ($name)';
+    }
+    return null;
   }
 }

@@ -17,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import 'package:here_sdk/routing.dart' as Routing;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:here_sdk/routing.dart' as Routing;
 
 extension RoutingErrorExtension on Routing.RoutingError {
   String errorMessage(AppLocalizations localized) {
@@ -53,6 +53,6 @@ extension RoutingErrorExtension on Routing.RoutingError {
       default:
         message = localized.errorRoutingFailedPleaseTryAgain;
     }
-    return message;
+    return '$message ($name)';
   }
 }
