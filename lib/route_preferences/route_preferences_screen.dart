@@ -81,7 +81,7 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with Ti
       ),
       body: PopScope(
         canPop: false,
-        onPopInvoked: (bool didPop) {
+        onPopInvokedWithResult: (bool didPop, _) {
           if (!didPop) {
             Navigator.pop(context, _transportModes[_transportModesTabController.index]);
           }

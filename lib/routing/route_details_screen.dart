@@ -225,7 +225,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     options.renderMode = MapRenderMode.texture;
     return PopScope(
       canPop: !_hasBeenZoomedToManeuver,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (_, __) {
         // If the route is currently zoomed in on a maneuver, zoom out to the full route view.
         // Otherwise, go back to the previous screen.
         if (_hasBeenZoomedToManeuver) {

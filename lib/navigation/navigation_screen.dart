@@ -217,7 +217,7 @@ class _NavigationScreenState extends State<NavigationScreen>
             : null,
       ),
       canPop: false,
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (!didPop && await Dialogs.askForExitFromNavigation(context)) {
           _stopNavigation();
           Navigator.of(context).pop();

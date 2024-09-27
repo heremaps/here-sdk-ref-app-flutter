@@ -103,7 +103,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       length: widget.places.length,
       child: PopScope(
         canPop: false,
-        onPopInvoked: (bool didPop) {
+        onPopInvokedWithResult: (bool didPop, _) {
           if (!didPop) {
             Navigator.of(context).pop(_hereMapController.camera.state.targetCoordinates);
           }

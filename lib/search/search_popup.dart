@@ -139,7 +139,7 @@ class _SearchPopupState extends State<_SearchPopup> {
 
     return Consumer<RecentSearchDataModel>(
       builder: (context, model, child) => PopScope(
-        onPopInvoked: (_) {
+        onPopInvokedWithResult: (_, __) {
           _stopCurrentSearch();
         },
         child: DismissKeyboardOnScroll(
