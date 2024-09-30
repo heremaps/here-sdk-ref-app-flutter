@@ -25,6 +25,25 @@ allprojects {
 }
 
 rootProject.buildDir = '../build'
+
+/*
+* After upgrading to Flutter 3.24.3, the Android release build encountered issues with several packages,
+* resulting in the error: "AAPT: error: resource android:attr/lStar not found."
+*
+* To resolve this issue, we applied the following changes in our android/build.gradle file.
+*/
+subprojects {
+    afterEvaluate { project ->
+        if (project.plugins.hasPlugin("com.android.application") ||
+                project.plugins.hasPlugin("com.android.library")) {
+            project.android {
+                compileSdkVersion 34
+            }
+        }
+    }
+}
+
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
