@@ -48,9 +48,9 @@ class SearchEngineProxy {
   TaskHandle searchByPlaceIdWithLanguageCode(
       PlaceIdQuery query, LanguageCode? languageCode, PlaceIdSearchCallback callback) {
     if (offline) {
-      return _offlineSearchEngine.searchByPlaceIdWithLanguageCode(query, languageCode, callback);
+      return _offlineSearchEngine.searchByPlaceId(query, languageCode, callback);
     } else {
-      return _onlineSearchEngine.searchByPlaceIdWithLanguageCode(query, languageCode, callback);
+      return _onlineSearchEngine.searchByPlaceId(query, languageCode, callback);
     }
   }
 
@@ -86,9 +86,9 @@ class SearchEngineProxy {
   /// Returns [TaskHandle]. Handle that will be used to manipulate the execution of the task.
   TaskHandle suggest(TextQuery query, SearchOptions options, SuggestCallback callback) {
     if (offline) {
-      return _offlineSearchEngine.suggest(query, options, callback);
+      return _offlineSearchEngine.suggestByText(query, options, callback);
     } else {
-      return _onlineSearchEngine.suggest(query, options, callback);
+      return _onlineSearchEngine.suggestByText(query, options, callback);
     }
   }
 
