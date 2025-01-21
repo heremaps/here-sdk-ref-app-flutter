@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 HERE Europe B.V.
+ * Copyright (C) 2020-2025 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -151,8 +151,6 @@ extension ManeuverActionTextHelper on Maneuver {
         return localizations.enterHighwayFromLeftActionText;
       case ManeuverAction.enterHighwayFromRight:
         return localizations.enterHighwayFromRightActionText;
-      default:
-        return _makeActionString(localizations.departActionText, localizations.departActionRoadText, roadName);
     }
   }
 }

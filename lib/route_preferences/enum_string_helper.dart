@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 HERE Europe B.V.
+ * Copyright (C) 2020-2025 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,6 @@ class EnumStringHelper {
         case OptimizationMode.shortest:
           result[value.index] = AppLocalizations.of(context)!.shortestRouteTitle;
           break;
-        default:
-          throw StateError("Invalid enum value $value for OptimizationMode enum.");
       }
     }
     return result;
@@ -61,8 +59,6 @@ class EnumStringHelper {
         case UnitSystem.imperialUs:
           result[value.index] = AppLocalizations.of(context)!.unitSystemImperialUs;
           break;
-        default:
-          throw StateError("Invalid enum value $value for TextFormat enum.");
       }
     }
     return result;
@@ -125,8 +121,6 @@ class EnumStringHelper {
         case Transport.TunnelCategory.e:
           result[value.index] = AppLocalizations.of(context)!.tunnelCategoryE;
           break;
-        default:
-          throw StateError("Invalid enum value $value for TunnelCategory enum.");
       }
     }
     return result;
@@ -171,8 +165,6 @@ class EnumStringHelper {
         case RoadFeatures.uTurns:
           result[localizations.uTurns] = value;
           break;
-        default:
-          throw StateError("Invalid enum value $value for RoadFeatures enum.");
       }
     }
     return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]!);
@@ -230,8 +222,6 @@ class EnumStringHelper {
         case Transport.HazardousMaterial.other:
           result[localizations.hazardousGoodsOther] = value;
           break;
-        default:
-          throw StateError("Invalid enum value $value for HazardousGood enum.");
       }
     }
     return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]!);
@@ -1001,8 +991,6 @@ class EnumStringHelper {
         case CountryCode.zwe:
           result[localizations.countryCodeZwe] = value;
           break;
-        default:
-          throw StateError("Invalid enum value $value for CountryCode enum.");
       }
     }
     return result;
