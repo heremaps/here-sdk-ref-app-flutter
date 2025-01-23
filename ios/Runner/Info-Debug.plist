@@ -28,10 +28,10 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-    <string>This app needs to access your location at all times to provide background updates during navigation.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs to access your current location to display it on the map.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs to access your location at all times to provide background updates during navigation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs to access your current location to display it on the map.</string>
 	<key>NSMotionUsageDescription</key>

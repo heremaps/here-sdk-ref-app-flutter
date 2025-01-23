@@ -24,10 +24,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-    <string>This app needs to access your location at all times to provide background updates during navigation.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs to access your current location to display it on the map.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs to access your location at all times to provide background updates during navigation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs to access your current location to display it on the map.</string>
 	<key>NSMotionUsageDescription</key>

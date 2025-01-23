@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 HERE Europe B.V.
+ * Copyright (C) 2020-2025 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,20 +24,67 @@ allprojects {
     }
 }
 
-rootProject.buildDir = '../build'
+/* To resolve the below error, we added
+
+Error:
+    Unable to make progress running work.
+    There are items queued for execution but none of them can be started
+*/
+gradle.startParameter.excludedTaskNames.addAll(
+        gradle.startParameter.taskNames.findAll { it.contains("testClasses") }
+)
+
+rootProject.layout.buildDirectory = file("../build")
 
 /*
-* After upgrading to Flutter 3.24.3, the Android release build encountered issues with several packages,
+* After upgrading Flutter, the Android release build encountered issues with several packages,
 * resulting in the error: "AAPT: error: resource android:attr/lStar not found."
 *
 * To resolve this issue, we applied the following changes in our android/build.gradle file.
 */
 subprojects {
     afterEvaluate { project ->
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+
+        tasks.withType(JavaCompile).configureEach {
+            sourceCompatibility = JavaVersion.VERSION_17.toString()
+            targetCompatibility = JavaVersion.VERSION_17.toString()
+            options.compilerArgs += "-Xlint:-options"
+        }
+
+        // Set Kotlin JVM compile task to show a warning if the JVM target version is incorrect.
+        // This prevents errors but still informs you if there’s a mismatch in the JVM target version.
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile.class).configureEach {
+            jvmTargetValidationMode = org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.WARNING
+        }
+
         if (project.plugins.hasPlugin("com.android.application") ||
                 project.plugins.hasPlugin("com.android.library")) {
             project.android {
-                compileSdkVersion 34
+                compileSdkVersion 35
+            }
+
+            android {
+                defaultConfig {
+                    minSdk 24 // Set the minimum Android SDK version required.
+                }
+            }
+        }
+
+
+
+
+        // If the project has the 'android' property, configure namespace and testNamespace.
+        if (project.hasProperty('android')) {
+            project.android {
+                // Set the namespace if not already set and the Android Gradle Plugin version is 7 or higher.
+                if (namespace == null) {
+                    namespace project.group // Set namespace using the project's group property.
+                }
             }
         }
     }
@@ -45,12 +92,12 @@ subprojects {
 
 
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.layout.buildDirectory = file("${rootProject.buildDir}/${project.name}")
 }
 subprojects {
     project.evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }
