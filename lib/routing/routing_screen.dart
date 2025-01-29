@@ -530,32 +530,33 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
               ),
             ],
           ),
-          Container(
-            width: double.infinity,
-            height: _kRouteCardHeight,
-            child: TabBarView(
-              key: _tabBarViewKey,
-              controller: _routesTabController,
-              children: _routes
-                  .map(
-                    (route) => Card(
-                      elevation: 2,
-                      child: RouteInfo(
-                        route: route,
-                        onRouteDetails: () => Navigator.of(context).pushNamed(
-                          RouteDetailsScreen.navRoute,
-                          arguments: [_routes[_routesTabController.index], _wayPointsController],
-                        ),
-                        onNavigation: () => Navigator.of(context).pushNamed(
-                          NavigationScreen.navRoute,
-                          arguments: [route, _wayPointsController.value],
+          if (_routes.isNotEmpty)
+            Container(
+              width: double.infinity,
+              height: _kRouteCardHeight,
+              child: TabBarView(
+                key: _tabBarViewKey,
+                controller: _routesTabController,
+                children: _routes
+                    .map(
+                      (route) => Card(
+                        elevation: 2,
+                        child: RouteInfo(
+                          route: route,
+                          onRouteDetails: () => Navigator.of(context).pushNamed(
+                            RouteDetailsScreen.navRoute,
+                            arguments: [_routes[_routesTabController.index], _wayPointsController],
+                          ),
+                          onNavigation: () => Navigator.of(context).pushNamed(
+                            NavigationScreen.navRoute,
+                            arguments: [route, _wayPointsController.value],
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -584,9 +585,21 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
   }
 
   _onRoutingEnd(Routing.RoutingError? error, List<Routing.Route>? routes) {
+    _routePoiHandler.clearPlaces();
+    _selectedRouteIndex = 0;
+    _routesTabController.dispose();
+    _tabBarViewKey = GlobalKey();
     if (routes == null || routes.isEmpty) {
+      _clearMapRoutes();
+      _routes.clear();
+      _routesTabController = TabController(
+        length: _routes.length,
+        vsync: this,
+      );
+      setState(() {
+        _routingInProgress = false;
+      });
       if (error != null) {
-        setState(() => _routingInProgress = false);
         print('Routing failed. Error: ${error.toString()}');
         if (mounted) {
           ErrorToaster.makeToast(
@@ -598,12 +611,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
       return;
     }
 
-    _routePoiHandler.clearPlaces();
-    _selectedRouteIndex = 0;
-    _routesTabController.dispose();
-
     _routes = routes;
-    _tabBarViewKey = GlobalKey();
     _routesTabController = TabController(
       length: _routes.length,
       vsync: this,
