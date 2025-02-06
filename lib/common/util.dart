@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:here_sdk_reference_application_flutter/common/extensions/geo_box_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,8 @@ import 'gradient_elevated_button.dart';
 import 'ui_style.dart';
 
 const String _placeholderPattern = '(\{\{([a-zA-Z0-9]+)\}\})';
+// Adjusts padding to keep the route visible and prevent overlap with other View elements.
+const double _paddingFactor = 0.10;
 
 /// Returns a formatted string constructed from a [template] and a list of [replacements].
 String formatString(String template, List replacements) {
@@ -135,7 +138,7 @@ extension LogicalCoords on HereMapController {
     double margin = UIStyle.contentMarginExtraHuge,
   }) {
     this.camera.lookAtAreaWithGeoOrientationAndViewRectangle(
-        geoBox,
+        geoBox.expandedByPercentage(_paddingFactor),
         GeoOrientationUpdate(double.nan, double.nan),
         Rectangle2D(
             Point2D(viewPort.left + margin, viewPort.top + margin) * this.pixelScale,
