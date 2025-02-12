@@ -52,9 +52,8 @@ void main() {
   SdkContext.init();
 
   _createSDKNativeEngine(
-    sdkOptions: SDKOptions.withAccessKeySecret(
-      Environment.accessKeyId,
-      Environment.accessKeySecret,
+    sdkOptions: SDKOptions.withAuthenticationMode(
+      AuthenticationMode.withKeySecret(Environment.accessKeyId, Environment.accessKeySecret),
     ),
     onSuccess: () => runApp(MyApp()),
     onFailure: (_) => runApp(const InitErrorScreen()),
