@@ -254,6 +254,11 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
     return _regionsInProgress[region]?.progress;
   }
 
+  /// Checks if any region download is currently in progress.
+  ///
+  /// Returns `true` if at least one region has a progress value of 0 or greater,
+  bool isAnyDownloadInProgress() => _regionsInProgress.values.any((_RegionTask region) => region.progress >= 0);
+
   // Handle pending Map Downloads
   void resumePendingMapDownloads() {
     if (_pausedRegionsWhenOffline.isNotEmpty) {
