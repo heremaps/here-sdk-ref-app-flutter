@@ -47,6 +47,9 @@ class MapRegionTile extends StatelessWidget {
   /// Called when the tile is tapped or otherwise activated.
   final VoidCallback? onTap;
 
+  /// Controls visibility of the trailing icon.
+  final bool hideTrailingIcon;
+
   /// Constructs the widget.
   MapRegionTile({
     Key? key,
@@ -57,6 +60,7 @@ class MapRegionTile extends StatelessWidget {
     this.icon = null,
     this.downloadProgress = null,
     this.onTap,
+    this.hideTrailingIcon = false,
   }) : super(key: key);
 
   @override
@@ -79,24 +83,25 @@ class MapRegionTile extends StatelessWidget {
     }
 
     Icon? tileIcon;
-
-    if (downloadProgress != null) {
-      if (downloadProgress! >= 0) {
-        tileIcon = Icon(
-          Icons.close,
-          size: UIStyle.smallIconSize,
-        );
-      }
-    } else {
-      tileIcon = icon ??
-          Icon(
-            installedRegion?.status == InstalledRegionStatus.installed
-                ? Icons.check_circle
-                : hasChildren && !isHeader
-                    ? Icons.arrow_forward
-                    : Icons.download,
-            color: installedRegion?.status == InstalledRegionStatus.installed ? Colors.green : null,
+    if (!hideTrailingIcon) {
+      if (downloadProgress != null) {
+        if (downloadProgress! >= 0) {
+          tileIcon = Icon(
+            Icons.close,
+            size: UIStyle.smallIconSize,
           );
+        }
+      } else {
+        tileIcon = icon ??
+            Icon(
+              installedRegion?.status == InstalledRegionStatus.installed
+                  ? Icons.check_circle
+                  : hasChildren && !isHeader
+                      ? Icons.arrow_forward
+                      : Icons.download,
+              color: installedRegion?.status == InstalledRegionStatus.installed ? Colors.green : null,
+            );
+      }
     }
 
     return ListTile(

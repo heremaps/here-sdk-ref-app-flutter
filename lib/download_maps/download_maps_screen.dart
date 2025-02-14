@@ -163,6 +163,9 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       installedRegions.forEach((element) {
         Region region = _findInstalledRegionByID(regions, element.regionId)!;
         int? progress = controller.getDownloadProgress(element.regionId);
+
+        // When true, disables tap action and hides trailing icon.
+        final bool hideTrailingAndDisableTap = controller.isAnyDownloadInProgress() && progress == null;
         MapRegionTile tile = MapRegionTile(
           region: region,
           installedRegion: element,
@@ -176,8 +179,11 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
                   //  we pass their region IDs to cancel the respective downloads for those children as well.
                   region.childRegions.regionIds(),
                 )
-              : _displayDownloadedMapMenu(context, controller, region, element),
+              : hideTrailingAndDisableTap
+                  ? null
+                  : _displayDownloadedMapMenu(context, controller, region, element),
           icon: Icon(Icons.menu),
+          hideTrailingIcon: hideTrailingAndDisableTap,
         );
 
         result.add(tile);
