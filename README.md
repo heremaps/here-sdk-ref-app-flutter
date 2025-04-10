@@ -15,14 +15,24 @@ If you are looking for smaller bits & pieces or just want to get started with th
 
 The reference application hosted in this repo focuses on how specific features can be implemented and used within the context of a full blown Flutter application - not only to show the usage of our APIs and the HERE SDK functionality as clear and understandable as possible, but also to show how complex Flutter projects in general can be organized and developed with production quality.
 
-### Supported features (so far):
+### Supported features (so far)
+
+The HERE Reference App offers a comprehensive range of features designed to enhance your navigation and mapping applications. Some of the supported features include:
 
 - [Search](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/search.html): Including suggestions, text search and search along a route corridor using the [search library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/search/search-library.html) of the HERE SDK.
 - [Routing](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/routing.html): As of now, the reference application supports the following transport modes: car, truck, scooter and pedestrian using the [routing library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/routing/routing-library.html) of the HERE SDK.
 - [Turn-By-Turn Navigation](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/navigation.html): Including maneuver instructions with visual feedback and voice guidance using the [navigation library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/navigation/navigation-library.html) of the HERE SDK.
 - [Offline Maps](https://developer.here.com/documentation/flutter-sdk-navigate/dev_guide/topics/offline-maps.html): Including UI to download, install and update regions using the [maploader library](https://developer.here.com/documentation/flutter-sdk-navigate/api_reference/maploader/maploader-library.html) of the HERE SDK. The application can be operated offline when the in-app offline switch is activated. To operate fully offline, turn also the device's connectivity off.
+- [HERE Icon Library](https://github.com/heremaps/here-icons): The app integrates *HERE Icon Library*, a robust set of customizable map icons and markers. These icons are designed to work seamlessly with HERE Maps, providing a consistent look and feel for map elements such as POIs (Points of Interest), routes, and more.
 
 ![screenshots](assets/screenshots.png)
+
+
+### Dependencies
+
+The following dependency is required for the HERE Reference App:
+
+- **[HERE Icon Library](https://github.com/heremaps/here-icons)**: A library of customizable map icons and markers that enhance the visual presentation of map elements within the application.
 
 ## Get Started
 
@@ -46,19 +56,71 @@ Make sure you have cloned this repository and you have downloaded the HERE SDK f
 2. Inside the unzipped package you will find a TAR file that contains the HERE SDK _plugin_.
 3. Unzip the TAR file and rename the folder to 'here_sdk'. Move it inside the [plugins](./plugins/) folder.
 
+### HERE Icon Library Integration and Fetching Submodules Before Building
+
+To ensure the necessary icon components are available during the build process, we recommend fetching and updating the "
+here-icon" submodule. This guarantees that the submodule is checked out at the correct revision specified in the project
+configuration. Missing updates can lead to build failures due to missing files.
+
+### Fetching Methods
+
+**1. Using the Command Line:**
+
+This method provides manual control over the update process. Here's how to fetch and update the submodule:
+
+* **Initialize and Update:** Run the following command to initialize (if not already done), fetch changes from the
+  remote repository, and update all submodules recursively:
+
+    ```bash
+    git submodule update --init --recursive
+    ```
+
+* **Verify Specific Commit (Optional):** If a specific commit ID is crucial for the icon library, you can further ensure
+  its correct checkout by running:
+
+    ```bash
+    git submodule foreach --recursive git fetch
+    git submodule foreach --recursive git checkout <commit_id>
+    ```
+
+**2. Using a Script (Recommended):**
+
+For a more convenient approach, consider using the provided scripts to automate the initializing and updating of the submodule to the correct revision as defined by the `HERE_ICON_LIBRARY_COMMIT_ID` variable within the script.
+If needed, you can also modify this variable to update the submodule to a different commit.
+
+* **On Mac/Linux:**
+  Run the provided `update_submodules.sh` script:
+    ```bash
+    ./update_submodules.sh
+    ```
+
+
+* **On Windows:**
+  Run the provided `update_submodules.bat` script:
+
+    ```cmd
+    update_submodules.bat
+    ```
+This will ensure the submodule is initialized and updated as needed.
+
 ### Build the Reference Application
 
-1. Set your HERE SDK credentials: 
-The credentials are read from the environment variables which are set using --dart-define. 
+1. Set your HERE SDK credentials:
+   The credentials are read from the environment variables which are set using --dart-define.
 - If you want to set up environment variables from the CLI, run the command:
-  `flutter run --dart-define=HERESDK_ACCESS_KEY_ID=<YOUR_ACCESS_KEY_ID> --dart-define=HERESDK_ACCESS_KEY_SECRET=<YOUR_ACCESS_KEY_SECRET>`
+  ```bash  
+  flutter run --dart-define=HERESDK_ACCESS_KEY_ID=<YOUR_ACCESS_KEY_ID> --dart-define=HERESDK_ACCESS_KEY_SECRET=<YOUR_ACCESS_KEY_SECRET>
+  ```
 - If you want to run from any IDE, you can add credentials to the .json file for your environment.
-Create a file .env/dev.json as:
-  > {
+  Create a file .env/dev.json as:
+  >
+  > ```bash
+  >{
   >   "HERESDK_ACCESS_KEY_ID": "<YOUR_ACCESS_KEY_ID>",
   >   "HERESDK_ACCESS_KEY_SECRET": "<YOUR_ACCESS_KEY_SECRET>"
   > }
-  
+  >```
+
   And add additional run args in the IDE: `--dart-define-from-file=.env/dev.json`
 
 2. Go to the repository root folder which contains the `pubspec.yaml` and run the terminal command `flutter pub get` to fetch the required dependencies.
@@ -77,8 +139,42 @@ If you are new to Flutter, here are more detailed steps for you. You may also wa
   - You can open the `/repository root/ios/Runner.xcworkspace` project in Xcode and execute and debug from there.
   - Note: You need to have valid _development certificates_ available to sign the app for device deployment.
 
-Note: You can alternatively also pass the credentails during build by: 
-`flutter build apk --dart-define=HERESDK_ACCESS_KEY_ID=<YOUR_ACCESS_KEY_ID> --dart-define=HERESDK_ACCESS_KEY_SECRET=<YOUR_ACCESS_KEY_SECRET>`
+Note: You can alternatively also pass the credentails during build by:
+
+```bash
+flutter build apk --dart-define=HERESDK_ACCESS_KEY_ID=<YOUR_ACCESS_KEY_ID> --dart-define=HERESDK_ACCESS_KEY_SECRET=<YOUR_ACCESS_KEY_SECRET>
+```
+
+### Troubleshooting
+
+#### Build Error: "unable to find directory entry in pubspec.yaml"
+
+If you're seeing an error like this when building the app:
+
+```
+Error: unable to find directory entry in pubspec.yaml: /Users/your-path/.../assets/here-icons/icons/.../...
+```
+
+It's likely because the required asset folders were not downloaded. These assets are part of a Git submodule, and must be initialized before building the app.
+
+This commonly happens if you **skipped running** the `update_submodules` script after cloning or pulling the repository.
+
+**Solution:**  
+Make sure to run the correct script for your platform from the root of the project:
+
+- **macOS/Linux:**
+
+  ```bash
+  ./update_submodules.sh
+  ```
+
+- **Windows:**
+
+  ```cmd
+  update_submodules.bat
+  ```
+
+This ensures all required submodules (including asset folders) are available for the build process.
 
 ## Contributing
 

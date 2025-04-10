@@ -114,7 +114,7 @@ class _MyAppState extends State<MyApp> {
         onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
         onGenerateRoute: (RouteSettings settings) {
           Map<String, WidgetBuilder> routes = {
-            LandingScreen.navRoute: (BuildContext context) => LandingScreen(),
+            LandingScreen.navRoute: (BuildContext context) => LandingScreen(key: LandingScreen.landingScreenKey),
             SearchResultsScreen.navRoute: (BuildContext context) {
               List<dynamic> arguments = settings.arguments as List<dynamic>;
               assert(arguments.length == 4);

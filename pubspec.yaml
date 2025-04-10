@@ -88,10 +88,8 @@ flutter:
 
   assets:
     - assets/
-    - assets/maneuvers/dark/
-    - assets/maneuvers/light/
-    - assets/maneuvers/dark/png/
-    - assets/maneuvers/light/png/
+    - assets/here-icons/icons/guidance-icons/manoeuvers-sdk/
+    - assets/here-icons/icons/core-ui/SVG/menu_solid_24px.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

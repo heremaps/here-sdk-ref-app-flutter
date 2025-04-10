@@ -20,15 +20,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/routing.dart' as Routing;
+import 'package:here_sdk_reference_application_flutter/navigation/maneuver_action_text_helper.dart';
 
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
-
-extension _ManeuverImagePath on Routing.ManeuverAction {
-  String get imagePath {
-    return "assets/maneuvers/light/" + toString().split(".").last + ".svg";
-  }
-}
 
 /// A widget that displays the upcoming navigation maneuver.
 class NextManeuver extends StatelessWidget {
@@ -57,7 +52,7 @@ class NextManeuver extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(UIStyle.contentMarginLarge),
           child: SvgPicture.asset(
-            action.imagePath,
+            action.iconPath,
             width: UIStyle.smallButtonHeight,
             height: UIStyle.smallButtonHeight,
           ),

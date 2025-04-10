@@ -34,6 +34,7 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:here_sdk_reference_application_flutter/common/extensions/error_handling/map_loader_error_extension.dart';
 import 'package:here_sdk_reference_application_flutter/common/file_utility.dart';
+import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_assets_paths.dart';
 import 'package:here_sdk_reference_application_flutter/routing/routing_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,7 @@ import 'package:provider/provider.dart';
 import 'common/application_preferences.dart';
 import 'common/connection_state_monitor.dart';
 import 'common/custom_map_style_settings.dart';
+import 'common/hds_icons/hds_icon_widget.dart';
 import 'common/load_custom_style_result_popup.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
@@ -57,7 +59,7 @@ import 'search/search_popup.dart';
 /// The home screen of the application.
 class LandingScreen extends StatefulWidget {
   static const String navRoute = "/";
-
+  static final GlobalKey<_LandingScreenState> landingScreenKey = GlobalKey();
   LandingScreen({Key? key}) : super(key: key);
 
   @override
@@ -187,10 +189,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
             child: InkWell(
               child: Padding(
                 padding: EdgeInsets.all(UIStyle.contentMarginMedium),
-                child: Icon(
-                  Icons.menu,
-                  color: colorScheme.primary,
-                ),
+                child: const HdsIconWidget(HdsAssetsPaths.menuSolidIcon),
               ),
               onTap: () => Scaffold.of(context).openDrawer(),
             ),
