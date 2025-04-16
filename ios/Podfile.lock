@@ -49,7 +49,7 @@ PODS:
     - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
-  - here_sdk (4.21.0.0.156359.release):
+  - here_sdk (4.22.0.0.179445.release):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
@@ -152,7 +152,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
   flutter_tts: b88dbc8655d3dc961bc4a796e4e16a4cc1795833
   geolocator_apple: 1560c3c875af2a412242c7a923e15d0d401966ff
-  here_sdk: d81a9c5142453d9075d09055f6658033ae9cfb15
+  here_sdk: e6840761871720b2a3feadc3390287e4d5b1f4f7
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d

@@ -25,6 +25,9 @@ class AppPreferences extends ChangeNotifier {
   static final _kAppOfflineParam = "use_app_offline";
   static final _kShowTrafficLayersParam = "show_traffic_layers";
 
+  /// Key to track if the HERE Privacy Notice dialog was shown on first launch.
+  static final String _kIsHerePrivacyDialogShown = 'is_here_privacy_dialog_shown';
+
   SharedPreferences? _sharedPreferences;
 
   AppPreferences() {
@@ -56,5 +59,17 @@ class AppPreferences extends ChangeNotifier {
   void set showTrafficLayers(bool value) {
     _sharedPreferences?.setBool(_kShowTrafficLayersParam, value);
     notifyListeners();
+  }
+
+  /// Returns true if HERE Privacy Notice was shown.
+  bool get isHerePrivacyDialogShown => _sharedPreferences?.getBool(_kIsHerePrivacyDialogShown) ?? false;
+
+  /// Sets the HERE Privacy Notice shown flag and notifies listeners on change.
+  void set isHerePrivacyDialogShown(bool value) {
+    final current = _sharedPreferences?.getBool(_kIsHerePrivacyDialogShown) ?? false;
+    if (current != value) {
+      _sharedPreferences?.setBool(_kIsHerePrivacyDialogShown, value);
+      notifyListeners();
+    }
   }
 }

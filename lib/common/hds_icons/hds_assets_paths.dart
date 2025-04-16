@@ -22,6 +22,9 @@ class HdsAssetsPaths {
   /// A constant value for arriveIcon
   static const String arriveIcon = '$_manoeuversSdkAssets/arrive.svg';
 
+  /// A constant value for chevronRightIcon
+  static const String chevronRightIcon = '$_coreUiAssets/SVG/chevron-right_solid_24px.svg';
+
   /// A constant value for continueOnIcon
   static const String continueOnIcon = '$_manoeuversSdkAssets/continue-on.svg';
 
@@ -33,6 +36,9 @@ class HdsAssetsPaths {
 
   /// A constant value for enterHighwayFromRightIcon
   static const String enterHighwayFromRightIcon = '$_manoeuversSdkAssets/enter-highway-right.svg';
+
+  /// A constant value for inboxAttentionIcon
+  static const String inboxAttentionIcon = '$_coreUiAssets/SVG/inbox-attention_solid_24px.svg';
 
   /// A constant value for leftExitIcon
   static const String leftExitIcon = '$_manoeuversSdkAssets/left-exit.svg';

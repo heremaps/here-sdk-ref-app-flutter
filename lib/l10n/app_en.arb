@@ -83,6 +83,10 @@
   "@consentGranted": {
     "description": "Text for granted consent"
   },
+  "continueTitle": "Continue",
+  "@continueTitle": {
+    "description": "Continue title"
+  },
   "continueOnActionRoadText": "Continue on '{{0}}'",
   "@continueOnActionRoadText": {
     "description": "Text for the continueOn maneuver action"
@@ -1261,6 +1265,10 @@
   "@hazardousGoodsTitle": {
     "description": "Route truck hazardous goods preferences row title"
   },
+  "herePrivacyNotice": "This application uses location services provided by HERE Technologies. To maintain, improve, and provide these services, HERE Technologies occasionally collects characteristic information about nearby mobile and Wi-Fi network signals. For more information, please refer to the HERE Privacy Notice at: ",
+  "@herePrivacyNotice": {
+    "description": "Text for Here Privacy Notice example"
+  },
   "highwayTitle": "Highway",
   "@highwayTitle": {
     "description": "Route preferences section title"
@@ -1504,6 +1512,14 @@
   "preferencesTitle": "Preferences",
   "@preferencesTitle": {
     "description": "Preferences button title"
+  },
+  "privacyNotice": "Privacy Notice",
+  "@privacyNotice": {
+    "description": "Title for Privacy Notice screen"
+  },
+  "privacyNoticePlaceholder": "Place your privacy notice here and include the following text:\n",
+  "@privacyNoticePlaceholder": {
+    "description": "Placeholder text prompting the app to include the privacy notice content for display."
   },
   "quadAxleGroup": "Quad Axle Group",
   "@quadAxleGroup": {
@@ -1924,6 +1940,14 @@
   "weightPerAxleGroup": "Weight Per Axle Group",
   "@weightPerAxleGroup": {
     "description": "Title for section of WeightPerAxleGroup preferences for truck specification"
+  },
+  "welcome": "Welcome",
+  "@Welcome": {
+    "description": "Title for the FTU Welcome Dialog"
+  },
+  "welcomeMessage": "and thanks for using the HERE SDK Reference Application for Flutter. Place your first time usage information here. \nFor your privacy notice please include the following example text:\n",
+  "@welcomeMessage": {
+    "description": "FTU Welcome Dialog message"
   },
   "yourLocationTitle": "Your location",
   "@yourLocationTitle": {

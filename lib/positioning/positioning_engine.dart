@@ -21,17 +21,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:here_sdk/consent.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk_reference_application_flutter/common/device_info.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+import '../common/application_preferences.dart';
+import 'here_privacy_notice_handler.dart';
 
 /// Class that implements logic for positioning. It asks for user consent, obtains the necessary permissions,
 /// and provides current location updates.
 /// The current implementation will only ask for user consent on Android devices.
 class PositioningEngine {
-  static final ConsentEngine? _consentEngine = Platform.isAndroid ? ConsentEngine() : null;
   static const int _locationServicePeriodicDurationInSeconds = 3;
   static const int _androidApiLevel30 = 30;
   LocationEngine? _locationEngine;
@@ -43,12 +45,6 @@ class PositioningEngine {
   Future initLocationEngine({required BuildContext context}) async {
     return _initialize(context);
   }
-
-  /// Displays user consent form.
-  Future<ConsentUserReply>? requestUserConsent(BuildContext context) => _consentEngine?.requestUserConsent(context);
-
-  /// Gets user consent state.
-  ConsentUserReply? get userConsentState => _consentEngine?.userConsentState;
 
   /// Gets last known location.
   Location? get lastKnownLocation => _locationEngine?.lastKnownLocation;
@@ -69,10 +65,16 @@ class PositioningEngine {
   bool _didLocationPermissionsRequested = false;
 
   Future<void> _initialize(BuildContext context) async {
-    // Check user consent state.
-    if (userConsentState == ConsentUserReply.notHandled) {
-      await requestUserConsent(context);
+    /// Important: This dialog is required to inform users about HERE SDK's privacy terms,
+    /// and must be accepted before calling `confirmHEREPrivacyNoticeInclusion()` and initializing the LocationEngine.
+    ///
+    /// This check determines whether the HERE Privacy Notice dialog has already been shown.
+    /// Defaults to false if the key does not exist (e.g., on first app launch).
+    if (!Provider.of<AppPreferences>(context, listen: false).isHerePrivacyDialogShown) {
+      // Show the dialog if it hasn't been shown before.
+      await showHerePrivacyDialog(context);
     }
+
     final didLocationServicesEnabled = await _didLocationServicesEnabled;
 
     // Check location services status
@@ -146,6 +148,11 @@ class PositioningEngine {
       (status) => _locationEngineStatusController.add(status),
       (features) {},
     ));
+
+    /// Important: The HERE Privacy Notice must be shown and accepted by the user
+    /// before starting the LocationEngine. Ensure the FTU/privacy screen is displayed
+    /// at app start-up. This method must be called every time before starting the engine.
+    _locationEngine!.confirmHEREPrivacyNoticeInclusion();
     _locationEngine!.startWithLocationAccuracy(LocationAccuracy.bestAvailable);
   }
 

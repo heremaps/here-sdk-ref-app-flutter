@@ -38,6 +38,11 @@ class PositioningLocationProvider extends LocationProviderInterface implements L
     _locationEngine.setPauseLocationUpdatesAutomatically(true);
     _locationEngine
       ..addLocationListener(this)
+
+      /// Important: The HERE Privacy Notice must be shown and accepted by the user
+      /// before starting the LocationEngine. Ensure the FTU/privacy screen is displayed
+      /// at app start-up. This method must be called every time before starting the engine.
+      ..confirmHEREPrivacyNoticeInclusion()
       ..startWithLocationAccuracy(LocationAccuracy.bestAvailable);
   }
 
