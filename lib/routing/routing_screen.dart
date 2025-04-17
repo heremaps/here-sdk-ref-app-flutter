@@ -210,7 +210,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
       hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
         widget.currentPosition,
         GeoOrientationUpdate(double.nan, double.nan),
-        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+        MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
       );
       _routePoiHandler = RoutePoiHandler(
         hereMapController: hereMapController,
@@ -259,7 +259,7 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
       coordinates,
       GeoOrientationUpdate(double.nan, double.nan),
-      MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
     );
     setState(() => enableMapUpdate = true);
   }

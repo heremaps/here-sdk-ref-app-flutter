@@ -119,7 +119,7 @@ mixin Positioning {
       if (enableMapUpdate) {
         _hereMapController.camera.lookAtPointWithMeasure(
           lastKnownLocation.coordinates,
-          MapMeasure(MapMeasureKind.distance, initDistanceToEarth),
+          MapMeasure(MapMeasureKind.distanceInMeters, initDistanceToEarth),
         );
       }
     } else {
@@ -129,7 +129,7 @@ mixin Positioning {
       if (enableMapUpdate) {
         _hereMapController.camera.lookAtPointWithMeasure(
           initPosition,
-          MapMeasure(MapMeasureKind.distance, initDistanceToEarth),
+          MapMeasure(MapMeasureKind.distanceInMeters, initDistanceToEarth),
         );
       }
     }

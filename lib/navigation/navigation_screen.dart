@@ -250,7 +250,7 @@ class _NavigationScreenState extends State<NavigationScreen>
 
       hereMapController.camera.lookAtPointWithMeasure(
         _currentRoute.geometry.vertices.first,
-        MapMeasure(MapMeasureKind.distance, _kInitDistanceToEarth),
+        MapMeasure(MapMeasureKind.distanceInMeters, _kInitDistanceToEarth),
       );
 
       hereMapController.setWatermarkLocation(

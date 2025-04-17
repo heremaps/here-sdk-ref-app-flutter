@@ -33,7 +33,6 @@ extension SearchErrorExtension on SearchError {
         message = localized.errorAuthenticationFailed;
 
       case SearchError.maxItemsOutOfRange:
-      case SearchError.invalidParameter:
       case SearchError.queryTooLong:
       case SearchError.filterTooLong:
         message = localized.errorNoResultFound;

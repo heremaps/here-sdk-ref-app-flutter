@@ -149,7 +149,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
 
       hereMapController.camera.lookAtPointWithMeasure(
         Positioning.initPosition,
-        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+        MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
       );
 
       hereMapController.setWatermarkLocation(
@@ -533,7 +533,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
       coordinates,
       GeoOrientationUpdate(double.nan, double.nan),
-      MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
     );
 
     setState(() => enableMapUpdate = true);

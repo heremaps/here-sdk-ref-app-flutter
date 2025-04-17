@@ -186,7 +186,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   void _zoomToManeuver(int index) {
     _hereMapController.camera.lookAtPointWithMeasure(
       _maneuvers[index].coordinates,
-      MapMeasure(MapMeasureKind.distance, _kZoomDistanceToManeuver),
+      MapMeasure(MapMeasureKind.distanceInMeters, _kZoomDistanceToManeuver),
     );
     setState(() => _hasBeenZoomedToManeuver = true);
   }
