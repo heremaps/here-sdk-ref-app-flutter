@@ -1945,7 +1945,7 @@
   "@Welcome": {
     "description": "Title for the FTU Welcome Dialog"
   },
-  "welcomeMessage": "and thanks for using the HERE SDK Reference Application for Flutter. Place your first time usage information here. \nFor your privacy notice please include the following example text:\n",
+  "welcomeMessage": "and thanks for using the HERE SDK Reference Application for Flutter. Place your first time usage information here. \nFor your privacy notice please include the following text:\n",
   "@welcomeMessage": {
     "description": "FTU Welcome Dialog message"
   },
