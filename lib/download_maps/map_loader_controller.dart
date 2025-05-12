@@ -293,7 +293,10 @@ class MapLoaderController extends ChangeNotifier implements MapCatalogUpdateList
   }
 
   /// Clear persisted map data
-  Future<void> clearPersistentMapStorage() async => _onCallback(_mapDownloader!.clearPersistentMapStorage);
+  Future<void> clearPersistentMapStorage() async {
+    await _onCallback(_mapDownloader!.clearPersistentMapStorage);
+    notifyListeners();
+  }
 
   /// Clear app cache
   Future<void> clearAppCache() async {
