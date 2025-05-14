@@ -24,7 +24,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:here_sdk/consent.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/gestures.dart';
@@ -34,6 +33,7 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:here_sdk_reference_application_flutter/common/extensions/error_handling/map_loader_error_extension.dart';
 import 'package:here_sdk_reference_application_flutter/common/file_utility.dart';
+import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_assets_paths.dart';
 import 'package:here_sdk_reference_application_flutter/routing/routing_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +41,7 @@ import 'package:provider/provider.dart';
 import 'common/application_preferences.dart';
 import 'common/connection_state_monitor.dart';
 import 'common/custom_map_style_settings.dart';
+import 'common/hds_icons/hds_icon_widget.dart';
 import 'common/load_custom_style_result_popup.dart';
 import 'common/place_actions_popup.dart';
 import 'common/reset_location_button.dart';
@@ -48,6 +49,7 @@ import 'common/ui_style.dart';
 import 'common/util.dart' as Util;
 import 'download_maps/download_maps_screen.dart';
 import 'download_maps/map_loader_controller.dart';
+import 'positioning/here_privacy_notice_handler.dart';
 import 'positioning/no_location_warning_widget.dart';
 import 'positioning/positioning.dart';
 import 'positioning/positioning_engine.dart';
@@ -57,6 +59,7 @@ import 'search/search_popup.dart';
 /// The home screen of the application.
 class LandingScreen extends StatefulWidget {
   static const String navRoute = "/";
+  static final GlobalKey<_LandingScreenState> landingScreenKey = GlobalKey();
 
   LandingScreen({Key? key}) : super(key: key);
 
@@ -75,7 +78,6 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   GlobalKey _hereMapKey = GlobalKey();
   OverlayEntry? _locationWarningOverlay;
   OverlayEntry? _loadCustomSceneResultOverlay;
-  ConsentUserReply? _consentState;
   MapMarker? _routeFromMarker;
   Place? _routeFromPlace;
 
@@ -147,7 +149,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
 
       hereMapController.camera.lookAtPointWithMeasure(
         Positioning.initPosition,
-        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+        MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
       );
 
       hereMapController.setWatermarkLocation(
@@ -164,7 +166,6 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
       _positioningEngine.getLocationEngineStatusUpdates.listen(_checkLocationStatus);
       _positioningEngine.initLocationEngine(context: context).then((value) {
         initPositioning(context: context, hereMapController: hereMapController);
-        _updateConsentState(_positioningEngine);
       });
 
       setState(() {
@@ -187,10 +188,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
             child: InkWell(
               child: Padding(
                 padding: EdgeInsets.all(UIStyle.contentMarginMedium),
-                child: Icon(
-                  Icons.menu,
-                  color: colorScheme.primary,
-                ),
+                child: const HdsIconWidget(HdsAssetsPaths.menuSolidIcon),
               ),
               onTap: () => Scaffold.of(context).openDrawer(),
             ),
@@ -198,62 +196,6 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
         ),
       ),
     );
-  }
-
-  List<Widget> _buildUserConsentItems(BuildContext context) {
-    PositioningEngine positioningEngine = Provider.of<PositioningEngine>(context, listen: false);
-    _consentState = positioningEngine.userConsentState;
-
-    if (_consentState == null) {
-      return [];
-    }
-
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-
-    return [
-      if (_consentState != ConsentUserReply.granted)
-        ListTile(
-          title: Text(
-            appLocalizations.userConsentDescription,
-            style: TextStyle(color: colorScheme.onSecondary),
-          ),
-        ),
-      ListTile(
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.privacy_tip,
-              color: _consentState == ConsentUserReply.granted
-                  ? UIStyle.acceptedConsentColor
-                  : UIStyle.revokedConsentColor,
-            ),
-          ],
-        ),
-        title: Text(
-          appLocalizations.userConsentTitle,
-          style: TextStyle(color: colorScheme.onPrimary),
-        ),
-        subtitle: _consentState == ConsentUserReply.granted
-            ? Text(
-                appLocalizations.consentGranted,
-                style: TextStyle(color: UIStyle.acceptedConsentColor),
-              )
-            : Text(
-                appLocalizations.consentDenied,
-                style: TextStyle(color: UIStyle.revokedConsentColor),
-              ),
-        trailing: Icon(
-          Icons.arrow_forward,
-          color: colorScheme.onPrimary,
-        ),
-        onTap: () {
-          Navigator.of(context).pop();
-          positioningEngine.requestUserConsent(context)?.then((_) => _updateConsentState(positioningEngine));
-        },
-      ),
-    ];
   }
 
   void applyCustomStyle(CustomMapStyleSettings customMapStyleSettings, File file) {
@@ -383,7 +325,16 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                 ),
               ),
             ),
-            ..._buildUserConsentItems(context),
+            ListTile(
+              leading: HdsIconWidget(HdsAssetsPaths.inboxAttentionIcon, color: colorScheme.onPrimary),
+              title: Text(appLocalizations.privacyNotice, style: TextStyle(color: colorScheme.onPrimary)),
+              trailing: HdsIconWidget(HdsAssetsPaths.chevronRightIcon, color: colorScheme.onPrimary),
+              onTap: () {
+                Navigator.of(context)
+                  ..pop()
+                  ..pushNamed(HerePrivacyNoticeScreen.navRoute);
+              },
+            ),
             ListTile(
                 leading: Icon(
                   Icons.download_rounded,
@@ -582,7 +533,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
       coordinates,
       GeoOrientationUpdate(double.nan, double.nan),
-      MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
     );
 
     setState(() => enableMapUpdate = true);
@@ -676,9 +627,5 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
 
     _routeFromPlace = null;
     _removeRouteFromMarker();
-  }
-
-  void _updateConsentState(PositioningEngine positioningEngine) {
-    setState(() => _consentState = positioningEngine.userConsentState);
   }
 }

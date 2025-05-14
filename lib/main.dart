@@ -37,6 +37,7 @@ import 'download_maps/map_loader_controller.dart';
 import 'download_maps/map_regions_list_screen.dart';
 import 'landing_screen.dart';
 import 'navigation/navigation_screen.dart';
+import 'positioning/here_privacy_notice_handler.dart';
 import 'positioning/positioning_engine.dart';
 import 'route_preferences/route_preferences_model.dart';
 import 'routing/route_details_screen.dart';
@@ -114,7 +115,7 @@ class _MyAppState extends State<MyApp> {
         onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
         onGenerateRoute: (RouteSettings settings) {
           Map<String, WidgetBuilder> routes = {
-            LandingScreen.navRoute: (BuildContext context) => LandingScreen(),
+            LandingScreen.navRoute: (BuildContext context) => LandingScreen(key: LandingScreen.landingScreenKey),
             SearchResultsScreen.navRoute: (BuildContext context) {
               List<dynamic> arguments = settings.arguments as List<dynamic>;
               assert(arguments.length == 4);
@@ -153,6 +154,7 @@ class _MyAppState extends State<MyApp> {
             DownloadMapsScreen.navRoute: (BuildContext context) {
               return DownloadMapsScreen();
             },
+            HerePrivacyNoticeScreen.navRoute: (BuildContext context) => HerePrivacyNoticeScreen(),
             MapRegionsListScreen.navRoute: (BuildContext context) {
               List<dynamic> arguments = settings.arguments as List<dynamic>;
               assert(arguments.length == 1);

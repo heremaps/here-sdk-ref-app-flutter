@@ -1,0 +1,3 @@
+[submodule "assets/here-icons"]
+	path = assets/here-icons
+	url = https://github.com/heremaps/here-icons.git

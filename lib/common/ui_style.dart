@@ -83,6 +83,7 @@ class UIStyle {
   static const double smallButtonHeight = 40;
 
   static const double bigIconSize = 24;
+  static const double largeIconSize = 32;
   static const double mediumIconSize = 20;
   static const double smallIconSize = 16;
 
@@ -98,6 +99,8 @@ class UIStyle {
 
   static const int searchMarkerDrawOrder = 5;
   static const int waypointsMarkerDrawOrder = 10;
+
+  static const int notificationIconSize = 80;
 
   // private UI constants
   static const double _defaultFontSize = 16;

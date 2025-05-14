@@ -34,11 +34,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.13.0
+version: 1.14.0
 
 environment:
-  sdk: ">=3.6.1 <4.0.0"
-  flutter: ">=3.27.2"
+  sdk: ">=3.6.2 <4.0.0"
+  flutter: ">=3.27.4"
 
 dependencies:
   battery_plus: 6.2.1
@@ -88,10 +88,10 @@ flutter:
 
   assets:
     - assets/
-    - assets/maneuvers/dark/
-    - assets/maneuvers/light/
-    - assets/maneuvers/dark/png/
-    - assets/maneuvers/light/png/
+    - assets/here-icons/icons/guidance-icons/manoeuvers-sdk/
+    - assets/here-icons/icons/core-ui/SVG/menu_solid_24px.svg
+    - assets/here-icons/icons/core-ui/SVG/chevron-right_solid_24px.svg
+    - assets/here-icons/icons/core-ui/SVG/inbox-attention_solid_24px.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

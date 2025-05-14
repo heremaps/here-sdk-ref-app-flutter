@@ -18,7 +18,6 @@
  */
 
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -251,7 +250,7 @@ class _NavigationScreenState extends State<NavigationScreen>
 
       hereMapController.camera.lookAtPointWithMeasure(
         _currentRoute.geometry.vertices.first,
-        MapMeasure(MapMeasureKind.distance, _kInitDistanceToEarth),
+        MapMeasure(MapMeasureKind.distanceInMeters, _kInitDistanceToEarth),
       );
 
       hereMapController.setWatermarkLocation(
@@ -471,7 +470,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     return NotificationBody(
       title: _getRemainingTimeString(),
       body: text ?? maneuver.getActionText(context),
-      imagePath: maneuver.action.imagePath,
+      imagePath: maneuver.action.iconPath,
       presentSound: !_soundEnabled,
     );
   }
@@ -813,12 +812,5 @@ class _NavigationScreenState extends State<NavigationScreen>
       _currentLocationForLocationStatus = location;
       _servicesStatusNotifier?.onLocationReceived(location);
     }
-  }
-}
-
-extension _ManeuverImagePath on Routing.ManeuverAction {
-  String get imagePath {
-    final String subDir = PlatformDispatcher.instance.platformBrightness == Brightness.light ? "dark" : "light";
-    return "assets/maneuvers/$subDir/png/${toString().split(".").last}.png";
   }
 }

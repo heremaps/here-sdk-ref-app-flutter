@@ -49,7 +49,7 @@ PODS:
     - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
-  - here_sdk (4.21.0.0.156359.release):
+  - here_sdk (4.22.0.0.179445.release):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
@@ -141,29 +141,29 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  battery_plus: 34f72fa2afeeea83bbae306c72a25828d3ec727a
-  connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
-  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
-  disk_space_plus: faa27633429bb392ecf7342395bf12040ca4ac9b
+  battery_plus: b42253f6d2dde71712f8c36fef456d99121c5977
+  connectivity_plus: 2256d3e20624a7749ed21653aafe291a46446fee
+  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
+  disk_space_plus: 59f8bdc7d1c9aad9e83f3659ed0e21c656277ada
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  file_picker: 09aa5ec1ab24135ccd7a1621c46c84134bfd6655
+  file_picker: 9b3292d7c8bc68c8a7bf8eb78f730e49c8efc517
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
-  flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
-  geolocator_apple: 9bcea1918ff7f0062d98345d238ae12718acfbc1
-  here_sdk: 9c746efdbfea1cf6af72f56191eab8d1f479f04b
-  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
-  ringtone_player: 151303fcb26e9daa11257fa6947faed36b198f13
+  flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
+  flutter_tts: b88dbc8655d3dc961bc4a796e4e16a4cc1795833
+  geolocator_apple: 1560c3c875af2a412242c7a923e15d0d401966ff
+  here_sdk: e6840761871720b2a3feadc3390287e4d5b1f4f7
+  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
+  ringtone_player: 4dc8a859ebee02c6b5b9b1c72b50796711607f2d
   SDWebImage: 96e0c18ef14010b7485210e92fac888587ebb958
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
-  wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  wakelock_plus: 04623e3f525556020ebd4034310f20fe7fda8b49
 
 PODFILE CHECKSUM: 35f3b71c1702404c71d87f8c1bb7d0c21e5491ee
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

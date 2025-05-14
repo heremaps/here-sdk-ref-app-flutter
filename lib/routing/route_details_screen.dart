@@ -18,16 +18,17 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk_reference_application_flutter/common/extensions/geo_box_extensions.dart';
 import 'package:here_sdk_reference_application_flutter/common/util.dart';
+import 'package:here_sdk_reference_application_flutter/navigation/maneuver_action_text_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../common/custom_map_style_settings.dart';
+import '../common/hds_icons/hds_icon_widget.dart';
 import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
 import '../navigation/navigation_screen.dart';
@@ -185,7 +186,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   void _zoomToManeuver(int index) {
     _hereMapController.camera.lookAtPointWithMeasure(
       _maneuvers[index].coordinates,
-      MapMeasure(MapMeasureKind.distance, _kZoomDistanceToManeuver),
+      MapMeasure(MapMeasureKind.distanceInMeters, _kZoomDistanceToManeuver),
     );
     setState(() => _hasBeenZoomedToManeuver = true);
   }
@@ -202,7 +203,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
   Widget _buildManeuverItem(BuildContext context, int index) {
     return ListTile(
-      leading: SvgPicture.asset(_maneuvers[index].action.imagePath),
+      leading: HdsIconWidget.large(_maneuvers[index].action.iconPath),
       title: Text(_maneuvers[index].text),
       onTap: () => _zoomToManeuver(index),
     );
@@ -309,12 +310,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
         ),
       ),
     );
-  }
-}
-
-extension _ManeuverImagePath on Routing.ManeuverAction {
-  String get imagePath {
-    return "assets/maneuvers/dark/" + toString().split(".").last + ".svg";
   }
 }
 

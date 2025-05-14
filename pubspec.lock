@@ -299,7 +299,7 @@ packages:
       path: "plugins/here_sdk"
       relative: true
     source: path
-    version: "4.21.0"
+    version: "4.22.0"
   http:
     dependency: transitive
     description:
@@ -922,5 +922,5 @@ packages:
     source: hosted
     version: "6.5.0"
 sdks:
-  dart: ">=3.6.1 <4.0.0"
-  flutter: ">=3.27.2"
+  dart: ">=3.6.2 <4.0.0"
+  flutter: ">=3.27.4"

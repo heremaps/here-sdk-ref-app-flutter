@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/routing.dart';
 
+import '../common/hds_icons/hds_assets_paths.dart';
 import '../common/util.dart';
 
 String _makeActionString(String text, String template, String? roadName) {
@@ -32,7 +33,7 @@ String _makeActionString(String text, String template, String? roadName) {
 }
 
 /// Helper extension class for the [Maneuver] class.
-extension ManeuverActionTextHelper on Maneuver {
+extension ManeuverActionHelper on Maneuver {
   /// Returns the localized text for the navigation maneuver.
   String getActionText(BuildContext context) {
     final AppLocalizations localizations = AppLocalizations.of(context)!;
@@ -151,6 +152,109 @@ extension ManeuverActionTextHelper on Maneuver {
         return localizations.enterHighwayFromLeftActionText;
       case ManeuverAction.enterHighwayFromRight:
         return localizations.enterHighwayFromRightActionText;
+    }
+  }
+}
+
+extension ManeuverActionExtension on ManeuverAction {
+  String get iconPath {
+    switch (this) {
+      case ManeuverAction.depart:
+        return HdsAssetsPaths.departIcon;
+      case ManeuverAction.arrive:
+        return HdsAssetsPaths.arriveIcon;
+      case ManeuverAction.leftUTurn:
+        return HdsAssetsPaths.leftUTurnIcon;
+      case ManeuverAction.sharpLeftTurn:
+        return HdsAssetsPaths.sharpLeftTurnIcon;
+      case ManeuverAction.leftTurn:
+        return HdsAssetsPaths.leftTurnIcon;
+      case ManeuverAction.slightLeftTurn:
+        return HdsAssetsPaths.slightLeftTurnIcon;
+      case ManeuverAction.continueOn:
+        return HdsAssetsPaths.continueOnIcon;
+      case ManeuverAction.slightRightTurn:
+        return HdsAssetsPaths.slightRightTurnIcon;
+      case ManeuverAction.rightTurn:
+        return HdsAssetsPaths.rightTurnIcon;
+      case ManeuverAction.sharpRightTurn:
+        return HdsAssetsPaths.sharpRightTurnIcon;
+      case ManeuverAction.rightUTurn:
+        return HdsAssetsPaths.rightUTurnIcon;
+      case ManeuverAction.leftExit:
+        return HdsAssetsPaths.leftExitIcon;
+      case ManeuverAction.rightExit:
+        return HdsAssetsPaths.rightExitIcon;
+      case ManeuverAction.leftRamp:
+        return HdsAssetsPaths.leftRampIcon;
+      case ManeuverAction.rightRamp:
+        return HdsAssetsPaths.rightRampIcon;
+      case ManeuverAction.leftFork:
+        return HdsAssetsPaths.leftForkIcon;
+      case ManeuverAction.middleFork:
+        return HdsAssetsPaths.middleForkIcon;
+      case ManeuverAction.rightFork:
+        return HdsAssetsPaths.rightForkIcon;
+      case ManeuverAction.enterHighwayFromLeft:
+        return HdsAssetsPaths.enterHighwayFromRightIcon;
+      case ManeuverAction.enterHighwayFromRight:
+        return HdsAssetsPaths.enterHighwayFromLeftIcon;
+      case ManeuverAction.leftRoundaboutEnter:
+        return HdsAssetsPaths.leftRoundaboutEnterIcon;
+      case ManeuverAction.rightRoundaboutEnter:
+        return HdsAssetsPaths.rightRoundaboutEnterIcon;
+      case ManeuverAction.leftRoundaboutPass:
+        return HdsAssetsPaths.leftRoundaboutPassIcon;
+      case ManeuverAction.rightRoundaboutPass:
+        return HdsAssetsPaths.rightRoundaboutPassIcon;
+      case ManeuverAction.leftRoundaboutExit1:
+        return HdsAssetsPaths.leftRoundaboutExit1Icon;
+      case ManeuverAction.leftRoundaboutExit2:
+        return HdsAssetsPaths.leftRoundaboutExit2Icon;
+      case ManeuverAction.leftRoundaboutExit3:
+        return HdsAssetsPaths.leftRoundaboutExit3Icon;
+      case ManeuverAction.leftRoundaboutExit4:
+        return HdsAssetsPaths.leftRoundaboutExit4Icon;
+      case ManeuverAction.leftRoundaboutExit5:
+        return HdsAssetsPaths.leftRoundaboutExit5Icon;
+      case ManeuverAction.leftRoundaboutExit6:
+        return HdsAssetsPaths.leftRoundaboutExit6Icon;
+      case ManeuverAction.leftRoundaboutExit7:
+        return HdsAssetsPaths.leftRoundaboutExit7Icon;
+      case ManeuverAction.leftRoundaboutExit8:
+        return HdsAssetsPaths.leftRoundaboutExit8Icon;
+      case ManeuverAction.leftRoundaboutExit9:
+        return HdsAssetsPaths.leftRoundaboutExit9Icon;
+      case ManeuverAction.leftRoundaboutExit10:
+        return HdsAssetsPaths.leftRoundaboutExit10Icon;
+      case ManeuverAction.leftRoundaboutExit11:
+        return HdsAssetsPaths.leftRoundaboutExit11Icon;
+      case ManeuverAction.leftRoundaboutExit12:
+        return HdsAssetsPaths.leftRoundaboutExit12Icon;
+      case ManeuverAction.rightRoundaboutExit1:
+        return HdsAssetsPaths.rightRoundaboutExit1Icon;
+      case ManeuverAction.rightRoundaboutExit2:
+        return HdsAssetsPaths.rightRoundaboutExit2Icon;
+      case ManeuverAction.rightRoundaboutExit3:
+        return HdsAssetsPaths.rightRoundaboutExit3Icon;
+      case ManeuverAction.rightRoundaboutExit4:
+        return HdsAssetsPaths.rightRoundaboutExit4Icon;
+      case ManeuverAction.rightRoundaboutExit5:
+        return HdsAssetsPaths.rightRoundaboutExit5Icon;
+      case ManeuverAction.rightRoundaboutExit6:
+        return HdsAssetsPaths.rightRoundaboutExit6Icon;
+      case ManeuverAction.rightRoundaboutExit7:
+        return HdsAssetsPaths.rightRoundaboutExit7Icon;
+      case ManeuverAction.rightRoundaboutExit8:
+        return HdsAssetsPaths.rightRoundaboutExit8Icon;
+      case ManeuverAction.rightRoundaboutExit9:
+        return HdsAssetsPaths.rightRoundaboutExit9Icon;
+      case ManeuverAction.rightRoundaboutExit10:
+        return HdsAssetsPaths.rightRoundaboutExit10Icon;
+      case ManeuverAction.rightRoundaboutExit11:
+        return HdsAssetsPaths.rightRoundaboutExit11Icon;
+      case ManeuverAction.rightRoundaboutExit12:
+        return HdsAssetsPaths.rightRoundaboutExit12Icon;
     }
   }
 }

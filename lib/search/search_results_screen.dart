@@ -149,7 +149,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
         widget.currentPosition,
         GeoOrientationUpdate(double.nan, double.nan),
-        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+        MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
       );
       _addPanListener();
       _createResultsMarkers();
@@ -178,7 +178,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
     _hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
       coordinates,
       GeoOrientationUpdate(double.nan, double.nan),
-      MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+      MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
     );
     setState(() => enableMapUpdate = true);
   }
@@ -224,7 +224,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
   void _zoomToPlace(int index) {
     _hereMapController.camera.lookAtPointWithMeasure(
       widget.places[index].geoCoordinates!,
-      MapMeasure(MapMeasureKind.distance, _kZoomDistanceToEarth),
+      MapMeasure(MapMeasureKind.distanceInMeters, _kZoomDistanceToEarth),
     );
   }
 
@@ -253,7 +253,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
     if (widget.places.length == 1) {
       _hereMapController.camera.lookAtPointWithMeasure(
         widget.places.first.geoCoordinates!,
-        MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
+        MapMeasure(MapMeasureKind.distanceInMeters, Positioning.initDistanceToEarth),
       );
     } else {
       GeoBox? geoBox = GeoBox.containingGeoCoordinates(widget.places.map((e) => e.geoCoordinates!).toList());
