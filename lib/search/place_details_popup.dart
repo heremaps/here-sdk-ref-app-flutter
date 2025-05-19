@@ -264,33 +264,37 @@ Widget _buildOptionButton(BuildContext context, Widget icon, String title, VoidC
     SimpleDialogOption(
       padding: EdgeInsets.zero,
       child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
-        child: Container(
-          height: UIStyle.bigButtonHeight,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: UIStyle.contentMarginLarge,
-              right: UIStyle.contentMarginLarge,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                icon,
-                Container(
-                  width: UIStyle.contentMarginMedium,
-                ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: UIStyle.bigFontSize,
-                    fontWeight: FontWeight.bold,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
+          onTap: onPressed,
+          child: Container(
+            height: UIStyle.bigButtonHeight,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: UIStyle.contentMarginLarge,
+                right: UIStyle.contentMarginLarge,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  icon,
+                  Container(
+                    width: UIStyle.contentMarginMedium,
                   ),
-                ),
-              ],
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: UIStyle.bigFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-      onPressed: onPressed,
     );
