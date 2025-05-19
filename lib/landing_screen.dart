@@ -186,6 +186,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
             borderRadius: BorderRadius.circular(UIStyle.popupsBorderRadius),
             elevation: 2,
             child: InkWell(
+              borderRadius: BorderRadius.circular(UIStyle.popupsBorderRadius),
               child: Padding(
                 padding: EdgeInsets.all(UIStyle.contentMarginMedium),
                 child: const HdsIconWidget(HdsAssetsPaths.menuSolidIcon),
