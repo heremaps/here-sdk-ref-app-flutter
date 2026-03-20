@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:here_sdk_reference_application_flutter/common/file_utility.dart';
 import 'package:here_sdk_reference_application_flutter/common/notifications/notifications_manager.dart';
 
 const int _defaultNotificationId = 0;
@@ -44,17 +43,7 @@ class IosNotificationsManager implements NotificationsManager {
 
   @override
   Future<void> showNotification(NotificationBody body) async {
-    late DarwinNotificationDetails iOSNotificationDetails;
-    try {
-      final String savedImagePath = await FileUtility.saveManeuverImageFromBundle(body.imagePath);
-      iOSNotificationDetails = DarwinNotificationDetails(
-        presentSound: body.presentSound,
-        attachments: [DarwinNotificationAttachment(savedImagePath)],
-      );
-    } catch (_) {
-      iOSNotificationDetails = DarwinNotificationDetails(presentSound: body.presentSound);
-    }
-
+    final iOSNotificationDetails = DarwinNotificationDetails(presentSound: body.presentSound);
     var platformChannelSpecifics = NotificationDetails(iOS: iOSNotificationDetails);
     await _maneuverLocalNotificationsPlugin!.show(
       id: _defaultNotificationId,
