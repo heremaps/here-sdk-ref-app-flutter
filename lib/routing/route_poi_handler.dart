@@ -77,7 +77,7 @@ class RoutePoiHandler {
     this.onGetText,
     required this.offline,
   }) {
-    _searchEngine = SearchEngineProxy(offline: offline, enableDistributedResults: true);
+    _searchEngine = SearchEngineProxy(offline: offline);
   }
 
   /// Releases resources.
