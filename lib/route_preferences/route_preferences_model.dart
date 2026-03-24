@@ -19,82 +19,53 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:here_sdk/transport.dart'
+    show PedestrianSpecification, ScooterSpecification, VehicleSpecification, TransportMode, TransportSpecification;
 
 /// A helper class that contains all of the routing settings.
 class RoutePreferencesModel extends ChangeNotifier {
   static final defaultAlternativeRoutes = 1;
 
   // Keep transport Options readonly to prevent accidental overwriting
-  CarOptions _carOptions;
-  TruckOptions _truckOptions;
-  ScooterOptions _scooterOptions;
-  PedestrianOptions _pedestrianOptions;
-
   late RouteOptions _sharedRouteOptions;
   late RouteTextOptions _sharedRouteTextOptions;
   late AvoidanceOptions _sharedAvoidanceOptions;
-
-  /// Sets new routing settings for car mode.
-  set carOptions(CarOptions value) {
-    _carOptions = value;
-    notifyListeners();
-  }
-
-  /// Sets new routing settings for truck mode.
-  set truckOptions(TruckOptions value) {
-    _truckOptions = value;
-    notifyListeners();
-  }
-
-  /// Sets new routing settings for scooter mode.
-  set scooterOptions(ScooterOptions value) {
-    _scooterOptions = value;
-    notifyListeners();
-  }
-
-  /// Sets new routing settings for pedestrian mode.
-  set pedestrianOptions(PedestrianOptions value) {
-    _pedestrianOptions = value;
-    notifyListeners();
-  }
+  late PedestrianSpecification _pedestrianSpecification;
+  late ScooterSpecification _scooterSpecification;
+  late VehicleSpecification _vehicleSpecification;
 
   /// Sets new routing settings.
   set sharedRouteOptions(RouteOptions value) {
     _sharedRouteOptions = value;
-    _carOptions.routeOptions = _truckOptions.routeOptions =
-        _scooterOptions.routeOptions = _pedestrianOptions.routeOptions =
-            _sharedRouteOptions;
     notifyListeners();
   }
 
   /// Sets new route text settings.
   set sharedRouteTextOptions(RouteTextOptions value) {
     _sharedRouteTextOptions = value;
-    _carOptions.textOptions = _truckOptions.textOptions =
-        _scooterOptions.textOptions = _pedestrianOptions.textOptions =
-            _sharedRouteTextOptions;
     notifyListeners();
   }
 
   /// Sets new route avoidance settings.
   set sharedAvoidanceOptions(AvoidanceOptions value) {
     _sharedAvoidanceOptions = value;
-    _carOptions.avoidanceOptions = _truckOptions.avoidanceOptions =
-        _scooterOptions.avoidanceOptions = _sharedAvoidanceOptions;
     notifyListeners();
   }
 
-  /// Gets routing settings for car mode.
-  CarOptions get carOptions => _carOptions;
+  set pedestrianSpecification(double walkingSpeed) {
+    _pedestrianSpecification.walkingSpeedInMetersPerSecond = walkingSpeed;
+    notifyListeners();
+  }
 
-  /// Gets routing settings for truck mode.
-  TruckOptions get truckOptions => _truckOptions;
+  set scooterSpecification(bool allowScooterOnHighway) {
+    _scooterSpecification.allowScooterOnHighway = allowScooterOnHighway;
+    notifyListeners();
+  }
 
-  /// Gets routing settings for scooter mode.
-  ScooterOptions get scooterOptions => _scooterOptions;
-
-  /// Gets routing settings for pedestrian mode.
-  PedestrianOptions get pedestrianOptions => _pedestrianOptions;
+  set vehicleSpecification(VehicleSpecification vehicleSpecification) {
+    _vehicleSpecification = vehicleSpecification;
+    notifyListeners();
+  }
 
   /// Gets routing settings.
   RouteOptions get sharedRouteOptions => _sharedRouteOptions;
@@ -105,31 +76,50 @@ class RoutePreferencesModel extends ChangeNotifier {
   /// Gets route avoidance settings.
   AvoidanceOptions get sharedAvoidanceOptions => _sharedAvoidanceOptions;
 
+  // Getters for transport options
+  PedestrianSpecification get pedestrianSpecification => _pedestrianSpecification;
+
+  ScooterSpecification get scooterSpecification => _scooterSpecification;
+
+  VehicleSpecification get vehicleSpecification => _vehicleSpecification;
+
+  /// Gets routing options for a given transport mode.
+  RoutingOptions getRoutingOptions(TransportMode selectedMode) {
+    TransportSpecification specification = TransportSpecification();
+    specification.transportMode = selectedMode;
+
+    /// Only a subset of HERE SDK transport modes are supported by the Ref App.
+    /// If an unsupported mode is requested, an UnimplementedError is thrown.
+    switch (selectedMode) {
+      case TransportMode.car:
+      case TransportMode.truck:
+        specification.vehicleSpecification = _vehicleSpecification;
+        break;
+      case TransportMode.scooter:
+        specification.vehicleSpecification = _vehicleSpecification;
+        specification.scooterSpecification = _scooterSpecification;
+        break;
+      case TransportMode.pedestrian:
+        specification.pedestrianSpecification = _pedestrianSpecification;
+        break;
+      default:
+        throw UnimplementedError('TransportMode $selectedMode is not supported by the Ref App.');
+    }
+
+    return RoutingOptions()..transportSpecification = specification;
+  }
+
   /// Constructs a settings objects with default values.
   RoutePreferencesModel.withDefaults()
-    : _carOptions = CarOptions(),
-      _truckOptions = TruckOptions(),
-      _scooterOptions = ScooterOptions(),
-      _pedestrianOptions = PedestrianOptions() {
+    : _pedestrianSpecification = PedestrianSpecification(),
+      _scooterSpecification = ScooterSpecification(),
+      _vehicleSpecification = VehicleSpecification() {
     _setupSharedOptions();
   }
 
   _setupSharedOptions() {
     _sharedRouteTextOptions = RouteTextOptions();
     _sharedAvoidanceOptions = AvoidanceOptions();
-    _sharedRouteOptions = RouteOptions.withDefaults();
-
-    _sharedRouteOptions.alternatives = defaultAlternativeRoutes;
-
-    _carOptions.routeOptions = _truckOptions.routeOptions =
-        _scooterOptions.routeOptions = _pedestrianOptions.routeOptions =
-            _sharedRouteOptions;
-
-    _carOptions.textOptions = _truckOptions.textOptions =
-        _scooterOptions.textOptions = _pedestrianOptions.textOptions =
-            _sharedRouteTextOptions;
-
-    _carOptions.avoidanceOptions = _truckOptions.avoidanceOptions =
-        _scooterOptions.avoidanceOptions = _sharedAvoidanceOptions;
+    _sharedRouteOptions = RouteOptions.withDefaults()..alternatives = defaultAlternativeRoutes;
   }
 }

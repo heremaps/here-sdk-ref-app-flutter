@@ -30,9 +30,12 @@ import 'package:here_sdk_reference_application_flutter/l10n/generated/app_locali
 class EnumStringHelper {
   static int noneValueIndex = -1;
 
-  /// Returns a map of truck type indices to their capitalized display names.
-  static Map<int, String> truckTypeDisplayNames() {
-    return {for (final type in Transport.TruckType.values) type.index: type.name.capitalize()};
+  /// Returns a map of truck category indices to their capitalized display names.
+  static Map<int, String> truckCategoryDisplayNames(BuildContext context) {
+    return {
+      noneValueIndex: AppLocalizations.of(context)!.noneTitle,
+      for (final category in Transport.TruckCategory.values) category.index: category.name.capitalize(),
+    };
   }
 
   /// Returns the mapping of [OptimizationMode] values to the corresponding strings.

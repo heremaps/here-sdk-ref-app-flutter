@@ -20,46 +20,34 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:here_sdk_reference_application_flutter/common/ui_style.dart';
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
-
-import '../common/ui_style.dart';
-import 'car_options_screen.dart';
-import 'pedestrian_options_screen.dart';
-import 'scooter_options_screen.dart';
-import 'transport_modes_widget.dart';
-import 'truck_options_screen.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/supported_transport_mode.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/transport_modes_widget.dart';
 
 /// Routing preferences screen widget.
 class RoutePreferencesScreen extends StatefulWidget {
   /// Constructs a widget.
-  RoutePreferencesScreen({Key? key, required this.activeTransportMode})
-    : super(key: key);
+  RoutePreferencesScreen({Key? key, required this.activeTransportMode}) : super(key: key);
 
   /// Active transport mode for display.
-  final TransportModes activeTransportMode;
+  final SupportedTransportMode activeTransportMode;
 
   @override
   _RoutePreferencesScreenState createState() => _RoutePreferencesScreenState();
 }
 
-class _RoutePreferencesScreenState extends State<RoutePreferencesScreen>
-    with TickerProviderStateMixin {
+class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with TickerProviderStateMixin {
   late TabController _transportModesTabController;
-  late List<TransportModes> _transportModes;
+  late List<SupportedTransportMode> _transportModes;
 
   @override
   void initState() {
     super.initState();
     // The HERE SDK supports car, truck, scooter and walk transport modes.
-    _transportModes = TransportModes.values;
-    _transportModesTabController = TabController(
-      length: _transportModes.length,
-      vsync: this,
-    );
-    _transportModesTabController.index = max(
-      _transportModes.indexOf(widget.activeTransportMode),
-      0,
-    );
+    _transportModes = SupportedTransportMode.values;
+    _transportModesTabController = TabController(length: _transportModes.length, vsync: this);
+    _transportModesTabController.index = max(_transportModes.indexOf(widget.activeTransportMode), 0);
   }
 
   @override
@@ -77,10 +65,7 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen>
           preferredSize: const Size.fromHeight(UIStyle.mediumButtonHeight),
           child: Container(
             color: UIStyle.tabBarBackgroundColor,
-            child: TransportModesWidget(
-              tabController: _transportModesTabController,
-              transportModes: _transportModes,
-            ),
+            child: TransportModesWidget(tabController: _transportModesTabController, transportModes: _transportModes),
           ),
         ),
       ),
@@ -88,10 +73,7 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen>
         canPop: false,
         onPopInvokedWithResult: (bool didPop, _) {
           if (!didPop) {
-            Navigator.pop(
-              context,
-              _transportModes[_transportModesTabController.index],
-            );
+            Navigator.pop(context, _transportModes[_transportModesTabController.index]);
           }
         },
         child: Container(
@@ -106,29 +88,12 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen>
               ),
               child: TabBarView(
                 controller: _transportModesTabController,
-                children: _transportModes
-                    .map((e) => e.getOptionsScreen)
-                    .toList(),
+                children: _transportModes.map((e) => e.getOptionsScreen).toList(),
               ),
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-extension _TransportModeOptionsExtension on TransportModes {
-  Widget get getOptionsScreen {
-    switch (this) {
-      case TransportModes.car:
-        return CarOptionsScreen();
-      case TransportModes.truck:
-        return TruckOptionsScreen();
-      case TransportModes.scooter:
-        return ScooterOptionsScreen();
-      case TransportModes.walk:
-        return PedestrianOptionsScreen();
-    }
   }
 }

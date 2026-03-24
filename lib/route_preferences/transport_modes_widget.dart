@@ -18,12 +18,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_assets_paths.dart';
 import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_icon_widget.dart';
-
-/// Available transport modes currently supported by the Ref App.
-/// The HERE SDK supports more transport modes than featured by this application.
-enum TransportModes { car, truck, scooter, walk }
+import 'package:here_sdk_reference_application_flutter/route_preferences/supported_transport_mode.dart';
 
 /// Widget for switching between transport modes.
 class TransportModesWidget extends StatefulWidget {
@@ -31,14 +27,11 @@ class TransportModesWidget extends StatefulWidget {
   final TabController tabController;
 
   /// List of transport modes to be shown.
-  final List<TransportModes> transportModes;
+  final List<SupportedTransportMode> transportModes;
 
   /// Constructs a widget.
-  TransportModesWidget({
-    Key? key,
-    required this.tabController,
-    this.transportModes = TransportModes.values,
-  }) : super(key: key);
+  TransportModesWidget({Key? key, required this.tabController, this.transportModes = SupportedTransportMode.values})
+    : super(key: key);
 
   @override
   State<TransportModesWidget> createState() => _TransportModesWidgetState();
@@ -78,29 +71,10 @@ class _TransportModesWidgetState extends State<TransportModesWidget> {
 
         /// Theme color setup.
         ColorScheme colorScheme = Theme.of(context).colorScheme;
-        Color color = isSelected
-            ? colorScheme.primary
-            : colorScheme.onSecondary;
+        Color color = isSelected ? colorScheme.primary : colorScheme.onSecondary;
 
-        return Tab(
-          icon: HdsIconWidget(widget.transportModes[index].icon, color: color),
-        );
+        return Tab(icon: HdsIconWidget(widget.transportModes[index].icon, color: color));
       }),
     );
-  }
-}
-
-extension _TransportModeIcon on TransportModes {
-  String get icon {
-    switch (this) {
-      case TransportModes.car:
-        return HdsAssetsPaths.carDrivingIcon;
-      case TransportModes.truck:
-        return HdsAssetsPaths.truck;
-      case TransportModes.scooter:
-        return HdsAssetsPaths.scooter;
-      case TransportModes.walk:
-        return HdsAssetsPaths.walk;
-    }
   }
 }

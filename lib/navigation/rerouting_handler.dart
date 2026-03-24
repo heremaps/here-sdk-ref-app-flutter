@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
-import 'package:here_sdk/transport.dart' as Transport;
 
 import '../route_preferences/route_preferences_model.dart';
 
@@ -132,42 +131,11 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
       ..._wayPoints.sublist(_passedWayPointIndex + 1),
     ];
 
-    switch (oldRoute.requestedTransportMode) {
-      case Transport.TransportMode.car:
-        _routingEngine.calculateCarRoute(
-          newWayPoints,
-          preferences.carOptions,
-          (error, routes) => _onReroutingEnd(error, routes, newWayPoints),
-        );
-        break;
-
-      case Transport.TransportMode.truck:
-        _routingEngine.calculateTruckRoute(
-          newWayPoints,
-          preferences.truckOptions,
-          (error, routes) => _onReroutingEnd(error, routes, newWayPoints),
-        );
-        break;
-
-      case Transport.TransportMode.scooter:
-        _routingEngine.calculateScooterRoute(
-          newWayPoints,
-          preferences.scooterOptions,
-          (error, routes) => _onReroutingEnd(error, routes, newWayPoints),
-        );
-        break;
-
-      case Transport.TransportMode.pedestrian:
-        _routingEngine.calculatePedestrianRoute(
-          newWayPoints,
-          preferences.pedestrianOptions,
-          (error, routes) => _onReroutingEnd(error, routes, newWayPoints),
-        );
-        break;
-
-      default:
-        assert(false);
-    }
+    _routingEngine.calculateRouteWithRoutingOptions(
+      newWayPoints,
+      preferences.getRoutingOptions(oldRoute.requestedTransportMode),
+      (error, routes) => _onReroutingEnd(error, routes, newWayPoints),
+    );
   }
 
   void _onReroutingEnd(Routing.RoutingError? error, List<Routing.Route>? routes, List<Routing.Waypoint> newWayPoints) {
@@ -187,7 +155,6 @@ class ReroutingHandler implements Navigation.RouteDeviationListener, Navigation.
     }
 
     onNewRoute(routes.first);
-
     _wayPoints = newWayPoints;
     _passedWayPointIndex = 0;
     _reroutingInProgress = false;

@@ -17,24 +17,49 @@
  * License-Filename: LICENSE
  */
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show MaterialPageRoute;
+import 'package:here_sdk/transport.dart' show VehicleSpecification;
+import 'package:here_sdk_reference_application_flutter/common/extensions/vehicle_specification_extensions.dart';
+import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/preferences_disclosure_row_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/preferences_section_title_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/route_preferences_model.dart'
+    show RoutePreferencesModel;
+import 'package:here_sdk_reference_application_flutter/route_preferences/vehicle_specification_screen.dart';
+import 'package:provider/provider.dart';
+
 import 'avoidance/route_avoidance_options_widget.dart';
 import 'route_options_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'route_text_options_widget.dart';
 
 /// Routing settings widget for car mode.
 class CarOptionsScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => SafeArea(
-    child: SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RouteOptionsWidget(),
-          RouteTextOptionsWidget(),
-          RouteAvoidanceOptionsWidget(),
-        ],
+  Widget build(BuildContext context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
+    final VehicleSpecification specification = context.select(
+      (RoutePreferencesModel model) => model.vehicleSpecification,
+    );
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RouteOptionsWidget(),
+            RouteTextOptionsWidget(),
+            RouteAvoidanceOptionsWidget(),
+            PreferencesSectionTitle(title: localizations.transportSpecification),
+            PreferencesDisclosureRowWidget(
+              title: localizations.vehicleSpecification,
+              subTitle: specification.specificationsString(localizations),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => VehicleSpecificationScreen()));
+              },
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

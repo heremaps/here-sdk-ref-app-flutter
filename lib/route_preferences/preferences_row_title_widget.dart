@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../common/ui_style.dart';
 
@@ -26,17 +26,19 @@ class PreferencesRowTitle extends StatelessWidget {
   /// Title
   final String title;
 
+  /// Title font size
+  final double? fontSize;
+
   /// Constructs a widget.
-  PreferencesRowTitle({required this.title});
+  PreferencesRowTitle({required this.title, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: UIStyle.contentMarginExtraLarge,
-        bottom: UIStyle.contentMarginMedium,
+      padding: const EdgeInsets.only(top: UIStyle.contentMarginExtraLarge, bottom: UIStyle.contentMarginMedium),
+      child: Row(
+        children: <Widget>[Text(title, style: TextStyle(fontSize: fontSize))],
       ),
-      child: Row(children: <Widget>[Text(title)]),
     );
   }
 }

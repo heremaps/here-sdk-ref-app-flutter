@@ -18,8 +18,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:here_sdk/routing.dart';
+import 'package:here_sdk/transport.dart' show VehicleSpecification;
+import 'package:here_sdk_reference_application_flutter/common/extensions/vehicle_specification_extensions.dart'
+    show VehicleSpecificationExtensions;
+import 'package:here_sdk_reference_application_flutter/common/ui_style.dart' show UIStyle;
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/preferences_disclosure_row_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/vehicle_specification_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'avoidance/route_avoidance_options_widget.dart';
@@ -33,37 +38,41 @@ import 'route_text_options_widget.dart';
 class ScooterOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ScooterOptions scooterOptions = context.select(
-      (RoutePreferencesModel model) => model.scooterOptions,
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
+    final bool allowScooterOnHighway = context.select((RoutePreferencesModel model) {
+      return model.scooterSpecification.allowScooterOnHighway;
+    });
+
+    final VehicleSpecification specification = context.select(
+      (RoutePreferencesModel model) => model.vehicleSpecification,
     );
 
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RouteOptionsWidget(),
             RouteTextOptionsWidget(),
             RouteAvoidanceOptionsWidget(),
-            PreferencesSectionTitle(
-              title: AppLocalizations.of(context)!.highwayTitle,
+            PreferencesSectionTitle(title: localizations.transportSpecification),
+            PreferencesDisclosureRowWidget(
+              title: localizations.vehicleSpecification,
+              subTitle: specification.specificationsString(localizations),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => VehicleSpecificationScreen()));
+              },
             ),
+            PreferencesRowTitle(title: localizations.scooterSpecification, fontSize: UIStyle.bigFontSize),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                PreferencesRowTitle(
-                  title: AppLocalizations.of(context)!.allowHighwayTitle,
-                ),
+                PreferencesRowTitle(title: localizations.allowScooterOnHighway),
                 Switch.adaptive(
-                  value: scooterOptions.allowHighway,
+                  value: allowScooterOnHighway,
                   onChanged: (value) {
-                    final ScooterOptions newOptions = ScooterOptions()
-                      ..routeOptions = scooterOptions.routeOptions
-                      ..textOptions = scooterOptions.textOptions
-                      ..avoidanceOptions = scooterOptions.avoidanceOptions
-                      ..allowHighway = value;
-                    context.read<RoutePreferencesModel>().scooterOptions =
-                        newOptions;
+                    context.read<RoutePreferencesModel>().scooterSpecification = value;
                   },
                 ),
               ],

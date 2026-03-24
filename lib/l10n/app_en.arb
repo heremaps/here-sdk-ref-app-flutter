@@ -15,8 +15,8 @@
   "@allowDownload": {
     "description": "Title text for allow download switcher"
   },
-  "allowHighwayTitle": "Allow highway",
-  "@allowHighwayTitle": {
+  "allowScooterOnHighway": "Allow Scooter On Highway",
+  "@allowScooterOnHighway": {
     "description": "Route preferences switcher title"
   },
   "appTitle": "HERE SDK for Flutter - Reference Application",
@@ -1313,6 +1313,10 @@
   "@internalStorageText": {
     "description": "Text for internal storage caption"
   },
+  "isCommercial": "is Commercial",
+  "@isCommercial": {
+    "description": "Title for truck specification preferences"
+  },
   "isLightTruck": "Is Light Truck",
   "@isLightTruck": {
     "description": "Title for truck specification preferences"
@@ -1561,6 +1565,10 @@
   "@payloadCapacityHint": {
     "description": "Hint for truck specification preferences"
   },
+  "pedestrianSpecification": "Pedestrian Specification",
+  "@pedestrianSpecification": {
+    "description": "Title for pedestrian specification preferences"
+  },
   "poiSettingsTitle": "Points of interest",
   "@poiSettingsTitle": {
     "description": "Title of the settings for POI"
@@ -1721,6 +1729,10 @@
   "@routingErrorText": {
     "description": "Routing error message"
   },
+  "scooterSpecification": "Scooter Specification",
+  "@scooterSpecification": {
+    "description": "Title of route preferences screen"
+  },
   "sdkInitFailError": "The initialisation of the HERE SDK failed. Please check your code and/or start the native engine with the default options.",
   "@sdkInitFailError": {
     "description": "HERE SDK initialisation failure message"
@@ -1841,6 +1853,10 @@
   "@trafficDelayText": {
     "description": "Template for the traffic delay text"
   },
+  "transportSpecification": "Transport Specification",
+  "@transportSpecification": {
+    "description": "Title of the transport specification"
+  },
   "tripleAxleGroup": "Triple Axle Group",
   "@tripleAxleGroup": {
     "description": "Title for WeightPerAxleGroup preference for truck specification"
@@ -1857,12 +1873,28 @@
   "@truckAxleWeightHint": {
     "description": "Hint for truck specification preferences"
   },
-  "truckGrossWeightRowTitle": "Gross weight",
-  "@truckGrossWeightRowTitle": {
+  "truckCategoryRowTitle": "Truck Category",
+  "@truckCategoryRowTitle": {
     "description": "Title for truck specification preferences"
   },
   "truckCurrentWeightRowTitle": "Current weight",
   "@truckCurrentWeightRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckEmptyWeightRowTitle": "Empty Weight",
+  "@truckEmptyWeightRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckEngineSizeHint": "cc in range [1, 65535]",
+  "@truckEngineSizeHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckEngineSizeRowTitle": "Engine Size",
+  "@truckEngineSizeRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckGrossWeightRowTitle": "Gross weight",
+  "@truckGrossWeightRowTitle": {
     "description": "Title for truck specification preferences"
   },
   "truckHeightHint": "Height in cm",
@@ -1873,13 +1905,37 @@
   "@truckHeightRowTitle": {
     "description": "Title for truck specification preferences"
   },
+  "truckKingpinToRearAxleDistanceHint": "Distance in cm",
+  "@truckKingpinToRearAxleDistanceHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckKingpinToRearAxleDistanceRowTitle": "Kingpin To Rear Axle Distance",
+  "@truckKingpinToRearAxleDistanceRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckLastCharacterOfLicensePlateHint": "Last Character as string",
+  "@truckLastCharacterOfLicensePlateHint": {
+    "description": "Hint for truck specification preferences"
+  },
+  "truckLastCharacterOfLicensePlateRowTitle": "Last Character Of License Plate",
+  "@truckLastCharacterOfLicensePlateRowTitle": {
+    "description": "Title for truck specification preferences"
+  },
+  "truckLengthHint": "Length in cm",
+  "@truckLengthHint": {
+    "description": "Hint for truck specification preferences"
+  },
   "truckLengthRowTitle": "Length",
   "@truckLengthRowTitle": {
     "description": "Title for truck specification preferences"
   },
-  "truckLengthtHint": "Length in cm",
-  "@truckLengthtHint": {
+  "truckOccupancyHint": "In range [1, 255]",
+  "@truckOccupancyHint": {
     "description": "Hint for truck specification preferences"
+  },
+  "truckOccupancyRowTitle": "Occupancy",
+  "@truckOccupancyRowTitle": {
+    "description": "Title for truck specification preferences"
   },
   "truckSpecificationsTitle": "Truck Specifications",
   "@truckSpecificationsTitle": {
@@ -1900,6 +1956,10 @@
   "truckSpecTrailerCountHint": "Number of trailers in range of 0-255",
   "@truckSpecTrailerCountHint": {
     "description": "Hint for truck specification preferences"
+  },
+  "truckTiresCountRowTitle": "Tires Count",
+  "@truckTiresCountRowTitle": {
+    "description": "Title for truck specification preferences"
   },
   "truckTotalWeightHint": "Total weight in kg",
   "@truckTotalWeightHint": {
@@ -2005,6 +2065,10 @@
   "@uTurns": {
     "description": "Avoid road feature name for route preferences"
   },
+  "vehicleSpecification": "Vehicle Specification",
+  "@vehicleSpecification": {
+    "description": "Title of the vehicle specification"
+  },
   "version": "Version",
   "@version": {
     "description": "Title of the version input"
@@ -2013,11 +2077,11 @@
   "@versionHintAsLong": {
     "description": "Text hint for version as long"
   },
-  "walkSpeedTitle": "Walk Speed",
-  "@walkSpeedTitle": {
-    "description": "Pedestrian route settings title"
+  "walkingSpeedHint": "in range [0.5, 2.0]",
+  "@walkingSpeedHint": {
+    "description": "Hint for walking speed"
   },
-  "walkSpeedUnitTitle": "Walk speed (m/s)",
+  "walkingSpeedUnitTitle": "Walking Speed (m/s)",
   "@walkSpeedUnitTitle": {
     "description": "Pedestrian route settings"
   },

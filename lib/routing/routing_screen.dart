@@ -31,6 +31,7 @@ import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_icon
 import 'package:here_sdk_reference_application_flutter/common/util.dart';
 import 'package:here_sdk_reference_application_flutter/common/utils/navigation/position_status_listener.dart';
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/supported_transport_mode.dart';
 import 'package:provider/provider.dart';
 
 import '../common/application_preferences.dart';
@@ -102,7 +103,7 @@ class _RoutingScreenState extends State<RoutingScreen>
   bool _routingInProgress = false;
 
   late TabController _transportModesTabController;
-  late List<TransportModes> _transportModes;
+  late List<SupportedTransportMode> _transportModes;
   late WayPointsController _wayPointsController;
   DeviceLocationServicesStatusNotifier? _servicesStatusNotifier;
   bool _canLocateUserPosition = false;
@@ -116,7 +117,7 @@ class _RoutingScreenState extends State<RoutingScreen>
 
     _routesTabController = TabController(length: _routes.length, vsync: this);
 
-    _transportModes = TransportModes.values;
+    _transportModes = SupportedTransportMode.values;
     _transportModesTabController = TabController(length: _transportModes.length, vsync: this);
     _transportModesTabController.addListener(() {
       if (!_transportModesTabController.indexIsChanging) {
@@ -584,25 +585,11 @@ class _RoutingScreenState extends State<RoutingScreen>
     _dismissWayPointPopup();
     setState(() => _routingInProgress = true);
     RoutePreferencesModel preferences = Provider.of<RoutePreferencesModel>(context, listen: false);
-
-    switch (_transportModes[_transportModesTabController.index]) {
-      case TransportModes.car:
-        _routingEngine.calculateCarRoute(_wayPointsController.value, preferences.carOptions, _onRoutingEnd);
-        break;
-      case TransportModes.truck:
-        _routingEngine.calculateTruckRoute(_wayPointsController.value, preferences.truckOptions, _onRoutingEnd);
-        break;
-      case TransportModes.scooter:
-        _routingEngine.calculateScooterRoute(_wayPointsController.value, preferences.scooterOptions, _onRoutingEnd);
-        break;
-      case TransportModes.walk:
-        _routingEngine.calculatePedestrianRoute(
-          _wayPointsController.value,
-          preferences.pedestrianOptions,
-          _onRoutingEnd,
-        );
-        break;
-    }
+    _routingEngine.calculateRouteWithRoutingOptions(
+      _wayPointsController.value,
+      preferences.getRoutingOptions(_transportModes[_transportModesTabController.index].mode),
+      _onRoutingEnd,
+    );
   }
 
   _onRoutingEnd(Routing.RoutingError? error, List<Routing.Route>? routes) {

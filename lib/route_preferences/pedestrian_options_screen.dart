@@ -18,7 +18,8 @@
  */
 
 import 'package:flutter/cupertino.dart';
-import 'package:here_sdk/routing.dart';
+import 'package:here_sdk/transport.dart' show PedestrianSpecification;
+import 'package:here_sdk_reference_application_flutter/common/ui_style.dart' show UIStyle;
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -33,8 +34,9 @@ import 'route_text_options_widget.dart';
 class PedestrianOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final PedestrianOptions pedestrianOptions = context.select(
-      (RoutePreferencesModel model) => model.pedestrianOptions,
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
+    final PedestrianSpecification pedestrianSpecification = context.select(
+      (RoutePreferencesModel model) => model.pedestrianSpecification,
     );
 
     return SafeArea(
@@ -44,24 +46,15 @@ class PedestrianOptionsScreen extends StatelessWidget {
           children: [
             RouteOptionsWidget(),
             RouteTextOptionsWidget(),
-            PreferencesSectionTitle(
-              title: AppLocalizations.of(context)!.walkSpeedTitle,
-            ),
-            PreferencesRowTitle(
-              title: AppLocalizations.of(context)!.walkSpeedUnitTitle,
-            ),
+            PreferencesSectionTitle(title: localizations.transportSpecification),
+            PreferencesRowTitle(title: localizations.pedestrianSpecification, fontSize: UIStyle.bigFontSize),
+            PreferencesRowTitle(title: localizations.walkingSpeedUnitTitle),
             NumericTextField(
-              initialValue: pedestrianOptions.walkSpeedInMetersPerSecond
-                  .toString(),
+              initialValue: pedestrianSpecification.walkingSpeedInMetersPerSecond.toString(),
+              hintText: localizations.walkingSpeedHint,
               isInteger: false,
               onChanged: (text) {
-                final PedestrianOptions newOptions = PedestrianOptions()
-                  ..routeOptions = pedestrianOptions.routeOptions
-                  ..textOptions = pedestrianOptions.textOptions
-                  ..avoidanceOptions = AvoidanceOptions()
-                  ..walkSpeedInMetersPerSecond = double.tryParse(text) ?? 0;
-                context.read<RoutePreferencesModel>().pedestrianOptions =
-                    newOptions;
+                context.read<RoutePreferencesModel>().pedestrianSpecification = double.tryParse(text) ?? 0;
               },
             ),
           ],

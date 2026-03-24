@@ -18,31 +18,26 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:here_sdk/routing.dart';
-import 'package:here_sdk/transport.dart' as Transport;
-import 'package:here_sdk_reference_application_flutter/common/extensions/truck_specification_extensions.dart';
+import 'package:here_sdk/transport.dart' show VehicleSpecification;
+import 'package:here_sdk_reference_application_flutter/common/extensions/vehicle_specification_extensions.dart'
+    show VehicleSpecificationExtensions;
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/vehicle_specification_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../common/ui_style.dart';
 import 'avoidance/route_avoidance_options_widget.dart';
-import 'dropdown_widget.dart';
-import 'enum_string_helper.dart';
 import 'preferences_disclosure_row_widget.dart';
-import 'preferences_row_title_widget.dart';
 import 'preferences_section_title_widget.dart';
 import 'route_options_widget.dart';
 import 'route_preferences_model.dart';
 import 'route_text_options_widget.dart';
-import 'truck_hazardous_materials_screen.dart';
-import 'truck_specifications_screen.dart';
 
 /// Routing settings widget for truck mode.
 class TruckOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final TruckOptions truckOptions = context.select(
-      (RoutePreferencesModel model) => model.truckOptions,
+    final VehicleSpecification specification = context.select(
+      (RoutePreferencesModel model) => model.vehicleSpecification,
     );
     final AppLocalizations localizations = AppLocalizations.of(context)!;
     return SafeArea(
@@ -53,59 +48,13 @@ class TruckOptionsScreen extends StatelessWidget {
             RouteOptionsWidget(),
             RouteTextOptionsWidget(),
             RouteAvoidanceOptionsWidget(),
-            PreferencesSectionTitle(
-              title: localizations.truckSpecificationsTitle,
-            ),
+            PreferencesSectionTitle(title: localizations.transportSpecification),
             PreferencesDisclosureRowWidget(
-              title: localizations.specificationsTitle,
-              subTitle: truckOptions.truckSpecifications.specificationsString(
-                localizations,
-              ),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TruckSpecificationsScreen(),
-                ),
-              ),
-            ),
-            PreferencesDisclosureRowWidget(
-              title: localizations.hazardousGoodsTitle,
-              subTitle: EnumStringHelper.hazardousMaterialsNamesToString(
-                context,
-                truckOptions.hazardousMaterials,
-              ),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TruckHazardousMaterialsScreen(),
-                ),
-              ),
-            ),
-            PreferencesRowTitle(title: localizations.tunnelCategoryTitle),
-            Container(
-              decoration: UIStyle.roundedRectDecoration(),
-              child: DropdownButtonHideUnderline(
-                child: DropdownWidget(
-                  data: EnumStringHelper.tunnelCategoryMap(context),
-                  selectedValue: truckOptions.linkTunnelCategory?.index,
-                  onChanged: (category) {
-                    Transport.TunnelCategory? tunnelCategory;
-                    if (category != EnumStringHelper.noneValueIndex) {
-                      tunnelCategory =
-                          Transport.TunnelCategory.values[category];
-                    }
-                    final TruckOptions newOptions = TruckOptions()
-                      ..routeOptions = truckOptions.routeOptions
-                      ..textOptions = truckOptions.textOptions
-                      ..avoidanceOptions = truckOptions.avoidanceOptions
-                      ..truckSpecifications = truckOptions.truckSpecifications
-                      ..linkTunnelCategory = tunnelCategory
-                      ..hazardousMaterials = truckOptions.hazardousMaterials;
-                    context.read<RoutePreferencesModel>().truckOptions =
-                        newOptions;
-                  },
-                ),
-              ),
+              title: localizations.vehicleSpecification,
+              subTitle: specification.specificationsString(localizations),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => VehicleSpecificationScreen()));
+              },
             ),
           ],
         ),
