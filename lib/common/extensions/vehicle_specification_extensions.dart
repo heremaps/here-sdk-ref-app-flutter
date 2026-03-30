@@ -37,7 +37,7 @@ extension VehicleSpecificationExtensions on VehicleSpecification {
     String? weightPerAxleInKilograms,
     WeightPerAxleGroup? weightPerAxleGroup,
     bool? isCommercial,
-    String? lastCharacterOfLicensePlate,
+    String? Function()? lastCharacterOfLicensePlate,
     String? engineSizeInCubicCentimeters,
     String? tiresCount,
     TunnelCategory? Function()? tunnelCategory,
@@ -68,7 +68,9 @@ extension VehicleSpecificationExtensions on VehicleSpecification {
     specification.occupancy = _parse(occupancy, this.occupancy);
     specification.tunnelCategory = tunnelCategory != null ? tunnelCategory() : this.tunnelCategory;
     specification.hazardousMaterials = hazardousMaterials ?? this.hazardousMaterials;
-    specification.lastCharacterOfLicensePlate = lastCharacterOfLicensePlate ?? this.lastCharacterOfLicensePlate;
+    specification.lastCharacterOfLicensePlate = lastCharacterOfLicensePlate != null
+        ? lastCharacterOfLicensePlate()
+        : this.lastCharacterOfLicensePlate;
     specification.truckCategory = truckCategory != null ? truckCategory() : this.truckCategory;
     specification.isCommercial = isCommercial ?? this.isCommercial;
     specification.isTruckLight = isTruckLight ?? this.isTruckLight;

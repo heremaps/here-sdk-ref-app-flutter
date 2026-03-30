@@ -21,14 +21,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:here_sdk/transport.dart' show PedestrianSpecification;
 import 'package:here_sdk_reference_application_flutter/common/ui_style.dart' show UIStyle;
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/avoidance/route_avoidance_options_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/numeric_text_field_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/preferences_row_title_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/preferences_section_title_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/route_options_widget.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/route_preferences_model.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/route_text_options_widget.dart';
 import 'package:provider/provider.dart';
-
-import 'numeric_text_field_widget.dart';
-import 'preferences_row_title_widget.dart';
-import 'preferences_section_title_widget.dart';
-import 'route_options_widget.dart';
-import 'route_preferences_model.dart';
-import 'route_text_options_widget.dart';
 
 /// Routing settings widget for pedestrian mode.
 class PedestrianOptionsScreen extends StatelessWidget {
@@ -46,6 +46,7 @@ class PedestrianOptionsScreen extends StatelessWidget {
           children: [
             RouteOptionsWidget(),
             RouteTextOptionsWidget(),
+            RouteAvoidanceOptionsWidget(),
             PreferencesSectionTitle(title: localizations.transportSpecification),
             PreferencesRowTitle(title: localizations.pedestrianSpecification, fontSize: UIStyle.bigFontSize),
             PreferencesRowTitle(title: localizations.walkingSpeedUnitTitle),

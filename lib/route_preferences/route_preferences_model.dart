@@ -106,7 +106,11 @@ class RoutePreferencesModel extends ChangeNotifier {
         throw UnimplementedError('TransportMode $selectedMode is not supported by the Ref App.');
     }
 
-    return RoutingOptions()..transportSpecification = specification;
+    return RoutingOptions()
+      ..transportSpecification = specification
+      ..avoidanceOptions = _sharedAvoidanceOptions
+      ..textOptions = _sharedRouteTextOptions
+      ..routeOptions = _sharedRouteOptions;
   }
 
   /// Constructs a settings objects with default values.

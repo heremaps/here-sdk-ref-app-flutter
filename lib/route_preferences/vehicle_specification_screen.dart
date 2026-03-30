@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:here_sdk/transport.dart'
     show VehicleSpecification, WeightPerAxleGroup, TruckCategory, TunnelCategory, HazardousMaterial;
 import 'package:here_sdk_reference_application_flutter/common/extensions/vehicle_specification_extensions.dart';
+import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_assets_paths.dart' show HdsAssetsPaths;
+import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_icon_widget.dart' show HdsIconWidget;
 import 'package:here_sdk_reference_application_flutter/common/ui_style.dart';
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
 import 'package:here_sdk_reference_application_flutter/route_preferences/dropdown_widget.dart';
@@ -37,6 +39,11 @@ import 'package:provider/provider.dart';
 class VehicleSpecificationScreen extends StatelessWidget {
   const VehicleSpecificationScreen({super.key});
 
+  void _onClearData(BuildContext context) {
+    context.read<RoutePreferencesModel>().vehicleSpecification = VehicleSpecification();
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
@@ -46,7 +53,16 @@ class VehicleSpecificationScreen extends StatelessWidget {
     WeightPerAxleGroup _weightPerAxleGroup = _specification.weightPerAxleGroup ?? WeightPerAxleGroup();
 
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.vehicleSpecification)),
+      appBar: AppBar(
+        title: Text(localizations.vehicleSpecification),
+        actions: [
+          IconButton(
+            icon: const HdsIconWidget(HdsAssetsPaths.clearIcon),
+            padding: const EdgeInsets.all(UIStyle.contentMarginMedium),
+            onPressed: () => _onClearData(context),
+          ),
+        ],
+      ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         child: Container(
@@ -176,6 +192,7 @@ class VehicleSpecificationScreen extends StatelessWidget {
               Container(
                 decoration: UIStyle.roundedRectDecoration(),
                 child: TextFormField(
+                  initialValue: _specification.lastCharacterOfLicensePlate ?? "",
                   decoration: InputDecoration(
                     hintText: localizations.truckLastCharacterOfLicensePlateHint,
                     border: InputBorder.none,
@@ -183,7 +200,7 @@ class VehicleSpecificationScreen extends StatelessWidget {
                   ),
                   onChanged: (text) {
                     context.read<RoutePreferencesModel>().vehicleSpecification = _specification.copyWith(
-                      lastCharacterOfLicensePlate: text.isNotEmpty ? text : null,
+                      lastCharacterOfLicensePlate: () => text.isNotEmpty ? text : null,
                     );
                   },
                 ),

@@ -35,16 +35,12 @@ class CountryAvoidanceScreen extends StatelessWidget {
       (RoutePreferencesModel model) => model.sharedAvoidanceOptions,
     );
 
-    Map<String, CountryCode> countryCodesMap = EnumStringHelper.countryCodesMap(
-      context,
-    );
+    Map<String, CountryCode> countryCodesMap = EnumStringHelper.countryCodesMap(context);
     List<String> sortedCountryNames = countryCodesMap.keys.toList()..sort();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.avoidCountriesTitle),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.avoidCountriesTitle)),
       body: Container(
         color: UIStyle.preferencesBackgroundColor,
         child: ListView.builder(
@@ -55,24 +51,16 @@ class CountryAvoidanceScreen extends StatelessWidget {
               title: Text(sortedCountryNames[index]),
               value: avoidanceOptions.countries.contains(code),
               onChanged: (bool? enable) {
-                List<CountryCode> updatedCountries = List.from(
-                  avoidanceOptions.countries,
-                );
+                List<CountryCode> updatedCountries = List.from(avoidanceOptions.countries);
                 if (enable ?? false) {
                   updatedCountries.add(code);
                 } else {
                   updatedCountries.remove(code);
                 }
-
-                final AvoidanceOptions newOptions = AvoidanceOptions()
+                context.read<RoutePreferencesModel>().sharedAvoidanceOptions = AvoidanceOptions()
                   ..roadFeatures = avoidanceOptions.roadFeatures
                   ..countries = updatedCountries
-                  ..avoidBoundingBoxAreasOptions =
-                      avoidanceOptions.avoidBoundingBoxAreasOptions
-                  ..zoneCategories = avoidanceOptions.zoneCategories
-                  ..segments = avoidanceOptions.segments;
-                context.read<RoutePreferencesModel>().sharedAvoidanceOptions =
-                    newOptions;
+                  ..zoneCategories = avoidanceOptions.zoneCategories;
               },
             );
           },

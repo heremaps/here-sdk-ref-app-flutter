@@ -36,45 +36,33 @@ class RoadFeaturesAvoidanceScreen extends StatelessWidget {
       (RoutePreferencesModel model) => model.sharedAvoidanceOptions,
     );
 
-    LinkedHashMap<String, RoadFeatures> roadFeaturesMap =
-        EnumStringHelper.sortedRoadFeaturesMap(context);
+    LinkedHashMap<String, RoadFeatures> roadFeaturesMap = EnumStringHelper.sortedRoadFeaturesMap(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.avoidRoadFeaturesTitle),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.avoidRoadFeaturesTitle)),
       body: Container(
         color: UIStyle.preferencesBackgroundColor,
         child: ListView(
           children: roadFeaturesMap.keys.map((String key) {
             return CheckboxListTile(
               title: Text(key),
-              value: avoidanceOptions.roadFeatures.contains(
-                roadFeaturesMap[key],
-              ),
+              value: avoidanceOptions.roadFeatures.contains(roadFeaturesMap[key]),
               onChanged: (bool? enable) {
                 RoadFeatures? changedFeature = roadFeaturesMap[key];
                 if (changedFeature == null) {
                   return;
                 }
-                List<RoadFeatures> updatedFeatures = List.from(
-                  avoidanceOptions.roadFeatures,
-                );
+                List<RoadFeatures> updatedFeatures = List.from(avoidanceOptions.roadFeatures);
                 if (enable ?? false) {
                   updatedFeatures.add(changedFeature);
                 } else {
                   updatedFeatures.remove(changedFeature);
                 }
-                final AvoidanceOptions newOptions = AvoidanceOptions()
+                context.read<RoutePreferencesModel>().sharedAvoidanceOptions = AvoidanceOptions()
                   ..roadFeatures = updatedFeatures
                   ..countries = avoidanceOptions.countries
-                  ..avoidBoundingBoxAreasOptions =
-                      avoidanceOptions.avoidBoundingBoxAreasOptions
-                  ..zoneCategories = avoidanceOptions.zoneCategories
-                  ..segments = avoidanceOptions.segments;
-                context.read<RoutePreferencesModel>().sharedAvoidanceOptions =
-                    newOptions;
+                  ..zoneCategories = avoidanceOptions.zoneCategories;
               },
             );
           }).toList(),

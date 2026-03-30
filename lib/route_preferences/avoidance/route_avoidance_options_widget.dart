@@ -20,6 +20,7 @@
 import 'package:flutter/material.dart';
 import 'package:here_sdk/routing.dart';
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/route_preferences/avoidance/zone_category_avoidance_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../enum_string_helper.dart';
@@ -39,32 +40,25 @@ class RouteAvoidanceOptionsWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        PreferencesSectionTitle(
-          title: AppLocalizations.of(context)!.avoidanceOptionsTitle,
-        ),
+        PreferencesSectionTitle(title: AppLocalizations.of(context)!.avoidanceOptionsTitle),
         PreferencesDisclosureRowWidget(
           title: AppLocalizations.of(context)!.avoidRoadFeaturesTitle,
-          subTitle: EnumStringHelper.roadFeatureNamesToString(
-            context,
-            avoidanceOptions.roadFeatures,
-          ),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RoadFeaturesAvoidanceScreen(),
-            ),
-          ),
+          subTitle: EnumStringHelper.roadFeatureNamesToString(context, avoidanceOptions.roadFeatures),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => RoadFeaturesAvoidanceScreen()));
+          },
         ),
         PreferencesDisclosureRowWidget(
           title: AppLocalizations.of(context)!.avoidCountriesTitle,
-          subTitle: EnumStringHelper.countryCodeNamesToString(
-            context,
-            avoidanceOptions.countries,
-          ),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CountryAvoidanceScreen()),
-          ),
+          subTitle: EnumStringHelper.countryCodeNamesToString(context, avoidanceOptions.countries),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CountryAvoidanceScreen())),
+        ),
+        PreferencesDisclosureRowWidget(
+          title: AppLocalizations.of(context)!.avoidZoneCategoriesTitle,
+          subTitle: EnumStringHelper.zoneCategoryNamesToString(context, avoidanceOptions.zoneCategories),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ZoneCategoryAvoidanceScreen()));
+          },
         ),
       ],
     );

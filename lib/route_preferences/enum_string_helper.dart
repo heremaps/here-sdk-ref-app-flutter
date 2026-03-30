@@ -179,6 +179,36 @@ class EnumStringHelper {
     return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]!);
   }
 
+  /// Returns concatenated string of the all values from the [zoneCategories] list.
+  static String zoneCategoryNamesToString(BuildContext context, List<ZoneCategory> zoneCategories) {
+    List<String> result = <String>[];
+    sortedZoneCategoriesMap(context).forEach((key, value) {
+      if (zoneCategories.contains(value)) result.add(key);
+    });
+    return result.join(", ");
+  }
+
+  /// Returns the mapping of [ZoneCategory] values to the corresponding strings.
+  static LinkedHashMap<String, ZoneCategory> sortedZoneCategoriesMap(BuildContext context) {
+    final Map<String, ZoneCategory> result = Map<String, ZoneCategory>();
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
+    for (ZoneCategory value in ZoneCategory.values) {
+      switch (value) {
+        case ZoneCategory.environmental:
+          result[localizations.zoneCategoryEnvironmental] = value;
+          break;
+        case ZoneCategory.vignette:
+          result[localizations.zoneCategoryVignette] = value;
+          break;
+        case ZoneCategory.congestionPricing:
+          result[localizations.zoneCategoryCongestionPricing] = value;
+          break;
+      }
+    }
+    return LinkedHashMap.fromIterable(result.keys.toList()..sort(), key: (k) => k, value: (k) => result[k]!);
+  }
+
   /// Returns concatenated string of the all values from the [hazardousMaterials] list.
   static String hazardousMaterialsNamesToString(
     BuildContext context,

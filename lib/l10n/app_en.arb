@@ -59,6 +59,10 @@
   "@avoidRoadFeaturesTitle": {
     "description": "Title of avoid road row in route preferences"
   },
+  "avoidZoneCategoriesTitle": "Avoid Zone Categories",
+  "@avoidZoneCategoriesTitle": {
+    "description": "Title of avoid zone categories row in route preferences"
+  },
   "backgroundPositioningWarning": "Positioning is not enabled for the background handling.",
   "@backgroundPositioningWarning": {
     "description": "No background location services warning"
@@ -2108,5 +2112,17 @@
   "yourLocationTitle": "Your location",
   "@yourLocationTitle": {
     "description": "Your location title"
+  },
+  "zoneCategoryCongestionPricing": "Congestion Pricing",
+  "@zoneCategoryCongestionPricing": {
+    "description": "Avoid zone category name for route preferences"
+  },
+  "zoneCategoryEnvironmental": "Environmental",
+  "@zoneCategoryEnvironmental": {
+    "description": "Avoid zone category name for route preferences"
+  },
+  "zoneCategoryVignette": "Vignette",
+  "@zoneCategoryVignette": {
+    "description": "Avoid zone category name for route preferences"
   }
 }
