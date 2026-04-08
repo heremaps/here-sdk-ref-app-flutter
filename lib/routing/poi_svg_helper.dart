@@ -81,13 +81,8 @@ class PoiSVGHelper {
   static const int _charAverageWidth = 4;
 
   /// returns SVG images for desired POI icon [type] and [text].
-  static SvgInfo getPoiSvgForCategoryAndText({
-    required PoiIconType type,
-    String? text,
-  }) {
-    int width = text != null
-        ? text.length * _charAverageWidth + _minIconSize
-        : 0;
+  static SvgInfo getPoiSvgForCategoryAndText({required PoiIconType type, String? text}) {
+    int width = text != null ? text.length * _charAverageWidth + _minIconSize : 0;
 
     String icon;
     switch (type) {

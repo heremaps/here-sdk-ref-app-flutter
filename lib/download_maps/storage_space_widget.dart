@@ -44,10 +44,7 @@ class _StorageSpaceState extends State<StorageSpace> {
   @override
   void initState() {
     super.initState();
-    _updateTimer = Timer.periodic(
-      Duration(seconds: 1),
-      (timer) => _updateDiskSpace(),
-    );
+    _updateTimer = Timer.periodic(Duration(seconds: 1), (timer) => _updateDiskSpace());
     _updateDiskSpace();
   }
 
@@ -71,10 +68,7 @@ class _StorageSpaceState extends State<StorageSpace> {
             child: RichText(
               text: TextSpan(
                 text: "${appLocalizations.internalStorageText} (",
-                style: TextStyle(
-                  color: colorScheme.primary,
-                  fontSize: UIStyle.bigFontSize,
-                ),
+                style: TextStyle(color: colorScheme.primary, fontSize: UIStyle.bigFontSize),
                 children: [
                   TextSpan(
                     text: Util.makeStorageSizeString(context, _totalSpace),

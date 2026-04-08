@@ -45,19 +45,14 @@ class ReroutingIndicator extends StatelessWidget {
               height: UIStyle.bigButtonHeight,
               child: CircularProgressIndicator(
                 backgroundColor: UIStyle.reroutingProgressBackgroundColor,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  UIStyle.reroutingProgressColor,
-                ),
+                valueColor: AlwaysStoppedAnimation<Color>(UIStyle.reroutingProgressColor),
               ),
             ),
           ),
           Expanded(
             child: Text(
               title ?? AppLocalizations.of(context)!.reroutingInProgressText,
-              style: TextStyle(
-                color: colorScheme.surface,
-                fontSize: UIStyle.extraHugeFontSize,
-              ),
+              style: TextStyle(color: colorScheme.surface, fontSize: UIStyle.extraHugeFontSize),
             ),
           ),
         ],

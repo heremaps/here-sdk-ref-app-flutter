@@ -39,11 +39,8 @@ class NavigationSpeed extends StatelessWidget {
   final Navigation.SpeedWarningStatus speedWarningStatus;
 
   /// Constructs a widget.
-  NavigationSpeed({
-    required this.currentSpeed,
-    double? speedLimit,
-    required this.speedWarningStatus,
-  }) : speedLimit = speedLimit != null && speedLimit > 0 ? speedLimit : null;
+  NavigationSpeed({required this.currentSpeed, double? speedLimit, required this.speedWarningStatus})
+    : speedLimit = speedLimit != null && speedLimit > 0 ? speedLimit : null;
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +58,7 @@ class NavigationSpeed extends StatelessWidget {
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
               child: Padding(
-                padding: EdgeInsets.only(
-                  top: UIStyle.contentMarginLarge,
-                  bottom: UIStyle.contentMarginLarge,
-                ),
+                padding: EdgeInsets.only(top: UIStyle.contentMarginLarge, bottom: UIStyle.contentMarginLarge),
                 child: Container(
                   width: UIStyle.bigButtonHeight,
                   height: speedLimit != null ? _kSpeedWidgetHeight : null,
@@ -77,21 +71,14 @@ class NavigationSpeed extends StatelessWidget {
                         (currentSpeed * _kKMpHinMpS).truncate().toString(),
                         style: TextStyle(
                           fontSize: UIStyle.extraHugeFontSize,
-                          color:
-                              speedWarningStatus ==
-                                  Navigation
-                                      .SpeedWarningStatus
-                                      .speedLimitExceeded
+                          color: speedWarningStatus == Navigation.SpeedWarningStatus.speedLimitExceeded
                               ? Colors.red
                               : colorScheme.primary,
                         ),
                       ),
                       Text(
                         AppLocalizations.of(context)!.kmhAbbreviationText,
-                        style: TextStyle(
-                          fontSize: UIStyle.bigFontSize,
-                          color: colorScheme.onSecondary,
-                        ),
+                        style: TextStyle(fontSize: UIStyle.bigFontSize, color: colorScheme.onSecondary),
                       ),
                     ],
                   ),
@@ -110,21 +97,13 @@ class NavigationSpeed extends StatelessWidget {
                   width: UIStyle.bigButtonHeight + _kSpeedSignBorderWidth * 2,
                   height: UIStyle.bigButtonHeight + _kSpeedSignBorderWidth * 2,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.red,
-                      width: _kSpeedSignBorderWidth,
-                    ),
-                    borderRadius: BorderRadius.circular(
-                      UIStyle.bigButtonHeight,
-                    ),
+                    border: Border.all(color: Colors.red, width: _kSpeedSignBorderWidth),
+                    borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
                   ),
                   child: Center(
                     child: Text(
                       (speedLimit! * _kKMpHinMpS).truncate().toString(),
-                      style: TextStyle(
-                        fontSize: UIStyle.extraHugeFontSize,
-                        color: colorScheme.primary,
-                      ),
+                      style: TextStyle(fontSize: UIStyle.extraHugeFontSize, color: colorScheme.primary),
                     ),
                   ),
                 ),

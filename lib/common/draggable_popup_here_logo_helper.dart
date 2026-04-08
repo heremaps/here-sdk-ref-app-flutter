@@ -48,12 +48,10 @@ class DraggablePopupHereLogoHelper extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DraggablePopupHereLogoHelperState createState() =>
-      _DraggablePopupHereLogoHelperState();
+  _DraggablePopupHereLogoHelperState createState() => _DraggablePopupHereLogoHelperState();
 }
 
-class _DraggablePopupHereLogoHelperState
-    extends State<DraggablePopupHereLogoHelper> {
+class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHelper> {
   bool _processEvents = true;
 
   @override
@@ -61,9 +59,7 @@ class _DraggablePopupHereLogoHelperState
     super.initState();
     SchedulerBinding.instance.scheduleFrameCallback(
       (timeStamp) => SchedulerBinding.instance.addPostFrameCallback(
-        (timeStamp) => _updateHereLogoPosition(
-          widget.draggableScrollableSheet.initialChildSize,
-        ),
+        (timeStamp) => _updateHereLogoPosition(widget.draggableScrollableSheet.initialChildSize),
       ),
     );
   }
@@ -91,28 +87,18 @@ class _DraggablePopupHereLogoHelperState
 
     final double height = MediaQuery.of(context).size.height;
     final double popupHeight = height * extent;
-    final RenderBox box =
-        widget.hereMapKey.currentContext!.findRenderObject() as RenderBox;
-    final double margin =
-        (popupHeight - (height - box.paintBounds.bottom)) *
-        widget.hereMapController.pixelScale;
+    final RenderBox box = widget.hereMapKey.currentContext!.findRenderObject() as RenderBox;
+    final double margin = (popupHeight - (height - box.paintBounds.bottom)) * widget.hereMapController.pixelScale;
 
     if (margin >= 0) {
       widget.hereMapController.setWatermarkLocation(
         Anchor2D.withHorizontalAndVertical(0.5, 1),
-        Point2D(
-          0,
-          -(widget.hereMapController.watermarkSize.height / 2) -
-              margin.truncate(),
-        ),
+        Point2D(0, -(widget.hereMapController.watermarkSize.height / 2) - margin.truncate()),
       );
     } else {
       widget.hereMapController.setWatermarkLocation(
         Anchor2D.withHorizontalAndVertical(0, 1),
-        Point2D(
-          -widget.hereMapController.watermarkSize.width / 2,
-          -widget.hereMapController.watermarkSize.height / 2,
-        ),
+        Point2D(-widget.hereMapController.watermarkSize.width / 2, -widget.hereMapController.watermarkSize.height / 2),
       );
     }
   }

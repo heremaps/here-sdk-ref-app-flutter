@@ -37,9 +37,7 @@ Future<void> createSDKNativeEngine({
     print('SDKNativeEngine created successfully!');
     onSuccess?.call();
   } on Exception catch (e) {
-    final String error = e is InstantiationException
-        ? '${e.error}'
-        : e.toString();
+    final String error = e is InstantiationException ? '${e.error}' : e.toString();
     print('Failed to create SDKNativeEngine: $error');
     onFailure?.call(error);
   }

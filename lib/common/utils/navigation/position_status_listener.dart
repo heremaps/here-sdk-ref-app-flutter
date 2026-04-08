@@ -30,10 +30,7 @@ abstract class PositioningStatusListener {
   ///
   /// [isPositioningAvailable] - A boolean value indicating whether positioning is available
   /// (true if available, false if not available).
-  void didDevicePositioningStatusUpdated({
-    required bool isPositioningAvailable,
-    required bool hasPermissionsGranted,
-  });
+  void didDevicePositioningStatusUpdated({required bool isPositioningAvailable, required bool hasPermissionsGranted});
 }
 
 class DeviceLocationServicesStatusNotifier {
@@ -45,9 +42,7 @@ class DeviceLocationServicesStatusNotifier {
     // Stop the previous status stream, if there is any.
     stop();
     _listener = listener;
-    _serviceStatusSteam = Geolocator.getServiceStatusStream().listen(
-      _serviceListener,
-    );
+    _serviceStatusSteam = Geolocator.getServiceStatusStream().listen(_serviceListener);
   }
 
   /// Stops the location services status listener and no longer notifies about status change.
@@ -57,13 +52,11 @@ class DeviceLocationServicesStatusNotifier {
 
   Future<bool> _hasLocationPermissions() async {
     final LocationPermission permission = await Geolocator.checkPermission();
-    return permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse;
+    return permission == LocationPermission.always || permission == LocationPermission.whileInUse;
   }
 
   Future<bool> canLocateUserPositioning() async {
-    return (await _hasLocationPermissions()) &&
-        await Geolocator.isLocationServiceEnabled();
+    return (await _hasLocationPermissions()) && await Geolocator.isLocationServiceEnabled();
   }
 
   Future<void> _serviceListener(ServiceStatus event) async {

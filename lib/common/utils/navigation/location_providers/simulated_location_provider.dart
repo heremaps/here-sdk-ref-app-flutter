@@ -24,12 +24,8 @@ import 'package:here_sdk/routing.dart';
 import 'package:here_sdk_reference_application_flutter/common/extensions/location_listener_extension.dart';
 import 'package:here_sdk_reference_application_flutter/common/utils/navigation/location_provider_interface.dart';
 
-class SimulatedLocationProvider extends LocationProviderInterface
-    implements LocationListener {
-  SimulatedLocationProvider.withRoute(
-    Route route,
-    LocationSimulatorOptions options,
-  ) {
+class SimulatedLocationProvider extends LocationProviderInterface implements LocationListener {
+  SimulatedLocationProvider.withRoute(Route route, LocationSimulatorOptions options) {
     _simulator = LocationSimulator.withRoute(route, options);
     _simulator.listener = this;
   }
@@ -75,6 +71,5 @@ class SimulatedLocationProvider extends LocationProviderInterface
   void removeListeners() => _listeners.clear();
 
   @override
-  void onLocationUpdated(Location location) =>
-      _listeners.notifyOnLocationUpdated(location);
+  void onLocationUpdated(Location location) => _listeners.notifyOnLocationUpdated(location);
 }

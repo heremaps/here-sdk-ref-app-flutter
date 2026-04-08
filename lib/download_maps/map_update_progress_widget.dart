@@ -39,22 +39,15 @@ class MapUpdateProgress extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.updatingMapTitle,
-            style: TextStyle(
-              fontSize: UIStyle.bigFontSize,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: UIStyle.bigFontSize, fontWeight: FontWeight.bold),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: UIStyle.contentMarginMedium,
-            ),
+            padding: EdgeInsets.symmetric(vertical: UIStyle.contentMarginMedium),
             child: LinearProgressIndicator(
               value: controller.mapUpdateState != MapUpdateState.cancelling
                   ? controller.mapUpdateProgress! / 100
                   : null,
-              valueColor: AlwaysStoppedAnimation(
-                Theme.of(context).colorScheme.secondary,
-              ),
+              valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.secondary),
               backgroundColor: Theme.of(context).dividerColor,
             ),
           ),
@@ -63,24 +56,12 @@ class MapUpdateProgress extends StatelessWidget {
             children: [
               Spacer(),
               if (controller.mapUpdateState == MapUpdateState.progress)
-                _buildButton(
-                  context,
-                  HdsIconWidget(HdsAssetsPaths.pauseIcon),
-                  () => controller.pauseMapUpdate(),
-                ),
+                _buildButton(context, HdsIconWidget(HdsAssetsPaths.pauseIcon), () => controller.pauseMapUpdate()),
               if (controller.mapUpdateState == MapUpdateState.paused)
-                _buildButton(
-                  context,
-                  HdsIconWidget(HdsAssetsPaths.playIcon),
-                  () => controller.resumeMapUpdate(),
-                ),
+                _buildButton(context, HdsIconWidget(HdsAssetsPaths.playIcon), () => controller.resumeMapUpdate()),
               Container(width: UIStyle.contentMarginMedium),
               if (controller.mapUpdateState != MapUpdateState.cancelling)
-                _buildButton(
-                  context,
-                  HdsIconWidget(HdsAssetsPaths.crossIcon),
-                  () => controller.cancelMapUpdate(),
-                ),
+                _buildButton(context, HdsIconWidget(HdsAssetsPaths.crossIcon), () => controller.cancelMapUpdate()),
             ],
           ),
           Divider(),
@@ -89,18 +70,17 @@ class MapUpdateProgress extends StatelessWidget {
     ),
   );
 
-  Widget _buildButton(BuildContext context, Widget icon, VoidCallback onTap) =>
-      ClipOval(
-        child: Material(
-          child: Ink(
-            width: UIStyle.smallButtonHeight,
-            height: UIStyle.smallButtonHeight,
-            color: Theme.of(context).dividerColor,
-            child: InkWell(
-              child: Center(child: icon),
-              onTap: onTap,
-            ),
-          ),
+  Widget _buildButton(BuildContext context, Widget icon, VoidCallback onTap) => ClipOval(
+    child: Material(
+      child: Ink(
+        width: UIStyle.smallButtonHeight,
+        height: UIStyle.smallButtonHeight,
+        color: Theme.of(context).dividerColor,
+        child: InkWell(
+          child: Center(child: icon),
+          onTap: onTap,
         ),
-      );
+      ),
+    ),
+  );
 }

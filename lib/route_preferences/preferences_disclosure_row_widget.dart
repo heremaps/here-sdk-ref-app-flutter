@@ -35,11 +35,7 @@ class PreferencesDisclosureRowWidget extends StatelessWidget {
   final VoidCallback onPressed;
 
   /// Constructs a widget.
-  PreferencesDisclosureRowWidget({
-    required this.title,
-    required this.onPressed,
-    this.subTitle,
-  });
+  PreferencesDisclosureRowWidget({required this.title, required this.onPressed, this.subTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -58,28 +54,20 @@ class PreferencesDisclosureRowWidget extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: UIStyle.bigFontSize,
-                      ),
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: UIStyle.bigFontSize),
                     ),
                     if (subTitle?.isNotEmpty ?? false)
                       Text(
                         subTitle!,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                         textAlign: TextAlign.left,
                       ),
                   ],
                 ),
               ),
               IconButton(
-                icon: HdsIconWidget(
-                  HdsAssetsPaths.chevronRightIcon,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
+                icon: HdsIconWidget(HdsAssetsPaths.chevronRightIcon, color: Theme.of(context).colorScheme.onSecondary),
                 onPressed: onPressed,
               ),
             ],

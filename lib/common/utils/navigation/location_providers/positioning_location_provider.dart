@@ -22,8 +22,7 @@ import 'package:here_sdk/location.dart';
 
 import '../location_provider_interface.dart';
 
-class PositioningLocationProvider extends LocationProviderInterface
-    implements LocationListener {
+class PositioningLocationProvider extends LocationProviderInterface implements LocationListener {
   PositioningLocationProvider() : _locationEngine = LocationEngine();
 
   final LocationEngine _locationEngine;

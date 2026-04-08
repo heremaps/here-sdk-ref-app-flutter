@@ -55,44 +55,24 @@ class RouteInfo extends StatelessWidget {
               children: [
                 RichText(
                   text: TextSpan(
-                    text:
-                        _buildDurationString(
-                          context,
-                          route.duration.inSeconds,
-                        ) +
-                        " ",
+                    text: _buildDurationString(context, route.duration.inSeconds) + " ",
                     style: TextStyle(
                       fontSize: UIStyle.hugeFontSize,
                       fontWeight: FontWeight.bold,
                       color: colorScheme.primary,
                     ),
                     children: [
-                      if (route.trafficDelay.inSeconds >
-                          Duration.secondsPerMinute)
+                      if (route.trafficDelay.inSeconds > Duration.secondsPerMinute)
                         TextSpan(
-                          text: Util.formatString(
-                            AppLocalizations.of(context)!.trafficDelayText,
-                            [
-                              _buildDurationString(
-                                context,
-                                route.trafficDelay.inSeconds,
-                              ),
-                            ],
-                          ),
-                          style: TextStyle(
-                            fontSize: UIStyle.mediumFontSize,
-                            color: UIStyle.trafficWarningColor,
-                          ),
+                          text: Util.formatString(AppLocalizations.of(context)!.trafficDelayText, [
+                            _buildDurationString(context, route.trafficDelay.inSeconds),
+                          ]),
+                          style: TextStyle(fontSize: UIStyle.mediumFontSize, color: UIStyle.trafficWarningColor),
                         )
                       else
                         TextSpan(
-                          text: AppLocalizations.of(
-                            context,
-                          )!.noTrafficDelaysText,
-                          style: TextStyle(
-                            fontSize: UIStyle.smallFontSize,
-                            color: colorScheme.onSecondary,
-                          ),
+                          text: AppLocalizations.of(context)!.noTrafficDelaysText,
+                          style: TextStyle(fontSize: UIStyle.smallFontSize, color: colorScheme.onSecondary),
                         ),
                     ],
                   ),
@@ -131,8 +111,7 @@ class RouteInfo extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (onRouteDetails != null && onNavigation != null)
-                Container(width: UIStyle.contentMarginMedium),
+              if (onRouteDetails != null && onNavigation != null) Container(width: UIStyle.contentMarginMedium),
               if (onNavigation != null)
                 SizedBox(
                   width: UIStyle.smallButtonHeight,
@@ -167,11 +146,9 @@ class RouteInfo extends StatelessWidget {
     if (hours == 0) {
       return "$minutes ${AppLocalizations.of(context)!.minuteAbbreviationText}";
     } else {
-      String result =
-          "$hours ${AppLocalizations.of(context)!.hourAbbreviationText}";
+      String result = "$hours ${AppLocalizations.of(context)!.hourAbbreviationText}";
       if (minutes != 0) {
-        result +=
-            " $minutes ${AppLocalizations.of(context)!.minuteAbbreviationText}";
+        result += " $minutes ${AppLocalizations.of(context)!.minuteAbbreviationText}";
       }
       return result;
     }

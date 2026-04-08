@@ -33,11 +33,7 @@ class PreferencesSectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: UIStyle.contentMarginExtraHuge),
-      child: Row(
-        children: <Widget>[
-          Text(title, style: UIStyle.optionsSectionStyle(context)),
-        ],
-      ),
+      child: Row(children: <Widget>[Text(title, style: UIStyle.optionsSectionStyle(context))]),
     );
   }
 }

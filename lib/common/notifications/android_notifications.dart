@@ -40,17 +40,14 @@ class AndroidNotificationsManager implements NotificationsManager {
 
   @override
   Future<bool?> requestNotificationPermissions() async {
-    final PermissionStatus notificationPermission = await Permission
-        .notification
-        .request();
+    final PermissionStatus notificationPermission = await Permission.notification.request();
     return notificationPermission.isGranted || notificationPermission.isLimited;
   }
 
   @override
   Future<void> showNotification(NotificationBody body) async {
     try {
-      final String savedImagePath =
-          await FileUtility.saveManeuverImageFromBundle(body.imagePath);
+      final String savedImagePath = await FileUtility.saveManeuverImageFromBundle(body.imagePath);
       await _kAndroidServiceChannel.invokeMethod(_kAndroidServiceStartCommand, {
         _kTitleParam: body.title,
         _kContentParam: body.body,

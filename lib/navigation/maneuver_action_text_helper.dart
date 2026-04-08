@@ -44,17 +44,9 @@ extension ManeuverActionHelper on Maneuver {
       case ManeuverAction.arrive:
         return localizations.arriveActionText;
       case ManeuverAction.continueOn:
-        return _makeActionString(
-          localizations.continueOnActionText,
-          localizations.continueOnActionRoadText,
-          roadName,
-        );
+        return _makeActionString(localizations.continueOnActionText, localizations.continueOnActionRoadText, roadName);
       case ManeuverAction.depart:
-        return _makeActionString(
-          localizations.departActionText,
-          localizations.departActionRoadText,
-          roadName,
-        );
+        return _makeActionString(localizations.departActionText, localizations.departActionRoadText, roadName);
       case ManeuverAction.leftExit:
         return _makeActionString(
           localizations.leftExitActionText,

@@ -31,11 +31,7 @@ class RoutePoiOptionsItem extends StatefulWidget {
   final ValueChanged<bool> onChanged;
 
   /// Constructs a widget.
-  RoutePoiOptionsItem({
-    this.value = false,
-    required this.title,
-    required this.onChanged,
-  });
+  RoutePoiOptionsItem({this.value = false, required this.title, required this.onChanged});
 
   @override
   _RoutePoiOptionsItemState createState() => _RoutePoiOptionsItemState();

@@ -30,11 +30,8 @@ class RouteProgress extends StatelessWidget {
   final int remainingDistanceInMeters;
 
   /// Constructs a widget.
-  RouteProgress({
-    Key? key,
-    required this.routeLengthInMeters,
-    required this.remainingDistanceInMeters,
-  }) : super(key: key);
+  RouteProgress({Key? key, required this.routeLengthInMeters, required this.remainingDistanceInMeters})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -73,20 +70,14 @@ class _RoutePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
     double currentPosition =
-        (routeLengthInMeters - remainingDistanceInMeters) /
-            routeLengthInMeters *
-            (size.width - _kLineWidth * 4) +
+        (routeLengthInMeters - remainingDistanceInMeters) / routeLengthInMeters * (size.width - _kLineWidth * 4) +
         _kLineWidth * 2;
 
     paint.color = travelledColor;
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = _kLineWidth;
 
-    canvas.drawLine(
-      Offset(_kLineWidth * 2, size.height / 2),
-      Offset(currentPosition, size.height / 2),
-      paint,
-    );
+    canvas.drawLine(Offset(_kLineWidth * 2, size.height / 2), Offset(currentPosition, size.height / 2), paint);
     paint.strokeWidth = 1;
     canvas.drawCircle(Offset(_kLineWidth, size.height / 2), _kLineWidth, paint);
 
@@ -98,11 +89,7 @@ class _RoutePainter extends CustomPainter {
       paint,
     );
     paint.strokeWidth = 1;
-    canvas.drawCircle(
-      Offset(size.width - _kLineWidth, size.height / 2),
-      _kLineWidth,
-      paint,
-    );
+    canvas.drawCircle(Offset(size.width - _kLineWidth, size.height / 2), _kLineWidth, paint);
 
     Path currentPositionShape = Path()
       ..moveTo(_kPositionSize, 0)

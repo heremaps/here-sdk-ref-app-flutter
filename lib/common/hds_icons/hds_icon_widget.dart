@@ -102,17 +102,12 @@ class HdsIconWidget extends StatelessWidget {
             height: height,
             colorFilter: ignoreColor
                 ? null
-                : ColorFilter.mode(
-                    color ?? Theme.of(context).colorScheme.primary,
-                    BlendMode.srcIn,
-                  ),
+                : ColorFilter.mode(color ?? Theme.of(context).colorScheme.primary, BlendMode.srcIn),
           )
         : ImageIcon(
             AssetImage(assetPath),
             size: width,
-            color: ignoreColor
-                ? null
-                : color ?? Theme.of(context).colorScheme.primary,
+            color: ignoreColor ? null : color ?? Theme.of(context).colorScheme.primary,
           );
   }
 }

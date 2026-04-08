@@ -31,10 +31,7 @@ extension RegionExtensions on List<Region>? {
 
   List<RegionId> regionIds() {
     if (this != null) {
-      return this!
-          .map((e) => [e.regionId, ..._getChildRegionIds(e) ?? <RegionId>[]])
-          .expand((e) => e)
-          .toList();
+      return this!.map((e) => [e.regionId, ..._getChildRegionIds(e) ?? <RegionId>[]]).expand((e) => e).toList();
     } else {
       return <RegionId>[];
     }

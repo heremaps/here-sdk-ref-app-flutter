@@ -58,19 +58,11 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
   @override
   void initState() {
     super.initState();
-    MapLoaderController controller = Provider.of<MapLoaderController>(
-      context,
-      listen: false,
-    );
-    _errorStreamSubscription = controller.getMapUpdateErrors.listen((
-      MapLoaderError error,
-    ) {
+    MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
+    _errorStreamSubscription = controller.getMapUpdateErrors.listen((MapLoaderError error) {
       print('Map downloading failed. Error: ${error.toString()}');
       if (mounted) {
-        ErrorToaster.makeToast(
-          context,
-          error.errorMessage(AppLocalizations.of(context)!),
-        );
+        ErrorToaster.makeToast(context, error.errorMessage(AppLocalizations.of(context)!));
       }
     });
 
@@ -100,15 +92,11 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
             itemBuilder: (_) {
               return [
                 PopupMenuItem(
-                  child: Text(
-                    AppLocalizations.of(context)!.clearPrefetchedCache,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.clearPrefetchedCache),
                   value: MenuActionType.clearAppCache,
                 ),
                 PopupMenuItem(
-                  child: Text(
-                    AppLocalizations.of(context)!.clearPersistentMapStorage,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.clearPersistentMapStorage),
                   value: MenuActionType.clearPersistentMapStorage,
                 ),
               ];
@@ -119,16 +107,12 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       body: Stack(
         children: [
           FutureBuilder(
-            future: Provider.of<MapLoaderController>(
-              context,
-              listen: false,
-            ).getDownloadableRegions(),
+            future: Provider.of<MapLoaderController>(context, listen: false).getDownloadableRegions(),
             builder: (context, snapshot) {
               return ListView(
                 children: [
                   StorageSpace(),
-                  if (controller.mapUpdateState != MapUpdateState.none)
-                    MapUpdateProgress(),
+                  if (controller.mapUpdateState != MapUpdateState.none) MapUpdateProgress(),
                   ..._buildInstalledMapsList(context, snapshot.data),
                   _buildDownloadButton(context),
                 ],
@@ -151,10 +135,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
         return region;
       }
       if (region.childRegions != null) {
-        Region? foundRegion = _findInstalledRegionByID(
-          region.childRegions!,
-          regionId,
-        );
+        Region? foundRegion = _findInstalledRegionByID(region.childRegions!, regionId);
         if (foundRegion != null) {
           return foundRegion;
         }
@@ -164,24 +145,13 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     return null;
   }
 
-  List<Widget> _buildInstalledMapsList(
-    BuildContext context,
-    List<Region>? regions,
-  ) {
+  List<Widget> _buildInstalledMapsList(BuildContext context, List<Region>? regions) {
     if (regions == null) {
-      return [
-        SizedBox(
-          height: 100,
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      ];
+      return [SizedBox(height: 100, child: Center(child: CircularProgressIndicator()))];
     }
 
     List<Widget> result = [];
-    MapLoaderController controller = Provider.of<MapLoaderController>(
-      context,
-      listen: false,
-    );
+    MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
     try {
       List<InstalledRegion> installedRegions = controller.getInstalledRegions();
 
@@ -190,8 +160,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
         int? progress = controller.getDownloadProgress(element.regionId);
 
         // When true, disables tap action and hides trailing icon.
-        final bool hideTrailingAndDisableTap =
-            controller.isAnyDownloadInProgress() && progress == null;
+        final bool hideTrailingAndDisableTap = controller.isAnyDownloadInProgress() && progress == null;
         MapRegionTile tile = MapRegionTile(
           region: region,
           installedRegion: element,
@@ -221,10 +190,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       if (error.error != MapLoaderError.operationCancelled) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
-            ErrorToaster.makeToast(
-              context,
-              error.error.errorMessage(AppLocalizations.of(context)!),
-            );
+            ErrorToaster.makeToast(context, error.error.errorMessage(AppLocalizations.of(context)!));
           }
         });
       }
@@ -250,9 +216,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(UIStyle.popupsBorderRadius),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(UIStyle.popupsBorderRadius)),
       ),
       builder: (context) => SafeArea(
         child: Column(
@@ -276,23 +240,14 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
                 children: [
                   Text(
                     region.name,
-                    style: TextStyle(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold),
                   ),
                   Container(height: UIStyle.contentMarginMedium),
-                  Text(
-                    appLocalizations.downloadedMapOptionsTitle,
-                    style: textTheme.titleMedium,
-                  ),
+                  Text(appLocalizations.downloadedMapOptionsTitle, style: textTheme.titleMedium),
                 ],
               ),
               actions: [
-                IconButton(
-                  icon: HdsIconWidget(HdsAssetsPaths.crossIcon),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+                IconButton(icon: HdsIconWidget(HdsAssetsPaths.crossIcon), onPressed: () => Navigator.of(context).pop()),
               ],
             ),
             if (installedRegion.status == InstalledRegionStatus.pending) ...[
@@ -307,14 +262,8 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
               Divider(),
             ],
             ListTile(
-              leading: HdsIconWidget(
-                HdsAssetsPaths.deleteIcon,
-                color: Colors.red,
-              ),
-              title: Text(
-                appLocalizations.deleteMapOptionTitle,
-                style: TextStyle(color: Colors.red),
-              ),
+              leading: HdsIconWidget(HdsAssetsPaths.deleteIcon, color: Colors.red),
+              title: Text(appLocalizations.deleteMapOptionTitle, style: TextStyle(color: Colors.red)),
               onTap: () async {
                 await controller.deleteRegion(region.regionId);
                 Navigator.of(context).pop();
@@ -342,22 +291,15 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       _isRegionsSearchInProgress = true;
     });
     try {
-      MapLoaderController controller = Provider.of<MapLoaderController>(
-        context,
-        listen: false,
-      );
+      MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
       List<Region> regions = await controller.getDownloadableRegions();
-      Navigator.of(
-        context,
-      ).pushNamed(MapRegionsListScreen.navRoute, arguments: [regions]);
+      Navigator.of(context).pushNamed(MapRegionsListScreen.navRoute, arguments: [regions]);
     } catch (error) {
       print('Map downloading failed. Error: ${error.toString()}');
       if (mounted) {
         ErrorToaster.makeToast(
           context,
-          (error is MapLoaderError)
-              ? error.errorMessage(AppLocalizations.of(context)!)
-              : error.toString(),
+          (error is MapLoaderError) ? error.errorMessage(AppLocalizations.of(context)!) : error.toString(),
         );
       }
     } finally {
@@ -367,10 +309,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
     }
   }
 
-  Widget _buildDownloadedMapsHeader(
-    BuildContext context,
-    MapLoaderController controller,
-  ) => Container(
+  Widget _buildDownloadedMapsHeader(BuildContext context, MapLoaderController controller) => Container(
     color: Theme.of(context).dividerColor,
     child: Padding(
       padding: EdgeInsets.all(UIStyle.contentMarginMedium),
@@ -383,8 +322,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       // Display the "MapUpdate" option only if it has not been initiated before.
       if (controller.mapUpdateState == MapUpdateState.none) {
         bool? isMapUpdateAvailable = await controller.isMapUpdateAvailable();
-        if (isMapUpdateAvailable &&
-            await showMapUpdatesAvailableDialog(context)) {
+        if (isMapUpdateAvailable && await showMapUpdatesAvailableDialog(context)) {
           controller.performMapUpdate();
         }
       }
@@ -394,10 +332,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       if (error != MapLoaderError.operationCancelled) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
-            ErrorToaster.makeToast(
-              context,
-              error.errorMessage(AppLocalizations.of(context)!),
-            );
+            ErrorToaster.makeToast(context, error.errorMessage(AppLocalizations.of(context)!));
           }
         });
       }
@@ -408,10 +343,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
 
   void _menuActionHandler(MenuActionType type) async {
     try {
-      MapLoaderController controller = Provider.of<MapLoaderController>(
-        context,
-        listen: false,
-      );
+      MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
       if (type == MenuActionType.clearPersistentMapStorage) {
         await controller.clearPersistentMapStorage();
       } else if (type == MenuActionType.clearAppCache) {
@@ -422,9 +354,7 @@ class _DownloadMapsScreenState extends State<DownloadMapsScreen> {
       if (mounted && error != MapLoaderError.operationCancelled) {
         ErrorToaster.makeToast(
           context,
-          (error is MapLoaderError)
-              ? error.errorMessage(AppLocalizations.of(context)!)
-              : error.toString(),
+          (error is MapLoaderError) ? error.errorMessage(AppLocalizations.of(context)!) : error.toString(),
         );
       }
     }

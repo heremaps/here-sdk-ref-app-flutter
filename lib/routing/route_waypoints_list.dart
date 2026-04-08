@@ -94,12 +94,7 @@ class _RouteWayPointsListState extends State<RouteWayPointsList> {
             childCount: _wayPoints.length * 2 - 1,
           ),
           onReorder: (oldIndex, newIndex) {
-            setState(
-              () => _wayPoints.insert(
-                newIndex ~/ 2,
-                _wayPoints.removeAt(oldIndex ~/ 2),
-              ),
-            );
+            setState(() => _wayPoints.insert(newIndex ~/ 2, _wayPoints.removeAt(oldIndex ~/ 2)));
             widget.onChanged(_wayPoints);
           },
         ),
@@ -109,17 +104,11 @@ class _RouteWayPointsListState extends State<RouteWayPointsList> {
 
   Widget _buildHeader(BuildContext context) => Row(
     children: [
-      IconButton(
-        icon: HdsIconWidget(HdsAssetsPaths.arrowLeftIcon),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
+      IconButton(icon: HdsIconWidget(HdsAssetsPaths.arrowLeftIcon), onPressed: () => Navigator.of(context).pop()),
       Expanded(
         child: Text(
           AppLocalizations.of(context)!.wayPointsListTitle,
-          style: TextStyle(
-            fontSize: UIStyle.hugeFontSize,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          style: TextStyle(fontSize: UIStyle.hugeFontSize, color: Theme.of(context).colorScheme.primary),
         ),
       ),
     ],
@@ -134,24 +123,16 @@ class _RouteWayPointsListState extends State<RouteWayPointsList> {
       leading: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          HdsIconWidget.medium(
-            HdsAssetsPaths.dragListIcon,
-            color: colorScheme.primary,
-          ),
+          HdsIconWidget.medium(HdsAssetsPaths.dragListIcon, color: colorScheme.primary),
           Container(width: UIStyle.contentMarginLarge),
-          HdsIconWidget(
-            isCurrent ? HdsAssetsPaths.center : HdsAssetsPaths.mapMarker,
-            color: colorScheme.primary,
-          ),
+          HdsIconWidget(isCurrent ? HdsAssetsPaths.center : HdsAssetsPaths.mapMarker, color: colorScheme.primary),
         ],
       ),
       title: Text(
         isCurrent ? widget.currentLocationTitle : wp.title,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: isCurrent ? colorScheme.secondary : colorScheme.primary,
-        ),
+        style: TextStyle(color: isCurrent ? colorScheme.secondary : colorScheme.primary),
       ),
     );
 
@@ -161,10 +142,7 @@ class _RouteWayPointsListState extends State<RouteWayPointsList> {
 
     List<Widget> dismissBackgroundItems = [
       Container(width: UIStyle.contentMarginLarge),
-      HdsIconWidget(
-        HdsAssetsPaths.deleteIcon,
-        color: UIStyle.removeWayPointIconColor,
-      ),
+      HdsIconWidget(HdsAssetsPaths.deleteIcon, color: UIStyle.removeWayPointIconColor),
       Spacer(),
     ];
 

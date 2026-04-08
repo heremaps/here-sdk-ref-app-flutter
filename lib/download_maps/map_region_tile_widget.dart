@@ -74,10 +74,7 @@ class MapRegionTile extends StatelessWidget {
     late String subtitle;
 
     if (hasChildren && !isHeader) {
-      subtitle = Util.formatString(
-        appLocalizations.mapRegionChildrenNumberText,
-        [region.childRegions!.length],
-      );
+      subtitle = Util.formatString(appLocalizations.mapRegionChildrenNumberText, [region.childRegions!.length]);
     } else if (isHeader) {
       subtitle = Util.formatString(appLocalizations.sizeOfWholeAreaOfRegion, [
         Util.makeStorageSizeString(context, region.sizeOnDiskInBytes),
@@ -101,9 +98,7 @@ class MapRegionTile extends StatelessWidget {
                   : hasChildren && !isHeader
                   ? HdsAssetsPaths.arrowRightIcon
                   : HdsAssetsPaths.downloadIcon,
-              color: installedRegion?.status == InstalledRegionStatus.installed
-                  ? Colors.green
-                  : null,
+              color: installedRegion?.status == InstalledRegionStatus.installed ? Colors.green : null,
             );
       }
     }
@@ -112,23 +107,13 @@ class MapRegionTile extends StatelessWidget {
       minLeadingWidth: 0,
       visualDensity: VisualDensity(vertical: -4),
       leading: isChild ? Container(width: UIStyle.contentMarginMedium) : null,
-      title: Text(
-        region.name,
-        style: TextStyle(
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
+      title: Text(region.name, style: TextStyle(fontWeight: isHeader ? FontWeight.bold : FontWeight.normal)),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(subtitle, style: TextStyle(color: colorScheme.onSecondary)),
-          if (downloadProgress == null &&
-              installedRegion?.status == InstalledRegionStatus.pending &&
-              !hasChildren)
-            Text(
-              appLocalizations.incompleteDownloadMessage,
-              style: TextStyle(color: colorScheme.onSecondary),
-            ),
+          if (downloadProgress == null && installedRegion?.status == InstalledRegionStatus.pending && !hasChildren)
+            Text(appLocalizations.incompleteDownloadMessage, style: TextStyle(color: colorScheme.onSecondary)),
         ],
       ),
       trailing: Container(

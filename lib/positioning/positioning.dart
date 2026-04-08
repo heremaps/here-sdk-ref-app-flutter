@@ -29,17 +29,13 @@ import '../common/ui_style.dart';
 import '../common/util.dart' as Util;
 import 'positioning_engine.dart';
 
-typedef LocationEngineStatusCallback =
-    void Function(LocationEngineStatus status);
+typedef LocationEngineStatusCallback = void Function(LocationEngineStatus status);
 typedef LocationUpdatedCallback = void Function(Location location);
 
 /// Mixin that implements logic for positioning. It manages the current location marker and provides location updates.
 mixin Positioning {
   static const double initDistanceToEarth = 8000; // meters
-  static final GeoCoordinates initPosition = GeoCoordinates(
-    52.530932,
-    13.384915,
-  );
+  static final GeoCoordinates initPosition = GeoCoordinates(52.530932, 13.384915);
 
   late HereMapController _hereMapController;
   PositioningEngine? _positioningEngine;
@@ -59,12 +55,10 @@ mixin Positioning {
   bool shouldAddUserLocationMarker = true;
 
   /// Gets last known location.
-  Location? get lastKnownLocation =>
-      _positioningEngine?.lastKnownLocation ?? _lastKnownLocation;
+  Location? get lastKnownLocation => _positioningEngine?.lastKnownLocation ?? _lastKnownLocation;
 
   /// Gets the state of the location engine.
-  bool get isLocationEngineStarted =>
-      _positioningEngine?.isLocationEngineStarted ?? false;
+  bool get isLocationEngineStarted => _positioningEngine?.isLocationEngineStarted ?? false;
 
   /// Gets the state of the current location marker.
   bool get locationVisible => _locationMarkerVisible;
@@ -108,8 +102,7 @@ mixin Positioning {
     _removeMarkers();
     _initMapLocation();
 
-    _locationUpdatesSubscription = _positioningEngine!.getLocationUpdates
-        .listen(_onLocationUpdated);
+    _locationUpdatesSubscription = _positioningEngine!.getLocationUpdates.listen(_onLocationUpdated);
   }
 
   /// Stops positioning.
@@ -121,8 +114,7 @@ mixin Positioning {
   void _initMapLocation() {
     final Location? lastKnownLocation = _positioningEngine!.lastKnownLocation;
     if (lastKnownLocation != null) {
-      final double accuracy =
-          (lastKnownLocation.horizontalAccuracyInMeters != null)
+      final double accuracy = (lastKnownLocation.horizontalAccuracyInMeters != null)
           ? lastKnownLocation.horizontalAccuracyInMeters!
           : 0;
 
@@ -141,10 +133,7 @@ mixin Positioning {
       }
     } else {
       // No last known location available, show a pre-defined location.
-      _addMyLocationToMap(
-        geoCoordinates: initPosition,
-        canShowUserLocationMarker: shouldAddUserLocationMarker,
-      );
+      _addMyLocationToMap(geoCoordinates: initPosition, canShowUserLocationMarker: shouldAddUserLocationMarker);
       // Update the map viewport to be centered on the location.
       if (enableMapUpdate) {
         _hereMapController.camera.lookAtPointWithMeasure(
@@ -160,8 +149,7 @@ mixin Positioning {
     double accuracyRadiusInMeters = 0,
     bool canShowUserLocationMarker = true,
   }) {
-    int locationMarkerSize =
-        (UIStyle.locationMarkerSize * _hereMapController.pixelScale).truncate();
+    int locationMarkerSize = (UIStyle.locationMarkerSize * _hereMapController.pixelScale).truncate();
 
     // Transparent halo around the current location.
     _locationAccuracyCircle = MapPolygon(
@@ -180,10 +168,7 @@ mixin Positioning {
     locationVisible = canShowUserLocationMarker;
   }
 
-  GeoPolygon _createGeometry(
-    GeoCoordinates geoCoordinates,
-    double accuracyRadiusInMeters,
-  ) {
+  GeoPolygon _createGeometry(GeoCoordinates geoCoordinates, double accuracyRadiusInMeters) {
     GeoCircle geoCircle = GeoCircle(geoCoordinates, accuracyRadiusInMeters);
     GeoPolygon geoPolygon = GeoPolygon.withGeoCircle(geoCircle);
     return geoPolygon;
@@ -191,13 +176,8 @@ mixin Positioning {
 
   void _onLocationUpdated(Location location) {
     _lastKnownLocation = location;
-    final double accuracy = (location.horizontalAccuracyInMeters != null)
-        ? location.horizontalAccuracyInMeters!
-        : 0.0;
-    _locationAccuracyCircle?.geometry = _createGeometry(
-      location.coordinates,
-      accuracy,
-    );
+    final double accuracy = (location.horizontalAccuracyInMeters != null) ? location.horizontalAccuracyInMeters! : 0.0;
+    _locationAccuracyCircle?.geometry = _createGeometry(location.coordinates, accuracy);
     _locationMarker?.coordinates = location.coordinates;
 
     // Update the map viewport to be centered on the location.

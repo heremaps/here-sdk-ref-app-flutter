@@ -34,19 +34,13 @@ import 'route_preferences_model.dart';
 class RouteTextOptionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final RouteTextOptions textOptions = context.select(
-      (RoutePreferencesModel model) => model.sharedRouteTextOptions,
-    );
+    final RouteTextOptions textOptions = context.select((RoutePreferencesModel model) => model.sharedRouteTextOptions);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        PreferencesSectionTitle(
-          title: AppLocalizations.of(context)!.routeTextOptionsTitle,
-        ),
-        PreferencesRowTitle(
-          title: AppLocalizations.of(context)!.unitSystemTitle,
-        ),
+        PreferencesSectionTitle(title: AppLocalizations.of(context)!.routeTextOptionsTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.unitSystemTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: DropdownButtonHideUnderline(
@@ -57,15 +51,12 @@ class RouteTextOptionsWidget extends StatelessWidget {
                 final RouteTextOptions newOptions = RouteTextOptions()
                   ..language = textOptions.language
                   ..unitSystem = UnitSystem.values[unit];
-                context.read<RoutePreferencesModel>().sharedRouteTextOptions =
-                    newOptions;
+                context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
               },
             ),
           ),
         ),
-        PreferencesRowTitle(
-          title: AppLocalizations.of(context)!.languageCodeTitle,
-        ),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.languageCodeTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: DropdownButtonHideUnderline(
@@ -76,8 +67,7 @@ class RouteTextOptionsWidget extends StatelessWidget {
                 final RouteTextOptions newOptions = RouteTextOptions()
                   ..language = LanguageCode.values[language]
                   ..unitSystem = textOptions.unitSystem;
-                context.read<RoutePreferencesModel>().sharedRouteTextOptions =
-                    newOptions;
+                context.read<RoutePreferencesModel>().sharedRouteTextOptions = newOptions;
               },
             ),
           ),

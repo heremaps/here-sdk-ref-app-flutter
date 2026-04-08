@@ -1,3 +1,6 @@
 analyzer:
   exclude:
     - plugins/**
+
+formatter:
+  page_width: 120

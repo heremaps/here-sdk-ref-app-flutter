@@ -36,13 +36,8 @@ class NumericTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   /// Constructs a widget.
-  NumericTextField({
-    Key? key,
-    required this.isInteger,
-    this.initialValue,
-    this.hintText,
-    required this.onChanged,
-  }) : super(key: key);
+  NumericTextField({Key? key, required this.isInteger, this.initialValue, this.hintText, required this.onChanged})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +45,11 @@ class NumericTextField extends StatelessWidget {
       decoration: UIStyle.roundedRectDecoration(),
       child: TextFormField(
         initialValue: initialValue ?? "",
-        keyboardType: isInteger
-            ? TextInputType.number
-            : TextInputType.numberWithOptions(decimal: true),
+        keyboardType: isInteger ? TextInputType.number : TextInputType.numberWithOptions(decimal: true),
         decoration: InputDecoration(
           hintText: hintText ?? "",
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: UIStyle.contentMarginMedium,
-          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
         ),
         onChanged: onChanged,
       ),

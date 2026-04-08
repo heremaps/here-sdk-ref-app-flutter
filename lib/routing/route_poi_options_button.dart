@@ -49,18 +49,9 @@ class _PoiSettingInfo {
 }
 
 final List<_PoiSettingInfo> _poiSettings = [
-  _PoiSettingInfo(
-    categoryId: PlaceCategory.eatAndDrink,
-    image: HdsAssetsPaths.restaurant,
-  ),
-  _PoiSettingInfo(
-    categoryId: PlaceCategory.businessAndServicesFuelingStation,
-    image: HdsAssetsPaths.petrolStation,
-  ),
-  _PoiSettingInfo(
-    categoryId: PlaceCategory.businessAndServicesAtm,
-    image: HdsAssetsPaths.atmIcon,
-  ),
+  _PoiSettingInfo(categoryId: PlaceCategory.eatAndDrink, image: HdsAssetsPaths.restaurant),
+  _PoiSettingInfo(categoryId: PlaceCategory.businessAndServicesFuelingStation, image: HdsAssetsPaths.petrolStation),
+  _PoiSettingInfo(categoryId: PlaceCategory.businessAndServicesAtm, image: HdsAssetsPaths.atmIcon),
 ];
 
 /// A widget that displays the POI categories enabled for search.
@@ -85,19 +76,15 @@ class RoutePoiOptionsButton extends StatelessWidget {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: _poiSettings
-              .map(
-                (poiInfo) => Padding(
-                  padding: EdgeInsets.only(right: UIStyle.contentMarginMedium),
-                  child: HdsIconWidget.medium(
-                    poiInfo.image,
-                    color: categoryIds.contains(poiInfo.categoryId)
-                        ? null
-                        : UIStyle.foregroundInactive,
-                  ),
-                ),
-              )
-              .toList(),
+          children: _poiSettings.map((poiInfo) {
+            return Padding(
+              padding: EdgeInsets.only(right: UIStyle.contentMarginMedium),
+              child: HdsIconWidget.medium(
+                poiInfo.image,
+                color: categoryIds.contains(poiInfo.categoryId) ? null : UIStyle.foregroundInactive,
+              ),
+            );
+          }).toList(),
         ),
       ),
       onTap: () => _showPoiEnableMenu(context),
@@ -110,57 +97,52 @@ class RoutePoiOptionsButton extends StatelessWidget {
 
     await showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(UIStyle.popupsBorderRadius),
-      ),
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppBar(
-              leading: null,
-              automaticallyImplyLeading: false,
-              primary: false,
-              centerTitle: false,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(UIStyle.popupsBorderRadius),
-                  topRight: Radius.circular(UIStyle.popupsBorderRadius),
-                ),
-              ),
-              backgroundColor: colorScheme.surface,
-              title: Text(AppLocalizations.of(context)!.poiSettingsTitle),
-              actions: [
-                IconButton(
-                  icon: HdsIconWidget(HdsAssetsPaths.crossIcon),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-            ..._poiSettings
-                .map(
-                  (poiInfo) => RoutePoiOptionsItem(
-                    value: categories.contains(poiInfo.categoryId),
-                    title: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        HdsIconWidget(
-                          poiInfo.image,
-                          color: colorScheme.primary,
-                        ),
-                        Container(width: UIStyle.contentMarginLarge),
-                        Text(poiInfo.getTitle(context)),
-                      ],
-                    ),
-                    onChanged: (value) => value
-                        ? categories.add(poiInfo.categoryId)
-                        : categories.remove(poiInfo.categoryId),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(UIStyle.popupsBorderRadius)),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                primary: false,
+                centerTitle: false,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(UIStyle.popupsBorderRadius),
+                    topRight: Radius.circular(UIStyle.popupsBorderRadius),
                   ),
-                )
-                .toList(),
-          ],
-        ),
-      ),
+                ),
+                backgroundColor: colorScheme.surface,
+                title: Text(AppLocalizations.of(context)!.poiSettingsTitle),
+                actions: [
+                  IconButton(
+                    icon: HdsIconWidget(HdsAssetsPaths.crossIcon),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+              ..._poiSettings.map((poiInfo) {
+                return RoutePoiOptionsItem(
+                  value: categories.contains(poiInfo.categoryId),
+                  title: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      HdsIconWidget(poiInfo.image, color: colorScheme.primary),
+                      Container(width: UIStyle.contentMarginLarge),
+                      Text(poiInfo.getTitle(context)),
+                    ],
+                  ),
+                  onChanged: (value) {
+                    value ? categories.add(poiInfo.categoryId) : categories.remove(poiInfo.categoryId);
+                  },
+                );
+              }).toList(),
+            ],
+          ),
+        );
+      },
     );
 
     if (!SetEquality().equals(categories, categoryIds)) {

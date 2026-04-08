@@ -48,9 +48,7 @@ class GradientElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
     style: ElevatedButton.styleFrom(
       padding: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight)),
     ),
     child: Ink(
       decoration: BoxDecoration(
@@ -65,10 +63,7 @@ class GradientElevatedButton extends StatelessWidget {
           ),
           child: DefaultTextStyle(
             child: title,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: UIStyle.hugeFontSize,
-            ),
+            style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: UIStyle.hugeFontSize),
           ),
         ),
       ),

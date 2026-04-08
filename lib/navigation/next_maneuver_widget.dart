@@ -37,11 +37,7 @@ class NextManeuver extends StatelessWidget {
   final String text;
 
   /// Constructs a widget.
-  NextManeuver({
-    required this.action,
-    required this.distance,
-    required this.text,
-  });
+  NextManeuver({required this.action, required this.distance, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -51,26 +47,17 @@ class NextManeuver extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.all(UIStyle.contentMarginLarge),
-          child: HdsIconWidget.small(
-            action.iconPath,
-            color: colorScheme.surface,
-          ),
+          child: HdsIconWidget.small(action.iconPath, color: colorScheme.surface),
         ),
         Text(
           Util.makeDistanceString(context, distance),
-          style: TextStyle(
-            color: colorScheme.surface,
-            fontSize: UIStyle.hugeFontSize,
-          ),
+          style: TextStyle(color: colorScheme.surface, fontSize: UIStyle.hugeFontSize),
         ),
         Container(height: 0, width: UIStyle.contentMarginMedium),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              color: colorScheme.surface,
-              fontSize: UIStyle.bigFontSize,
-            ),
+            style: TextStyle(color: colorScheme.surface, fontSize: UIStyle.bigFontSize),
           ),
         ),
       ],

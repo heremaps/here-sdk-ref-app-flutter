@@ -37,11 +37,7 @@ class CurrentManeuver extends StatelessWidget {
   final String text;
 
   /// Constructs a widget.
-  CurrentManeuver({
-    required this.action,
-    required this.distance,
-    required this.text,
-  });
+  CurrentManeuver({required this.action, required this.distance, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +47,7 @@ class CurrentManeuver extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.all(UIStyle.contentMarginLarge),
-          child: HdsIconWidget.large(
-            action.iconPath,
-            color: colorScheme.surface,
-          ),
+          child: HdsIconWidget.large(action.iconPath, color: colorScheme.surface),
         ),
         Expanded(
           child: Column(
@@ -63,19 +56,13 @@ class CurrentManeuver extends StatelessWidget {
             children: [
               Text(
                 Util.makeDistanceString(context, distance),
-                style: TextStyle(
-                  color: colorScheme.surface,
-                  fontSize: UIStyle.extraHugeFontSize,
-                ),
+                style: TextStyle(color: colorScheme.surface, fontSize: UIStyle.extraHugeFontSize),
               ),
               Container(height: UIStyle.contentMarginSmall),
               Text(
                 text,
                 maxLines: 2,
-                style: TextStyle(
-                  color: colorScheme.surface,
-                  fontSize: UIStyle.bigFontSize,
-                ),
+                style: TextStyle(color: colorScheme.surface, fontSize: UIStyle.bigFontSize),
                 overflow: TextOverflow.ellipsis,
               ),
             ],

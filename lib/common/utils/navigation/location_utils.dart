@@ -27,14 +27,8 @@ LocationProviderInterface createLocationProvider({
   LocationSimulatorOptions? simulatorOptions, // needed if simulated == true
   here.Route? route,
 }) {
-  assert(
-    simulated == false || simulatorOptions != null,
-    'simulatorOptions are needed if simulated == true',
-  );
-  assert(
-    simulated == false || (simulated && route != null),
-    'track or route need to be provided if simulated == true',
-  );
+  assert(simulated == false || simulatorOptions != null, 'simulatorOptions are needed if simulated == true');
+  assert(simulated == false || (simulated && route != null), 'track or route need to be provided if simulated == true');
 
   if (simulated && route != null) {
     return SimulatedLocationProvider.withRoute(route, simulatorOptions!);

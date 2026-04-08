@@ -22,12 +22,7 @@ class NotificationBody {
   final String imagePath;
   final bool presentSound;
 
-  NotificationBody({
-    required this.title,
-    required this.body,
-    required this.imagePath,
-    this.presentSound = true,
-  });
+  NotificationBody({required this.title, required this.body, required this.imagePath, this.presentSound = true});
 }
 
 abstract class NotificationsManager {

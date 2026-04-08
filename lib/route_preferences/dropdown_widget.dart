@@ -24,12 +24,7 @@ import 'enum_string_helper.dart';
 /// Dropdown list widget.
 class DropdownWidget extends StatelessWidget {
   /// Creates a widget.
-  DropdownWidget({
-    Key? key,
-    required this.data,
-    this.selectedValue,
-    required this.onChanged,
-  }) : super(key: key);
+  DropdownWidget({Key? key, required this.data, this.selectedValue, required this.onChanged}) : super(key: key);
 
   /// Dropdown list items.
   final Map<int, String> data;

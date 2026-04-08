@@ -43,46 +43,33 @@ class RouteOptionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RouteOptions routeOptions = context.select(
-      (RoutePreferencesModel model) => model.sharedRouteOptions,
-    );
+    final RouteOptions routeOptions = context.select((RoutePreferencesModel model) => model.sharedRouteOptions);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        PreferencesSectionTitle(
-          title: AppLocalizations.of(context)!.routeOptionsTitle,
-        ),
-        PreferencesRowTitle(
-          title: AppLocalizations.of(context)!.routeAlternativesTitle,
-        ),
+        PreferencesSectionTitle(title: AppLocalizations.of(context)!.routeOptionsTitle),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.routeAlternativesTitle),
         NumericTextField(
           initialValue: routeOptions.alternatives.toString(),
           isInteger: true,
           hintText: _alternativesRangeHint,
-          onChanged: (text) =>
-              context
-                  .read<RoutePreferencesModel>()
-                  .sharedRouteOptions = RouteOptions(
-                routeOptions.optimizationMode,
-                int.tryParse(text) ?? 0,
-                routeOptions.departureTime,
-              ),
+          onChanged: (text) {
+            context.read<RoutePreferencesModel>().sharedRouteOptions = RouteOptions(
+              routeOptions.optimizationMode,
+              int.tryParse(text) ?? 0,
+              routeOptions.departureTime,
+            );
+          },
         ),
-        PreferencesRowTitle(
-          title: AppLocalizations.of(context)!.departureTimeTitle,
-        ),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.departureTimeTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: InkWell(
             onTap: () async {
-              DateTime? newDate = await (Platform.isIOS
-                  ? _selectDateTimeCupertino(context)
-                  : _selectDateTime(context));
+              DateTime? newDate = await (Platform.isIOS ? _selectDateTimeCupertino(context) : _selectDateTime(context));
               if (newDate != null)
-                context
-                    .read<RoutePreferencesModel>()
-                    .sharedRouteOptions = RouteOptions(
+                context.read<RoutePreferencesModel>().sharedRouteOptions = RouteOptions(
                   routeOptions.optimizationMode,
                   routeOptions.alternatives,
                   newDate,
@@ -92,15 +79,8 @@ class RouteOptionsWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(
-                    left: UIStyle.contentMarginMedium,
-                  ),
-                  child: Text(
-                    Util.stringFromDateTime(
-                      context,
-                      routeOptions.departureTime,
-                    ),
-                  ),
+                  padding: const EdgeInsets.only(left: UIStyle.contentMarginMedium),
+                  child: Text(Util.stringFromDateTime(context, routeOptions.departureTime)),
                 ),
                 Visibility(
                   maintainSize: true,
@@ -108,41 +88,34 @@ class RouteOptionsWidget extends StatelessWidget {
                   maintainState: true,
                   visible: routeOptions.departureTime != null,
                   child: IconButton(
-                    icon: HdsIconWidget.medium(
-                      HdsAssetsPaths.crossIcon,
-                      color: UIStyle.optionsBorderColor,
-                    ),
-                    onPressed: () =>
-                        context
-                            .read<RoutePreferencesModel>()
-                            .sharedRouteOptions = RouteOptions(
-                          routeOptions.optimizationMode,
-                          routeOptions.alternatives,
-                          null,
-                        ),
+                    icon: HdsIconWidget.medium(HdsAssetsPaths.crossIcon, color: UIStyle.optionsBorderColor),
+                    onPressed: () {
+                      context.read<RoutePreferencesModel>().sharedRouteOptions = RouteOptions(
+                        routeOptions.optimizationMode,
+                        routeOptions.alternatives,
+                        null,
+                      );
+                    },
                   ),
                 ),
               ],
             ),
           ),
         ),
-        PreferencesRowTitle(
-          title: AppLocalizations.of(context)!.optimizationModeTitle,
-        ),
+        PreferencesRowTitle(title: AppLocalizations.of(context)!.optimizationModeTitle),
         Container(
           decoration: UIStyle.roundedRectDecoration(),
           child: DropdownButtonHideUnderline(
             child: DropdownWidget(
               data: EnumStringHelper.routeOptimizationModeMap(context),
               selectedValue: routeOptions.optimizationMode.index,
-              onChanged: (mode) =>
-                  context
-                      .read<RoutePreferencesModel>()
-                      .sharedRouteOptions = RouteOptions(
-                    OptimizationMode.values[mode],
-                    routeOptions.alternatives,
-                    routeOptions.departureTime,
-                  ),
+              onChanged: (mode) {
+                context.read<RoutePreferencesModel>().sharedRouteOptions = RouteOptions(
+                  OptimizationMode.values[mode],
+                  routeOptions.alternatives,
+                  routeOptions.departureTime,
+                );
+              },
             ),
           ),
         ),
@@ -171,10 +144,7 @@ class RouteOptionsWidget extends StatelessWidget {
   }
 
   Future<TimeOfDay?> _selectTime(BuildContext context) async {
-    return showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(DateTime.now()),
-    );
+    return showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(DateTime.now()));
   }
 
   Future<DateTime?> _selectDateTimeCupertino(BuildContext context) async {
@@ -203,10 +173,7 @@ class RouteOptionsWidget extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: CupertinoDatePicker(
-                    onDateTimeChanged: (DateTime dateTime) =>
-                        selectedDateTime = dateTime,
-                  ),
+                  child: CupertinoDatePicker(onDateTimeChanged: (DateTime dateTime) => selectedDateTime = dateTime),
                 ),
               ),
               Container(
@@ -216,21 +183,16 @@ class RouteOptionsWidget extends StatelessWidget {
                     CupertinoButton(
                       child: Text(
                         AppLocalizations.of(context)!.cancelTitle,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
                       ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                     CupertinoButton(
                       child: Text(
                         AppLocalizations.of(context)!.doneTitle,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
                       ),
-                      onPressed: () =>
-                          Navigator.of(context).pop(selectedDateTime),
+                      onPressed: () => Navigator.of(context).pop(selectedDateTime),
                     ),
                   ],
                 ),
@@ -242,12 +204,6 @@ class RouteOptionsWidget extends StatelessWidget {
     );
     if (result == null) return null;
 
-    return DateTime(
-      result.year,
-      result.month,
-      result.day,
-      result.hour,
-      result.minute,
-    );
+    return DateTime(result.year, result.month, result.day, result.hour, result.minute);
   }
 }

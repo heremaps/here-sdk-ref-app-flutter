@@ -40,12 +40,9 @@ class NoLocationWarning extends StatelessWidget {
     if (!await Permission.location.serviceStatus.isEnabled) {
       return AppLocalizations.of(context)!.noLocationWarning;
     }
-    final PermissionStatus locationPermission =
-        await Permission.location.status;
-    final PermissionStatus locationAlwaysPermission =
-        await Permission.locationAlways.status;
-    if (locationPermission == PermissionStatus.granted &&
-        locationAlwaysPermission != PermissionStatus.granted) {
+    final PermissionStatus locationPermission = await Permission.location.status;
+    final PermissionStatus locationAlwaysPermission = await Permission.locationAlways.status;
+    if (locationPermission == PermissionStatus.granted && locationAlwaysPermission != PermissionStatus.granted) {
       return AppLocalizations.of(context)!.backgroundPositioningWarning;
     } else {
       return AppLocalizations.of(context)!.noLocationWarning;
@@ -59,11 +56,7 @@ class NoLocationWarning extends StatelessWidget {
       right: UIStyle.contentMarginMedium,
       bottom: _kOverlayPosition,
       child: Material(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(UIStyle.popupsBorderRadius),
-          ),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius))),
         color: UIStyle.noLocationWarningBackgroundColor,
         elevation: 2,
         child: SizedBox(
@@ -73,10 +66,7 @@ class NoLocationWarning extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: HdsIconWidget(
-                    HdsAssetsPaths.center,
-                    color: UIStyle.noLocationWarningColor,
-                  ),
+                  icon: HdsIconWidget(HdsAssetsPaths.center, color: UIStyle.noLocationWarningColor),
                   onPressed: () {},
                 ),
                 Expanded(
@@ -86,10 +76,7 @@ class NoLocationWarning extends StatelessWidget {
                       if (snapshot.hasData) {
                         return Text(
                           snapshot.data!,
-                          style: TextStyle(
-                            fontSize: UIStyle.bigFontSize,
-                            color: UIStyle.noLocationWarningColor,
-                          ),
+                          style: TextStyle(fontSize: UIStyle.bigFontSize, color: UIStyle.noLocationWarningColor),
                         );
                       } else {
                         return const SizedBox();
@@ -98,10 +85,7 @@ class NoLocationWarning extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: HdsIconWidget(
-                    HdsAssetsPaths.crossIcon,
-                    color: UIStyle.noLocationWarningColor,
-                  ),
+                  icon: HdsIconWidget(HdsAssetsPaths.crossIcon, color: UIStyle.noLocationWarningColor),
                   onPressed: onPressed,
                 ),
               ],

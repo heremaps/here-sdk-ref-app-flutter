@@ -72,9 +72,7 @@ class _RouteWayPointsState extends State<RouteWayPoints> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     bool displayCurrentLocationButton = widget.controller.value.fold(
       true,
-      (previousValue, element) =>
-          previousValue &&
-          element.sourceType != WayPointInfoSourceType.CurrentPosition,
+      (previousValue, element) => previousValue && element.sourceType != WayPointInfoSourceType.CurrentPosition,
     );
 
     return Row(
@@ -85,11 +83,7 @@ class _RouteWayPointsState extends State<RouteWayPoints> {
             children: [
               _buildWayPointItem(context, 0, displayCurrentLocationButton),
               Divider(height: 1),
-              _buildWayPointItem(
-                context,
-                widget.controller.length - 1,
-                displayCurrentLocationButton,
-              ),
+              _buildWayPointItem(context, widget.controller.length - 1, displayCurrentLocationButton),
             ],
           ),
         ),
@@ -101,50 +95,34 @@ class _RouteWayPointsState extends State<RouteWayPoints> {
           child: widget.controller.length > 2
               ? IconButton(
                   padding: EdgeInsets.all(UIStyle.contentMarginMedium),
-                  icon: HdsIconWidget(
-                    HdsAssetsPaths.menuSolidIcon,
-                    color: colorScheme.primary,
-                  ),
+                  icon: HdsIconWidget(HdsAssetsPaths.menuSolidIcon, color: colorScheme.primary),
                   onPressed: () => _showWayPointsEditPopup(context),
                 )
               : IconButton(
                   padding: EdgeInsets.all(UIStyle.contentMarginMedium),
-                  icon: HdsIconWidget(
-                    HdsAssetsPaths.switchVertical,
-                    color: colorScheme.primary,
-                  ),
-                  onPressed: () => setState(
-                    () => widget.controller.value = widget.controller.value
-                        .swap(0, widget.controller.length - 1),
-                  ),
+                  icon: HdsIconWidget(HdsAssetsPaths.switchVertical, color: colorScheme.primary),
+                  onPressed: () {
+                    setState(() {
+                      widget.controller.value = widget.controller.value.swap(0, widget.controller.length - 1);
+                    });
+                  },
                 ),
         ),
       ],
     );
   }
 
-  Widget _buildWayPointItem(
-    BuildContext context,
-    int index,
-    bool displayCurrentLocationButton,
-  ) {
+  Widget _buildWayPointItem(BuildContext context, int index, bool displayCurrentLocationButton) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     final WayPointInfo wayPoint = widget.controller[index];
-    bool isCurrent =
-        wayPoint.sourceType == WayPointInfoSourceType.CurrentPosition;
+    bool isCurrent = wayPoint.sourceType == WayPointInfoSourceType.CurrentPosition;
 
     return ListTile(
       dense: true,
-      leading: HdsIconWidget(
-        isCurrent ? HdsAssetsPaths.center : HdsAssetsPaths.mapMarker,
-        color: colorScheme.primary,
-      ),
+      leading: HdsIconWidget(isCurrent ? HdsAssetsPaths.center : HdsAssetsPaths.mapMarker, color: colorScheme.primary),
       title: Text(
         isCurrent ? widget.currentLocationTitle : wayPoint.title,
-        style: TextStyle(
-          fontSize: UIStyle.bigFontSize,
-          color: isCurrent ? colorScheme.secondary : colorScheme.primary,
-        ),
+        style: TextStyle(fontSize: UIStyle.bigFontSize, color: isCurrent ? colorScheme.secondary : colorScheme.primary),
       ),
       onTap: () async {
         GeoCoordinates currentPosition = widget.controller.currentLocation;
@@ -153,21 +131,15 @@ class _RouteWayPointsState extends State<RouteWayPoints> {
           currentPosition: currentPosition,
           hereMapController: widget.hereMapController,
           hereMapKey: widget.hereMapKey,
-          currentLocationTitle: displayCurrentLocationButton || isCurrent
-              ? widget.currentLocationTitle
-              : null,
+          currentLocationTitle: displayCurrentLocationButton || isCurrent ? widget.currentLocationTitle : null,
         );
         if (result != null) {
           setState(() {
             SearchResult searchResult = result;
             if (searchResult.place != null) {
-              widget.controller[index] = WayPointInfo.withPlace(
-                place: searchResult.place,
-              );
+              widget.controller[index] = WayPointInfo.withPlace(place: searchResult.place);
             } else {
-              widget.controller[index] = WayPointInfo(
-                coordinates: currentPosition,
-              );
+              widget.controller[index] = WayPointInfo(coordinates: currentPosition);
             }
           });
         }
@@ -203,10 +175,7 @@ class _RouteWayPointsState extends State<RouteWayPoints> {
 
     widget.hereMapController.setWatermarkLocation(
       Anchor2D.withHorizontalAndVertical(0, 1),
-      Point2D(
-        -widget.hereMapController.watermarkSize.width / 2,
-        -widget.hereMapController.watermarkSize.height / 2,
-      ),
+      Point2D(-widget.hereMapController.watermarkSize.width / 2, -widget.hereMapController.watermarkSize.height / 2),
     );
     widget.controller.value = wayPoints;
   }

@@ -21,10 +21,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-
-import '../common/ui_style.dart';
-import 'waypoint_info.dart';
-import '../common/util.dart' as Util;
+import 'package:here_sdk_reference_application_flutter/common/ui_style.dart' show UIStyle;
+import 'package:here_sdk_reference_application_flutter/common/util.dart' as Util;
+import 'package:here_sdk_reference_application_flutter/routing/waypoint_info.dart' show WayPointInfo;
 
 /// Helper class that manages routing waypoints. It uses [HereMapController] to display waypoint markers.
 class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
@@ -34,10 +33,7 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
   List<MapMarker> _wpMarkers = [];
 
   /// Creates a [WayPointsController] object.
-  WayPointsController({
-    required List<WayPointInfo> wayPoints,
-    required this.currentLocation,
-  }) : super(wayPoints) {
+  WayPointsController({required List<WayPointInfo> wayPoints, required this.currentLocation}) : super(wayPoints) {
     addListener(() {
       _clearWpMarkers();
       _createWpMarkers();
@@ -115,10 +111,8 @@ class WayPointsController extends ValueNotifier<List<WayPointInfo>> {
 
     List<MapMarker> markers = [];
 
-    int locationMarkerSize =
-        (controller.pixelScale * UIStyle.locationMarkerSize).truncate();
-    int placeBigMarkerSize =
-        (controller.pixelScale * UIStyle.searchMarkerSize).truncate() * 2;
+    int locationMarkerSize = (controller.pixelScale * UIStyle.locationMarkerSize).truncate();
+    int placeBigMarkerSize = (controller.pixelScale * UIStyle.searchMarkerSize).truncate() * 2;
 
     MapMarker marker = Util.createMarkerWithImagePath(
       super.value[0].coordinates,

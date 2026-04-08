@@ -88,9 +88,7 @@ class _Toast extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.red,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(UIStyle.popupsBorderRadius),
-                ),
+                borderRadius: const BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius)),
               ),
               padding: const EdgeInsets.all(_toastPadding),
               child: Row(
@@ -98,20 +96,14 @@ class _Toast extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(UIStyle.contentMarginSmall),
-                    child: HdsIconWidget(
-                      HdsAssetsPaths.attentionCircleIcon,
-                      color: UIStyle.errorMessageTextColor,
-                    ),
+                    child: HdsIconWidget(HdsAssetsPaths.attentionCircleIcon, color: UIStyle.errorMessageTextColor),
                   ),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(UIStyle.contentMarginSmall),
                       child: Text(
                         message,
-                        style: TextStyle(
-                          fontSize: UIStyle.bigFontSize,
-                          color: UIStyle.errorMessageTextColor,
-                        ),
+                        style: TextStyle(fontSize: UIStyle.bigFontSize, color: UIStyle.errorMessageTextColor),
                       ),
                     ),
                   ),

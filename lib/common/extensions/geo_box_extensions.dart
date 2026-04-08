@@ -24,9 +24,7 @@ extension GeoBoxExtensionsNullable on GeoBox {
 
   GeoBox expandedByPercentage(double percentage) {
     final double diagonalLength = southWestCorner.distanceTo(northEastCorner);
-    final double padding = hasDiagonalLength
-        ? diagonalLength * percentage
-        : percentage;
+    final double padding = hasDiagonalLength ? diagonalLength * percentage : percentage;
     return expandedBy(padding, padding, padding, padding);
   }
 }

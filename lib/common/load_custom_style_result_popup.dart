@@ -36,11 +36,8 @@ class LoadCustomStyleResultPopup extends StatelessWidget {
   final VoidCallback onClosePressed;
 
   /// Constructs a widget.
-  LoadCustomStyleResultPopup({
-    Key? key,
-    required this.loadCustomStyleResult,
-    required this.onClosePressed,
-  }) : super(key: key);
+  LoadCustomStyleResultPopup({Key? key, required this.loadCustomStyleResult, required this.onClosePressed})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +47,7 @@ class LoadCustomStyleResultPopup extends StatelessWidget {
       right: UIStyle.contentMarginMedium,
       bottom: _kOverlayPosition,
       child: Material(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(UIStyle.popupsBorderRadius),
-          ),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius))),
         color: UIStyle.loadCustomStyleResultPopupBackgroundColor,
         elevation: 2,
         child: SizedBox(
@@ -66,20 +59,12 @@ class LoadCustomStyleResultPopup extends StatelessWidget {
                 SizedBox(width: UIStyle.contentMarginLarge),
                 Expanded(
                   child: Text(
-                    loadCustomStyleResult
-                        ? localized.loadCustomSceneSuccess
-                        : localized.loadCustomSceneFailure,
-                    style: TextStyle(
-                      fontSize: UIStyle.bigFontSize,
-                      color: UIStyle.loadCustomStyleResultPopupTextColor,
-                    ),
+                    loadCustomStyleResult ? localized.loadCustomSceneSuccess : localized.loadCustomSceneFailure,
+                    style: TextStyle(fontSize: UIStyle.bigFontSize, color: UIStyle.loadCustomStyleResultPopupTextColor),
                   ),
                 ),
                 IconButton(
-                  icon: HdsIconWidget(
-                    HdsAssetsPaths.crossIcon,
-                    color: UIStyle.loadCustomStyleResultPopupTextColor,
-                  ),
+                  icon: HdsIconWidget(HdsAssetsPaths.crossIcon, color: UIStyle.loadCustomStyleResultPopupTextColor),
                   onPressed: onClosePressed,
                 ),
               ],

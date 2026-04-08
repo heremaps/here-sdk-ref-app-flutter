@@ -79,10 +79,7 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
 
   Widget _buildRegionTile(BuildContext context, int index) {
     Region region = widget.regions[index];
-    MapLoaderController controller = Provider.of<MapLoaderController>(
-      context,
-      listen: false,
-    );
+    MapLoaderController controller = Provider.of<MapLoaderController>(context, listen: false);
     InstalledRegion? installedRegion;
     try {
       installedRegion = controller.getInstalledRegions().where((element) {
@@ -93,9 +90,7 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
     }
     bool hasChildren = region.childRegions != null;
     int? progress = controller.getDownloadProgress(region.regionId);
-    bool hasParentRegion = widget.regions.any(
-      (element) => element is _ParentRegion,
-    );
+    bool hasParentRegion = widget.regions.any((element) => element is _ParentRegion);
     return MapRegionTile(
       region: widget.regions[index],
       installedRegion: installedRegion,
@@ -125,13 +120,8 @@ class _MapRegionsListScreenState extends State<MapRegionsListScreen> {
   }
 
   void _openChildRegions(Region region) {
-    List<Region> regions = [
-      _ParentRegion.fromRegion(region),
-      ...?region.childRegions,
-    ];
+    List<Region> regions = [_ParentRegion.fromRegion(region), ...?region.childRegions];
 
-    Navigator.of(
-      context,
-    ).pushNamed(MapRegionsListScreen.navRoute, arguments: [regions]);
+    Navigator.of(context).pushNamed(MapRegionsListScreen.navRoute, arguments: [regions]);
   }
 }

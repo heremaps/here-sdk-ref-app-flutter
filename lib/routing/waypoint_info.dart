@@ -55,9 +55,7 @@ class WayPointInfo extends Routing.Waypoint {
       sourceType = WayPointInfoSourceType.Coordinates,
       super.withDefaults(coordinates);
 
-  WayPointInfo.withPlace({
-    required this.place,
-    GeoCoordinates? originalCoordinates = null,
-  }) : sourceType = WayPointInfoSourceType.Place,
-       super.withDefaults(originalCoordinates ?? place!.geoCoordinates!);
+  WayPointInfo.withPlace({required this.place, GeoCoordinates? originalCoordinates = null})
+    : sourceType = WayPointInfoSourceType.Place,
+      super.withDefaults(originalCoordinates ?? place!.geoCoordinates!);
 }

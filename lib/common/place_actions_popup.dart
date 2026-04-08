@@ -59,10 +59,7 @@ class PlaceActionsPopup extends StatefulWidget {
     required this.hereMapController,
     required this.coordinates,
     required this.onRightButtonPressed,
-    this.rightButtonIcon = const HdsIconWidget(
-      HdsAssetsPaths.plus,
-      color: UIStyle.addWayPointPopupForegroundColor,
-    ),
+    this.rightButtonIcon = const HdsIconWidget(HdsAssetsPaths.plus, color: UIStyle.addWayPointPopupForegroundColor),
     this.onLeftButtonPressed = null,
     this.leftButtonIcon = null,
   }) : assert((onLeftButtonPressed == null) == (leftButtonIcon == null)),
@@ -87,21 +84,10 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
   @override
   void initState() {
     super.initState();
-    _searchEngine = SearchEngineProxy(
-      offline: Provider.of<AppPreferences>(
-        context,
-        listen: false,
-      ).useAppOffline,
-    );
-    _searchTask = _searchEngine.searchByCoordinates(
-      widget.coordinates,
-      _searchOptions,
-      _onSearchEnd,
-    );
+    _searchEngine = SearchEngineProxy(offline: Provider.of<AppPreferences>(context, listen: false).useAppOffline);
+    _searchTask = _searchEngine.searchByCoordinates(widget.coordinates, _searchOptions, _onSearchEnd);
     _title = widget.coordinates.toPrettyString();
-    int markerSize =
-        (widget.hereMapController.pixelScale * UIStyle.searchMarkerSize * 2)
-            .round();
+    int markerSize = (widget.hereMapController.pixelScale * UIStyle.searchMarkerSize * 2).round();
     _mapMarker = Util.createMarkerWithImagePath(
       widget.coordinates,
       "assets/map_marker_wp.svg",
@@ -126,11 +112,7 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
     children: [
       Material(
         color: UIStyle.addWayPointPopupBackgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(UIStyle.popupsBorderRadius),
-          ),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius))),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -146,12 +128,7 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
               padding: EdgeInsets.all(UIStyle.contentMarginMedium),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: _kMaxPopupWidth),
-                child: Text(
-                  _title,
-                  style: TextStyle(
-                    color: UIStyle.addWayPointPopupForegroundColor,
-                  ),
-                ),
+                child: Text(_title, style: TextStyle(color: UIStyle.addWayPointPopupForegroundColor)),
               ),
             ),
             IconButton(
@@ -164,9 +141,7 @@ class _PlaceActionsPopupState extends State<PlaceActionsPopup> {
           ],
         ),
       ),
-      Container(
-        height: UIStyle.searchMarkerSize * 2.0 + UIStyle.contentMarginMedium,
-      ),
+      Container(height: UIStyle.searchMarkerSize * 2.0 + UIStyle.contentMarginMedium),
     ],
   );
 

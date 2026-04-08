@@ -33,8 +33,7 @@ class MapCatalogUpdateHandler implements CatalogUpdateProgressListener {
   final CatalogUpdateInfo catalog;
   int progress = 0;
   CatalogUpdateTask? _task;
-  final List<MapCatalogUpdateListener> _listeners =
-      <MapCatalogUpdateListener>[];
+  final List<MapCatalogUpdateListener> _listeners = <MapCatalogUpdateListener>[];
 
   void start() {
     _task ??= updater?.updateCatalog(catalog, this);

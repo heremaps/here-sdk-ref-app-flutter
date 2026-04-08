@@ -140,7 +140,7 @@ class EnumStringHelper {
     sortedRoadFeaturesMap(context).forEach((key, value) {
       if (roadFeatures.contains(value)) result.add(key);
     });
-    return result.join(", ");
+    return result.join(', ');
   }
 
   /// Returns the mapping of [RoadFeatures] values to the corresponding strings.
@@ -185,7 +185,7 @@ class EnumStringHelper {
     sortedZoneCategoriesMap(context).forEach((key, value) {
       if (zoneCategories.contains(value)) result.add(key);
     });
-    return result.join(", ");
+    return result.join(', ');
   }
 
   /// Returns the mapping of [ZoneCategory] values to the corresponding strings.
@@ -218,7 +218,7 @@ class EnumStringHelper {
     sortedHazardousMaterialsMap(context).forEach((key, value) {
       if (hazardousMaterials.contains(value)) result.add(key);
     });
-    return result.join(", ");
+    return result.join(', ');
   }
 
   /// Returns the mapping of [HazardousMaterial] values to the corresponding strings.
@@ -272,7 +272,7 @@ class EnumStringHelper {
     countryCodesMap(context).forEach((key, value) {
       if (countryCodes.contains(value)) result.add(key);
     });
-    return (result..sort()).join(", ");
+    return (result..sort()).join(', ');
   }
 
   /// Returns the mapping of [CountryCode] values to the corresponding strings.

@@ -28,8 +28,7 @@ class DismissKeyboardOnScroll extends StatelessWidget {
   final Function? onDismiss;
 
   /// Constructs a widget.
-  const DismissKeyboardOnScroll({Key? key, required this.child, this.onDismiss})
-    : super(key: key);
+  const DismissKeyboardOnScroll({Key? key, required this.child, this.onDismiss}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

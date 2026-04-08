@@ -52,8 +52,7 @@ class NavigationProgress extends StatelessWidget {
     DateTime dtArrival = dt.add(Duration(seconds: remainingDurationInSeconds));
 
     int remainingHours = (remainingDurationInSeconds / 3600).truncate();
-    int remainingMinutes =
-        ((remainingDurationInSeconds - remainingHours * 3600) / 60).truncate();
+    int remainingMinutes = ((remainingDurationInSeconds - remainingHours * 3600) / 60).truncate();
 
     String remainingDistanceUnits = appLocalizations.kilometerAbbreviationText;
     int remainingDistance = (remainingDistanceInMeters / 1000).truncate();
@@ -72,64 +71,40 @@ class NavigationProgress extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text(
-                      DateFormat.Hm().format(dtArrival),
-                      style: TextStyle(fontSize: UIStyle.extraHugeFontSize),
-                    ),
+                    Text(DateFormat.Hm().format(dtArrival), style: TextStyle(fontSize: UIStyle.extraHugeFontSize)),
                     Text(
                       appLocalizations.arrivalTitle,
-                      style: TextStyle(
-                        fontSize: UIStyle.bigFontSize,
-                        color: colorScheme.onSecondary,
-                      ),
+                      style: TextStyle(fontSize: UIStyle.bigFontSize, color: colorScheme.onSecondary),
                     ),
                   ],
                 ),
                 Container(width: UIStyle.contentMarginHuge),
                 Column(
                   children: [
-                    Text(
-                      remainingHours.toString(),
-                      style: TextStyle(fontSize: UIStyle.extraHugeFontSize),
-                    ),
+                    Text(remainingHours.toString(), style: TextStyle(fontSize: UIStyle.extraHugeFontSize)),
                     Text(
                       appLocalizations.hourAbbreviationText,
-                      style: TextStyle(
-                        fontSize: UIStyle.bigFontSize,
-                        color: colorScheme.onSecondary,
-                      ),
+                      style: TextStyle(fontSize: UIStyle.bigFontSize, color: colorScheme.onSecondary),
                     ),
                   ],
                 ),
                 Container(width: UIStyle.contentMarginLarge),
                 Column(
                   children: [
-                    Text(
-                      remainingMinutes.toString(),
-                      style: TextStyle(fontSize: UIStyle.extraHugeFontSize),
-                    ),
+                    Text(remainingMinutes.toString(), style: TextStyle(fontSize: UIStyle.extraHugeFontSize)),
                     Text(
                       appLocalizations.minuteAbbreviationText,
-                      style: TextStyle(
-                        fontSize: UIStyle.bigFontSize,
-                        color: colorScheme.onSecondary,
-                      ),
+                      style: TextStyle(fontSize: UIStyle.bigFontSize, color: colorScheme.onSecondary),
                     ),
                   ],
                 ),
                 Container(width: UIStyle.contentMarginHuge),
                 Column(
                   children: [
-                    Text(
-                      remainingDistance.toString(),
-                      style: TextStyle(fontSize: UIStyle.extraHugeFontSize),
-                    ),
+                    Text(remainingDistance.toString(), style: TextStyle(fontSize: UIStyle.extraHugeFontSize)),
                     Text(
                       remainingDistanceUnits.toString(),
-                      style: TextStyle(
-                        fontSize: UIStyle.bigFontSize,
-                        color: colorScheme.onSecondary,
-                      ),
+                      style: TextStyle(fontSize: UIStyle.bigFontSize, color: colorScheme.onSecondary),
                     ),
                   ],
                 ),

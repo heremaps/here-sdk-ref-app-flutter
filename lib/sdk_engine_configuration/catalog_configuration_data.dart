@@ -52,14 +52,7 @@ class CatalogConfigurationData {
       throw Exception('Error in parsing CatalogConfigurationData');
     }
 
-    return CatalogConfigurationData(
-      hrn,
-      version,
-      allowDownload,
-      ignoreCachedData,
-      cacheExpiration,
-      patchHrn,
-    );
+    return CatalogConfigurationData(hrn, version, allowDownload, ignoreCachedData, cacheExpiration, patchHrn);
   }
 
   CatalogConfigurationData.from(CatalogConfiguration config)
@@ -110,23 +103,16 @@ class CatalogConfigurationData {
     };
   }
 
-  static List<CatalogConfigurationData>? fromDynamicListToList(
-    List<dynamic>? list,
-  ) {
+  static List<CatalogConfigurationData>? fromDynamicListToList(List<dynamic>? list) {
     if (list?.isNotEmpty ?? false) {
-      final List<Map<String, dynamic>> listOfMaps = list!
-          .cast<Map<String, dynamic>>();
+      final List<Map<String, dynamic>> listOfMaps = list!.cast<Map<String, dynamic>>();
       return listOfMaps.map(CatalogConfigurationData.fromMap).toList();
     }
     return null;
   }
 
-  static List<dynamic> toDynamicListFromList(
-    List<CatalogConfigurationData> list,
-  ) {
-    return list
-        .map((CatalogConfigurationData catConf) => catConf.toMap())
-        .toList();
+  static List<dynamic> toDynamicListFromList(List<CatalogConfigurationData> list) {
+    return list.map((CatalogConfigurationData catConf) => catConf.toMap()).toList();
   }
 }
 
@@ -135,8 +121,7 @@ extension CatalogConfigurationDataDescriptionUtil on CatalogConfigurationData {
     return '${localized.hrn}: $hrn, ${version == -1 ? localized.latest : version ?? localized.latest}';
   }
 
-  String description(AppLocalizations localized) =>
-      '${localized.patchHrn.toUpperCase()}: ${patchHrn.unwrapped}';
+  String description(AppLocalizations localized) => '${localized.patchHrn.toUpperCase()}: ${patchHrn.unwrapped}';
 
   /// Converts this `CatalogConfigurationData` to a `CatalogConfiguration` for SDK usage.
   CatalogConfiguration toSdkCatalogConfiguration() {
@@ -146,21 +131,16 @@ extension CatalogConfigurationDataDescriptionUtil on CatalogConfigurationData {
           ? CatalogVersionHint.specific(version!)
           : CatalogVersionHint.latestWithIgnoringCachedData(ignoreCachedData),
     );
-    final CatalogConfiguration catalogConfig =
-        CatalogConfiguration(desiredCatalog)
-          ..allowDownload = allowDownload
-          ..cacheExpirationPeriod = cacheExpirationInSec != null
-              ? Duration(seconds: cacheExpirationInSec!)
-              : null
-          ..patchHrn = patchHrn;
+    final CatalogConfiguration catalogConfig = CatalogConfiguration(desiredCatalog)
+      ..allowDownload = allowDownload
+      ..cacheExpirationPeriod = cacheExpirationInSec != null ? Duration(seconds: cacheExpirationInSec!) : null
+      ..patchHrn = patchHrn;
     return catalogConfig;
   }
 }
 
 extension CatalogConfigurationDataListUtil on List<CatalogConfigurationData> {
   List<CatalogConfiguration> toSdkCatalogConfigurations() {
-    return map(
-      (CatalogConfigurationData c) => c.toSdkCatalogConfiguration(),
-    ).toList();
+    return map((CatalogConfigurationData c) => c.toSdkCatalogConfiguration()).toList();
   }
 }

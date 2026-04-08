@@ -66,9 +66,7 @@ class RecentSearchDataModel extends ChangeNotifier {
     _db = await openDatabase(
       join(dbPath, _kDbName),
       onCreate: (db, version) => db.execute(createTableSQL),
-      onUpgrade: (db, oldVersion, newVersion) => db
-          .execute(deleteTableSQL)
-          .then((value) => db.execute(createTableSQL)),
+      onUpgrade: (db, oldVersion, newVersion) => db.execute(deleteTableSQL).then((value) => db.execute(createTableSQL)),
       version: 2,
     );
 
@@ -87,12 +85,7 @@ class RecentSearchDataModel extends ChangeNotifier {
   /// Adds [text] to the list of recently searched items.
   Future<void> insertText(String text) async {
     await _initFuture;
-    final queryResult = await _db.query(
-      _kTableName,
-      where: "$_kTitleField = ?",
-      whereArgs: [text],
-      limit: 1,
-    );
+    final queryResult = await _db.query(_kTableName, where: "$_kTitleField = ?", whereArgs: [text], limit: 1);
     if (queryResult.isNotEmpty) {
       await _updateTimeStamp(queryResult.first["id"] as int);
     } else {
@@ -107,12 +100,7 @@ class RecentSearchDataModel extends ChangeNotifier {
   /// Adds id of a place to the list of recently searched items.
   Future<void> insertPlace(Place place) async {
     await _initFuture;
-    final queryResult = await _db.query(
-      _kTableName,
-      where: "$_kPlaceIdField = ?",
-      whereArgs: [place.id],
-      limit: 1,
-    );
+    final queryResult = await _db.query(_kTableName, where: "$_kPlaceIdField = ?", whereArgs: [place.id], limit: 1);
     if (queryResult.isNotEmpty) {
       await _updateTimeStamp(queryResult.first["id"] as int);
     } else {
@@ -134,20 +122,11 @@ class RecentSearchDataModel extends ChangeNotifier {
   /// Returns recently searched items list.
   Future<List<RecentSearchItem>> getData() async {
     await _initFuture;
-    List<Map<String, dynamic>> results = await _db.query(
-      _kTableName,
-      orderBy: "$_kTimeStampField DESC",
-    );
+    List<Map<String, dynamic>> results = await _db.query(_kTableName, orderBy: "$_kTimeStampField DESC");
     return results.map((e) {
       String? placeString = e[_kPlaceField] as String?;
-      Place? place = placeString != null
-          ? Place.deserialize(placeString)
-          : null;
-      return RecentSearchItem(
-        e["id"] as int,
-        e[_kTitleField] as String?,
-        place,
-      );
+      Place? place = placeString != null ? Place.deserialize(placeString) : null;
+      return RecentSearchItem(e["id"] as int, e[_kTitleField] as String?, place);
     }).toList();
   }
 }

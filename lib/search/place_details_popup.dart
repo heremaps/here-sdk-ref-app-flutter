@@ -48,16 +48,15 @@ Future<PlaceDetailsPopupResult?> showPlaceDetailsPopup({
 
   PlaceDetailsPopupResult? result = await showDialog<PlaceDetailsPopupResult>(
     context: context,
-    builder: (context) => FutureBuilder<Place>(
-      initialData: place,
-      future: placeDetailsFuture,
-      builder: (context, snapshot) => _createPopupFromPlace(
-        context,
-        snapshot.data!,
-        routeToEnabled,
-        addToRouteEnabled,
-      ),
-    ),
+    builder: (context) {
+      return FutureBuilder<Place>(
+        initialData: place,
+        future: placeDetailsFuture,
+        builder: (context, snapshot) {
+          return _createPopupFromPlace(context, snapshot.data!, routeToEnabled, addToRouteEnabled);
+        },
+      );
+    },
   );
 
   return result;
@@ -67,18 +66,14 @@ Future<Place> _getPlaceDetails(Place place, bool offline) async {
   final SearchEngineProxy _searchEngine = SearchEngineProxy(offline: offline);
   final Completer<Place?> completer = Completer();
 
-  _searchEngine.searchByPlaceIdWithLanguageCode(
-    PlaceIdQuery(place.id),
-    LanguageCode.enUs,
-    (error, place) {
-      if (error != null) {
-        print('Search failed. Error: ${error.toString()}');
-        completer.complete();
-      }
+  _searchEngine.searchByPlaceIdWithLanguageCode(PlaceIdQuery(place.id), LanguageCode.enUs, (error, place) {
+    if (error != null) {
+      print('Search failed. Error: ${error.toString()}');
+      completer.complete();
+    }
 
-      completer.complete(place);
-    },
-  );
+    completer.complete(place);
+  });
 
   Place? newPlace = await completer.future;
 
@@ -89,18 +84,9 @@ Future<Place> _getPlaceDetails(Place place, bool offline) async {
   return newPlace;
 }
 
-Widget _createPopupFromPlace(
-  BuildContext context,
-  Place place,
-  bool routeToEnabled,
-  bool addToRouteEnabled,
-) {
+Widget _createPopupFromPlace(BuildContext context, Place place, bool routeToEnabled, bool addToRouteEnabled) {
   return SimpleDialog(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(UIStyle.popupsBorderRadius),
-      ),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius))),
     titlePadding: EdgeInsets.zero,
     title: Column(
       mainAxisSize: MainAxisSize.min,
@@ -114,30 +100,18 @@ Widget _createPopupFromPlace(
                   place.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: UIStyle.hugeFontSize,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: UIStyle.hugeFontSize, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            IconButton(
-              icon: HdsIconWidget(HdsAssetsPaths.crossIcon),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+            IconButton(icon: HdsIconWidget(HdsAssetsPaths.crossIcon), onPressed: () => Navigator.of(context).pop()),
           ],
         ),
         Padding(
-          padding: EdgeInsets.only(
-            left: UIStyle.contentMarginLarge,
-            right: UIStyle.contentMarginLarge,
-          ),
+          padding: EdgeInsets.only(left: UIStyle.contentMarginLarge, right: UIStyle.contentMarginLarge),
           child: Text(
             place.address.addressText,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSecondary,
-              fontSize: UIStyle.bigFontSize,
-            ),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize: UIStyle.bigFontSize),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -161,28 +135,18 @@ Widget _createPopupFromPlace(
                 Spacer(),
                 _buildOptionButton(
                   context,
-                  HdsIconWidget.medium(
-                    HdsAssetsPaths.path,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  HdsIconWidget.medium(HdsAssetsPaths.path, color: Theme.of(context).colorScheme.primary),
                   AppLocalizations.of(context)!.routeToButtonTitle,
-                  () => Navigator.of(
-                    context,
-                  ).pop(PlaceDetailsPopupResult.routeTo),
+                  () => Navigator.of(context).pop(PlaceDetailsPopupResult.routeTo),
                 ),
               ],
               if (addToRouteEnabled) ...[
                 Spacer(),
                 _buildOptionButton(
                   context,
-                  HdsIconWidget.small(
-                    HdsAssetsPaths.addMapMarkerIcon,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  HdsIconWidget.small(HdsAssetsPaths.addMapMarkerIcon, color: Theme.of(context).colorScheme.primary),
                   AppLocalizations.of(context)!.addToRouteButton,
-                  () => Navigator.of(
-                    context,
-                  ).pop(PlaceDetailsPopupResult.addToRoute),
+                  () => Navigator.of(context).pop(PlaceDetailsPopupResult.addToRoute),
                 ),
               ],
               Spacer(),
@@ -199,24 +163,19 @@ List<Widget>? _buildPhonesList(BuildContext context, Place place) {
   }
 
   List<ListTile> phoneWidgets = [
-    ...place.details.contacts.first.landlinePhones.map(
-      (phone) =>
-          _buildPhoneTile(HdsAssetsPaths.telephoneIcon, phone.phoneNumber),
-    ),
-    ...place.details.contacts.first.mobilePhones.map(
-      (phone) => _buildPhoneTile(HdsAssetsPaths.smartPhone, phone.phoneNumber),
-    ),
+    ...place.details.contacts.first.landlinePhones.map((phone) {
+      return _buildPhoneTile(HdsAssetsPaths.telephoneIcon, phone.phoneNumber);
+    }),
+    ...place.details.contacts.first.mobilePhones.map((phone) {
+      return _buildPhoneTile(HdsAssetsPaths.smartPhone, phone.phoneNumber);
+    }),
   ];
 
   return _convertToExpansionTile(phoneWidgets);
 }
 
 ListTile _buildPhoneTile(String icon, String phoneNumber) {
-  return _buildInfoTile(
-    icon,
-    phoneNumber,
-    () => launchUrl(Uri.parse("tel:" + phoneNumber)),
-  );
+  return _buildInfoTile(icon, phoneNumber, () => launchUrl(Uri.parse("tel:" + phoneNumber)));
 }
 
 List<Widget>? _buildOpeningHours(Place place) {
@@ -225,13 +184,9 @@ List<Widget>? _buildOpeningHours(Place place) {
   }
 
   List<ListTile> openingHoursWidgets = [];
-  place.details.openingHours.forEach(
-    (openingHours) => openingHours.text.forEach(
-      (hour) => openingHoursWidgets.add(
-        _buildInfoTile(HdsAssetsPaths.time, hour, null),
-      ),
-    ),
-  );
+  place.details.openingHours.forEach((openingHours) {
+    openingHours.text.forEach((hour) => openingHoursWidgets.add(_buildInfoTile(HdsAssetsPaths.time, hour, null)));
+  });
 
   return _convertToExpansionTile(openingHoursWidgets);
 }
@@ -241,9 +196,7 @@ List<Widget>? _buildURLsList(BuildContext context, Place place) {
     return null;
   }
 
-  List<ListTile> urlsWidgets = place.details.contacts.first.websites.map((
-    site,
-  ) {
+  List<ListTile> urlsWidgets = place.details.contacts.first.websites.map((site) {
     return _buildInfoTile(HdsAssetsPaths.globalIcon, site.address, () {
       launchUrl(Uri.parse(site.address), mode: LaunchMode.externalApplication);
     });
@@ -266,10 +219,7 @@ List<Widget>? _convertToExpansionTile(List<ListTile> tiles) {
               leading: tiles.first.leading,
               title: InkWell(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    top: UIStyle.contentMarginLarge,
-                    bottom: UIStyle.contentMarginLarge,
-                  ),
+                  padding: EdgeInsets.only(top: UIStyle.contentMarginLarge, bottom: UIStyle.contentMarginLarge),
                   child: tiles.first.title,
                 ),
                 onTap: tiles.first.onTap,
@@ -280,50 +230,39 @@ List<Widget>? _convertToExpansionTile(List<ListTile> tiles) {
   ];
 }
 
-ListTile _buildInfoTile(String icon, String text, VoidCallback? onTap) =>
-    ListTile(
-      leading: HdsIconWidget(icon),
-      title: Text(text, maxLines: 2, overflow: TextOverflow.ellipsis),
-      onTap: onTap,
-    );
+ListTile _buildInfoTile(String icon, String text, VoidCallback? onTap) => ListTile(
+  leading: HdsIconWidget(icon),
+  title: Text(text, maxLines: 2, overflow: TextOverflow.ellipsis),
+  onTap: onTap,
+);
 
-Widget _buildOptionButton(
-  BuildContext context,
-  Widget icon,
-  String title,
-  VoidCallback onPressed,
-) => SimpleDialogOption(
-  padding: EdgeInsets.zero,
-  child: Material(
-    color: Colors.transparent,
-    borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
-    child: InkWell(
-      borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
-      onTap: onPressed,
-      child: Container(
-        height: UIStyle.bigButtonHeight,
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: UIStyle.contentMarginLarge,
-            right: UIStyle.contentMarginLarge,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              icon,
-              Container(width: UIStyle.contentMarginMedium),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: UIStyle.bigFontSize,
-                  fontWeight: FontWeight.bold,
-                ),
+Widget _buildOptionButton(BuildContext context, Widget icon, String title, VoidCallback onPressed) =>
+    SimpleDialogOption(
+      padding: EdgeInsets.zero,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(UIStyle.bigButtonHeight),
+          onTap: onPressed,
+          child: Container(
+            height: UIStyle.bigButtonHeight,
+            child: Padding(
+              padding: EdgeInsets.only(left: UIStyle.contentMarginLarge, right: UIStyle.contentMarginLarge),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  icon,
+                  Container(width: UIStyle.contentMarginMedium),
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: UIStyle.bigFontSize, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
-    ),
-  ),
-);
+    );

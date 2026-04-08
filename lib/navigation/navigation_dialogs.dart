@@ -37,10 +37,7 @@ Future<bool?> askForPositionSource(BuildContext context) async {
       children: [
         SimpleDialogOption(
           child: ListTile(
-            leading: HdsIconWidget.medium(
-              HdsAssetsPaths.path,
-              color: Theme.of(context).colorScheme.onSecondary,
-            ),
+            leading: HdsIconWidget.medium(HdsAssetsPaths.path, color: Theme.of(context).colorScheme.onSecondary),
             title: Text(appLocalizations.simulatedLocationSourceTitle),
           ),
           onPressed: () => Navigator.of(context).pop(true),
