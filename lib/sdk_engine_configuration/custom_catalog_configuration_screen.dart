@@ -78,7 +78,7 @@ class _CustomCatalogConfigurationScreenState extends State<CustomCatalogConfigur
   }
 
   void _toggleCatalogHrnAddButtonState() {
-    setState(() => _isCatalogHrnAddButtonEnabled = _catalogHrnController.text.isNotEmpty);
+    setState(() => _isCatalogHrnAddButtonEnabled = _catalogHrnController.text.trim().isNotEmpty);
   }
 
   void _resetInputFields() {
@@ -102,13 +102,15 @@ class _CustomCatalogConfigurationScreenState extends State<CustomCatalogConfigur
   }
 
   void _onAddCatalogConfig() async {
-    final String? patchHrn = _catalogPatchHrnController.text.isEmpty ? null : _catalogPatchHrnController.text;
+    final String? patchHrn = _catalogPatchHrnController.text.trim().isEmpty
+        ? null
+        : _catalogPatchHrnController.text.trim();
     CatalogConfigurationData configurationData = CatalogConfigurationData(
-      _catalogHrnController.text,
-      int.tryParse(_catalogVersionHintController.text),
+      _catalogHrnController.text.trim(),
+      int.tryParse(_catalogVersionHintController.text.trim()),
       _catalogAllowDownload,
       _ignoreCachedData,
-      int.tryParse(_catalogExpirationTimeController.text),
+      int.tryParse(_catalogExpirationTimeController.text.trim()),
       patchHrn,
     );
     if (_catalogConfigurations.contains(configurationData)) {
