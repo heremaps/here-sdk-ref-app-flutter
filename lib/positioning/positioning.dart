@@ -23,28 +23,30 @@ import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:here_sdk_reference_application_flutter/common/ui_style.dart';
+import 'package:here_sdk_reference_application_flutter/common/utils/navigation/position_status_listener.dart';
+import 'package:here_sdk_reference_application_flutter/common/util.dart' as Util;
 import 'package:provider/provider.dart';
 
-import '../common/ui_style.dart';
-import '../common/util.dart' as Util;
 import 'positioning_engine.dart';
 
 typedef LocationEngineStatusCallback = void Function(LocationEngineStatus status);
 typedef LocationUpdatedCallback = void Function(Location location);
 
 /// Mixin that implements logic for positioning. It manages the current location marker and provides location updates.
-mixin Positioning {
+mixin Positioning implements PositioningStatusListener {
   static const double initDistanceToEarth = 8000; // meters
   static final GeoCoordinates initPosition = GeoCoordinates(52.530932, 13.384915);
 
   late HereMapController _hereMapController;
   PositioningEngine? _positioningEngine;
+  DeviceLocationServicesStatusNotifier? _locationServicesStatusNotifier;
 
   LocationUpdatedCallback? _onLocationUpdatedCallback;
   StreamSubscription? _locationUpdatesSubscription;
 
-  MapPolygon? _locationAccuracyCircle;
-  MapMarker? _locationMarker;
+  LocationIndicator? _locationIndicator; // Used when device location is available (shows bearing).
+  MapMarker? _locationMarker; // Used as fallback when device location is unavailable.
   bool _locationMarkerVisible = false;
   Location? _lastKnownLocation;
 
@@ -63,27 +65,44 @@ mixin Positioning {
   /// Gets the state of the current location marker.
   bool get locationVisible => _locationMarkerVisible;
 
-  /// Sets the state of the current location marker.
-  set locationVisible(bool visible) {
-    if (_locationMarker != null) {
-      if (visible) {
-        _hereMapController.mapScene.addMapMarker(_locationMarker!);
-        _hereMapController.mapScene.addMapPolygon(_locationAccuracyCircle!);
-      } else {
-        _hereMapController.mapScene.removeMapMarker(_locationMarker!);
-        _hereMapController.mapScene.removeMapPolygon(_locationAccuracyCircle!);
-      }
-      _locationMarkerVisible = visible;
-    }
+  /// Returns the best available location: positioning engine > cached > default.
+  Location get _displayLocation {
+    return _positioningEngine?.lastKnownLocation ?? _lastKnownLocation ?? Location.withCoordinates(initPosition);
   }
 
+  /// Sets the state of the current location marker.
+  set locationVisible(bool visible) {
+    if (_locationIndicator == null && _locationMarker == null) {
+      _locationMarkerVisible = visible;
+      return;
+    }
+
+    if (visible) {
+      if (_locationIndicator != null) {
+        _locationIndicator!.enable(_hereMapController);
+        _locationIndicator!.updateLocation(_displayLocation);
+      } else if (_locationMarker != null) {
+        _hereMapController.mapScene.addMapMarker(_locationMarker!);
+      }
+    } else {
+      _locationIndicator?.disable();
+      if (_locationMarker != null) {
+        _hereMapController.mapScene.removeMapMarker(_locationMarker!);
+      }
+    }
+
+    _locationMarkerVisible = visible;
+  }
+
+  /// Removes both the [LocationIndicator] and [MapMarker] from the map and resets visibility.
   void _removeMarkers() {
+    _locationIndicator?.disable();
+    _locationIndicator = null;
     if (_locationMarker != null) {
       _hereMapController.mapScene.removeMapMarker(_locationMarker!);
+      _locationMarker = null;
     }
-    if (_locationAccuracyCircle != null) {
-      _hereMapController.mapScene.removeMapPolygon(_locationAccuracyCircle!);
-    }
+    _locationMarkerVisible = false;
   }
 
   /// Initializes positioning. The [hereMapController] is used to display current position marker,
@@ -100,6 +119,8 @@ mixin Positioning {
     // Ensure that any previously applied markers are removed before applying a new one,
     // when the app is resumed.
     _removeMarkers();
+    _locationServicesStatusNotifier?.stop();
+    _locationServicesStatusNotifier = DeviceLocationServicesStatusNotifier()..start(this);
     _initMapLocation();
 
     _locationUpdatesSubscription = _positioningEngine!.getLocationUpdates.listen(_onLocationUpdated);
@@ -108,10 +129,15 @@ mixin Positioning {
   /// Stops positioning.
   void stopPositioning() {
     _locationUpdatesSubscription?.cancel();
+    _locationServicesStatusNotifier?.stop();
+    _locationServicesStatusNotifier = null;
     _removeMarkers();
   }
 
-  void _initMapLocation() {
+  /// Checks current device location availability and places the initial location marker on the map.
+  Future<void> _initMapLocation() async {
+    final bool canShowBearing = await _locationServicesStatusNotifier!.canLocateUserPositioning();
+
     final Location? lastKnownLocation = _positioningEngine!.lastKnownLocation;
     if (lastKnownLocation != null) {
       final double accuracy = (lastKnownLocation.horizontalAccuracyInMeters != null)
@@ -123,6 +149,7 @@ mixin Positioning {
         geoCoordinates: lastKnownLocation.coordinates,
         accuracyRadiusInMeters: accuracy,
         canShowUserLocationMarker: shouldAddUserLocationMarker,
+        showLocationWithBearing: canShowBearing,
       );
       // Update the map viewport to be centered on the location.
       if (enableMapUpdate) {
@@ -133,7 +160,11 @@ mixin Positioning {
       }
     } else {
       // No last known location available, show a pre-defined location.
-      _addMyLocationToMap(geoCoordinates: initPosition, canShowUserLocationMarker: shouldAddUserLocationMarker);
+      _addMyLocationToMap(
+        geoCoordinates: initPosition,
+        canShowUserLocationMarker: shouldAddUserLocationMarker,
+        showLocationWithBearing: canShowBearing,
+      );
       // Update the map viewport to be centered on the location.
       if (enableMapUpdate) {
         _hereMapController.camera.lookAtPointWithMeasure(
@@ -144,41 +175,51 @@ mixin Positioning {
     }
   }
 
+  /// Clears any existing marker/indicator and adds the appropriate one based on [showLocationWithBearing].
+  /// When true, uses [LocationIndicator] with bearing; when false, uses a static [MapMarker].
   void _addMyLocationToMap({
     required GeoCoordinates geoCoordinates,
     double accuracyRadiusInMeters = 0,
     bool canShowUserLocationMarker = true,
+    bool showLocationWithBearing = true,
   }) {
-    int locationMarkerSize = (UIStyle.locationMarkerSize * _hereMapController.pixelScale).truncate();
+    _locationIndicator?.disable();
+    _locationIndicator = null;
+    if (_locationMarker != null) {
+      _hereMapController.mapScene.removeMapMarker(_locationMarker!);
+      _locationMarker = null;
+    }
 
-    // Transparent halo around the current location.
-    _locationAccuracyCircle = MapPolygon(
-      _createGeometry(geoCoordinates, accuracyRadiusInMeters),
-      UIStyle.accuracyCircleColor,
-    );
-    // Image on top of the current location.
-    _locationMarker = Util.createMarkerWithImagePath(
-      geoCoordinates,
-      'assets/position.svg',
-      locationMarkerSize,
-      locationMarkerSize,
-    );
+    if (showLocationWithBearing) {
+      _locationIndicator = LocationIndicator()
+        ..locationIndicatorStyle = LocationIndicatorIndicatorStyle.pedestrian
+        ..isAccuracyVisualized = true;
+    } else {
+      final int markerSize = (UIStyle.locationMarkerSize * _hereMapController.pixelScale).truncate();
+      _locationMarker = Util.createMarkerWithImagePath(geoCoordinates, 'assets/position.svg', markerSize, markerSize);
+    }
 
-    // Add the location marker and circle to the map based on the flag [canShowUserLocationMarker].
+    // Add the location indicator based on the flag [canShowUserLocationMarker].
     locationVisible = canShowUserLocationMarker;
-  }
-
-  GeoPolygon _createGeometry(GeoCoordinates geoCoordinates, double accuracyRadiusInMeters) {
-    GeoCircle geoCircle = GeoCircle(geoCoordinates, accuracyRadiusInMeters);
-    GeoPolygon geoPolygon = GeoPolygon.withGeoCircle(geoCircle);
-    return geoPolygon;
   }
 
   void _onLocationUpdated(Location location) {
     _lastKnownLocation = location;
-    final double accuracy = (location.horizontalAccuracyInMeters != null) ? location.horizontalAccuracyInMeters! : 0.0;
-    _locationAccuracyCircle?.geometry = _createGeometry(location.coordinates, accuracy);
-    _locationMarker?.coordinates = location.coordinates;
+    if (_locationMarkerVisible) {
+      if (_locationIndicator != null) {
+        _locationIndicator!.updateLocation(location);
+      } else if (_locationMarker != null) {
+        final int markerSize = (UIStyle.locationMarkerSize * _hereMapController.pixelScale).truncate();
+        _hereMapController.mapScene.removeMapMarker(_locationMarker!);
+        _locationMarker = Util.createMarkerWithImagePath(
+          location.coordinates,
+          'assets/position.svg',
+          markerSize,
+          markerSize,
+        );
+        _hereMapController.mapScene.addMapMarker(_locationMarker!);
+      }
+    }
 
     // Update the map viewport to be centered on the location.
     if (enableMapUpdate) {
@@ -186,5 +227,21 @@ mixin Positioning {
     }
 
     _onLocationUpdatedCallback?.call(location);
+  }
+
+  /// Called by [DeviceLocationServicesStatusNotifier] when device location services are toggled.
+  /// Rebuilds the map marker presentation to match the new availability state.
+  @override
+  void didDevicePositioningStatusUpdated({required bool isPositioningAvailable, required bool hasPermissionsGranted}) {
+    final bool canShowBearing = isPositioningAvailable && hasPermissionsGranted;
+    final Location currentLocation = _displayLocation;
+    final double accuracy = currentLocation.horizontalAccuracyInMeters ?? 0;
+
+    _addMyLocationToMap(
+      geoCoordinates: currentLocation.coordinates,
+      accuracyRadiusInMeters: accuracy,
+      canShowUserLocationMarker: shouldAddUserLocationMarker,
+      showLocationWithBearing: canShowBearing,
+    );
   }
 }
