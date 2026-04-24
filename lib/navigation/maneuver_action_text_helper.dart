@@ -42,7 +42,7 @@ extension ManeuverActionHelper on Maneuver {
 
     switch (action) {
       case ManeuverAction.arrive:
-        return localizations.arriveActionText;
+        return '${localizations.arriveAt} ${roadName ?? ''}';
       case ManeuverAction.continueOn:
         return _makeActionString(localizations.continueOnActionText, localizations.continueOnActionRoadText, roadName);
       case ManeuverAction.depart:
