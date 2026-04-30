@@ -19,6 +19,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:here_sdk/routing.dart';
+import 'package:here_sdk_reference_application_flutter/common/extensions/string_extensions.dart';
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
 
 import '../common/hds_icons/hds_assets_paths.dart';
@@ -35,14 +36,19 @@ String _makeActionString(String text, String template, String? roadName) {
 /// Helper extension class for the [Maneuver] class.
 extension ManeuverActionHelper on Maneuver {
   /// Returns the localized text for the navigation maneuver.
-  String getActionText(BuildContext context) {
+  String getActionText(BuildContext context, int totalsSections) {
     final AppLocalizations localizations = AppLocalizations.of(context)!;
     final String? roadName = roadTexts.names.getDefaultValue();
     final String? nextRoadName = nextRoadTexts.names.getDefaultValue();
 
     switch (action) {
       case ManeuverAction.arrive:
-        return '${localizations.arriveAt} ${roadName ?? ''}';
+        if (roadName.isNotNullNorEmpty) {
+          return '${localizations.arrivedAt} $roadName';
+        } else {
+          bool isLastSection = totalsSections == sectionIndex + 1;
+          return '${localizations.arrivedAt}  ${isLastSection ? localizations.destination : localizations.waypoint}';
+        }
       case ManeuverAction.continueOn:
         return _makeActionString(localizations.continueOnActionText, localizations.continueOnActionRoadText, roadName);
       case ManeuverAction.depart:

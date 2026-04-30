@@ -39,7 +39,7 @@
   "@arriveActionText": {
     "description": "Text for the arrive maneuver action"
   },
-  "arriveAt": "Arrive at",
+  "arrivedAt": "Arrived at",
   "atmTitle": "ATM",
   "@atmTitle": {
     "description": "Text for the ATM place category"
@@ -1132,6 +1132,7 @@
   "@departureTimeTitle": {
     "description": "Title of departure time setting in route options"
   },
+  "destination": "destination",
   "dirtRoad": "Dirt road",
   "@dirtRoad": {
     "description": "Avoid road feature name for route preferences"
@@ -2090,6 +2091,7 @@
   "@walkSpeedUnitTitle": {
     "description": "Pedestrian route settings"
   },
+  "waypoint": "waypoint",
   "wayPointsListTitle": "Waypoints",
   "@wayPointsListTitle": {
     "description": "Title of the waypoints list"

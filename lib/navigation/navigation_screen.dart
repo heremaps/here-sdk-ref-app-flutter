@@ -490,7 +490,7 @@ class _NavigationScreenState extends State<NavigationScreen>
   NotificationBody _buildManeuverNotificationBody(Routing.Maneuver maneuver, {String? text}) {
     return NotificationBody(
       title: _getRemainingTimeString(),
-      body: text ?? maneuver.getActionText(context),
+      body: text ?? maneuver.getActionText(context, _currentRoute.sections.length),
       imagePath: maneuver.action.iconPath,
       presentSound: !_soundEnabled,
     );
@@ -591,7 +591,7 @@ class _NavigationScreenState extends State<NavigationScreen>
       child = CurrentManeuver(
         action: maneuver.action,
         distance: _currentManeuverDistance,
-        text: maneuver.getActionText(context),
+        text: maneuver.getActionText(context, _currentRoute.sections.length),
       );
     }
 
@@ -617,7 +617,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     }
 
     Routing.ManeuverAction action = maneuver.action;
-    String text = maneuver.getActionText(context);
+    String text = maneuver.getActionText(context, _currentRoute.sections.length);
 
     return Align(
       alignment: Alignment.topCenter,
