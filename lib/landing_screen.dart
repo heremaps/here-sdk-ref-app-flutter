@@ -213,7 +213,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   }
 
   Future<void> loadCustomScene(CustomMapStyleSettings customMapStyleSettings) async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles();
+    final FilePickerResult? result = await FilePicker.pickFiles();
     if (result == null) {
       return;
     }

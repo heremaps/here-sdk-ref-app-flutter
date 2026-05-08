@@ -21,7 +21,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
@@ -446,13 +445,8 @@ class _NavigationScreenState extends State<NavigationScreen>
         ..highSpeedBoundaryInMetersPerSecond = _kDefaultSpeedLimitBoundary;
       _visualNavigator.speedWarningOptions = Navigation.SpeedWarningOptions(offset);
       _visualNavigator.speedWarningListener = Navigation.SpeedWarningListener((status) {
-        if (status == Navigation.SpeedWarningStatus.speedLimitExceeded && _soundEnabled) {
-          FlutterRingtonePlayer().play(
-            android: AndroidSounds.notification,
-            ios: IosSounds.triTone,
-            looping: false,
-            asAlarm: false,
-          );
+        if (status == Navigation.SpeedWarningStatus.speedLimitExceeded) {
+          print('Speed warning: speed limit exceeded.');
         }
         setState(() => _speedWarningStatus = status);
       });

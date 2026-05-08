@@ -42,34 +42,33 @@ environment:
 
 dependencies:
   battery_plus: 7.0.0
-  connectivity_plus: ^7.0.0
-  cupertino_icons: ^1.0.5
+  connectivity_plus: 7.0.0
+  cupertino_icons: ^1.0.9
   device_info_plus: 12.3.0
   disk_space_plus: 0.2.6
-  file_picker: 10.3.10
+  file_picker: 11.0.2
   flutter:
     sdk: flutter
-  flutter_local_notifications: 20.0.0
+  flutter_local_notifications: 21.0.0
   flutter_localizations:
     sdk: flutter
-  flutter_ringtone_player: ^4.0.0+4
-  flutter_svg: 2.2.3
+  flutter_svg: 2.2.4
   flutter_tts: 4.2.5
   geolocator: 14.0.2
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:
     path: plugins/here_sdk
   intl: 0.20.2
-  package_info_plus: 9.0.0
+  package_info_plus: 9.0.1
   path: 1.9.1
   path_provider: 2.1.5
   permission_handler: 12.0.1
   provider: 6.1.5+1
   reorderables: ^0.6.0
-  shared_preferences: 2.5.4
+  shared_preferences: 2.5.5
   sqflite: 2.4.2+1
   url_launcher: ^6.3.2
-  wakelock_plus: 1.4.0
+  wakelock_plus: 1.5.2
 
 dev_dependencies:
   flutter_test:
