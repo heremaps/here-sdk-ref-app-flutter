@@ -43,38 +43,43 @@ set "SUBMODULE_PATH=assets/here-icons"
 :: To update: run "git log --oneline" inside assets/here-icons, choose the
 :: desired commit, paste the full SHA here, and update the parent repo pointer
 :: with "git add assets/here-icons" followed by "git commit".
-set "HERE_ICON_LIBRARY_COMMIT_ID=f8920855366266e400cfa7944c8143e627757c1a"
+set "HERE_ICON_LIBRARY_COMMIT_ID=11b8592957e597648910d56137feb15ee0f5d4bb"
 
-:: Step 1: Initialize any submodule that has not been cloned yet, then fetch
+:: Initialize any submodule that has not been cloned yet, then fetch
 :: and check out the recorded submodule commits.  --recursive handles nested
 :: submodules if any are added in the future.
-echo Initializing and updating submodules...
-git submodule update --init --recursive
+echo Syncing submodule configuration...
+git submodule sync --recursive
+if errorlevel 1 goto :error
 
-:: Verify Step 1 succeeded before proceeding.  Exiting early here prevents
-:: the checkout step from running against a missing or incomplete submodule.
+echo Initializing/updating %SUBMODULE_PATH%...
+git submodule update --init --recursive "%SUBMODULE_PATH%"
+if errorlevel 1 goto :error
+
+:: Fetch ensures the pinned commit object is available locally.
+echo Fetching latest refs for %SUBMODULE_PATH%...
+git -C "%SUBMODULE_PATH%" fetch origin --prune --tags
+if errorlevel 1 goto :error
+
+:: Validate commit exists before checkout to give a clear error.
+echo Validating pinned commit...
+git -C "%SUBMODULE_PATH%" cat-file -e %HERE_ICON_LIBRARY_COMMIT_ID%^{commit}
 if errorlevel 1 (
-    echo Failed to initialize and update submodules.
-    exit /b 1
+  echo ERROR: Commit %HERE_ICON_LIBRARY_COMMIT_ID% not found in %SUBMODULE_PATH%.
+  echo Check the SHA and verify it exists on remote origin.
+  goto :error
 )
 
-:: Step 2: Checkout the submodule to a fixed commit ID
-:: This is useful when you want to pin the submodule to a specific version
-echo Checking out submodule "%SUBMODULE_PATH%" to commit %HERE_ICON_LIBRARY_COMMIT_ID%...
-pushd "%SUBMODULE_PATH%"
-git checkout %HERE_ICON_LIBRARY_COMMIT_ID% --force
+echo Checking out pinned commit...
+git -C "%SUBMODULE_PATH%" checkout --force %HERE_ICON_LIBRARY_COMMIT_ID%
+if errorlevel 1 goto :error
 
-:: Verify Step 2 succeeded.  popd is called before exiting so the working
-:: directory is restored even on failure.
-if errorlevel 1 (
-    echo Failed to checkout commit %HERE_ICON_LIBRARY_COMMIT_ID% in submodule "%SUBMODULE_PATH%".
-    popd
-    exit /b 1
-)
-popd
-
-echo Submodule synced to commit %HERE_ICON_LIBRARY_COMMIT_ID% successfully.
+echo Submodule updated: %SUBMODULE_PATH% @ %HERE_ICON_LIBRARY_COMMIT_ID%
 
 :: Release all locally scoped variables and restore the previous environment.
 endlocal
 exit /b 0
+
+:error
+echo Failed to initialize/update submodules.
+exit /b 1

@@ -205,6 +205,103 @@ class HdsAssetsPaths {
 
   static const String walk = '$_traveTransportTracking/walking_solid_24px.svg';
 
+  // SDK Maneuver PNG icons
+  static const String arrivePngIcon = '$_manoeuversSdkPngAssets/arrive.png';
+
+  static const String continueOnPngIcon = '$_manoeuversSdkPngAssets/continue-on.png';
+
+  static const String departPngIcon = '$_manoeuversSdkPngAssets/depart.png';
+
+  static const String enterHighwayFromLeftPngIcon = '$_manoeuversSdkPngAssets/enter-highway-left.png';
+
+  static const String enterHighwayFromRightPngIcon = '$_manoeuversSdkPngAssets/enter-highway-right.png';
+
+  static const String leftExitPngIcon = '$_manoeuversSdkPngAssets/left-exit.png';
+
+  static const String leftForkPngIcon = '$_manoeuversSdkPngAssets/left-fork.png';
+
+  static const String leftRampPngIcon = '$_manoeuversSdkPngAssets/left-ramp.png';
+
+  static const String leftRoundaboutEnterPngIcon = '$_manoeuversSdkPngAssets/left-roundabout-enter.png';
+
+  static const String leftRoundaboutExit1PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit1.png';
+
+  static const String leftRoundaboutExit2PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit2.png';
+
+  static const String leftRoundaboutExit3PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit3.png';
+
+  static const String leftRoundaboutExit4PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit4.png';
+
+  static const String leftRoundaboutExit5PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit5.png';
+
+  static const String leftRoundaboutExit6PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit6.png';
+
+  static const String leftRoundaboutExit7PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit7.png';
+
+  static const String leftRoundaboutExit8PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit8.png';
+
+  static const String leftRoundaboutExit9PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit9.png';
+
+  static const String leftRoundaboutExit10PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit10.png';
+
+  static const String leftRoundaboutExit11PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit11.png';
+
+  static const String leftRoundaboutExit12PngIcon = '$_manoeuversSdkPngAssets/left-roundabout-exit12.png';
+
+  static const String leftRoundaboutPassPngIcon = '$_manoeuversSdkPngAssets/left-roundabout-pass.png';
+
+  static const String leftTurnPngIcon = '$_manoeuversSdkPngAssets/left-turn.png';
+
+  static const String leftUTurnPngIcon = '$_manoeuversSdkPngAssets/left-u-turn.png';
+
+  static const String middleForkPngIcon = '$_manoeuversSdkPngAssets/middle-fork.png';
+
+  static const String rightExitPngIcon = '$_manoeuversSdkPngAssets/right-exit.png';
+
+  static const String rightForkPngIcon = '$_manoeuversSdkPngAssets/right-fork.png';
+
+  static const String rightRampPngIcon = '$_manoeuversSdkPngAssets/right-ramp.png';
+
+  static const String rightRoundaboutEnterPngIcon = '$_manoeuversSdkPngAssets/right-roundabout-enter.png';
+
+  static const String rightRoundaboutExit10PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit10.png';
+
+  static const String rightRoundaboutExit11PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit11.png';
+
+  static const String rightRoundaboutExit12PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit12.png';
+
+  static const String rightRoundaboutExit1PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit1.png';
+
+  static const String rightRoundaboutExit2PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit2.png';
+
+  static const String rightRoundaboutExit3PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit3.png';
+
+  static const String rightRoundaboutExit4PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit4.png';
+
+  static const String rightRoundaboutExit5PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit5.png';
+
+  static const String rightRoundaboutExit6PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit6.png';
+
+  static const String rightRoundaboutExit7PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit7.png';
+
+  static const String rightRoundaboutExit8PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit8.png';
+
+  static const String rightRoundaboutExit9PngIcon = '$_manoeuversSdkPngAssets/right-roundabout-exit9.png';
+
+  static const String rightRoundaboutPassPngIcon = '$_manoeuversSdkPngAssets/right-roundabout-pass.png';
+
+  static const String rightTurnPngIcon = '$_manoeuversSdkPngAssets/right-turn.png';
+
+  static const String rightUTurnPngIcon = '$_manoeuversSdkPngAssets/right-u-turn.png';
+
+  static const String sharpLeftTurnPngIcon = '$_manoeuversSdkPngAssets/sharp-left-turn.png';
+
+  static const String sharpRightTurnPngIcon = '$_manoeuversSdkPngAssets/sharp-right-turn.png';
+
+  static const String slightLeftTurnPngIcon = '$_manoeuversSdkPngAssets/slight-left-turn.png';
+
+  static const String slightRightTurnPngIcon = '$_manoeuversSdkPngAssets/slight-right-turn.png';
+
   //image folder shortcuts
 
   static const String _assets = 'assets/here-icons/icons';
@@ -213,7 +310,8 @@ class HdsAssetsPaths {
   static const String _deviceSensors = '$_assets/devices-sensors/SVG';
   static const String _discoverySharing = '$_assets/discovery-sharing/SVG';
   static const String _directionsSet1 = '$_assets/guidance-icons/lane-assistance/directions/set-1';
-  static const String _manoeuversSdkAssets = '$_assets/guidance-icons/manoeuvers-sdk';
+  static const String _manoeuversSdkAssets = '$_assets/guidance-icons/manoeuvers-sdk/SVG';
+  static const String _manoeuversSdkPngAssets = '$_assets/guidance-icons/manoeuvers-sdk/2x';
   static const String _manoeuverAssets = '$_assets/guidance-icons/manoeuvers/SVG/';
   static const String _mapView = '$_assets/map-view/SVG';
   static const String _misc = '$_assets/misc/SVG';

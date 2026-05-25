@@ -95,6 +95,8 @@ flutter:
     - assets/here-icons/icons/core-ui/SVG/
     - assets/here-icons/icons/data/SVG/
     - assets/here-icons/icons/guidance-icons/manoeuvers-sdk/
+    - assets/here-icons/icons/guidance-icons/manoeuvers-sdk/2x/
+    - assets/here-icons/icons/guidance-icons/manoeuvers-sdk/SVG/
     - assets/here-icons/icons/travel-transport-tracking/SVG/
     - assets/here-icons/icons/poi/SVG/
     - assets/here-icons/icons/tools/SVG/

@@ -208,6 +208,7 @@ extension ManeuverActionHelper on Maneuver {
 }
 
 extension ManeuverActionExtension on ManeuverAction {
+  /// Returns the SVG asset path for the maneuver
   String get iconPath {
     switch (this) {
       case ManeuverAction.depart:
@@ -306,6 +307,108 @@ extension ManeuverActionExtension on ManeuverAction {
         return HdsAssetsPaths.rightRoundaboutExit11Icon;
       case ManeuverAction.rightRoundaboutExit12:
         return HdsAssetsPaths.rightRoundaboutExit12Icon;
+    }
+  }
+
+  /// Returns the PNG asset path for the maneuver
+  String get pngIconPath {
+    switch (this) {
+      case ManeuverAction.depart:
+        return HdsAssetsPaths.departPngIcon;
+      case ManeuverAction.arrive:
+        return HdsAssetsPaths.arrivePngIcon;
+      case ManeuverAction.leftUTurn:
+        return HdsAssetsPaths.leftUTurnPngIcon;
+      case ManeuverAction.sharpLeftTurn:
+        return HdsAssetsPaths.sharpLeftTurnPngIcon;
+      case ManeuverAction.leftTurn:
+        return HdsAssetsPaths.leftTurnPngIcon;
+      case ManeuverAction.slightLeftTurn:
+        return HdsAssetsPaths.slightLeftTurnPngIcon;
+      case ManeuverAction.continueOn:
+        return HdsAssetsPaths.continueOnPngIcon;
+      case ManeuverAction.slightRightTurn:
+        return HdsAssetsPaths.slightRightTurnPngIcon;
+      case ManeuverAction.rightTurn:
+        return HdsAssetsPaths.rightTurnPngIcon;
+      case ManeuverAction.sharpRightTurn:
+        return HdsAssetsPaths.sharpRightTurnPngIcon;
+      case ManeuverAction.rightUTurn:
+        return HdsAssetsPaths.rightUTurnPngIcon;
+      case ManeuverAction.leftExit:
+        return HdsAssetsPaths.leftExitPngIcon;
+      case ManeuverAction.rightExit:
+        return HdsAssetsPaths.rightExitPngIcon;
+      case ManeuverAction.leftRamp:
+        return HdsAssetsPaths.leftRampPngIcon;
+      case ManeuverAction.rightRamp:
+        return HdsAssetsPaths.rightRampPngIcon;
+      case ManeuverAction.leftFork:
+        return HdsAssetsPaths.leftForkPngIcon;
+      case ManeuverAction.middleFork:
+        return HdsAssetsPaths.middleForkPngIcon;
+      case ManeuverAction.rightFork:
+        return HdsAssetsPaths.rightForkPngIcon;
+      case ManeuverAction.enterHighwayFromLeft:
+        return HdsAssetsPaths.enterHighwayFromRightPngIcon;
+      case ManeuverAction.enterHighwayFromRight:
+        return HdsAssetsPaths.enterHighwayFromLeftPngIcon;
+      case ManeuverAction.leftRoundaboutEnter:
+        return HdsAssetsPaths.leftRoundaboutEnterPngIcon;
+      case ManeuverAction.rightRoundaboutEnter:
+        return HdsAssetsPaths.rightRoundaboutEnterPngIcon;
+      case ManeuverAction.leftRoundaboutPass:
+        return HdsAssetsPaths.leftRoundaboutPassPngIcon;
+      case ManeuverAction.rightRoundaboutPass:
+        return HdsAssetsPaths.rightRoundaboutPassPngIcon;
+      case ManeuverAction.leftRoundaboutExit1:
+        return HdsAssetsPaths.leftRoundaboutExit1PngIcon;
+      case ManeuverAction.leftRoundaboutExit2:
+        return HdsAssetsPaths.leftRoundaboutExit2PngIcon;
+      case ManeuverAction.leftRoundaboutExit3:
+        return HdsAssetsPaths.leftRoundaboutExit3PngIcon;
+      case ManeuverAction.leftRoundaboutExit4:
+        return HdsAssetsPaths.leftRoundaboutExit4PngIcon;
+      case ManeuverAction.leftRoundaboutExit5:
+        return HdsAssetsPaths.leftRoundaboutExit5PngIcon;
+      case ManeuverAction.leftRoundaboutExit6:
+        return HdsAssetsPaths.leftRoundaboutExit6PngIcon;
+      case ManeuverAction.leftRoundaboutExit7:
+        return HdsAssetsPaths.leftRoundaboutExit7PngIcon;
+      case ManeuverAction.leftRoundaboutExit8:
+        return HdsAssetsPaths.leftRoundaboutExit8PngIcon;
+      case ManeuverAction.leftRoundaboutExit9:
+        return HdsAssetsPaths.leftRoundaboutExit9PngIcon;
+      case ManeuverAction.leftRoundaboutExit10:
+        return HdsAssetsPaths.leftRoundaboutExit10PngIcon;
+      case ManeuverAction.leftRoundaboutExit11:
+        return HdsAssetsPaths.leftRoundaboutExit11PngIcon;
+      case ManeuverAction.leftRoundaboutExit12:
+        return HdsAssetsPaths.leftRoundaboutExit12PngIcon;
+      case ManeuverAction.rightRoundaboutExit1:
+        return HdsAssetsPaths.rightRoundaboutExit1PngIcon;
+      case ManeuverAction.rightRoundaboutExit2:
+        return HdsAssetsPaths.rightRoundaboutExit2PngIcon;
+      case ManeuverAction.rightRoundaboutExit3:
+        return HdsAssetsPaths.rightRoundaboutExit3PngIcon;
+      case ManeuverAction.rightRoundaboutExit4:
+        return HdsAssetsPaths.rightRoundaboutExit4PngIcon;
+      case ManeuverAction.rightRoundaboutExit5:
+        return HdsAssetsPaths.rightRoundaboutExit5PngIcon;
+      case ManeuverAction.rightRoundaboutExit6:
+        return HdsAssetsPaths.rightRoundaboutExit6PngIcon;
+      case ManeuverAction.rightRoundaboutExit7:
+        return HdsAssetsPaths.rightRoundaboutExit7PngIcon;
+      case ManeuverAction.rightRoundaboutExit8:
+        return HdsAssetsPaths.rightRoundaboutExit8PngIcon;
+      case ManeuverAction.rightRoundaboutExit9:
+        return HdsAssetsPaths.rightRoundaboutExit9PngIcon;
+      case ManeuverAction.rightRoundaboutExit10:
+        return HdsAssetsPaths.rightRoundaboutExit10PngIcon;
+      case ManeuverAction.rightRoundaboutExit11:
+        return HdsAssetsPaths.rightRoundaboutExit11PngIcon;
+      case ManeuverAction.rightRoundaboutExit12:
+        return HdsAssetsPaths.rightRoundaboutExit12PngIcon;
     }
   }
 }

@@ -485,7 +485,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     return NotificationBody(
       title: _getRemainingTimeString(),
       body: text ?? maneuver.getActionText(context, _currentRoute.sections.length),
-      imagePath: maneuver.action.iconPath,
+      imagePath: maneuver.action.pngIconPath,
       presentSound: !_soundEnabled,
     );
   }
