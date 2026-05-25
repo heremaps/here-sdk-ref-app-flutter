@@ -45,6 +45,17 @@ android {
     namespace "com.example.RefApp"
     compileSdk 36
     buildToolsVersion '36.0.0'
+    ndkVersion "28.2.13676358"
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.example.RefApp"
+        minSdk 24
+        targetSdk 36
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        multiDexEnabled true
+    }
 
     compileOptions {
         // Flag to enable support for the new language APIs
@@ -65,15 +76,6 @@ android {
         disable 'InvalidPackage'
     }
 
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.RefApp"
-        minSdk 24
-        targetSdk 36
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-        multiDexEnabled true
-    }
 
     dependencies {
         coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
