@@ -47,7 +47,7 @@ extension ManeuverActionHelper on Maneuver {
           return '${localizations.arrivedAt} $roadName';
         } else {
           bool isLastSection = totalsSections == sectionIndex + 1;
-          return '${localizations.arrivedAt}  ${isLastSection ? localizations.destination : localizations.waypoint}';
+          return '${localizations.arrivedAt} ${isLastSection ? localizations.destination : localizations.waypoint}';
         }
       case ManeuverAction.continueOn:
         return _makeActionString(localizations.continueOnActionText, localizations.continueOnActionRoadText, roadName);
