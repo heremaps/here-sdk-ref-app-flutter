@@ -105,7 +105,6 @@ flutter:
     - assets/here-icons/icons/social/SVG/
     - assets/here-icons/icons/guidance-icons/lane-assistance/directions/set-1/
     - assets/here-icons/icons/discovery-sharing/SVG/
-    - assets/here-icons/icons/guidance-icons/manoeuvers/SVG/
     - assets/here-icons/icons/navigation-image/SVG/
 
   # To add assets to your application, add an assets section, like this:

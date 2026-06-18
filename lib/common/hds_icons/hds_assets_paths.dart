@@ -57,7 +57,7 @@ class HdsAssetsPaths {
 
   static const String deleteIcon = '$_coreUiAssets/delete_solid_24px.svg';
 
-  static const String departIcon = '$_manoeuverAssets/depart_outline_24px.svg';
+  static const String departIcon = '$_manoeuversSdkAssets/depart.svg';
 
   static const String directionRightIcon = '$_directionsSet1/right.svg';
 
@@ -312,7 +312,6 @@ class HdsAssetsPaths {
   static const String _directionsSet1 = '$_assets/guidance-icons/lane-assistance/directions/set-1';
   static const String _manoeuversSdkAssets = '$_assets/guidance-icons/manoeuvers-sdk/SVG';
   static const String _manoeuversSdkPngAssets = '$_assets/guidance-icons/manoeuvers-sdk/2x';
-  static const String _manoeuverAssets = '$_assets/guidance-icons/manoeuvers/SVG/';
   static const String _mapView = '$_assets/map-view/SVG';
   static const String _misc = '$_assets/misc/SVG';
   static const String _navigationImage = '$_assets/navigation-image/SVG';
