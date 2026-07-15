@@ -594,6 +594,7 @@ class _RoutingScreenState extends State<RoutingScreen>
 
   _onRoutingEnd(Routing.RoutingError? error, List<Routing.Route>? routes) {
     _routePoiHandler.clearPlaces();
+    _routePoiHandler.clearMarkers();
     _selectedRouteIndex = 0;
     _routesTabController.dispose();
     _tabBarViewKey = GlobalKey();

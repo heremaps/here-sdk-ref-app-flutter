@@ -66,7 +66,10 @@ class RoutePoiHandler {
 
   List<String> _categories = [];
   Map<Routing.Route, List<Place>> _placesForRoutes = {};
+
+  /// Map of [MapMarker] to [Place] for all POI markers on the map.
   Map<MapMarker, Place> _markers = {};
+
   late SearchEngineProxy _searchEngine;
   TaskHandle? _poiSearchTask;
 
@@ -90,7 +93,7 @@ class RoutePoiHandler {
     _poiSearchTask = null;
   }
 
-  void _clearMarkers() {
+  void clearMarkers() {
     _markers.keys.forEach((marker) {
       hereMapController.mapScene.removeMapMarker(marker);
     });
@@ -120,7 +123,7 @@ class RoutePoiHandler {
 
   /// Searches POI for the [route].
   void updatePoiForRoute(Routing.Route route) async {
-    _clearMarkers();
+    clearMarkers();
     _stopCurrentSearch();
 
     if (_placesForRoutes.containsKey(route)) {
