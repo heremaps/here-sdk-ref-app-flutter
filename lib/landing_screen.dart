@@ -37,6 +37,7 @@ import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_asse
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
 import 'package:here_sdk_reference_application_flutter/routing/routing_screen.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_catalog_configuration_screen.dart';
+import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_engine_options_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -330,6 +331,12 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
               trailing: HdsIconWidget(HdsAssetsPaths.chevronRightIcon, color: colorScheme.onPrimary),
               onTap: _openAndHandleCatalogConfiguration,
             ),
+            ListTile(
+              leading: HdsIconWidget(HdsAssetsPaths.dataBaseIcon, color: colorScheme.onPrimary),
+              title: Text(appLocalizations.customEngineOptions, style: TextStyle(color: colorScheme.onPrimary)),
+              trailing: HdsIconWidget(HdsAssetsPaths.chevronRightIcon, color: colorScheme.onPrimary),
+              onTap: _openAndHandleCustomEngineOptions,
+            ),
             ..._buildLoadCustomSceneItem(context),
             SwitchListTile(
               title: Text(appLocalizations.useMapOfflineSwitch, style: TextStyle(color: colorScheme.onPrimary)),
@@ -597,6 +604,18 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     bool reloadNeeded =
         await Navigator.of(context).pushNamed(CustomCatalogConfigurationScreen.navRoute) as bool? ?? false;
 
+    if (reloadNeeded) {
+      setState(() {
+        _hereMapWidgetKey = GlobalKey();
+      });
+    }
+  }
+
+  /// Opens the custom engine options screen and reloads the map if needed.
+  /// Resets widget keys to force a rebuild when configuration changes
+  void _openAndHandleCustomEngineOptions() async {
+    Navigator.of(context).pop();
+    bool reloadNeeded = await Navigator.of(context).pushNamed(CustomEngineOptionsScreen.navRoute) as bool? ?? false;
     if (reloadNeeded) {
       setState(() {
         _hereMapWidgetKey = GlobalKey();

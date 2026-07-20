@@ -81,6 +81,14 @@ extension Utils on String {
   String capitalize() {
     return '${this[0].toUpperCase()}${substring(1)}';
   }
+
+  // Converts camel case to a sentence by adding space and capitalizes first letter
+  // E.g. notEnoughSpace ->  Not Enough Space
+  String camelToCapitalizedWords() {
+    final String result = replaceAll(RegExp(r'(?<!^)(?=[A-Z])'), r' ');
+    final String finalResult = result[0].toUpperCase() + result.substring(1);
+    return finalResult;
+  }
 }
 
 /// An extension for lists that allows swapping of two elements at indices [index1], [index2].

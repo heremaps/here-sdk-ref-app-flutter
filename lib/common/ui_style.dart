@@ -47,6 +47,7 @@ class UIStyle {
   static const Color loadCustomStyleResultPopupTextColor = Color(0xFFFFFFFF);
 
   static const Color errorMessageTextColor = Color(0xFFFFFFFF);
+  static const Color segmentedButtonBgColor = Color(0xBFE8EEFC);
 
   static const Color routeColor = Color(0xFF929FB2);
   static const Color routeBorderColor = Color(0xFF6F7F90);

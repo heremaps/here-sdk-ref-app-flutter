@@ -55,6 +55,8 @@ class HdsAssetsPaths {
 
   static const String currentLocation = '$_mapView/current-location_solid_24px.svg';
 
+  static const String dataBaseIcon = '$_dataAssets/database_solid_24px.svg';
+
   static const String deleteIcon = '$_coreUiAssets/delete_solid_24px.svg';
 
   static const String departIcon = '$_manoeuversSdkAssets/depart.svg';

@@ -21,6 +21,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/core.errors.dart' show InstantiationException;
+import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/catalog_configuration_data.dart';
+import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_engine_options_data.dart';
 
 ///
 /// Creates [SDKNativeEngine] for the [SDKOptions] and returns [onSuccess] callback on success and
@@ -41,4 +43,26 @@ Future<void> createSDKNativeEngine({
     print('Failed to create SDKNativeEngine: $error');
     onFailure?.call(error);
   }
+}
+
+///
+/// Returns updated `SDKOptions`.
+/// If `sdkOptions` is not provided, the current shared engine options are used.
+/// Optional catalog and custom engine settings are applied before returning.
+///
+Future<SDKOptions> getSDKOptions({
+  SDKOptions? sdkOptions,
+  List<CatalogConfigurationData>? catalogConfigurations,
+  CustomEngineOptionsData? customEngineOptions,
+}) async {
+  SDKOptions options = sdkOptions ?? SDKNativeEngine.sharedInstance!.options;
+  if (catalogConfigurations != null) {
+    options.catalogConfigurations = catalogConfigurations.toSdkCatalogConfigurations();
+  }
+
+  if (customEngineOptions != null) {
+    options.customEngineOptions = customEngineOptions.toEngineOptionsMap();
+  }
+
+  return options;
 }

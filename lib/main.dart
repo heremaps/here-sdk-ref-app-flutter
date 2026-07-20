@@ -28,6 +28,8 @@ import 'package:here_sdk_reference_application_flutter/environment.dart';
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/catalog_configuration_data.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_catalog_configuration_screen.dart';
+import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_engine_options_data.dart';
+import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_engine_options_screen.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/sdk_engine_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,20 +60,25 @@ Future<void> main() async {
   // Obtain an instance of SharedPreferences for persistent storage.
   final SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
 
-  // Load catalog configurations data from preferences and convert to CatalogConfiguration format.
-  final List<CatalogConfiguration>? catalogConfigurations = AppPreferences.loadSdkOptionsCatalogConfigurationFromPrefs(
-    _sharedPreferences,
-  )?.toSdkCatalogConfigurations();
+  // Load catalog configurations data from preferences.
+  final List<CatalogConfigurationData>? catalogConfigurations =
+      AppPreferences.loadSdkOptionsCatalogConfigurationFromPrefs(_sharedPreferences);
 
-  // Create SDKOptions with authentication using access key and secret.
-  final SDKOptions sdkOptions = SDKOptions.withAuthenticationMode(
-    AuthenticationMode.withKeySecret(Environment.accessKeyId, Environment.accessKeySecret),
+  // Load custom engineOptions data from preferences.
+  final CustomEngineOptionsData? customEngineOptions = AppPreferences.loadSdkOptionsCustomEngineOptionsFromPrefs(
+    _sharedPreferences,
   );
 
-  // If catalog configurations are available, assign them to sdkOptions.
-  if (catalogConfigurations != null && catalogConfigurations.isNotEmpty) {
-    sdkOptions.catalogConfigurations = catalogConfigurations;
-  }
+  // Create SDKOptions with authentication, applying catalog configurations and custom engine options if available.
+  final SDKOptions sdkOptions = await getSDKOptions(
+    sdkOptions: SDKOptions.withAuthenticationMode(
+      AuthenticationMode.withKeySecret(Environment.accessKeyId, Environment.accessKeySecret),
+    ),
+    catalogConfigurations: catalogConfigurations != null && catalogConfigurations.isNotEmpty
+        ? catalogConfigurations
+        : null,
+    customEngineOptions: customEngineOptions?.customUrls.isNotEmpty ?? false ? customEngineOptions : null,
+  );
 
   createSDKNativeEngine(
     sdkOptions: sdkOptions,
@@ -162,6 +169,7 @@ class _MyAppState extends State<MyApp> {
               return MapRegionsListScreen(regions: arguments[0] as List<Region>);
             },
             CustomCatalogConfigurationScreen.navRoute: (BuildContext context) => CustomCatalogConfigurationScreen(),
+            CustomEngineOptionsScreen.navRoute: (BuildContext context) => CustomEngineOptionsScreen(),
           };
 
           WidgetBuilder builder = routes[settings.name]!;

@@ -1,4 +1,28 @@
 {
+  "accessID": "Access ID",
+  "@accessID": {
+    "description": "Access ID title"
+  },
+  "accessIDHint": "id as string",
+  "@accessIDHint": {
+    "description": "Access ID hint"
+  },
+  "accessIDSecret": "Access Secret",
+  "@accessIDSecret": {
+    "description": "Access Secret title"
+  },
+  "accessIDSecretHint": "secret as string",
+  "@accessIDSecretHint": {
+    "description": "Access Secret hint"
+  },
+  "accessToken": "Access Token",
+  "@accessToken": {
+    "description": "Access Token title"
+  },
+  "accessTokenHint": "token as string",
+  "@accessTokenHint": {
+    "description": "Access Token hint"
+  },
   "addCatalogConfiguration": "Add Catalog Configuration",
   "@addCatalogConfiguration": {
     "description": "Title of the add catalog configuration button"
@@ -43,6 +67,14 @@
   "atmTitle": "ATM",
   "@atmTitle": {
     "description": "Text for the ATM place category"
+  },
+  "asString": "as string",
+  "@asString": {
+    "description": "Hint text"
+  },
+  "authentication": "Authentication",
+  "@authentication": {
+    "description": "Authentication section title"
   },
   "availableStorageText": "Available",
   "@availableStorageText": {
@@ -104,6 +136,14 @@
   "@catalogHrnErrorMessage": {
     "description": "Catalog Hrn empty error message"
   },
+  "certificate": "Certificate",
+  "@certificate": {
+    "description": "Certificate title"
+  },
+  "certificateAuthorityFileAsBlob": "Certificate Authority File As Blob",
+  "@certificateAuthorityFileAsBlob": {
+    "description": "Certificate Authority title"
+  },
   "clearAll": "Clear All",
   "@clearAll": {
     "description": "Text for clear all action"
@@ -115,6 +155,18 @@
   "clearPrefetchedCache": "Clear Prefetched Cache",
   "@clearPrefetchedCache": {
     "description": "Text for clear Prefetched Cache action"
+  },
+  "clientCertificateFileAsBlob": "Client Certificate File As Blob",
+  "@clientCertificateFileAsBlob": {
+    "description": "Client Certificate File title"
+  },
+  "clientCertificateFileAsBlobHint": "format as P12 or PEM",
+  "@clientCertificateFileAsBlobHint": {
+    "description": "Client Certificate File hint"
+  },
+  "clientKeyCertificateFileAsBlob": "Client Key Certificate File As Blob",
+  "@clientKeyCertificateFileAsBlob": {
+    "description": "Client Key Certificate File title"
   },
   "consentDenied": "Revoked",
   "@consentDenied": {
@@ -1108,6 +1160,22 @@
   "@countryCodeZwe": {
     "description": "Country name title"
   },
+  "customBaseUrl": "Custom Base URL",
+  "@customBaseUrl": {
+    "description": "Custom Base URL title"
+  },
+  "customBaseUrlHint": "url as string",
+  "@customBaseUrlHint": {
+    "description": "Custom Base URL hint"
+  },
+  "customEngineOptions": "Custom Engine Options",
+  "@customEngineOptions": {
+    "description": "Custom Engine Options title"
+  },
+  "customEngineOptionsErrorErrorMessage": "Please specify required field",
+  "@customEngineOptionsErrorErrorMessage": {
+    "description": "Custom Engine Options error message"
+  },
   "dateTimeFormat": "dd/MM/yyyy, hh:mm a",
   "@dateTimeFormat": {
     "description": "Date and time format"
@@ -1167,6 +1235,14 @@
   },
   "enterHighwayFromLeftActionText": "Join the highway from the left side",
   "enterHighwayFromRightActionText": "Join the highway from the right side",
+  "engineBaseURL": "Engine Base URL",
+  "@engineBaseURL": {
+    "description": "Engine Base URL title"
+  },
+  "engineOptions": "Engine Options",
+  "@engineOptions": {
+    "description": "Engine Options title"
+  },
   "error": "Error",
   "@error": {
     "description": "Text for the error"
@@ -1210,6 +1286,10 @@
   "errorSearchFailedPleaseTryAgain": "Search failed, please try again",
   "@errorSearchFailedPleaseTryAgain": {
     "description": "Text for the search error with please try again"
+  },
+  "external": "External",
+  "@external": {
+    "description": "External title"
   },
   "fastestRouteTitle": "Fastest route",
   "@fastestRouteTitle": {
@@ -1306,6 +1386,10 @@
   "hrnTitle": "HERE Resource Name (HRN)",
   "@hrnTitle": {
     "description": "HRN title text"
+  },
+  "idAndSecret": "ID & Secret",
+  "@idAndSecret": {
+    "description": "ID & Secret title"
   },
   "ignoreCachedData": "Ignore Cached Data",
   "@ignoreCachedData": {
@@ -1527,6 +1611,14 @@
   "@minuteAbbreviationText": {
     "description": "Text for the abbreviation of the minute"
   },
+  "nameAsString": "name as string",
+  "@nameAsString": {
+    "description": "Text hint for name as string"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Name as title"
+  },
   "navigationStatusRerouting": "Rerouting",
   "@navigationStatusRerouting": {
     "description": "Navigation status, rerouting, while engine tries to fetch new route."
@@ -1747,6 +1839,10 @@
   "@routingErrorText": {
     "description": "Routing error message"
   },
+  "save": "Save",
+  "@save": {
+    "description": "Save as title"
+  },
   "scooterSpecification": "Scooter Specification",
   "@scooterSpecification": {
     "description": "Title of route preferences screen"
@@ -1862,6 +1958,10 @@
   "textFormatPlain": "Plain",
   "@textFormatPlain": {
     "description": "Title of text instructions plain format setting in route text options"
+  },
+  "token": "Token",
+  "@token": {
+    "description": "Token title"
   },
   "tollRoad": "Toll road",
   "@tollRoad": {
@@ -2054,6 +2154,10 @@
   "updatingMapTitle": "Updating map...",
   "@updatingMapTitle": {
     "description": "Title of the map updating progress"
+  },
+  "url": "URL",
+  "@url": {
+    "description": "URL Title"
   },
   "useMapOfflineSwitch": "Use app offline",
   "@useMapOfflineSwitch": {

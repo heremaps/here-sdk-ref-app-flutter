@@ -21,6 +21,7 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/core.engine.dart' show EngineBaseURL;
 import 'package:here_sdk/routing.dart';
 import 'package:here_sdk/transport.dart' as Transport;
 import 'package:here_sdk_reference_application_flutter/common/util.dart';
@@ -29,6 +30,11 @@ import 'package:here_sdk_reference_application_flutter/l10n/generated/app_locali
 /// Helper class for the routing options strings.
 class EnumStringHelper {
   static int noneValueIndex = -1;
+
+  /// Returns the mapping of [EngineBaseURL] values to the corresponding strings.
+  static Map<int, String> engineBaseURLMap() {
+    return {for (final value in EngineBaseURL.values) value.index: value.name.camelToCapitalizedWords()};
+  }
 
   /// Returns a map of truck category indices to their capitalized display names.
   static Map<int, String> truckCategoryDisplayNames(BuildContext context) {

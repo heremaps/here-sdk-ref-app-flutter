@@ -21,6 +21,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/catalog_configuration_data.dart';
+import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_engine_options_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A class that implements application preferences.
@@ -33,6 +34,9 @@ class AppPreferences extends ChangeNotifier {
 
   /// Key used to store and retrieve SDK options catalog configurations in shared preferences.
   static const String _kSdkOptionsCatalogConfigurations = 'sdk_options_catalog_configurations';
+
+  /// Key used to store and retrieve SDK options custom engineOptions in shared preferences.
+  static const String _kSdkOptionsCustomEngineOptions = 'sdk_options_custom_engine_options';
 
   SharedPreferences? _sharedPreferences;
 
@@ -101,6 +105,34 @@ class AppPreferences extends ChangeNotifier {
     try {
       final String? jsonString = prefs.getString(_kSdkOptionsCatalogConfigurations);
       return CatalogConfigurationData.fromDynamicListToList(jsonString == null ? null : jsonDecode(jsonString));
+    } catch (error) {
+      print('Error while fetching CatalogConfiguration $error');
+    }
+    return null;
+  }
+
+  /// Saves or removes the SDK options custom engineOptions in shared preferences.
+  /// Returns `true` if successful, otherwise `false`.
+  Future<bool> saveSdkOptionsCustomEngineOptions(CustomEngineOptionsData? customEngineOptionsData) async {
+    if (customEngineOptionsData != null && customEngineOptionsData.customUrls.isNotEmpty) {
+      final String serialized = const JsonEncoder().convert(customEngineOptionsData.toMap());
+      return (await _sharedPreferences?.setString(_kSdkOptionsCustomEngineOptions, serialized)) ?? false;
+    }
+    return await _sharedPreferences?.remove(_kSdkOptionsCustomEngineOptions) ?? false;
+  }
+
+  /// Retrieves the SDK options catalog configuration from shared preferences.
+  /// Returns a `CustomEngineOptionsData` if the configuration exists, otherwise `null`.
+  CustomEngineOptionsData? loadSdkOptionsCustomEngineOptions() {
+    return loadSdkOptionsCustomEngineOptionsFromPrefs(_sharedPreferences!);
+  }
+
+  /// Retrieves the SDK options catalog configuration from the provided [SharedPreferences] instance.
+  /// Returns a `CustomEngineOptionsData` if the configuration exists, otherwise `null`.
+  static CustomEngineOptionsData? loadSdkOptionsCustomEngineOptionsFromPrefs(SharedPreferences prefs) {
+    try {
+      final String? jsonString = prefs.getString(_kSdkOptionsCustomEngineOptions);
+      return CustomEngineOptionsData.fromMap(jsonString == null ? null : jsonDecode(jsonString));
     } catch (error) {
       print('Error while fetching CatalogConfiguration $error');
     }

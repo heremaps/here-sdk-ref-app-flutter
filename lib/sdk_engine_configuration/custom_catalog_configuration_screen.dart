@@ -131,8 +131,11 @@ class _CustomCatalogConfigurationScreenState extends State<CustomCatalogConfigur
   }) async {
     _setProgressIndicator(true);
     try {
-      SDKOptions options = sdkOptions ?? SDKNativeEngine.sharedInstance!.options;
-      options.catalogConfigurations = catalogConfigurations.toSdkCatalogConfigurations();
+      SDKOptions options = await getSDKOptions(
+        sdkOptions: sdkOptions ?? SDKNativeEngine.sharedInstance!.options,
+        catalogConfigurations: catalogConfigurations,
+        customEngineOptions: context.read<AppPreferences>().loadSdkOptionsCustomEngineOptions(),
+      );
 
       await createSDKNativeEngine(
         sdkOptions: options,
