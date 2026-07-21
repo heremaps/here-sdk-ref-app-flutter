@@ -22,22 +22,17 @@ const String _credentialIdKey = 'id';
 const String _credentialSecretKey = 'secret';
 const String _credentialTypeKey = 'type';
 const String _credentialTokenKey = 'token';
-const String _certFileBlobKey = 'certfileblob';
-const String _clientCertFileBlobKey = 'clientcertfileblob';
-const String _clientKeyFileBlobKey = 'clientkeyfileblob';
 
 enum CredentialsType {
   authModeKeySecret,
   authModeToken,
-  external,
-  certificate;
+  external;
 
   String displayName(AppLocalizations localized) {
     return switch (this) {
       CredentialsType.authModeKeySecret => localized.idAndSecret,
       CredentialsType.authModeToken => localized.token,
       CredentialsType.external => localized.external,
-      CredentialsType.certificate => localized.certificate,
     };
   }
 }
@@ -100,9 +95,6 @@ class EngineOptionData {
     this.id,
     this.secret,
     this.token,
-    this.certFileBlob,
-    this.clientCertFileBlob,
-    this.clientKeyFileBlob,
   });
 
   factory EngineOptionData.fromMap(Map<String, dynamic> map) {
@@ -120,9 +112,6 @@ class EngineOptionData {
       id: map[_credentialIdKey] as String?,
       secret: map[_credentialSecretKey] as String?,
       token: map[_credentialTokenKey] as String?,
-      certFileBlob: map[_certFileBlobKey] as String?,
-      clientCertFileBlob: map[_clientCertFileBlobKey] as String?,
-      clientKeyFileBlob: map[_clientKeyFileBlobKey] as String?,
     );
   }
 
@@ -132,9 +121,6 @@ class EngineOptionData {
   final String? id;
   final String? secret;
   final String? token;
-  final String? certFileBlob;
-  final String? clientCertFileBlob;
-  final String? clientKeyFileBlob;
 
   EngineOptions get engineOptions {
     return EngineOptions()
@@ -149,11 +135,6 @@ class EngineOptionData {
         CredentialsType.authModeToken => AuthenticationMode.withToken(token!),
         CredentialsType.external => AuthenticationMode.withExternal(),
         CredentialsType.authModeKeySecret => AuthenticationMode.withKeySecret(id!, secret!),
-        CredentialsType.certificate => () {
-          // TODO: Update certificate authentication implementation after upgrading the HERE SDK.
-          debugPrint('Certificate auth not yet supported.');
-          return null;
-        }(),
       };
     } catch (error) {
       debugPrint('Failed to create AuthenticationMode $error');
@@ -167,8 +148,6 @@ class EngineOptionData {
       CredentialsType.external => true,
       CredentialsType.authModeToken => token?.trim().isNotEmpty ?? false,
       CredentialsType.authModeKeySecret => (id?.trim().isNotEmpty ?? false) && (secret?.trim().isNotEmpty ?? false),
-      CredentialsType.certificate =>
-        (clientCertFileBlob?.trim().isNotEmpty ?? false) && (clientKeyFileBlob?.trim().isNotEmpty ?? false),
     };
   }
 
@@ -181,25 +160,12 @@ class EngineOptionData {
             type == other.type &&
             id == other.id &&
             secret == other.secret &&
-            token == other.token &&
-            certFileBlob == other.certFileBlob &&
-            clientCertFileBlob == other.clientCertFileBlob &&
-            clientKeyFileBlob == other.clientKeyFileBlob;
+            token == other.token;
   }
 
   @override
   int get hashCode {
-    return Object.hash(
-      customBaseUrl,
-      credentialName,
-      type,
-      id,
-      secret,
-      token,
-      certFileBlob,
-      clientCertFileBlob,
-      clientKeyFileBlob,
-    );
+    return Object.hash(customBaseUrl, credentialName, type, id, secret, token);
   }
 
   Map<String, dynamic> toMap() {
@@ -210,9 +176,6 @@ class EngineOptionData {
       if (id != null) _credentialIdKey: id,
       if (secret != null) _credentialSecretKey: secret,
       if (token != null) _credentialTokenKey: token,
-      if (certFileBlob != null) _certFileBlobKey: certFileBlob,
-      if (clientCertFileBlob != null) _clientCertFileBlobKey: clientCertFileBlob,
-      if (clientKeyFileBlob != null) _clientKeyFileBlobKey: clientKeyFileBlob,
     };
   }
 }

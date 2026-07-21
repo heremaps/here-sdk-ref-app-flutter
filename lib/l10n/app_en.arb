@@ -68,10 +68,6 @@
   "@atmTitle": {
     "description": "Text for the ATM place category"
   },
-  "asString": "as string",
-  "@asString": {
-    "description": "Hint text"
-  },
   "authentication": "Authentication",
   "@authentication": {
     "description": "Authentication section title"
@@ -140,10 +136,6 @@
   "@certificate": {
     "description": "Certificate title"
   },
-  "certificateAuthorityFileAsBlob": "Certificate Authority File As Blob",
-  "@certificateAuthorityFileAsBlob": {
-    "description": "Certificate Authority title"
-  },
   "clearAll": "Clear All",
   "@clearAll": {
     "description": "Text for clear all action"
@@ -155,18 +147,6 @@
   "clearPrefetchedCache": "Clear Prefetched Cache",
   "@clearPrefetchedCache": {
     "description": "Text for clear Prefetched Cache action"
-  },
-  "clientCertificateFileAsBlob": "Client Certificate File As Blob",
-  "@clientCertificateFileAsBlob": {
-    "description": "Client Certificate File title"
-  },
-  "clientCertificateFileAsBlobHint": "format as P12 or PEM",
-  "@clientCertificateFileAsBlobHint": {
-    "description": "Client Certificate File hint"
-  },
-  "clientKeyCertificateFileAsBlob": "Client Key Certificate File As Blob",
-  "@clientKeyCertificateFileAsBlob": {
-    "description": "Client Key Certificate File title"
   },
   "consentDenied": "Revoked",
   "@consentDenied": {

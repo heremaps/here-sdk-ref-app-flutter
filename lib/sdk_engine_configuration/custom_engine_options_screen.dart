@@ -66,9 +66,6 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _secretController = TextEditingController();
   final TextEditingController _tokenController = TextEditingController();
-  final TextEditingController _certFileBlobController = TextEditingController();
-  final TextEditingController _clientCertFileBlobController = TextEditingController();
-  final TextEditingController _clientKeyFileBlobController = TextEditingController();
 
   @override
   void initState() {
@@ -81,9 +78,6 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
     _idController.addListener(_validateInputFields);
     _secretController.addListener(_validateInputFields);
     _tokenController.addListener(_validateInputFields);
-    _certFileBlobController.addListener(_validateInputFields);
-    _clientCertFileBlobController.addListener(_validateInputFields);
-    _clientKeyFileBlobController.addListener(_validateInputFields);
   }
 
   @override
@@ -93,9 +87,6 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
     _idController.dispose();
     _secretController.dispose();
     _tokenController.dispose();
-    _certFileBlobController.dispose();
-    _clientCertFileBlobController.dispose();
-    _clientKeyFileBlobController.dispose();
     super.dispose();
   }
 
@@ -112,11 +103,6 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
       case CredentialsType.authModeToken:
         newState = newState && _tokenController.text.trim().isNotEmpty;
 
-      case CredentialsType.certificate:
-        newState =
-            newState &&
-            _clientCertFileBlobController.text.trim().isNotEmpty &&
-            _clientKeyFileBlobController.text.trim().isNotEmpty;
       case CredentialsType.external:
         // no extra validation needed beyond base fields
         break;
@@ -138,9 +124,6 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
     _idController.clear();
     _secretController.clear();
     _tokenController.clear();
-    _certFileBlobController.clear();
-    _clientCertFileBlobController.clear();
-    _clientKeyFileBlobController.clear();
   }
 
   void _onAuthModeChanged(CredentialsType newMode) {
@@ -181,15 +164,6 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
         credentialName: name,
         type: _selectedType,
         token: _tokenController.text.trim(),
-      ),
-
-      CredentialsType.certificate => EngineOptionData(
-        customBaseUrl: baseUrl,
-        credentialName: name,
-        type: _selectedType,
-        certFileBlob: _certFileBlobController.text.trim().isNotEmpty ? _certFileBlobController.text.trim() : null,
-        clientCertFileBlob: _clientCertFileBlobController.text.trim(),
-        clientKeyFileBlob: _clientKeyFileBlobController.text.trim(),
       ),
 
       CredentialsType.external => EngineOptionData(customBaseUrl: baseUrl, credentialName: name, type: _selectedType),
@@ -420,44 +394,6 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
                             contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
                           ),
                           controller: _tokenController,
-                        ),
-                      ),
-                    ],
-                    if (_selectedType == CredentialsType.certificate) ...[
-                      PreferencesRowTitle(title: localized.certificateAuthorityFileAsBlob),
-                      Container(
-                        decoration: UIStyle.roundedRectDecoration(),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: localized.asString,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
-                          ),
-                          controller: _certFileBlobController,
-                        ),
-                      ),
-                      PreferencesRowTitle(title: localized.clientCertificateFileAsBlob),
-                      Container(
-                        decoration: UIStyle.roundedRectDecoration(),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: localized.clientCertificateFileAsBlobHint,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
-                          ),
-                          controller: _clientCertFileBlobController,
-                        ),
-                      ),
-                      PreferencesRowTitle(title: localized.clientKeyCertificateFileAsBlob),
-                      Container(
-                        decoration: UIStyle.roundedRectDecoration(),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: localized.asString,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
-                          ),
-                          controller: _clientKeyFileBlobController,
                         ),
                       ),
                     ],
