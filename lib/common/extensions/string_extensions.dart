@@ -20,7 +20,18 @@
 const String emptyValue = '--';
 
 extension NullableUtils on String? {
+  static const _visiblePrefixLength = 3;
+  static const _maskedSuffix = '...';
+
   String get unwrapped => isNotNullNorEmpty ? this! : emptyValue;
 
   bool get isNotNullNorEmpty => this?.isNotEmpty ?? false;
+
+  String get maskedCredential {
+    final value = unwrapped;
+    if (value.length <= _visiblePrefixLength) {
+      return value;
+    }
+    return '${value.substring(0, _visiblePrefixLength)}$_maskedSuffix';
+  }
 }

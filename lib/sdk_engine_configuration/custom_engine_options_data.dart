@@ -14,28 +14,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:here_sdk/core.engine.dart' show AuthenticationMode, EngineOptions, EngineBaseURL;
-import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
+import 'package:here_sdk_reference_application_flutter/common/extensions/string_extensions.dart';
 
-const String _credentialNameKey = 'name';
 const String _urlKey = 'url';
 const String _credentialIdKey = 'id';
 const String _credentialSecretKey = 'secret';
-const String _credentialTypeKey = 'type';
-const String _credentialTokenKey = 'token';
-
-enum CredentialsType {
-  authModeKeySecret,
-  authModeToken,
-  external;
-
-  String displayName(AppLocalizations localized) {
-    return switch (this) {
-      CredentialsType.authModeKeySecret => localized.idAndSecret,
-      CredentialsType.authModeToken => localized.token,
-      CredentialsType.external => localized.external,
-    };
-  }
-}
 
 /// Manages custom engine configuration options for different base URLs.
 class CustomEngineOptionsData {
@@ -88,39 +71,19 @@ class CustomEngineOptionsData {
 
 /// Stores engine configuration data including credentials and custom base URL.
 class EngineOptionData {
-  EngineOptionData({
-    required this.customBaseUrl,
-    required this.credentialName,
-    this.type = CredentialsType.authModeKeySecret,
-    this.id,
-    this.secret,
-    this.token,
-  });
+  EngineOptionData({required this.customBaseUrl, this.id, this.secret});
 
   factory EngineOptionData.fromMap(Map<String, dynamic> map) {
-    final String typeData = map[_credentialTypeKey] as String? ?? '';
-
-    final CredentialsType type = CredentialsType.values.firstWhere(
-      (CredentialsType rc) => rc.name.toUpperCase() == typeData.toUpperCase(),
-      orElse: () => CredentialsType.authModeKeySecret,
-    );
-
     return EngineOptionData(
       customBaseUrl: map[_urlKey] as String? ?? '',
-      credentialName: map[_credentialNameKey] as String? ?? '',
-      type: type,
       id: map[_credentialIdKey] as String?,
       secret: map[_credentialSecretKey] as String?,
-      token: map[_credentialTokenKey] as String?,
     );
   }
 
   final String customBaseUrl;
-  final String credentialName;
-  final CredentialsType type;
   final String? id;
   final String? secret;
-  final String? token;
 
   EngineOptions get engineOptions {
     return EngineOptions()
@@ -131,11 +94,7 @@ class EngineOptionData {
   AuthenticationMode? get authenticationMode {
     if (!isValid) return null;
     try {
-      return switch (type) {
-        CredentialsType.authModeToken => AuthenticationMode.withToken(token!),
-        CredentialsType.external => AuthenticationMode.withExternal(),
-        CredentialsType.authModeKeySecret => AuthenticationMode.withKeySecret(id!, secret!),
-      };
+      return AuthenticationMode.withKeySecret(id!, secret!);
     } catch (error) {
       debugPrint('Failed to create AuthenticationMode $error');
     }
@@ -143,39 +102,29 @@ class EngineOptionData {
   }
 
   bool get isValid {
-    if (credentialName.isEmpty) return false;
-    return switch (type) {
-      CredentialsType.external => true,
-      CredentialsType.authModeToken => token?.trim().isNotEmpty ?? false,
-      CredentialsType.authModeKeySecret => (id?.trim().isNotEmpty ?? false) && (secret?.trim().isNotEmpty ?? false),
-    };
+    return (id?.trim().isNotEmpty ?? false) && (secret?.trim().isNotEmpty ?? false);
   }
+
+  String get readableId => id.maskedCredential;
+
+  String get readableSecret => secret.maskedCredential;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        other is EngineOptionData &&
-            customBaseUrl == other.customBaseUrl &&
-            credentialName == other.credentialName &&
-            type == other.type &&
-            id == other.id &&
-            secret == other.secret &&
-            token == other.token;
+        other is EngineOptionData && customBaseUrl == other.customBaseUrl && id == other.id && secret == other.secret;
   }
 
   @override
   int get hashCode {
-    return Object.hash(customBaseUrl, credentialName, type, id, secret, token);
+    return Object.hash(customBaseUrl, id, secret);
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       _urlKey: customBaseUrl,
-      _credentialNameKey: credentialName,
-      _credentialTypeKey: type.name.toUpperCase(),
       if (id != null) _credentialIdKey: id,
       if (secret != null) _credentialSecretKey: secret,
-      if (token != null) _credentialTokenKey: token,
     };
   }
 }

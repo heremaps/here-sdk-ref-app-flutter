@@ -15,14 +15,6 @@
   "@accessIDSecretHint": {
     "description": "Access Secret hint"
   },
-  "accessToken": "Access Token",
-  "@accessToken": {
-    "description": "Access Token title"
-  },
-  "accessTokenHint": "token as string",
-  "@accessTokenHint": {
-    "description": "Access Token hint"
-  },
   "addCatalogConfiguration": "Add Catalog Configuration",
   "@addCatalogConfiguration": {
     "description": "Title of the add catalog configuration button"
@@ -1267,10 +1259,6 @@
   "@errorSearchFailedPleaseTryAgain": {
     "description": "Text for the search error with please try again"
   },
-  "external": "External",
-  "@external": {
-    "description": "External title"
-  },
   "fastestRouteTitle": "Fastest route",
   "@fastestRouteTitle": {
     "description": "Title of fastest route mode"
@@ -1367,9 +1355,9 @@
   "@hrnTitle": {
     "description": "HRN title text"
   },
-  "idAndSecret": "ID & Secret",
-  "@idAndSecret": {
-    "description": "ID & Secret title"
+  "id": "Id",
+  "@id": {
+    "description": "Id title text"
   },
   "ignoreCachedData": "Ignore Cached Data",
   "@ignoreCachedData": {
@@ -1590,14 +1578,6 @@
   "minuteAbbreviationText": "min",
   "@minuteAbbreviationText": {
     "description": "Text for the abbreviation of the minute"
-  },
-  "nameAsString": "name as string",
-  "@nameAsString": {
-    "description": "Text hint for name as string"
-  },
-  "name": "Name",
-  "@name": {
-    "description": "Name as title"
   },
   "navigationStatusRerouting": "Rerouting",
   "@navigationStatusRerouting": {
@@ -1843,6 +1823,10 @@
   "@seasonalClosure": {
     "description": "Avoid road feature name for route preferences"
   },
+  "secret": "Secret",
+  "@secret": {
+    "description": "Secret title text"
+  },
   "selectDateTimeTitle": "Select date and time",
   "@selectDateTimeTitle": {
     "description": "Title for date time picker"
@@ -1938,10 +1922,6 @@
   "textFormatPlain": "Plain",
   "@textFormatPlain": {
     "description": "Title of text instructions plain format setting in route text options"
-  },
-  "token": "Token",
-  "@token": {
-    "description": "Token title"
   },
   "tollRoad": "Toll road",
   "@tollRoad": {

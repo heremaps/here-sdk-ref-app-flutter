@@ -20,6 +20,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/catalog_configuration_data.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/custom_engine_options_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,10 +36,12 @@ class AppPreferences extends ChangeNotifier {
   /// Key used to store and retrieve SDK options catalog configurations in shared preferences.
   static const String _kSdkOptionsCatalogConfigurations = 'sdk_options_catalog_configurations';
 
-  /// Key used to store and retrieve SDK options custom engineOptions in shared preferences.
+  /// Key used to store and retrieve SDK options custom engineOptions in secure storage.
   static const String _kSdkOptionsCustomEngineOptions = 'sdk_options_custom_engine_options';
 
   SharedPreferences? _sharedPreferences;
+
+  static const FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   AppPreferences() {
     _initializePreferences();
@@ -106,35 +109,35 @@ class AppPreferences extends ChangeNotifier {
       final String? jsonString = prefs.getString(_kSdkOptionsCatalogConfigurations);
       return CatalogConfigurationData.fromDynamicListToList(jsonString == null ? null : jsonDecode(jsonString));
     } catch (error) {
-      print('Error while fetching CatalogConfiguration $error');
+      debugPrint('Error while fetching CatalogConfiguration $error');
     }
     return null;
   }
 
-  /// Saves or removes the SDK options custom engineOptions in shared preferences.
-  /// Returns `true` if successful, otherwise `false`.
-  Future<bool> saveSdkOptionsCustomEngineOptions(CustomEngineOptionsData? customEngineOptionsData) async {
+  /// Saves or removes the SDK options custom engineOptions in secure storage.
+  Future<void> saveSdkOptionsCustomEngineOptions(CustomEngineOptionsData? customEngineOptionsData) async {
     if (customEngineOptionsData != null && customEngineOptionsData.customUrls.isNotEmpty) {
       final String serialized = const JsonEncoder().convert(customEngineOptionsData.toMap());
-      return (await _sharedPreferences?.setString(_kSdkOptionsCustomEngineOptions, serialized)) ?? false;
+      await secureStorage.write(key: _kSdkOptionsCustomEngineOptions, value: serialized);
+    } else {
+      await secureStorage.delete(key: _kSdkOptionsCustomEngineOptions);
     }
-    return await _sharedPreferences?.remove(_kSdkOptionsCustomEngineOptions) ?? false;
   }
 
-  /// Retrieves the SDK options catalog configuration from shared preferences.
+  /// Retrieves the SDK options catalog configuration from the secure storage.
   /// Returns a `CustomEngineOptionsData` if the configuration exists, otherwise `null`.
-  CustomEngineOptionsData? loadSdkOptionsCustomEngineOptions() {
-    return loadSdkOptionsCustomEngineOptionsFromPrefs(_sharedPreferences!);
+  Future<CustomEngineOptionsData?> loadSdkOptionsCustomEngineOptions() async {
+    return loadSdkOptionsCustomEngineOptionsFromStorage();
   }
 
-  /// Retrieves the SDK options catalog configuration from the provided [SharedPreferences] instance.
+  /// Retrieves the SDK options catalog configuration from the secure storage.
   /// Returns a `CustomEngineOptionsData` if the configuration exists, otherwise `null`.
-  static CustomEngineOptionsData? loadSdkOptionsCustomEngineOptionsFromPrefs(SharedPreferences prefs) {
+  static Future<CustomEngineOptionsData?> loadSdkOptionsCustomEngineOptionsFromStorage() async {
     try {
-      final String? jsonString = prefs.getString(_kSdkOptionsCustomEngineOptions);
+      final String? jsonString = await secureStorage.read(key: _kSdkOptionsCustomEngineOptions);
       return CustomEngineOptionsData.fromMap(jsonString == null ? null : jsonDecode(jsonString));
     } catch (error) {
-      print('Error while fetching CatalogConfiguration $error');
+      debugPrint('Error while fetching CustomEngineOptions $error');
     }
     return null;
   }

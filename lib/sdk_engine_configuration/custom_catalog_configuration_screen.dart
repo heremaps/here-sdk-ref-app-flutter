@@ -134,7 +134,7 @@ class _CustomCatalogConfigurationScreenState extends State<CustomCatalogConfigur
       SDKOptions options = await getSDKOptions(
         sdkOptions: sdkOptions ?? SDKNativeEngine.sharedInstance!.options,
         catalogConfigurations: catalogConfigurations,
-        customEngineOptions: context.read<AppPreferences>().loadSdkOptionsCustomEngineOptions(),
+        customEngineOptions: await context.read<AppPreferences>().loadSdkOptionsCustomEngineOptions(),
       );
 
       await createSDKNativeEngine(

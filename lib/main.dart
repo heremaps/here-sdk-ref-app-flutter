@@ -65,9 +65,8 @@ Future<void> main() async {
       AppPreferences.loadSdkOptionsCatalogConfigurationFromPrefs(_sharedPreferences);
 
   // Load custom engineOptions data from preferences.
-  final CustomEngineOptionsData? customEngineOptions = AppPreferences.loadSdkOptionsCustomEngineOptionsFromPrefs(
-    _sharedPreferences,
-  );
+  final CustomEngineOptionsData? customEngineOptions =
+      await AppPreferences.loadSdkOptionsCustomEngineOptionsFromStorage();
 
   // Create SDKOptions with authentication, applying catalog configurations and custom engine options if available.
   final SDKOptions sdkOptions = await getSDKOptions(

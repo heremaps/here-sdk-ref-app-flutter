@@ -59,35 +59,32 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
   bool _hasAttemptedRecovery = false;
   late CustomEngineOptionsData _optionsData;
   EngineBaseURL _engineBaseURL = EngineBaseURL.searchEngine;
-  CredentialsType _selectedType = CredentialsType.authModeKeySecret;
-
   final TextEditingController _baseUrlController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _secretController = TextEditingController();
-  final TextEditingController _tokenController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _optionsData =
-        context.read<AppPreferences>().loadSdkOptionsCustomEngineOptions() ?? CustomEngineOptionsData(customUrls: {});
-
+    _optionsData = CustomEngineOptionsData(customUrls: {});
+    _loadOptions();
     _baseUrlController.addListener(_validateInputFields);
-    _nameController.addListener(_validateInputFields);
     _idController.addListener(_validateInputFields);
     _secretController.addListener(_validateInputFields);
-    _tokenController.addListener(_validateInputFields);
   }
 
   @override
   void dispose() {
     _baseUrlController.dispose();
-    _nameController.dispose();
     _idController.dispose();
     _secretController.dispose();
-    _tokenController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadOptions() async {
+    final options = await context.read<AppPreferences>().loadSdkOptionsCustomEngineOptions();
+    if (!mounted) return;
+    setState(() => _optionsData = options ?? CustomEngineOptionsData(customUrls: {}));
   }
 
   void _setProgressIndicator(bool value) {
@@ -95,40 +92,14 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
   }
 
   void _validateInputFields() {
-    bool newState = _baseUrlController.text.trim().isNotEmpty && _nameController.text.trim().isNotEmpty;
-    switch (_selectedType) {
-      case CredentialsType.authModeKeySecret:
-        newState = newState && _idController.text.trim().isNotEmpty && _secretController.text.trim().isNotEmpty;
+    bool newState =
+        _baseUrlController.text.trim().isNotEmpty &&
+        _idController.text.trim().isNotEmpty &&
+        _secretController.text.trim().isNotEmpty;
 
-      case CredentialsType.authModeToken:
-        newState = newState && _tokenController.text.trim().isNotEmpty;
-
-      case CredentialsType.external:
-        // no extra validation needed beyond base fields
-        break;
-    }
     if (newState != _isInputValid) {
       setState(() => _isInputValid = newState);
     }
-  }
-
-  void _clearFields({bool isAuthModeChanges = false}) {
-    if (!isAuthModeChanges) {
-      setState(() {
-        _selectedType = CredentialsType.authModeKeySecret;
-        _engineBaseURL = EngineBaseURL.searchEngine;
-      });
-      _baseUrlController.clear();
-      _nameController.clear();
-    }
-    _idController.clear();
-    _secretController.clear();
-    _tokenController.clear();
-  }
-
-  void _onAuthModeChanged(CredentialsType newMode) {
-    setState(() => _selectedType = newMode);
-    _clearFields(isAuthModeChanges: true);
   }
 
   void _showErrorMessage(String? message) {
@@ -148,31 +119,16 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
     }
 
     final baseUrl = _baseUrlController.text.trim();
-    final name = _nameController.text.trim();
 
-    EngineOptionData engineOptionData = switch (_selectedType) {
-      CredentialsType.authModeKeySecret => EngineOptionData(
-        customBaseUrl: baseUrl,
-        credentialName: name,
-        type: _selectedType,
-        id: _idController.text.trim(),
-        secret: _secretController.text.trim(),
-      ),
-
-      CredentialsType.authModeToken => EngineOptionData(
-        customBaseUrl: baseUrl,
-        credentialName: name,
-        type: _selectedType,
-        token: _tokenController.text.trim(),
-      ),
-
-      CredentialsType.external => EngineOptionData(customBaseUrl: baseUrl, credentialName: name, type: _selectedType),
-    };
+    EngineOptionData engineOptionData = EngineOptionData(
+      customBaseUrl: baseUrl,
+      id: _idController.text.trim(),
+      secret: _secretController.text.trim(),
+    );
 
     CustomEngineOptionsData customEngineOptionData = CustomEngineOptionsData(
       customUrls: _optionsData.customUrls.map(MapEntry<EngineBaseURL, EngineOptionData>.new),
     )..customUrls[_engineBaseURL] = engineOptionData;
-
     _hasAttemptedRecovery = false; // Reset recovery attempt flag for new addition
     _recreateEngineWithOptions(customEngineOptionData);
   }
@@ -204,22 +160,23 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
 
   /// Handles successful SDK engine recreation: re-initializes map loader, updates UI and saves configurations.
   Future<void> _onSuccess(CustomEngineOptionsData customEngineOptionData) async {
-    if (mounted) {
-      await context.read<MapLoaderController>().restartMapLoader();
+    if (!mounted) {
+      return;
     }
-    _setProgressIndicator(false);
-    _clearFields();
+    await context.read<AppPreferences>().saveSdkOptionsCustomEngineOptions(customEngineOptionData);
+    await context.read<MapLoaderController>().restartMapLoader();
+    _isEngineCreated = true;
+    if (!mounted) {
+      return;
+    }
+    _baseUrlController.clear();
+    _idController.clear();
+    _secretController.clear();
     setState(() {
-      if (!_isEngineCreated) {
-        _isEngineCreated = true;
-      }
+      _showProgressIndicator = false;
       _optionsData = customEngineOptionData;
+      _engineBaseURL = EngineBaseURL.searchEngine;
     });
-    _saveCustomEngineOptions(customEngineOptionData);
-  }
-
-  void _saveCustomEngineOptions(CustomEngineOptionsData? customEngineOptionData) {
-    context.read<AppPreferences>().saveSdkOptionsCustomEngineOptions(customEngineOptionData);
   }
 
   /// Handles SDK engine recreation failure.
@@ -315,88 +272,30 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
                         controller: _baseUrlController,
                       ),
                     ),
-                    PreferencesRowTitle(title: localized.authentication),
-                    SizedBox(
-                      width: double.infinity,
-                      child: SegmentedButton<CredentialsType>(
-                        style: ButtonStyle(
-                          shape: WidgetStatePropertyAll(
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                          ),
-                          backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
-                            if (states.contains(WidgetState.selected)) {
-                              return UIStyle.selectedRouteColor;
-                            }
-                            return UIStyle.segmentedButtonBgColor;
-                          }),
-                          foregroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
-                            if (states.contains(WidgetState.selected)) {
-                              return Colors.white;
-                            }
-                            return Colors.black;
-                          }),
-                          side: WidgetStatePropertyAll(BorderSide.none),
-                        ),
-                        showSelectedIcon: false,
-                        segments: CredentialsType.values.map((type) {
-                          return ButtonSegment(value: type, label: Text(type.displayName(localized)));
-                        }).toList(),
-                        selected: {_selectedType},
-                        onSelectionChanged: (selection) => _onAuthModeChanged(selection.first),
-                      ),
-                    ),
-                    PreferencesRowTitle(title: localized.name),
+                    PreferencesRowTitle(title: localized.accessID),
                     Container(
                       decoration: UIStyle.roundedRectDecoration(),
                       child: TextFormField(
                         decoration: InputDecoration(
-                          hintText: localized.nameAsString,
+                          hintText: localized.accessIDHint,
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
                         ),
-                        controller: _nameController,
+                        controller: _idController,
                       ),
                     ),
-                    if (_selectedType == CredentialsType.authModeKeySecret) ...[
-                      PreferencesRowTitle(title: localized.accessID),
-                      Container(
-                        decoration: UIStyle.roundedRectDecoration(),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: localized.accessIDHint,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
-                          ),
-                          controller: _idController,
+                    PreferencesRowTitle(title: localized.accessIDSecret),
+                    Container(
+                      decoration: UIStyle.roundedRectDecoration(),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: localized.accessIDSecretHint,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
                         ),
+                        controller: _secretController,
                       ),
-                      PreferencesRowTitle(title: localized.accessIDSecret),
-                      Container(
-                        decoration: UIStyle.roundedRectDecoration(),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: localized.accessIDSecretHint,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
-                          ),
-                          controller: _secretController,
-                        ),
-                      ),
-                    ],
-                    if (_selectedType == CredentialsType.authModeToken) ...[
-                      PreferencesRowTitle(title: localized.accessToken),
-                      Container(
-                        decoration: UIStyle.roundedRectDecoration(),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: localized.accessTokenHint,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: UIStyle.contentMarginMedium),
-                          ),
-                          controller: _tokenController,
-                        ),
-                      ),
-                    ],
+                    ),
                     Padding(
                       padding: _commonPadding,
                       child: Row(
@@ -423,7 +322,8 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
                           title: Text(engineOptionData.key.name.camelToCapitalizedWords()),
                           subtitle: Text(
                             "${localized.url}: ${engineOptionData.value.customBaseUrl} \n"
-                            "${localized.authentication}: ${engineOptionData.value.type.name.camelToCapitalizedWords()}",
+                            "${localized.authentication} - ${localized.id}: ${engineOptionData.value.readableId},"
+                            " ${localized.secret}: ${engineOptionData.value.readableSecret}",
                             style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                           ),
                           trailing: InkWell(
