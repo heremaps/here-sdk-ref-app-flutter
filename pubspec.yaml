@@ -37,8 +37,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.18.0
 
 environment:
-  sdk: '>=3.11.5 <4.0.0'
-  flutter: '>=3.41.7'
+  sdk: '>=3.12.2 <4.0.0'
+  flutter: '>=3.44.8'
 
 dependencies:
   battery_plus: 7.0.0
