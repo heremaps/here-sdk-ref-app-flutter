@@ -133,7 +133,7 @@ class RoutePoiHandler {
         return;
       }
 
-      List<Place>? places = await _searchForVertices(route.geometry.vertices);
+      List<Place>? places = await _searchForVertices(route.geometry.vertices, route.lengthInMeters);
       print('Total results: ${places?.length}');
       if (places?.isNotEmpty ?? false) {
         _placesForRoutes[route] = places!;
@@ -142,17 +142,32 @@ class RoutePoiHandler {
     }
   }
 
-  Future<List<Place>?> _searchForVertices(List<GeoCoordinates> vertices) async {
+  Future<List<Place>?> _searchForVertices(List<GeoCoordinates> vertices, int routeLength) async {
+    int halfWidth = _getCorridorHalfWidth(routeLength);
     List<PlaceCategory> categories = _categories.map((categoryId) => PlaceCategory(categoryId)).toList();
     CategoryQuery categoryQuery = CategoryQuery.withCategoriesInArea(
       categories,
-      CategoryQueryArea.withCorridorAndCenter(GeoCorridor(vertices, _kGeoCorridorRadius), vertices.first),
+      CategoryQueryArea.withCorridorAndCenter(GeoCorridor(vertices, halfWidth), vertices.first),
     );
 
     return _searchPois(categoryQuery).onError((SearchError? error, stackTrace) {
       print('Search failed. Error: ${error.toString()}');
       return null;
     });
+  }
+
+  /// Returns the corridor half-width (meters) for route POI search.
+  ///
+  /// The width increases with route length to keep nearby results relevant
+  /// while improving coverage on longer routes.
+  int _getCorridorHalfWidth(int routeLengthInMeters) {
+    final int routeLength = routeLengthInMeters ~/ 1000;
+    return switch (routeLength) {
+      < 5 => 200,
+      < 20 => 500,
+      < 100 => 750,
+      _ => _kGeoCorridorRadius,
+    };
   }
 
   Future<List<Place>?> _searchPois(CategoryQuery categoryQuery) {
