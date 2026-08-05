@@ -4,7 +4,7 @@ PODS:
   - Flutter (1.0.0)
   - flutter_tts (0.0.1):
     - Flutter
-  - here_sdk (4.27.1.0.307017.release):
+  - here_sdk (4.27.0.1.304430.release):
     - Flutter
   - permission_handler_apple (9.3.0):
     - Flutter
@@ -32,7 +32,7 @@ SPEC CHECKSUMS:
   disk_space_plus: a36391fb5f732dbdd29628b0bac5a1acbd43aaef
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_tts: 35ac3c7d42412733e795ea96ad2d7e05d0a75113
-  here_sdk: 50aa01fca4227d32693fdf1315414e77eae61135
+  here_sdk: 22f574989af29743ed07fe97d96ccd717613581a
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
 
 PODFILE CHECKSUM: 35f3b71c1702404c71d87f8c1bb7d0c21e5491ee
