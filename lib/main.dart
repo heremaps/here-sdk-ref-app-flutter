@@ -24,6 +24,7 @@ import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/maploader.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/search.dart';
+import 'package:here_sdk_reference_application_flutter/common/map_configuration.dart';
 import 'package:here_sdk_reference_application_flutter/environment.dart';
 import 'package:here_sdk_reference_application_flutter/l10n/generated/app_localizations.dart';
 import 'package:here_sdk_reference_application_flutter/sdk_engine_configuration/catalog_configuration_data.dart';
@@ -56,6 +57,9 @@ import 'search/search_results_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init();
+
+  // Resolve the HERE map rendering mode once at startup.
+  await MapConfiguration.init();
 
   // Obtain an instance of SharedPreferences for persistent storage.
   final SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();

@@ -17,9 +17,29 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:io' show Platform;
+
 import 'package:here_sdk/mapview.dart';
+
+import 'device_info.dart' show getAndroidApiVersion;
 
 /// Central configuration for HereMap widget settings.
 class MapConfiguration {
-  static const NativeViewMode nativeViewMode = NativeViewMode.hybridComposition;
+  static const int _androidApiLevel13 = 33;
+
+  // Resolved once at startup so map widgets can read a stable value later.
+  static NativeViewMode _nativeViewMode = NativeViewMode.hybridComposition;
+
+  static Future<void> init() async {
+    if (!Platform.isAndroid) return;
+
+    final int androidApiVersion = await getAndroidApiVersion();
+
+    // Use virtual display on Android 13 and below for better compatibility.
+    if (androidApiVersion != -1 && androidApiVersion <= _androidApiLevel13) {
+      _nativeViewMode = NativeViewMode.virtualDisplay;
+    }
+  }
+
+  static NativeViewMode get nativeViewMode => _nativeViewMode;
 }
