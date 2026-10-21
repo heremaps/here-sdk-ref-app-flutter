@@ -30,7 +30,7 @@ set -euo pipefail
 # To update: run `git log --oneline` inside assets/here-icons, choose the
 # desired commit, paste the full SHA here, and update the parent repo pointer
 # with `git add assets/here-icons && git commit`.
-HERE_ICON_LIBRARY_COMMIT_ID="11b8592957e597648910d56137feb15ee0f5d4bb"
+HERE_ICON_LIBRARY_COMMIT_ID="395c0d5705835080a696a278b0ed97c6e778570d"
 
 # Path to the submodule relative to the repository root.
 SUBMODULE_PATH="assets/here-icons"

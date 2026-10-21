@@ -43,7 +43,7 @@ set "SUBMODULE_PATH=assets/here-icons"
 :: To update: run "git log --oneline" inside assets/here-icons, choose the
 :: desired commit, paste the full SHA here, and update the parent repo pointer
 :: with "git add assets/here-icons" followed by "git commit".
-set "HERE_ICON_LIBRARY_COMMIT_ID=11b8592957e597648910d56137feb15ee0f5d4bb"
+set "HERE_ICON_LIBRARY_COMMIT_ID=395c0d5705835080a696a278b0ed97c6e778570d"
 
 :: Initialize any submodule that has not been cloned yet, then fetch
 :: and check out the recorded submodule commits.  --recursive handles nested

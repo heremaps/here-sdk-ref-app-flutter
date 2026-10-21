@@ -58,8 +58,8 @@ Make sure you have cloned this repository and you have downloaded the HERE SDK f
 
 ### HERE Icon Library Integration and Fetching Submodules Before Building
 
-To ensure the necessary icon components are available during the build process, we recommend fetching and updating the "
-here-icon" submodule. This guarantees that the submodule is checked out at the correct revision specified in the project
+To ensure the necessary icon components are available during the build process, we recommend fetching and updating the
+`here-icons` submodule. This guarantees that the submodule is checked out at the correct revision specified in the project
 configuration. Missing updates can lead to build failures due to missing files.
 
 ### Fetching Methods
