@@ -1173,6 +1173,7 @@
     "description": "Title of departure time setting in route options"
   },
   "destination": "destination",
+  "destinationReached": "Destination reached",
   "dirtRoad": "Dirt road",
   "@dirtRoad": {
     "description": "Avoid road feature name for route preferences"
@@ -1205,8 +1206,6 @@
   "@eatAndDrinkTitle": {
     "description": "Text for the Eat and Drink place category"
   },
-  "enterHighwayFromLeftActionText": "Join the highway from the left side",
-  "enterHighwayFromRightActionText": "Join the highway from the right side",
   "engineBaseURL": "Engine Base URL",
   "@engineBaseURL": {
     "description": "Engine Base URL title"
@@ -1215,6 +1214,8 @@
   "@engineOptions": {
     "description": "Engine Options title"
   },
+  "enterHighwayFromLeftActionText": "Join the highway from the left side",
+  "enterHighwayFromRightActionText": "Join the highway from the right side",
   "error": "Error",
   "@error": {
     "description": "Text for the error"

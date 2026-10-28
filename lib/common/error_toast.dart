@@ -33,9 +33,9 @@ class ErrorToaster {
   static OverlayEntry? _toastEntry;
   static Timer? _timer;
 
-  static void makeToast(BuildContext context, String message) {
+  static void makeToast(BuildContext context, String message, {Color? backgroundColor, String? icon}) {
     _hide();
-    _toastEntry = _getOverlayEntry(message);
+    _toastEntry = _getOverlayEntry(message, backgroundColor, icon);
     _displayToast(context, entry: _toastEntry);
   }
 
@@ -44,11 +44,11 @@ class ErrorToaster {
     _toastEntry = null;
   }
 
-  static OverlayEntry _getOverlayEntry(String message) {
+  static OverlayEntry _getOverlayEntry(String message, Color? backgroundColor, String? icon) {
     return OverlayEntry(
       builder: (BuildContext context) => LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return _Toast(message);
+          return _Toast(message, backgroundColor: backgroundColor, icon: icon);
         },
       ),
     );
@@ -68,9 +68,11 @@ class ErrorToaster {
 }
 
 class _Toast extends StatelessWidget {
-  const _Toast(this.message, {Key? key}) : super(key: key);
+  const _Toast(this.message, {Key? key, this.backgroundColor, this.icon}) : super(key: key);
 
   final String message;
+  final Color? backgroundColor;
+  final String? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,7 @@ class _Toast extends StatelessWidget {
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: backgroundColor ?? Colors.red,
                 borderRadius: const BorderRadius.all(Radius.circular(UIStyle.popupsBorderRadius)),
               ),
               padding: const EdgeInsets.all(_toastPadding),
@@ -96,7 +98,7 @@ class _Toast extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(UIStyle.contentMarginSmall),
-                    child: HdsIconWidget(HdsAssetsPaths.attentionCircleIcon, color: UIStyle.errorMessageTextColor),
+                    child: HdsIconWidget(icon ?? HdsAssetsPaths.attentionCircleIcon, color: UIStyle.errorMessageTextColor),
                   ),
                   Expanded(
                     child: Padding(

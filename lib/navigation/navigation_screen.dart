@@ -21,7 +21,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
@@ -29,6 +28,8 @@ import 'package:here_sdk/navigation.dart' as Navigation;
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/transport.dart' as Transport;
 import 'package:here_sdk_reference_application_flutter/common/battery_saver_utils.dart';
+import 'package:here_sdk_reference_application_flutter/common/error_toast.dart';
+import 'package:here_sdk_reference_application_flutter/common/extensions/string_extensions.dart';
 import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_assets_paths.dart';
 import 'package:here_sdk_reference_application_flutter/common/hds_icons/hds_icon_widget.dart';
 import 'package:here_sdk_reference_application_flutter/common/notifications/android_notifications.dart';
@@ -55,6 +56,7 @@ import 'maneuver_action_text_helper.dart';
 import 'navigation_dialogs.dart' as Dialogs;
 import 'navigation_progress_widget.dart';
 import 'navigation_speed_widget.dart';
+import 'voice_anouncer.dart';
 import 'next_maneuver_widget.dart';
 import 'rerouting_handler.dart';
 import 'rerouting_indicator_widget.dart';
@@ -109,8 +111,7 @@ class _NavigationScreenState extends State<NavigationScreen>
   bool _canLocateUserPosition = true;
   bool _shouldMonitorPositioning = false;
 
-  bool _soundEnabled = true;
-  FlutterTts _flutterTts = FlutterTts();
+  final VoiceAnouncer _voiceAnouncer = VoiceAnouncer();
 
   late int _remainingDistanceInMeters;
   late int _remainingDurationInSeconds;
@@ -142,7 +143,6 @@ class _NavigationScreenState extends State<NavigationScreen>
     WidgetsBinding.instance.addObserver(this);
     if (Platform.isIOS) {
       _notificationsManager = IosNotificationsManager();
-      _configTextSpeakerForIOS();
     } else {
       _notificationsManager = AndroidNotificationsManager();
     }
@@ -168,7 +168,7 @@ class _NavigationScreenState extends State<NavigationScreen>
     _locationProvider?.stop();
     _reroutingHandler.release();
     _servicesStatusNotifier?.stop();
-    _flutterTts.stop();
+    _voiceAnouncer.dispose();
     WidgetsBinding.instance.removeObserver(this);
     WakelockPlus.disable();
     _notificationsManager.dismissNotification();
@@ -242,14 +242,6 @@ class _NavigationScreenState extends State<NavigationScreen>
         }
       },
     );
-  }
-
-  Future<void> _configTextSpeakerForIOS() async {
-    await _flutterTts.setSharedInstance(true);
-    await _flutterTts.setIosAudioCategory(IosTextToSpeechAudioCategory.playback, <IosTextToSpeechAudioCategoryOptions>[
-      IosTextToSpeechAudioCategoryOptions.mixWithOthers,
-      IosTextToSpeechAudioCategoryOptions.duckOthers,
-    ], IosTextToSpeechAudioMode.voicePrompt);
   }
 
   void _onMapCreated(HereMapController hereMapController) {
@@ -452,23 +444,28 @@ class _NavigationScreenState extends State<NavigationScreen>
       });
     }
 
-    _visualNavigator.destinationReachedListener = Navigation.DestinationReachedListener(() {
+    _visualNavigator.destinationReachedListener = Navigation.DestinationReachedListener(() async {
+      if (!mounted || !_navigationStarted) return;
+      _navigationStarted = false;
       _stopNavigation();
-      Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
+      final String message = AppLocalizations.of(context)!.destinationReached.unwrapped;
+      ErrorToaster.makeToast(context, message, backgroundColor: Colors.black, icon: HdsAssetsPaths.arriveIcon);
+      _voiceAnouncer.announce(message);
+      await _voiceAnouncer.waitUntilAnnouncementsFinish();
+      if (mounted && ModalRoute.of(context)?.isCurrent == true) {
+        Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
+      }
     });
 
     _visualNavigator.routeDeviationListener = _reroutingHandler;
     _visualNavigator.milestoneStatusListener = _reroutingHandler;
   }
 
-  void _setupVoiceTextMessages() async {
-    await _flutterTts.setLanguage("en-US");
-
+  void _setupVoiceTextMessages() {
     _visualNavigator.eventTextListener = Navigation.EventTextListener((Navigation.EventText eventText) {
+      if (!mounted || !_navigationStarted) return;
       if (eventText.type == Navigation.TextNotificationType.maneuver) {
-        if (_soundEnabled) {
-          _flutterTts.speak(eventText.text);
-        }
+        _voiceAnouncer.announce(eventText.text);
 
         if (_appLifecycleState == AppLifecycleState.paused && _currentManeuverIndex != null) {
           Routing.Maneuver? maneuver = _visualNavigator.getManeuver(_currentManeuverIndex!);
@@ -486,7 +483,7 @@ class _NavigationScreenState extends State<NavigationScreen>
       title: _getRemainingTimeString(),
       body: text ?? maneuver.getActionText(context, _currentRoute.sections.length),
       imagePath: maneuver.action.pngIconPath,
-      presentSound: !_soundEnabled,
+      presentSound: !_voiceAnouncer.soundEnabled,
     );
   }
 
@@ -495,7 +492,7 @@ class _NavigationScreenState extends State<NavigationScreen>
       title: _navigationStatus() ?? _getRemainingTimeString(),
       body: '',
       imagePath: '',
-      presentSound: !_soundEnabled,
+      presentSound: !_voiceAnouncer.soundEnabled,
     );
   }
 
@@ -646,11 +643,14 @@ class _NavigationScreenState extends State<NavigationScreen>
           ),
         FloatingActionButton(
           heroTag: null,
-          child: HdsIconWidget(_soundEnabled ? HdsAssetsPaths.volumeHighIcon : HdsAssetsPaths.volumeOffIcon),
+          child: HdsIconWidget(
+            _voiceAnouncer.soundEnabled ? HdsAssetsPaths.volumeHighIcon : HdsAssetsPaths.volumeOffIcon,
+          ),
           backgroundColor: Theme.of(context).colorScheme.surface,
-          onPressed: () async {
-            await _flutterTts.stop();
-            setState(() => _soundEnabled = !_soundEnabled);
+          onPressed: () {
+            setState(() {
+              _voiceAnouncer.toggleSound();
+            });
           },
         ),
         Container(height: UIStyle.contentMarginLarge),
