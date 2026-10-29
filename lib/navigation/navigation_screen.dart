@@ -450,7 +450,6 @@ class _NavigationScreenState extends State<NavigationScreen>
       _stopNavigation();
       final String message = AppLocalizations.of(context)!.destinationReached.unwrapped;
       ErrorToaster.makeToast(context, message, backgroundColor: Colors.black, icon: HdsAssetsPaths.arriveIcon);
-      _voiceAnouncer.announce(message);
       await _voiceAnouncer.waitUntilAnnouncementsFinish();
       if (mounted && ModalRoute.of(context)?.isCurrent == true) {
         Navigator.of(context).popUntil((route) => route.settings.name == LandingScreen.navRoute);
