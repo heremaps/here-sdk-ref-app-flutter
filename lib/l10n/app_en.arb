@@ -1144,9 +1144,13 @@
   "@customEngineOptions": {
     "description": "Custom Engine Options title"
   },
-  "customEngineOptionsErrorErrorMessage": "Please specify required field",
+  "customEngineOptionsErrorErrorMessage": "Please specify a custom base URL",
   "@customEngineOptionsErrorErrorMessage": {
     "description": "Custom Engine Options error message"
+  },
+  "customEngineCredentialsErrorMessage": "Enter both Access ID and Access Secret, or leave both blank to use the default authentication.",
+  "@customEngineCredentialsErrorMessage": {
+    "description": "Validation error when only one custom engine credential is provided"
   },
   "dateTimeFormat": "dd/MM/yyyy, hh:mm a",
   "@dateTimeFormat": {

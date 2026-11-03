@@ -91,11 +91,11 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
     setState(() => _showProgressIndicator = value);
   }
 
+  bool get _hasIncompleteCredentials =>
+      _idController.text.trim().isNotEmpty != _secretController.text.trim().isNotEmpty;
+
   void _validateInputFields() {
-    bool newState =
-        _baseUrlController.text.trim().isNotEmpty &&
-        _idController.text.trim().isNotEmpty &&
-        _secretController.text.trim().isNotEmpty;
+    bool newState = _baseUrlController.text.trim().isNotEmpty && !_hasIncompleteCredentials;
 
     if (newState != _isInputValid) {
       setState(() => _isInputValid = newState);
@@ -305,7 +305,11 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
                             title: Text(localized.save),
                             onPressed: _isInputValid
                                 ? _addCustomEngineOption
-                                : () => _showErrorMessage(localized.customEngineOptionsErrorErrorMessage),
+                                : () => _showErrorMessage(
+                                    _baseUrlController.text.trim().isEmpty
+                                        ? localized.customEngineOptionsErrorErrorMessage
+                                        : localized.customEngineCredentialsErrorMessage,
+                                  ),
                           ),
                           Spacer(),
                         ],
@@ -321,9 +325,12 @@ class _CustomEngineOptionsScreenState extends State<CustomEngineOptionsScreen> {
                           contentPadding: EdgeInsets.zero,
                           title: Text(engineOptionData.key.name.camelToCapitalizedWords()),
                           subtitle: Text(
-                            "${localized.url}: ${engineOptionData.value.customBaseUrl} \n"
-                            "${localized.authentication} - ${localized.id}: ${engineOptionData.value.readableId},"
-                            " ${localized.secret}: ${engineOptionData.value.readableSecret}",
+                            [
+                              "${localized.url}: ${engineOptionData.value.customBaseUrl}",
+                              if (engineOptionData.value.hasCredentials)
+                                "${localized.authentication} - ${localized.id}: ${engineOptionData.value.readableId},"
+                                    " ${localized.secret}: ${engineOptionData.value.readableSecret}",
+                            ].join('\n'),
                             style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                           ),
                           trailing: InkWell(

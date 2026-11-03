@@ -69,9 +69,11 @@ class CustomEngineOptionsData {
   }
 }
 
-/// Stores engine configuration data including credentials and custom base URL.
+/// Stores a custom base URL and optional credentials, retaining only complete, nonempty pairs.
 class EngineOptionData {
-  EngineOptionData({required this.customBaseUrl, this.id, this.secret});
+  EngineOptionData({required this.customBaseUrl, String? id, String? secret})
+    : id = (id?.trim().isNotEmpty ?? false) && (secret?.trim().isNotEmpty ?? false) ? id!.trim() : null,
+      secret = (id?.trim().isNotEmpty ?? false) && (secret?.trim().isNotEmpty ?? false) ? secret!.trim() : null;
 
   factory EngineOptionData.fromMap(Map<String, dynamic> map) {
     return EngineOptionData(
@@ -86,13 +88,15 @@ class EngineOptionData {
   final String? secret;
 
   EngineOptions get engineOptions {
-    return EngineOptions()
-      ..customBaseUrl = customBaseUrl
-      ..customAuthenticationMode = authenticationMode;
+    final options = EngineOptions()..customBaseUrl = customBaseUrl;
+    if (hasCredentials) {
+      options.customAuthenticationMode = authenticationMode;
+    }
+    return options;
   }
 
   AuthenticationMode? get authenticationMode {
-    if (!isValid) return null;
+    if (!hasCredentials) return null;
     try {
       return AuthenticationMode.withKeySecret(id!, secret!);
     } catch (error) {
@@ -101,9 +105,7 @@ class EngineOptionData {
     return null;
   }
 
-  bool get isValid {
-    return (id?.trim().isNotEmpty ?? false) && (secret?.trim().isNotEmpty ?? false);
-  }
+  bool get hasCredentials => id != null && secret != null;
 
   String get readableId => id.maskedCredential;
 
@@ -123,8 +125,8 @@ class EngineOptionData {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       _urlKey: customBaseUrl,
-      if (id != null) _credentialIdKey: id,
-      if (secret != null) _credentialSecretKey: secret,
+      if (hasCredentials) _credentialIdKey: id,
+      if (hasCredentials) _credentialSecretKey: secret,
     };
   }
 }
