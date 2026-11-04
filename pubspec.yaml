@@ -37,15 +37,15 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.19.0
 
 environment:
-  sdk: '>=3.12.2 <4.0.0'
-  flutter: '>=3.44.8'
+  sdk: '>=3.13.7 <4.0.0'
+  flutter: '>=3.47.9'
 
 dependencies:
   battery_plus: 7.1.1
   connectivity_plus: 7.0.0
   cupertino_icons: ^1.0.9
   device_info_plus: 12.3.0
-  disk_space_plus: 0.2.6
+  disk_space_plus: 0.2.8
   file_picker: 11.0.2
   flutter:
     sdk: flutter
@@ -59,7 +59,7 @@ dependencies:
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:
     path: plugins/here_sdk
-  intl: 0.20.2
+  intl: 0.20.3
   package_info_plus: 9.0.1
   path: 1.9.1
   path_provider: 2.1.6

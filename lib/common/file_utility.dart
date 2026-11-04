@@ -99,9 +99,9 @@ class FileUtility {
       final Directory newDirectory = await scenesDirectory.create();
       final File file = File('${newDirectory.path}/${filePath.split('/').last}');
       // Write the file
-      return file.writeAsBytes(File(filePath).readAsBytesSync());
+      return await file.writeAsBytes(await File(filePath).readAsBytes());
     } catch (e) {
-      print('Failed to create a local copy of given file');
+      print('Failed to create a local copy of given file: $e');
       return null;
     }
   }

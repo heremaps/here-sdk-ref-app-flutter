@@ -1,6 +1,4 @@
 PODS:
-  - disk_space_plus (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_tts (0.0.1):
     - Flutter
@@ -8,14 +6,11 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - disk_space_plus (from `.symlinks/plugins/disk_space_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
 EXTERNAL SOURCES:
-  disk_space_plus:
-    :path: ".symlinks/plugins/disk_space_plus/ios"
   Flutter:
     :path: Flutter
   flutter_tts:
@@ -24,8 +19,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
-  disk_space_plus: a36391fb5f732dbdd29628b0bac5a1acbd43aaef
-  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_tts: 35ac3c7d42412733e795ea96ad2d7e05d0a75113
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
 
