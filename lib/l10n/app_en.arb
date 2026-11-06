@@ -3,7 +3,7 @@
   "@accessID": {
     "description": "Access ID title"
   },
-  "accessIDHint": "id as string",
+  "accessIDHint": "optional id as string",
   "@accessIDHint": {
     "description": "Access ID hint"
   },
@@ -11,7 +11,7 @@
   "@accessIDSecret": {
     "description": "Access Secret title"
   },
-  "accessIDSecretHint": "secret as string",
+  "accessIDSecretHint": "optional secret as string",
   "@accessIDSecretHint": {
     "description": "Access Secret hint"
   },
