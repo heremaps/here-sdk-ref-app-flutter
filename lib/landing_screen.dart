@@ -573,21 +573,20 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     // Restart if coming back from navigation screen (no value returned).
     final bool shouldRestartLocationEngine =
         await Navigator.of(context).pushNamed(
-              RoutingScreen.navRoute,
-              arguments: [
-                currentPosition,
-                _routeFromMarker != null
-                    ? _routeFromPlace != null
-                          ? WayPointInfo.withPlace(
-                              place: _routeFromPlace,
-                              originalCoordinates: _routeFromMarker!.coordinates,
-                            )
-                          : WayPointInfo.withCoordinates(coordinates: _routeFromMarker!.coordinates)
-                    : WayPointInfo(coordinates: currentPosition),
-                destination,
-              ],
-            )
-            as bool? ??
+          RoutingScreen.navRoute,
+          arguments: [
+            currentPosition,
+            _routeFromMarker != null
+                ? _routeFromPlace != null
+                      ? WayPointInfo.withPlace(
+                          place: _routeFromPlace,
+                          originalCoordinates: _routeFromMarker!.coordinates,
+                        )
+                      : WayPointInfo.withCoordinates(coordinates: _routeFromMarker!.coordinates)
+                : WayPointInfo(coordinates: currentPosition),
+            destination,
+          ],
+        ) as bool? ??
         true;
 
     _routeFromPlace = null;
