@@ -67,6 +67,8 @@ dependencies:
   provider: 6.1.5+1
   reorderables: ^0.6.0
   shared_preferences: 2.5.5
+  # Pin for compatibility with Xcode 16.2's Swift compiler.
+  shared_preferences_foundation: 2.5.6
   sqflite: 2.4.5
   url_launcher: ^6.3.3
   wakelock_plus: 1.5.2
